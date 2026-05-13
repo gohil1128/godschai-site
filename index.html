@@ -774,7 +774,7 @@ ${message || 'None provided'}
     <p style="color:#B85C38;font-size:10px;letter-spacing:4px;text-transform:uppercase;margin-bottom:16px;">Welcome to God's Chai</p>
     <h2 style="font-family:'Playfair Display',serif;color:#F5EDD8;font-size:1.75rem;font-weight:700;margin-bottom:12px;line-height:1.2;">Sip the Sacred,<br>Stay Inspired</h2>
     <p style="color:#C49038;font-size:13px;margin-bottom:28px;line-height:1.6;">New blends, stories &amp; exclusive offers - delivered to your inbox.</p>
-    <form id="gc-popup-form" action="https://godschai.us9.list-manage.com/subscribe/post?u=6dbcb24537761b9433540d839&amp;id=963c7fe1aa&amp;f_id=0099dbe0f0" method="post" target="_blank">
+    <form id="gc-popup-form" action="https://godschai.us9.list-manage.com/subscribe/post?u=6dbcb24537761b9433540d839&amp;id=963c7fe1aa&amp;f_id=0099dbe0f0" method="post">
       <input type="email" name="EMAIL" placeholder="Your email address" required style="display:block;width:100%;box-sizing:border-box;padding:13px 18px;background:transparent;border:1.5px solid #B85C38;color:#F5EDD8;font-size:14px;margin-bottom:12px;outline:none;">
       <div style="position:absolute;left:-5000px;" aria-hidden="true"><input type="text" name="b_6dbcb24537761b9433540d839_963c7fe1aa" tabindex="-1" value=""></div>
       <button type="submit" style="display:block;width:100%;padding:14px;background:#B85C38;color:#FAF6EE;font-size:12px;letter-spacing:3px;text-transform:uppercase;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;">JOIN THE JOURNEY</button>
@@ -792,7 +792,22 @@ ${message || 'None provided'}
   setTimeout(showPopup, 3000);
   document.getElementById('gc-popup-close').addEventListener('click', hidePopup);
   document.getElementById('gc-popup-no-thanks').addEventListener('click', hidePopup);
-  document.getElementById('gc-popup-form').addEventListener('submit', function() { setTimeout(function() { hidePopup(); }, 500); });
+  document.getElementById('gc-popup-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    var email = this.querySelector('[name="EMAIL"]').value;
+    var url = 'https://godschai.us9.list-manage.com/subscribe/post-json?u=6dbcb24537761b9433540d839&id=963c7fe1aa&f_id=0099dbe0f0&EMAIL=' + encodeURIComponent(email) + '&c=gcMailchimpCb';
+    window.gcMailchimpCb = function(data) {
+      var inner = document.querySelector('#gc-popup-overlay > div');
+      if (data.result === 'success') {
+        inner.innerHTML = '<p style="color:#B85C38;font-size:11px;letter-spacing:3px;text-transform:uppercase;margin-bottom:20px;">Welcome to God's Chai</p><h2 style="font-family:Playfair Display,serif;color:#F5EDD8;font-size:1.75rem;font-weight:700;margin-bottom:16px;">You're in!</h2><p style="color:#C49038;font-size:14px;">Thanks for joining. Expect something special soon.</p>';
+        setTimeout(hidePopup, 2500);
+      } else {
+        inner.querySelector('button[type=submit]').textContent = 'Try Again';
+      }
+    };
+    var s = document.createElement('script'); s.src = url; document.body.appendChild(s);
+    setTimeout(function() { if (document.body.contains(s)) document.body.removeChild(s); }, 8000);
+  });
   overlay.addEventListener('click', function(e) { if (e.target === overlay) hidePopup(); });
 })();
 </script>
