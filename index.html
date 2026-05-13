@@ -783,7 +783,7 @@ ${message || 'None provided'}
   </div>
 </div>
 <script>
-(function() {
+window.addEventListener('load', function() {
   var POPUP_KEY = 'gc_popup_dismissed';
   var overlay = document.getElementById('gc-popup-overlay');
   function showPopup() { overlay.style.display = 'flex'; }
@@ -808,7 +808,7 @@ ${message || 'None provided'}
     setTimeout(function() { if (document.body.contains(s)) document.body.removeChild(s); }, 8000);
   });
   overlay.addEventListener('click', function(e) { if (e.target === overlay) hidePopup(); });
-})();
+});
 </script>
 </body>
 </html>
