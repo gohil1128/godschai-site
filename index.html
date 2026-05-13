@@ -766,5 +766,36 @@ ${message || 'None provided'}
     document.getElementById('event-form-wrap').scrollIntoView({ behavior:'smooth', block:'center' });
   }
 </script>
+
+<!-- Email Signup Popup -->
+<div id="gc-popup-overlay" style="display:none;position:fixed;inset:0;background:rgba(44,21,0,0.85);z-index:9999;align-items:center;justify-content:center;padding:20px;">
+  <div style="background:#2C1500;border:2px solid #B85C38;max-width:480px;width:100%;padding:48px 40px;position:relative;text-align:center;">
+    <button id="gc-popup-close" aria-label="Close" style="position:absolute;top:16px;right:20px;background:none;border:none;color:#B85C38;font-size:24px;cursor:pointer;line-height:1;">×</button>
+    <p style="color:#B85C38;font-size:10px;letter-spacing:4px;text-transform:uppercase;margin-bottom:16px;">Welcome to God's Chai</p>
+    <h2 style="font-family:'Playfair Display',serif;color:#F5EDD8;font-size:1.75rem;font-weight:700;margin-bottom:12px;line-height:1.2;">Sip the Sacred,<br>Stay Inspired</h2>
+    <p style="color:#C49038;font-size:13px;margin-bottom:28px;line-height:1.6;">New blends, stories &amp; exclusive offers - delivered to your inbox.</p>
+    <form id="gc-popup-form" action="https://godschai.us9.list-manage.com/subscribe/post?u=6dbcb24537761b9433540d839&amp;id=963c7fe1aa&amp;f_id=0099dbe0f0" method="post" target="_blank">
+      <input type="email" name="EMAIL" placeholder="Your email address" required style="display:block;width:100%;box-sizing:border-box;padding:13px 18px;background:transparent;border:1.5px solid #B85C38;color:#F5EDD8;font-size:14px;margin-bottom:12px;outline:none;">
+      <div style="position:absolute;left:-5000px;" aria-hidden="true"><input type="text" name="b_6dbcb24537761b9433540d839_963c7fe1aa" tabindex="-1" value=""></div>
+      <button type="submit" style="display:block;width:100%;padding:14px;background:#B85C38;color:#FAF6EE;font-size:12px;letter-spacing:3px;text-transform:uppercase;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;">JOIN THE JOURNEY</button>
+    </form>
+    <button id="gc-popup-no-thanks" style="background:none;border:none;color:#C49038;font-size:12px;margin-top:16px;cursor:pointer;text-decoration:underline;text-underline-offset:3px;">No thanks</button>
+  </div>
+</div>
+<script>
+(function() {
+  var POPUP_KEY = 'gc_popup_dismissed';
+  if (localStorage.getItem(POPUP_KEY)) return;
+  var overlay = document.getElementById('gc-popup-overlay');
+  function showPopup() { overlay.style.display = 'flex'; }
+  function hidePopup() { overlay.style.display = 'none'; localStorage.setItem(POPUP_KEY, '1'); }
+  setTimeout(showPopup, 3000);
+  document.getElementById('gc-popup-close').addEventListener('click', hidePopup);
+  document.getElementById('gc-popup-no-thanks').addEventListener('click', hidePopup);
+  document.getElementById('gc-popup-form').addEventListener('submit', function() { setTimeout(function() { hidePopup(); }, 500); });
+  overlay.addEventListener('click', function(e) { if (e.target === overlay) hidePopup(); });
+})();
+</script>
 </body>
 </html>
+
