@@ -785,11 +785,10 @@ ${message || 'None provided'}
 <script>
 (function() {
   var POPUP_KEY = 'gc_popup_dismissed';
-  if (localStorage.getItem(POPUP_KEY)) return;
   var overlay = document.getElementById('gc-popup-overlay');
   function showPopup() { overlay.style.display = 'flex'; }
   function hidePopup() { overlay.style.display = 'none'; localStorage.setItem(POPUP_KEY, '1'); }
-  setTimeout(showPopup, 3000);
+  if (!localStorage.getItem(POPUP_KEY)) { setTimeout(showPopup, 3000); }
   document.getElementById('gc-popup-close').addEventListener('click', hidePopup);
   document.getElementById('gc-popup-no-thanks').addEventListener('click', hidePopup);
   document.getElementById('gc-popup-form').addEventListener('submit', function(e) {
