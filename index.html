@@ -787,8 +787,8 @@ window.addEventListener('load', function() {
   var POPUP_KEY = 'gc_popup_dismissed';
   var overlay = document.getElementById('gc-popup-overlay');
   function showPopup() { overlay.style.display = 'flex'; }
-  function hidePopup() { overlay.style.display = 'none'; localStorage.setItem(POPUP_KEY, '1'); }
-  if (!localStorage.getItem(POPUP_KEY)) { setTimeout(showPopup, 3000); }
+  function hidePopup() { overlay.style.display = 'none'; sessionStorage.setItem(POPUP_KEY, '1'); }
+  if (!sessionStorage.getItem(POPUP_KEY)) { setTimeout(showPopup, 3000); }
   document.getElementById('gc-popup-close').addEventListener('click', hidePopup);
   document.getElementById('gc-popup-no-thanks').addEventListener('click', hidePopup);
   document.getElementById('gc-popup-form').addEventListener('submit', function(e) {
@@ -813,3 +813,4 @@ window.addEventListener('load', function() {
 </body>
 </html>
 
+  function hidePopup() { overlay.style.display = 'none'; sessionStorage.setItem(POPUP_KEY, '1'); }
