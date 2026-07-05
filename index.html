@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -10,6 +10,13 @@
 <helmet>
 <title>God's Chai — Not Your Average Chai | Saskatoon, Canada</title>
 <meta name="description" content="God's Chai is a premium chai brand from Saskatoon, Saskatchewan. Crafted with 5 whole spices, zero fillers. Authentic masala chai — the real way.">
+<meta property="og:title" content="God's Chai — Not Your Average Chai">
+<meta property="og:description" content="Whole spices from Kerala. Single-origin Assam tea. Poured fresh, the real way — in Saskatoon, SK.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://godschai.com">
+<meta property="og:image" content="https://godschai.com/uploads/pour-cup.jpeg">
+<meta name="theme-color" content="#100A05">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>☕</text></svg>">
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-618Y5RK3T3"></script>
 <script>
@@ -137,7 +144,7 @@
           <div style="background:#2E1D13;border:1px solid rgba(243,232,211,0.10);border-radius:22px;overflow:hidden;transition:transform .35s ease" style-hover="transform:translateY(-4px)">
             <sc-if value="{{ d.img }}" hint-placeholder-val="{{ false }}">
               <div style="aspect-ratio:4/5;overflow:hidden;background:#25160F;position:relative">
-                <img src="{{ d.img }}" alt="{{ d.name }}" style="width:100%;height:100%;object-fit:cover;display:block;filter:saturate(0.5) contrast(0.92) brightness(0.72) sepia(0.12)"/>
+                <img src="{{ d.img }}" alt="{{ d.name }}" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;filter:saturate(0.5) contrast(0.92) brightness(0.72) sepia(0.12)"/>
                 <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(34,22,14,0.45) 0%,rgba(34,22,14,0.20) 40%,rgba(24,15,9,0.72) 100%);mix-blend-mode:multiply"></div>
                 <div style="position:absolute;inset:0;background:#5A3A24;mix-blend-mode:color;opacity:0.30"></div>
                 <div style="position:absolute;inset:0;background:radial-gradient(120% 90% at 50% 38%,transparent 52%,rgba(18,11,6,0.5) 100%)"></div>
@@ -241,6 +248,9 @@
             <input type="email" required="true" value="{{ email }}" onChange="{{ onEmail }}" placeholder="you@email.com" style="flex:1 1 220px;min-width:0;border:1px solid rgba(243,232,211,0.18);border-radius:999px;padding:15px 20px;font-size:16px;font-family:'Hanken Grotesk',sans-serif;color:#F3E8D3;background:rgba(18,11,6,0.5);outline:none"/>
             <button type="submit" style="border:none;cursor:pointer;background:#F2A93C;color:#2B1B12;font-weight:700;font-size:16px;font-family:'Hanken Grotesk',sans-serif;padding:15px 28px;border-radius:999px" style-hover="background:#FFBA55">Get launch updates</button>
           </form>
+          <sc-if value="{{ subErr }}" hint-placeholder-val="{{ false }}">
+            <p style="color:#FF7A66;font-size:14px;font-weight:600;margin:12px 0 0">Hmm, that didn't go through — double-check your email and try again.</p>
+          </sc-if>
           <p style="font-family:'DM Mono',monospace;font-size:11px;color:#C7B29E;margin:12px 0 0;letter-spacing:0.04em">No spam. Just one note when the premixes are ready.</p>
         </sc-if>
       </div>
@@ -347,13 +357,13 @@
 
         <!-- image -->
         <div style="border-radius:18px;overflow:hidden;background:#25160F;position:relative;cursor:pointer;transition:transform .35s ease" style-hover="transform:scale(1.02)">
-          <img src="https://pub-cebe510d78a84528b5ea883bd62fe46c.r2.dev/IMG_0465.JPEG" alt="God's Chai" style="width:100%;height:100%;object-fit:cover;display:block"/>
+          <img src="https://pub-cebe510d78a84528b5ea883bd62fe46c.r2.dev/IMG_0465.JPEG" alt="God's Chai" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block"/>
           <div style="position:absolute;inset:0;display:flex;align-items:flex-end;padding:11px;background:linear-gradient(180deg,transparent 55%,rgba(18,11,6,0.7))"><span style="font-family:'DM Mono',monospace;font-size:10px;color:#FFFAF3">@godschai</span></div>
         </div>
 
         <!-- image -->
         <div style="border-radius:18px;overflow:hidden;background:#25160F;position:relative;cursor:pointer;transition:transform .35s ease" style-hover="transform:scale(1.02)">
-          <img src="https://pub-cebe510d78a84528b5ea883bd62fe46c.r2.dev/IMG_0464.JPEG" alt="God's Chai" style="width:100%;height:100%;object-fit:cover;display:block"/>
+          <img src="https://pub-cebe510d78a84528b5ea883bd62fe46c.r2.dev/IMG_0464.JPEG" alt="God's Chai" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block"/>
           <div style="position:absolute;inset:0;display:flex;align-items:flex-end;padding:11px;background:linear-gradient(180deg,transparent 55%,rgba(18,11,6,0.7))"><span style="font-family:'DM Mono',monospace;font-size:10px;color:#FFFAF3">@godschai</span></div>
         </div>
 
@@ -395,6 +405,9 @@
             <input type="email" required="true" value="{{ fEmail }}" onChange="{{ onFEmail }}" placeholder="you@email.com" style="flex:1 1 180px;min-width:0;border:1px solid rgba(243,232,211,0.18);border-radius:999px;padding:13px 18px;font-size:15px;font-family:'Hanken Grotesk',sans-serif;color:#F3E8D3;background:rgba(243,232,211,0.05);outline:none"/>
             <button type="submit" style="border:none;cursor:pointer;background:#F2A93C;color:#2B1B12;font-weight:700;font-size:15px;font-family:'Hanken Grotesk',sans-serif;padding:13px 22px;border-radius:999px" style-hover="background:#FFBA55">Sign up</button>
           </form>
+          <sc-if value="{{ fSubErr }}" hint-placeholder-val="{{ false }}">
+            <p style="color:#FF7A66;font-size:13px;font-weight:600;margin:10px 0 0">That didn't go through — check your email and try again.</p>
+          </sc-if>
         </sc-if>
       </div>
     </div>
@@ -411,7 +424,7 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:&quot;100%&quot;,&quot;height&quot;:&quot;100%&quot;},&quot;showTicker&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;}}">
 class Component extends DCLogic {
-  state = { email: '', sent: false, fEmail: '', fSent: false, featMuted: true };
+  state = { email: '', sent: false, subErr: false, fEmail: '', fSent: false, fSubErr: false, featMuted: true };
 
   constructor(props){
     super(props);
@@ -422,14 +435,21 @@ class Component extends DCLogic {
     this._raf = 0; this._active = 0;
   }
 
-  _mcSubscribe = (email, onDone) => {
+  _mcSubscribe = (email, onResult) => {
     const cbName = 'gcMailchimpCb' + Math.random().toString(36).slice(2);
     const url = 'https://godschai.us9.list-manage.com/subscribe/post-json?u=6dbcb24537761b9433540d839&id=963c7fe1aa&f_id=0099dbe0f0&EMAIL=' + encodeURIComponent(email) + '&c=' + cbName;
-    window[cbName] = () => { onDone(); delete window[cbName]; };
+    let settled = false;
+    const settle = (ok) => { if (settled) return; settled = true; onResult(ok); delete window[cbName]; };
+    window[cbName] = (data) => {
+      // Mailchimp reports "already subscribed" as an error; treat it as success for the visitor.
+      const ok = !!data && (data.result === 'success' || /already subscribed/i.test(data.msg || ''));
+      settle(ok);
+    };
     const s = document.createElement('script');
     s.src = url;
+    s.onerror = () => settle(false);
     document.body.appendChild(s);
-    setTimeout(() => { if (document.body.contains(s)) document.body.removeChild(s); }, 8000);
+    setTimeout(() => { settle(false); if (document.body.contains(s)) document.body.removeChild(s); }, 8000);
   };
 
   _silenceAll = (except) => {
@@ -631,12 +651,12 @@ class Component extends DCLogic {
       f0: this.f0, f1: this.f1, f2: this.f2, f3: this.f3,
       cue: this.cue, nav: this.nav, content: this.content, heroIn: this.heroIn, par: this.par,
       featVideo: this.featVideo, toggleFeat: this.toggleFeat, toggleVideo: this.toggleVideo, featIcon: this.state.featMuted ? '🔇' : '🔊',
-      email: this.state.email, sent: this.state.sent, notSent: !this.state.sent,
+      email: this.state.email, sent: this.state.sent, notSent: !this.state.sent, subErr: this.state.subErr,
       onEmail: (e) => this.setState({ email: e.target.value }),
-      subscribe: (e) => { e.preventDefault(); if (this.state.email) this._mcSubscribe(this.state.email, () => this.setState({ sent: true })); },
-      fEmail: this.state.fEmail, fSent: this.state.fSent, fNotSent: !this.state.fSent,
+      subscribe: (e) => { e.preventDefault(); if (this.state.email) this._mcSubscribe(this.state.email, (ok) => this.setState(ok ? { sent: true, subErr: false } : { subErr: true })); },
+      fEmail: this.state.fEmail, fSent: this.state.fSent, fNotSent: !this.state.fSent, fSubErr: this.state.fSubErr,
       onFEmail: (e) => this.setState({ fEmail: e.target.value }),
-      fSubscribe: (e) => { e.preventDefault(); if (this.state.fEmail) this._mcSubscribe(this.state.fEmail, () => this.setState({ fSent: true })); },
+      fSubscribe: (e) => { e.preventDefault(); if (this.state.fEmail) this._mcSubscribe(this.state.fEmail, (ok) => this.setState(ok ? { fSent: true, fSubErr: false } : { fSubErr: true })); },
     };
   }
 }
@@ -644,7 +664,7 @@ class Component extends DCLogic {
 
 <!-- Email Signup Popup -->
 <div id="gc-popup-overlay" style="display:none;position:fixed;inset:0;background:rgba(16,10,5,0.85);z-index:9999;align-items:center;justify-content:center;padding:20px;">
-  <div style="background:#1D120B;border:1px solid rgba(242,169,60,0.35);border-radius:24px;max-width:440px;width:100%;padding:44px 36px;position:relative;text-align:center;box-shadow:0 24px 60px rgba(0,0,0,0.5);">
+  <div role="dialog" aria-modal="true" aria-label="Email signup" style="background:#1D120B;border:1px solid rgba(242,169,60,0.35);border-radius:24px;max-width:440px;width:100%;padding:44px 36px;position:relative;text-align:center;box-shadow:0 24px 60px rgba(0,0,0,0.5);">
     <button id="gc-popup-close" aria-label="Close" style="position:absolute;top:14px;right:18px;background:none;border:none;color:#C7B29E;font-size:24px;cursor:pointer;line-height:1;">×</button>
     <p style="font-family:'DM Mono',monospace;color:#F2A93C;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;margin-bottom:14px;">Welcome to God's Chai</p>
     <h2 style="font-family:'Bricolage Grotesque',sans-serif;color:#F3E8D3;font-size:1.65rem;font-weight:800;letter-spacing:-0.02em;margin-bottom:12px;line-height:1.15;">Sip the sacred, stay inspired.</h2>
@@ -652,6 +672,7 @@ class Component extends DCLogic {
     <form id="gc-popup-form" style="display:flex;flex-direction:column;gap:12px;">
       <input type="email" name="EMAIL" placeholder="you@email.com" required style="width:100%;box-sizing:border-box;padding:14px 18px;background:rgba(243,232,211,0.05);border:1px solid rgba(243,232,211,0.18);border-radius:999px;color:#F3E8D3;font-family:'Hanken Grotesk',sans-serif;font-size:15px;outline:none;">
       <button type="submit" style="width:100%;padding:14px;background:#F2A93C;color:#2B1B12;font-weight:700;font-size:14px;font-family:'Hanken Grotesk',sans-serif;border:none;border-radius:999px;cursor:pointer;">Join the journey</button>
+      <p id="gc-popup-error" style="display:none;color:#FF7A66;font-size:13px;font-weight:600;margin:0;font-family:'Hanken Grotesk',sans-serif;">That didn't go through — check your email and try again.</p>
     </form>
     <button id="gc-popup-no-thanks" style="background:none;border:none;color:#8A7869;font-size:12px;margin-top:16px;cursor:pointer;text-decoration:underline;text-underline-offset:3px;font-family:'Hanken Grotesk',sans-serif;">No thanks</button>
   </div>
@@ -668,16 +689,31 @@ window.addEventListener('load', function() {
   document.getElementById('gc-popup-form').addEventListener('submit', function(e) {
     e.preventDefault();
     var email = this.querySelector('[name="EMAIL"]').value;
+    var errEl = document.getElementById('gc-popup-error');
+    if (errEl) errEl.style.display = 'none';
+    var settled = false;
+    function showError() {
+      if (settled) return; settled = true;
+      if (errEl) errEl.style.display = 'block';
+    }
     var url = 'https://godschai.us9.list-manage.com/subscribe/post-json?u=6dbcb24537761b9433540d839&id=963c7fe1aa&f_id=0099dbe0f0&EMAIL=' + encodeURIComponent(email) + '&c=gcMailchimpCbPopup';
-    window.gcMailchimpCbPopup = function() {
+    window.gcMailchimpCbPopup = function(data) {
+      if (settled) return;
+      // Mailchimp reports "already subscribed" as an error; treat it as success for the visitor.
+      var ok = data && (data.result === 'success' || /already subscribed/i.test(data.msg || ''));
+      if (!ok) { showError(); return; }
+      settled = true;
       var inner = document.querySelector('#gc-popup-overlay > div');
       inner.innerHTML = '<p style="font-family:\'DM Mono\',monospace;color:#F2A93C;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;margin-bottom:16px;">Welcome to God\'s Chai</p><h2 style="font-family:\'Bricolage Grotesque\',sans-serif;color:#F3E8D3;font-size:1.65rem;font-weight:800;margin-bottom:12px;">You\'re in! ✶</h2><p style="font-family:\'Hanken Grotesk\',sans-serif;color:#C7B29E;font-size:14px;">Thanks for joining. Expect something special soon.</p>';
       setTimeout(hidePopup, 2500);
     };
-    var s = document.createElement('script'); s.src = url; document.body.appendChild(s);
-    setTimeout(function() { if (document.body.contains(s)) document.body.removeChild(s); }, 8000);
+    var s = document.createElement('script'); s.src = url;
+    s.onerror = showError;
+    document.body.appendChild(s);
+    setTimeout(function() { showError(); if (document.body.contains(s)) document.body.removeChild(s); }, 8000);
   });
   overlay.addEventListener('click', function(e) { if (e.target === overlay) hidePopup(); });
+  document.addEventListener('keydown', function(e) { if (e.key === 'Escape' && overlay.style.display === 'flex') hidePopup(); });
 });
 </script>
 </body>
