@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -10,6 +10,13 @@
 <helmet>
 <title>Menu — God's Chai | Saskatoon, Canada</title>
 <meta name="description" content="The full God's Chai menu — hot masala chai, iced chai creations and snacks. Whole spices from Kerala, single-origin Assam tea, brewed fresh in Saskatoon.">
+<meta property="og:title" content="Menu — God's Chai">
+<meta property="og:description" content="Hot masala chai, iced chai creations and snacks — brewed fresh in Saskatoon.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://godschai.com/menu.html">
+<meta property="og:image" content="https://godschai.com/uploads/drink-gulabo.jpeg">
+<meta name="theme-color" content="#FDF6E4">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>☕</text></svg>">
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-618Y5RK3T3"></script>
 <script>
@@ -66,7 +73,7 @@
   </section>
 
   <!-- HOT -->
-  <section id="hot" style="max-width:1240px;margin:0 auto;padding:clamp(28px,4vw,44px) clamp(18px,4vw,40px)">
+  <section id="hot" style="max-width:1240px;margin:0 auto;padding:clamp(28px,4vw,44px) clamp(18px,4vw,40px);scroll-margin-top:104px">
     <div style="display:flex;align-items:center;gap:16px;margin-bottom:24px">
       <h2 style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:clamp(1.7rem,3.6vw,2.6rem);letter-spacing:-0.02em;margin:0;white-space:nowrap">Hot Chai</h2>
       <div style="flex:1;height:1px;background:rgba(74,47,37,0.16)"></div>
@@ -84,7 +91,7 @@
   </section>
 
   <!-- ICED -->
-  <section id="cold" style="background:#37231C;margin-top:clamp(34px,4vw,56px)">
+  <section id="cold" style="background:#37231C;margin-top:clamp(34px,4vw,56px);scroll-margin-top:104px">
     <div style="max-width:1240px;margin:0 auto;padding:clamp(40px,5vw,72px) clamp(18px,4vw,40px)">
       <div style="display:flex;align-items:center;gap:16px;margin-bottom:28px">
         <h2 style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:clamp(1.7rem,3.6vw,2.6rem);letter-spacing:-0.02em;margin:0;color:#FDF6E4;white-space:nowrap">Iced &amp; Signature</h2>
@@ -95,7 +102,7 @@
         <sc-for list="{{ iced }}" as="d" hint-placeholder-count="6">
           <div style="background:#412C22;border:1px solid rgba(253,246,228,0.10);border-radius:22px;overflow:hidden;box-shadow:0 12px 30px rgba(0,0,0,0.3)" style-hover="transform:translateY(-4px)">
             <sc-if value="{{ d.img }}" hint-placeholder-val="{{ true }}">
-              <div style="aspect-ratio:4/5;overflow:hidden;background:#2A1A13"><img src="{{ d.img }}" alt="{{ d.name }}" style="width:100%;height:100%;object-fit:cover;display:block"/></div>
+              <div style="aspect-ratio:4/5;overflow:hidden;background:#2A1A13"><img src="{{ d.img }}" alt="{{ d.name }}" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block"/></div>
             </sc-if>
             <sc-if value="{{ d.noImg }}" hint-placeholder-val="{{ false }}">
               <div style="aspect-ratio:4/5;background:repeating-linear-gradient(135deg,#E1865D,#E1865D 14px,#D57245 14px,#D57245 28px);position:relative"><span style="position:absolute;left:12px;bottom:12px;font-family:'DM Mono',monospace;font-size:10.5px;color:#FFFAF3;background:rgba(15,8,5,0.5);padding:5px 9px;border-radius:8px">{{ d.shot }}</span></div>
@@ -111,7 +118,7 @@
   </section>
 
   <!-- SNACKS -->
-  <section id="snacks" style="background:#FFFAF3;border-top:1px solid rgba(74,47,37,0.08);border-bottom:1px solid rgba(74,47,37,0.08)">
+  <section id="snacks" style="background:#FFFAF3;border-top:1px solid rgba(74,47,37,0.08);border-bottom:1px solid rgba(74,47,37,0.08);scroll-margin-top:104px">
     <div style="max-width:1240px;margin:0 auto;padding:clamp(40px,5vw,72px) clamp(18px,4vw,40px)">
       <div style="display:flex;align-items:center;gap:16px;margin-bottom:24px">
         <h2 style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:clamp(1.7rem,3.6vw,2.6rem);letter-spacing:-0.02em;margin:0;white-space:nowrap">Snacks &amp; combos</h2>
@@ -163,7 +170,7 @@
     </div>
     <div style="border-top:1px solid rgba(253,246,228,0.12)">
       <div style="max-width:1240px;margin:0 auto;padding:18px clamp(18px,4vw,40px);display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.06em;color:#967466">
-        <span>© 2026 Gods Chai · Saskatoon, SK</span>
+        <span>© 2026 God's Chai · Saskatoon, SK</span>
         <span>Summer menu · Made fresh in Saskatoon</span>
       </div>
     </div>
