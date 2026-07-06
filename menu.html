@@ -3,6 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- 'unsafe-inline'/'unsafe-eval' are required by the page runtime (inline scripts + new Function); every remote origin below is an existing first-party dependency. frame-ancestors can't be set via <meta> — GitHub Pages doesn't allow custom headers. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://*.list-manage.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://pub-cebe510d78a84528b5ea883bd62fe46c.r2.dev https://*.google-analytics.com https://*.googletagmanager.com; media-src 'self' https://pub-cebe510d78a84528b5ea883bd62fe46c.r2.dev; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://stats.g.doubleclick.net; object-src 'none'; base-uri 'self'; form-action 'self'; frame-src 'none'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <script src="./support.js"></script>
 </head>
 <body>
