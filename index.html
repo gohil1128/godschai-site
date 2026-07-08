@@ -147,10 +147,8 @@
           <div style="background:#2E1D13;border:1px solid rgba(243,232,211,0.10);border-radius:22px;overflow:hidden;transition:transform .35s ease" style-hover="transform:translateY(-4px)">
             <sc-if value="{{ d.img }}" hint-placeholder-val="{{ false }}">
               <div style="aspect-ratio:4/5;overflow:hidden;background:#25160F;position:relative">
-                <img src="{{ d.img }}" alt="{{ d.name }}" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;filter:saturate(0.5) contrast(0.92) brightness(0.72) sepia(0.12)"/>
-                <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(34,22,14,0.45) 0%,rgba(34,22,14,0.20) 40%,rgba(24,15,9,0.72) 100%);mix-blend-mode:multiply"></div>
-                <div style="position:absolute;inset:0;background:#5A3A24;mix-blend-mode:color;opacity:0.30"></div>
-                <div style="position:absolute;inset:0;background:radial-gradient(120% 90% at 50% 38%,transparent 52%,rgba(18,11,6,0.5) 100%)"></div>
+                <img src="{{ d.img }}" alt="{{ d.name }}" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;filter:saturate(1.18) contrast(1.04) brightness(1.06)"/>
+                <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 58%,rgba(20,12,7,0.45) 100%)"></div>
               </div>
             </sc-if>
             <sc-if value="{{ d.logo }}" hint-placeholder-val="{{ false }}">
@@ -270,7 +268,14 @@
       <a href="https://www.instagram.com/godschai" target="_blank" rel="noopener" style="text-decoration:none;color:#F2A93C;font-weight:600;font-size:15px;border-bottom:2px solid rgba(242,169,60,0.5);padding-bottom:2px">Follow @godschai for live updates →</a>
     </div>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:clamp(16px,2vw,24px)">
-      <sc-for list="{{ events }}" as="e" hint-placeholder-count="7">
+      <sc-if value="{{ noEvents }}" hint-placeholder-val="{{ false }}">
+        <div style="grid-column:1/-1;display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px;background:#342216;border:1px dashed rgba(243,232,211,0.18);border-radius:20px;padding:34px 24px">
+          <div style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#F2A93C">Between pop-ups</div>
+          <div style="font-family:'Instrument Serif',serif;font-weight:400;font-size:1.5rem;color:#F3E8D3">No events on the calendar right now</div>
+          <p style="font-size:0.95rem;line-height:1.45;color:#C7B29E;margin:0;max-width:42ch">We're plotting the next one. Follow <a href="https://www.instagram.com/godschai" target="_blank" rel="noopener" style="color:#F2A93C;font-weight:600">@godschai</a> to catch the next drop first.</p>
+        </div>
+      </sc-if>
+      <sc-for list="{{ events }}" as="e" hint-placeholder-count="8">
         <div style="display:flex;gap:16px;background:#342216;border:1px solid rgba(243,232,211,0.08);border-radius:20px;padding:18px;align-items:flex-start;transition:border-color .3s ease" style-hover="border:1px solid rgba(242,169,60,0.4)">
           <div style="flex:none;min-width:64px;text-align:center;background:#F2A93C;color:#2B1B12;border-radius:14px;padding:11px 8px">
             <div style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase">{{ e.mon }}</div>
@@ -583,7 +588,7 @@ class Component extends DCLogic {
 
     const coldCreations = [
       { name: 'Iced Chai', desc: 'The signature, straight over ice. Spiced, smooth, and never watered down.', img: '', noImg: false, logo: true },
-      { name: 'Gulabo · Rose Refresher', desc: 'House-made rose syrup with lemon and soda. Floral, fizzy and ridiculously pretty.', img: 'uploads/drink-gulabo.jpeg', noImg: false },
+      { name: 'Gulabo · Rose Refresher', desc: 'House-made rose syrup with lemon and soda. Floral, fizzy and ridiculously pretty.', img: 'uploads/drink-gulabo-studio.png', noImg: false },
       { name: 'Iced Chocolate Chai', desc: 'House chai concentrate with rich dark chocolate, milk, hazelnut syrup and biscuit crumbles.', img: 'uploads/drink-chocolate.jpeg', noImg: false },
       { name: "YXE's Mont Blanc", desc: 'House coffee-and-chai concentrate, coconut water, a vanilla cream top and a dusting of cocoa.', img: 'uploads/drink-montblanc.jpeg', noImg: false },
       { name: 'Iced Banana Bread Chai', desc: 'Decadent house-made banana bread syrup with oat milk and chai concentrate.', img: 'uploads/drink-bananabread.jpeg', noImg: false },
@@ -608,21 +613,31 @@ class Component extends DCLogic {
       { mon: 'Jul', day: '24–26', name: 'Foodtruck Wars Street Festival', where: '2700 Porter St · Lions Arena', desc: "We're in the ring at YXE's biggest food festival. Three days, 25+ trucks — come hunt down our chai." },
       { mon: 'Aug', day: '15', name: 'Creatures of the Night Market', where: 'Saskatoon · After dark', desc: 'After-dark market vibes and our chai under the lights. Come find us when the sun goes down.' },
       { mon: 'Aug', day: '30', name: 'Art in the Park — Finale', where: 'Buena Vista Park · 10am–3pm', desc: 'The last Art in the Park of the summer — local artists, makers and our chai cart in the park.' },
+      { mon: 'Sep', day: '4–5', name: 'Nutrien Fireworks Festival', where: 'River Landing · Fireworks 9:30pm', desc: "Two nights on the river's edge to send off summer. Grab a cold chai and watch the sky light up at 9:30 each night." },
       { mon: 'Sep', day: '12', name: 'Broadway Street Fair', where: 'Broadway Ave · 10am–5pm', desc: "Broadway's 43rd street fair turns the avenue into an open-air market. Find us among 20,000+ visitors." },
     ];
-    const events = eventsRaw.map((e) => ({ ...e, dayFs: e.day.length > 2 ? '18px' : '26px' }));
+    const monMap = { Jan:0, Feb:1, Mar:2, Apr:3, May:4, Jun:5, Jul:6, Aug:7, Sep:8, Oct:9, Nov:10, Dec:11 };
+    const _today = new Date(); _today.setHours(0,0,0,0);
+    const events = eventsRaw
+      .map((e) => {
+        const nums = String(e.day).match(/\d+/g) || ['1'];
+        const endDate = new Date(2026, monMap[e.mon] || 0, parseInt(nums[nums.length - 1], 10));
+        return { ...e, dayFs: e.day.length > 2 ? '18px' : '26px', endDate };
+      })
+      .filter((e) => e.endDate >= _today);
+    const noEvents = events.length === 0;
 
     const igPosts = [
       { cap: 'straight from the kettle', img: 'uploads/pour-c.jpeg' },
       { cap: 'kadak, every cup ✶', img: 'uploads/pour-cup.jpeg' },
       { cap: 'the long pour', img: 'uploads/pour-a.jpeg' },
-      { cap: 'rose refresher', img: 'uploads/drink-gulabo.jpeg' },
+      { cap: 'rose refresher', img: 'uploads/drink-gulabo-studio.png' },
       { cap: 'chocolate chai', img: 'uploads/drink-chocolate.jpeg' },
       { cap: 'lavender cold foam', img: 'uploads/drink-lavender.jpeg' },
     ];
 
     return {
-      showTicker, hotChai, coldCreations, lineup, events, igPosts,
+      showTicker, hotChai, coldCreations, lineup, events, noEvents, igPosts,
       f0: this.f0, f1: this.f1, f2: this.f2, f3: this.f3,
       cue: this.cue, nav: this.nav, content: this.content, heroIn: this.heroIn, par: this.par,
       featVideo: this.featVideo, toggleFeat: this.toggleFeat, toggleVideo: this.toggleVideo, featIcon: this.state.featMuted ? '🔇' : '🔊',
