@@ -37,13 +37,40 @@
   html{overflow-x:clip;scroll-behavior:smooth}
   body{overflow-x:clip;background:#100A05}
   ::selection{background:#F2A93C;color:#100A05}
+  a{color:#F2A93C}
+  a:hover{color:#FFBA55}
   @keyframes gc-marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
   @keyframes gc-kb{from{transform:scale(1.03)}to{transform:scale(1.13)}}
   @keyframes gc-cuedot{0%{transform:translateY(0);opacity:0.2}50%{transform:translateY(8px);opacity:1}100%{transform:translateY(0);opacity:0.2}}
+  /* Phones: the nav's four links + @godschai pill overflow past the viewport edge
+     (and get silently clipped by overflow-x:clip), so tighten it up down there. */
+  @media (max-width:560px){
+    header nav{gap:8px!important;padding-left:14px!important;padding-right:14px!important}
+    header nav img{height:44px!important}
+    header nav > div{gap:11px!important;font-size:13px!important}
+    header nav > a:last-child{font-size:12px!important;padding:8px 12px!important}
+  }
+  @media (max-width:400px){
+    header nav{gap:6px!important;padding-left:11px!important;padding-right:11px!important}
+    header nav img{height:38px!important}
+    header nav > div{gap:9px!important;font-size:12px!important}
+    header nav > a:last-child{font-size:11.5px!important;padding:7px 10px!important}
+  }
+  @media (max-width:345px){
+    header nav{flex-wrap:wrap!important;justify-content:center!important;row-gap:6px!important}
+  }
 </style>
 </helmet>
 
 <div style="font-family:'Hanken Grotesk',system-ui,sans-serif;color:#F3E8D3;background:#100A05;-webkit-font-smoothing:antialiased;position:relative">
+
+  <!-- AMBER MESH BACKGROUND (scroll-reactive) -->
+  <div aria-hidden="true" style="position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden">
+    <div ref="{{ meshA }}" style="position:absolute;left:-12%;top:-18%;width:80vw;height:80vw;border-radius:50%;background:radial-gradient(circle,rgba(242,169,60,0.34) 0%,rgba(242,169,60,0.12) 45%,transparent 70%);will-change:transform"></div>
+    <div ref="{{ meshB }}" style="position:absolute;right:-14%;top:24%;width:74vw;height:74vw;border-radius:50%;background:radial-gradient(circle,rgba(219,146,38,0.24) 0%,rgba(120,66,20,0.10) 50%,transparent 72%);will-change:transform"></div>
+    <div ref="{{ meshC }}" style="position:absolute;left:6%;bottom:-16%;width:70vw;height:70vw;border-radius:50%;background:radial-gradient(circle,rgba(255,111,97,0.20) 0%,rgba(255,111,97,0.07) 48%,transparent 70%);will-change:transform"></div>
+    <div style="position:absolute;inset:0;background:url('data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20width=%22160%22%20height=%22160%22%3E%3Cfilter%20id=%22n%22%3E%3CfeTurbulence%20type=%22fractalNoise%22%20baseFrequency=%220.9%22%20numOctaves=%222%22/%3E%3C/filter%3E%3Crect%20width=%22160%22%20height=%22160%22%20filter=%22url(%23n)%22%20opacity=%220.5%22/%3E%3C/svg%3E');opacity:0.07;mix-blend-mode:overlay"></div>
+  </div>
 
   <!-- FIXED NAV -->
   <header ref="{{ nav }}" style="position:fixed;top:0;left:0;right:0;z-index:80;background:transparent;border-bottom:1px solid transparent;transition:background .5s ease,border-color .5s ease">
@@ -53,6 +80,7 @@
       </a>
       <div style="display:flex;align-items:center;gap:clamp(12px,2vw,28px);font-weight:500;font-size:14.5px">
         <a href="menu.html" style="text-decoration:none;color:#EFE0CF">Menu</a>
+        <a href="#brew" style="text-decoration:none;color:#EFE0CF">Brew Guide</a>
         <a href="#premix" style="text-decoration:none;color:#EFE0CF">Premixes</a>
         <a href="#events" style="text-decoration:none;color:#EFE0CF">Events</a>
       </div>
@@ -62,7 +90,7 @@
 
   <span id="top"></span>
 
-  <!-- ================= HERO ================= -->
+  <!-- ================= AMBIENT POUR HERO ================= -->
   <section data-screen-label="Hero" style="position:relative;height:100vh;min-height:620px;background:#100A05">
     <div style="position:relative;height:100%;overflow:hidden;background:#100A05">
     <div style="position:absolute;inset:0">
@@ -80,7 +108,6 @@
         <h1 style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(3rem,9vw,7rem);line-height:0.92;letter-spacing:0;margin:16px 0 0;text-shadow:0 6px 40px rgba(0,0,0,0.5)">Not your<br><span style="color:#FF6F61;font-style:italic">average</span> chai.</h1>
         <p style="font-size:clamp(1.05rem,1.5vw,1.3rem);line-height:1.5;color:#E7D6C4;max-width:36ch;margin:20px 0 0;text-shadow:0 2px 16px rgba(0,0,0,0.6)">Whole spices from Kerala. Single-origin Assam tea. Poured fresh, the real way.</p>
         <div style="display:flex;gap:13px;flex-wrap:wrap;margin-top:30px">
-          <a href="#menu" style="text-decoration:none;background:#FF7A66;color:#2B1B12;font-weight:700;font-size:16px;padding:15px 26px;border-radius:999px;box-shadow:0 12px 34px rgba(255,122,102,0.45)" style-hover="background:#FF9C8A">View the menu →</a>
           <a href="#hot" style="text-decoration:none;background:rgba(243,232,211,0.10);color:#F3E8D3;font-weight:600;font-size:16px;padding:15px 24px;border-radius:999px;border:1.5px solid rgba(243,232,211,0.3);backdrop-filter:blur(4px)" style-hover="border-color:#F2A93C">Explore the chai</a>
         </div>
         <div style="display:flex;gap:24px;margin-top:32px;flex-wrap:wrap">
@@ -96,7 +123,7 @@
   </section>
 
   <!-- ================= CONTENT ================= -->
-  <div ref="{{ content }}" style="position:relative;z-index:2;background:#150D07">
+  <div ref="{{ content }}" style="position:relative;z-index:2;background:rgba(21,13,7,0.28)">
 
   <sc-if value="{{ showTicker }}" hint-placeholder-val="{{ true }}">
   <div style="background:#1D120B;color:#F2A93C;overflow:hidden;white-space:nowrap;border-top:1px solid rgba(242,169,60,0.2);border-bottom:1px solid rgba(242,169,60,0.2)">
@@ -131,7 +158,7 @@
   </section>
 
   <!-- COLD -->
-  <section id="cold" style="background:#1D120B;margin-top:clamp(40px,5vw,76px);scroll-margin-top:84px">
+  <section id="cold" style="background:rgba(29,18,11,0.6);margin-top:clamp(40px,5vw,76px);scroll-margin-top:84px">
     <div style="max-width:1240px;margin:0 auto;padding:clamp(44px,6vw,84px) clamp(18px,4vw,40px)">
       <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:18px;flex-wrap:wrap;margin-bottom:30px">
         <div>
@@ -179,7 +206,7 @@
     <h2 style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(1.9rem,4vw,3rem);letter-spacing:0;text-align:center;margin:0 0 8px">Why God's Chai is different</h2>
     <p style="text-align:center;color:#C7B29E;font-size:1.05rem;margin:0 auto 42px;max-width:46ch">No syrups pretending to be spice. No powders, no shortcuts. Just the real thing, done properly.</p>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:clamp(16px,2vw,24px)">
-      <div style="padding:30px 28px 32px;background:#1C110A;border:1px solid rgba(242,169,60,0.16);border-radius:22px;transition:border-color .35s ease" style-hover="border-color:rgba(242,169,60,0.5)">
+      <div style="padding:30px 28px 32px;background:rgba(28,17,10,0.8);backdrop-filter:blur(3px);border:1px solid rgba(242,169,60,0.16);border-radius:22px;transition:border-color .35s ease" style-hover="border-color:rgba(242,169,60,0.5)">
         <div style="display:flex;align-items:baseline;gap:14px;padding-bottom:18px;border-bottom:1px solid rgba(243,232,211,0.10)">
           <span style="font-family:'Instrument Serif',serif;font-weight:400;font-size:46px;line-height:0.8;color:#F2A93C;letter-spacing:0">01</span>
           <span style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#C58A2E">Sourcing</span>
@@ -187,7 +214,7 @@
         <h3 style="font-family:'Instrument Serif',serif;font-weight:400;font-size:1.32rem;margin:20px 0 0">Sourced, not faked</h3>
         <p style="color:#C7B29E;line-height:1.55;margin:9px 0 0">Whole spices from Kerala and single-origin tea from Assam. Ground and blended in small batches.</p>
       </div>
-      <div style="padding:30px 28px 32px;background:#1C110A;border:1px solid rgba(242,169,60,0.16);border-radius:22px;transition:border-color .35s ease" style-hover="border-color:rgba(242,169,60,0.5)">
+      <div style="padding:30px 28px 32px;background:rgba(28,17,10,0.8);backdrop-filter:blur(3px);border:1px solid rgba(242,169,60,0.16);border-radius:22px;transition:border-color .35s ease" style-hover="border-color:rgba(242,169,60,0.5)">
         <div style="display:flex;align-items:baseline;gap:14px;padding-bottom:18px;border-bottom:1px solid rgba(243,232,211,0.10)">
           <span style="font-family:'Instrument Serif',serif;font-weight:400;font-size:46px;line-height:0.8;color:#F2A93C;letter-spacing:0">02</span>
           <span style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#C58A2E">Philosophy</span>
@@ -195,7 +222,7 @@
         <h3 style="font-family:'Instrument Serif',serif;font-weight:400;font-size:1.32rem;margin:20px 0 0">Real spices, done right</h3>
         <p style="color:#C7B29E;line-height:1.55;margin:9px 0 0">Whole spices, freshly ground and slow-brewed the proper way — never from a premade base.</p>
       </div>
-      <div style="padding:30px 28px 32px;background:#1C110A;border:1px solid rgba(242,169,60,0.16);border-radius:22px;transition:border-color .35s ease" style-hover="border-color:rgba(242,169,60,0.5)">
+      <div style="padding:30px 28px 32px;background:rgba(28,17,10,0.8);backdrop-filter:blur(3px);border:1px solid rgba(242,169,60,0.16);border-radius:22px;transition:border-color .35s ease" style-hover="border-color:rgba(242,169,60,0.5)">
         <div style="display:flex;align-items:baseline;gap:14px;padding-bottom:18px;border-bottom:1px solid rgba(243,232,211,0.10)">
           <span style="font-family:'Instrument Serif',serif;font-weight:400;font-size:46px;line-height:0.8;color:#F2A93C;letter-spacing:0">03</span>
           <span style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#C58A2E">Roots</span>
@@ -206,29 +233,58 @@
     </div>
   </section>
 
-  <!-- MENU PREVIEW -->
-  <section id="menu" style="background:#1D120B;border-top:1px solid rgba(243,232,211,0.08);border-bottom:1px solid rgba(243,232,211,0.08);scroll-margin-top:84px">
-    <div style="max-width:1240px;margin:0 auto;padding:clamp(44px,6vw,84px) clamp(18px,4vw,40px)">
-      <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:18px;flex-wrap:wrap;margin-bottom:30px">
+  <!-- BREW GUIDE -->
+  <section id="brew" data-screen-label="Brew Guide" style="background:linear-gradient(180deg,#1A100A,#241610);border-top:1px solid rgba(242,169,60,0.14);border-bottom:1px solid rgba(242,169,60,0.14);scroll-margin-top:84px">
+    <div style="max-width:1240px;margin:0 auto;padding:clamp(48px,6vw,90px) clamp(18px,4vw,40px)">
+      <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:28px;flex-wrap:wrap;margin-bottom:clamp(30px,4vw,46px)">
         <div>
-          <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.18em;text-transform:uppercase;color:#F2A93C">A taste of the menu</div>
-          <h2 style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(2rem,4.4vw,3.3rem);letter-spacing:0;line-height:1;margin:10px 0 0">The full lineup</h2>
+          <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.2em;text-transform:uppercase;color:#F2A93C;margin-bottom:14px">Brew it your way</div>
+          <h2 style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(2.1rem,5vw,3.6rem);line-height:0.98;letter-spacing:0;margin:0;color:#F3E8D3">Four steps. One proper cup.</h2>
         </div>
-        <a href="menu.html" style="text-decoration:none;background:#F2A93C;color:#2B1B12;font-weight:700;font-size:15px;padding:13px 22px;border-radius:999px;white-space:nowrap" style-hover="background:#FFBA55">See the full menu →</a>
+        <p style="max-width:34ch;font-size:1.02rem;line-height:1.5;color:#C7B29E;margin:0">Straight off the back of the bag. Stovetop only — this is how chai is supposed to be made.</p>
       </div>
-      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:clamp(14px,1.8vw,20px)">
-        <sc-for list="{{ lineup }}" as="d" hint-placeholder-count="8">
-          <div style="background:#2E1D13;border:1px solid rgba(243,232,211,0.08);border-radius:18px;padding:17px 18px 19px;transition:border-color .3s ease" style-hover="border:1px solid rgba(242,169,60,0.45)">
-            <span style="display:inline-block;font-family:'DM Mono',monospace;font-size:9.5px;color:#F2A93C;background:rgba(242,169,60,0.14);padding:3px 9px;border-radius:999px;text-transform:uppercase;letter-spacing:0.08em">{{ d.tag }}</span>
-            <h3 style="font-family:'Instrument Serif',serif;font-weight:400;font-size:1.08rem;margin:11px 0 0;letter-spacing:0">{{ d.name }}</h3>
-            <p style="font-size:0.88rem;line-height:1.4;color:#C7B29E;margin:5px 0 0">{{ d.desc }}</p>
+
+      <div style="display:flex;align-items:center;gap:10px;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#C58A2E;margin-bottom:20px">
+        <span style="width:7px;height:7px;border-radius:50%;background:#FF7A66;display:inline-block"></span>
+        <span>Serves 2</span>
+        <span style="flex:1;height:1px;background:rgba(242,169,60,0.2)"></span>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:clamp(14px,1.8vw,20px)">
+        <div style="padding:26px 24px 28px;background:rgba(46,29,19,0.72);border:1px solid rgba(242,169,60,0.16);border-radius:22px;transition:border-color .35s ease,transform .35s ease" style-hover="border-color:rgba(242,169,60,0.5);transform:translateY(-4px)">
+          <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding-bottom:16px;border-bottom:1px solid rgba(243,232,211,0.10)">
+            <span style="font-family:'Instrument Serif',serif;font-size:44px;line-height:0.8;color:#F2A93C">01</span>
+            <span style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#C58A2E">Boil</span>
           </div>
-        </sc-for>
+          <h3 style="font-family:'Instrument Serif',serif;font-weight:400;font-size:1.32rem;margin:20px 0 0;color:#F3E8D3">1 cup water, 1 cup milk</h3>
+          <p style="color:#C7B29E;line-height:1.55;margin:9px 0 0;font-size:0.95rem">Bring both to a boil together in a small pot. Equal parts, no measuring cup gymnastics.</p>
+        </div>
+        <div style="padding:26px 24px 28px;background:rgba(46,29,19,0.72);border:1px solid rgba(242,169,60,0.16);border-radius:22px;transition:border-color .35s ease,transform .35s ease" style-hover="border-color:rgba(242,169,60,0.5);transform:translateY(-4px)">
+          <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding-bottom:16px;border-bottom:1px solid rgba(243,232,211,0.10)">
+            <span style="font-family:'Instrument Serif',serif;font-size:44px;line-height:0.8;color:#F2A93C">02</span>
+            <span style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#C58A2E">Blend</span>
+          </div>
+          <h3 style="font-family:'Instrument Serif',serif;font-weight:400;font-size:1.32rem;margin:20px 0 0;color:#F3E8D3">2 tbsp God's Chai</h3>
+          <p style="color:#C7B29E;line-height:1.55;margin:9px 0 0;font-size:0.95rem">Stir in the mix and sugar to taste. Give the bag a shake first — the spices settle.</p>
+        </div>
+        <div style="padding:26px 24px 28px;background:rgba(46,29,19,0.72);border:1px solid rgba(255,122,102,0.3);border-radius:22px;transition:border-color .35s ease,transform .35s ease" style-hover="border-color:rgba(255,122,102,0.65);transform:translateY(-4px)">
+          <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding-bottom:16px;border-bottom:1px solid rgba(243,232,211,0.10)">
+            <span style="font-family:'Instrument Serif',serif;font-size:44px;line-height:0.8;color:#FF7A66">03</span>
+            <span style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#FF7A66">Rise</span>
+          </div>
+          <h3 style="font-family:'Instrument Serif',serif;font-weight:400;font-size:1.32rem;margin:20px 0 0;color:#F3E8D3">Let it rise 2–3 times</h3>
+          <p style="color:#C7B29E;line-height:1.55;margin:9px 0 0;font-size:0.95rem">Let it climb the pot, pull it back, repeat. This is where the magic happens — don't skip it.</p>
+        </div>
+        <div style="padding:26px 24px 28px;background:rgba(46,29,19,0.72);border:1px solid rgba(242,169,60,0.16);border-radius:22px;transition:border-color .35s ease,transform .35s ease" style-hover="border-color:rgba(242,169,60,0.5);transform:translateY(-4px)">
+          <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding-bottom:16px;border-bottom:1px solid rgba(243,232,211,0.10)">
+            <span style="font-family:'Instrument Serif',serif;font-size:44px;line-height:0.8;color:#F2A93C">04</span>
+            <span style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#C58A2E">Strain</span>
+          </div>
+          <h3 style="font-family:'Instrument Serif',serif;font-weight:400;font-size:1.32rem;margin:20px 0 0;color:#F3E8D3">Strain and enjoy</h3>
+          <p style="color:#C7B29E;line-height:1.55;margin:9px 0 0;font-size:0.95rem">Pour through a fine strainer into your cup. Kadak, spiced, exactly right.</p>
+        </div>
       </div>
-      <div style="margin-top:22px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:#2E1D13;border:1px dashed rgba(242,169,60,0.35);border-radius:16px;padding:14px 20px">
-        <span style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:#2B1B12;background:#F2A93C;padding:6px 12px;border-radius:999px">Combos available</span>
-        <span style="font-size:0.98rem;color:#D6C7B4">Pair any drink with a samosa — just ask at the cart.</span>
-      </div>
+
     </div>
   </section>
 
@@ -253,6 +309,7 @@
           <p style="font-family:'DM Mono',monospace;font-size:11px;color:#C7B29E;margin:12px 0 0;letter-spacing:0.04em">No spam. Just one note when the premixes are ready.</p>
         </sc-if>
       </div>
+      
     </div>
   </section>
 
@@ -263,18 +320,10 @@
         <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.18em;text-transform:uppercase;color:#F2A93C">Find us in the wild</div>
         <h2 style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(2rem,4.4vw,3.3rem);letter-spacing:0;line-height:1;margin:10px 0 0">Events & pop-ups</h2>
       </div>
-      <a href="https://www.instagram.com/godschai" target="_blank" rel="noopener" style="text-decoration:none;color:#F2A93C;font-weight:600;font-size:15px;border-bottom:2px solid rgba(242,169,60,0.5);padding-bottom:2px">Follow @godschai for live updates →</a>
     </div>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:clamp(16px,2vw,24px)">
-      <sc-if value="{{ noEvents }}" hint-placeholder-val="{{ false }}">
-        <div style="grid-column:1/-1;display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px;background:#342216;border:1px dashed rgba(243,232,211,0.18);border-radius:20px;padding:34px 24px">
-          <div style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#F2A93C">Between pop-ups</div>
-          <div style="font-family:'Instrument Serif',serif;font-weight:400;font-size:1.5rem;color:#F3E8D3">No events on the calendar right now</div>
-          <p style="font-size:0.95rem;line-height:1.45;color:#C7B29E;margin:0;max-width:42ch">We're plotting the next one. Follow <a href="https://www.instagram.com/godschai" target="_blank" rel="noopener" style="color:#F2A93C;font-weight:600">@godschai</a> to catch the next drop first.</p>
-        </div>
-      </sc-if>
       <sc-for list="{{ events }}" as="e" hint-placeholder-count="8">
-        <div style="display:flex;gap:16px;background:#342216;border:1px solid rgba(243,232,211,0.08);border-radius:20px;padding:18px;align-items:flex-start;transition:border-color .3s ease" style-hover="border:1px solid rgba(242,169,60,0.4)">
+        <div style="display:flex;gap:16px;background:rgba(52,34,22,0.82);backdrop-filter:blur(3px);border:1px solid rgba(243,232,211,0.08);border-radius:20px;padding:18px;align-items:flex-start;transition:border-color .3s ease" style-hover="border:1px solid rgba(242,169,60,0.4)">
           <div style="flex:none;min-width:64px;text-align:center;background:#F2A93C;color:#2B1B12;border-radius:14px;padding:11px 8px">
             <div style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase">{{ e.mon }}</div>
             <div style="font-family:'Instrument Serif',serif;font-weight:400;font-size:{{ e.dayFs }};line-height:1;margin-top:2px;white-space:nowrap">{{ e.day }}</div>
@@ -286,42 +335,38 @@
           </div>
         </div>
       </sc-for>
+        <sc-if value="{{ noEvents }}" hint-placeholder-val="{{ false }}">
+          <div style="grid-column:1/-1;display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px;background:#342216;border:1px dashed rgba(243,232,211,0.18);border-radius:20px;padding:34px 24px">
+            <div style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#F2A93C">Between pop-ups</div>
+            <div style="font-family:'Instrument Serif',serif;font-weight:400;font-size:1.5rem;color:#F3E8D3">No events on the calendar right now</div>
+            <p style="font-size:0.95rem;line-height:1.45;color:#C7B29E;margin:0;max-width:42ch">We're plotting the next one. Follow <a href="https://www.instagram.com/godschai" target="_blank" rel="noopener" style="color:#F2A93C;font-weight:600">@godschai</a> to catch the next drop first.</p>
+          </div>
+        </sc-if>
     </div>
   </section>
 
   <!-- COMMUNITY -->
-  <section id="community" style="background:#1D120B;scroll-margin-top:84px">
+  <section id="community" style="background:rgba(29,18,11,0.6);scroll-margin-top:84px">
     <div style="max-width:1240px;margin:0 auto;padding:clamp(46px,6vw,88px) clamp(18px,4vw,40px)">
       <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:18px;flex-wrap:wrap;margin-bottom:28px">
         <div>
           <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.18em;text-transform:uppercase;color:#FF7A66">The God's Chai community</div>
           <h2 style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(2rem,4.6vw,3.4rem);letter-spacing:0;line-height:1;margin:10px 0 0;color:#F3E8D3">@godschai</h2>
         </div>
-        <a href="https://www.instagram.com/godschai" target="_blank" rel="noopener" style="text-decoration:none;background:#F2A93C;color:#2B1B12;font-weight:700;font-size:15px;padding:13px 24px;border-radius:999px" style-hover="background:#FFBA55">Follow on Instagram</a>
       </div>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));grid-auto-rows:174px;grid-auto-flow:dense;gap:12px">
 
         <!-- FEATURED post (replace with your #1 reel/post) -->
         <div style="grid-column:span 2;grid-row:span 2;border-radius:20px;overflow:hidden;background:#25160F;position:relative;cursor:pointer">
           <video ref="{{ featVideo }}" data-sound="1" src="https://pub-cebe510d78a84528b5ea883bd62fe46c.r2.dev/6E01C02C-6C76-463F-B10C-64BCD4A48B83.MOV" muted="true" loop="true" playsInline="true" preload="metadata" poster="uploads/pour-cup.jpeg" style="width:100%;height:100%;object-fit:cover;object-position:50% 36%;display:block"></video>
-          <span style="position:absolute;top:13px;left:13px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:#2B1B12;background:#F2A93C;padding:5px 10px;border-radius:999px">★ Top post</span>
           <button onClick="{{ toggleFeat }}" aria-label="Toggle sound" style="position:absolute;top:11px;right:11px;width:38px;height:38px;border-radius:999px;border:1px solid rgba(243,232,211,0.25);background:rgba(18,11,6,0.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);color:#F3E8D3;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;line-height:1;z-index:3" style-hover="background:rgba(18,11,6,0.8)">{{ featIcon }}</button>
-          <div style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:18px;background:linear-gradient(180deg,transparent 45%,rgba(18,11,6,0.82))">
-            <div style="font-family:'Instrument Serif',serif;font-weight:400;font-size:1.25rem;color:#F3E8D3;letter-spacing:0">Kadak, every single cup</div>
-            <div style="font-family:'DM Mono',monospace;font-size:10.5px;color:#F2A93C;margin-top:5px;letter-spacing:0.04em">@godschai · 2.4k likes</div>
-          </div>
         </div>
-
-
 
         <!-- video -->
         <div style="border-radius:18px;overflow:hidden;background:#25160F;position:relative;cursor:pointer;transition:transform .35s ease" style-hover="transform:scale(1.02)">
           <video muted="true" loop="true" playsInline="true" preload="none" data-lazy="https://pub-cebe510d78a84528b5ea883bd62fe46c.r2.dev/IMG_2773.MOV" poster="uploads/pour-cup.jpeg" style="width:100%;height:100%;object-fit:cover;display:block"></video>
           <button onClick="{{ toggleVideo }}" aria-label="Toggle sound" style="position:absolute;top:10px;right:10px;width:32px;height:32px;border-radius:999px;border:1px solid rgba(243,232,211,0.25);background:rgba(18,11,6,0.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);color:#F3E8D3;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;line-height:1;z-index:3" style-hover="background:rgba(18,11,6,0.8)">🔇</button>
-          <div style="position:absolute;inset:0;display:flex;align-items:flex-end;padding:11px;background:linear-gradient(180deg,transparent 55%,rgba(18,11,6,0.7))"><span style="font-family:'DM Mono',monospace;font-size:10px;color:#FFFAF3">@godschai</span></div>
         </div>
-
-
 
         <!-- TAG-US CTA tile -->
         <div style="grid-column:span 2;border-radius:20px;border:1px dashed rgba(242,169,60,0.4);background:rgba(242,169,60,0.06);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:18px;gap:8px">
@@ -347,6 +392,7 @@
         <div style="display:flex;flex-direction:column;gap:11px;font-size:15px">
           <a href="menu.html" style="text-decoration:none;color:#F3E8D3">Menu</a>
           <a href="#events" style="text-decoration:none;color:#F3E8D3">Events</a>
+          <a href="#brew" style="text-decoration:none;color:#F3E8D3">Brew Guide</a>
           <a href="#premix" style="text-decoration:none;color:#F3E8D3">Premixes</a>
         </div>
         <div style="display:flex;gap:12px;margin-top:16px">
@@ -392,6 +438,7 @@ class Component extends DCLogic {
   constructor(props){
     super(props);
     this.cue = React.createRef(); this.nav = React.createRef();
+    this.meshA = React.createRef(); this.meshB = React.createRef(); this.meshC = React.createRef();
     this.content = React.createRef(); this.heroIn = React.createRef(); this.par = React.createRef();
     this.featVideo = React.createRef();
     this._raf = 0; this._active = 0;
@@ -419,7 +466,6 @@ class Component extends DCLogic {
       if (v === except) return;
       v.muted = true; v.volume = 0;
     });
-    // reset every sound button icon to muted
     document.querySelectorAll('#community button[aria-label="Toggle sound"]').forEach((b) => {
       const vid = b.parentElement ? b.parentElement.querySelector('video') : null;
       if (vid !== except) b.textContent = '🔇';
@@ -451,10 +497,8 @@ class Component extends DCLogic {
   };
 
   componentDidMount(){
-    // force-mute every video, now and any added later
     const muteAll = () => { document.querySelectorAll('video').forEach((v) => { if (v.dataset.sound === '1' || v.dataset.userSound === '1') return; v.muted = true; v.defaultMuted = true; v.volume = 0; }); };
     muteAll();
-    // play videos only while on-screen (fixes lag from many videos decoding at once)
     try {
       const vids = Array.from(document.querySelectorAll('video'));
       this._vidObs = new IntersectionObserver((entries) => {
@@ -473,13 +517,11 @@ class Component extends DCLogic {
       this._muteObs.observe(document.body, { childList: true, subtree: true });
     } catch (e) {}
 
-    // reveal hero copy
     requestAnimationFrame(() => {
       const h = this.heroIn.current;
       if (h){ h.style.opacity = '1'; h.style.transform = 'none'; }
     });
 
-    // scroll-reveal for content blocks
     const root = this.content.current;
     const blocks = root ? Array.from(root.querySelectorAll('section, footer')) : [];
     this._blocks = blocks;
@@ -491,7 +533,6 @@ class Component extends DCLogic {
         el.style.transition = 'opacity .9s cubic-bezier(.2,.7,.2,1), transform .9s cubic-bezier(.2,.7,.2,1)';
         el.style.willChange = 'opacity, transform';
       });
-      // backup: reveal any block already in view on scroll/load (works without IntersectionObserver)
       this._revealInView = () => {
         const vh = window.innerHeight;
         this._blocks = this._blocks.filter((el) => {
@@ -508,17 +549,20 @@ class Component extends DCLogic {
         blocks.forEach((el) => this._io.observe(el));
       }
       this._revealInView();
-      // failsafe: never leave content hidden if neither observer nor scroll fires
       this._revealFailsafe = setTimeout(() => blocks.forEach(reveal), 1400);
     } catch (err) {
       blocks.forEach(reveal);
     }
 
-    // light scroll: nav solidity, cue fade, parallax band
     this._tick = () => { if (this._raf) return; this._raf = requestAnimationFrame(this._onScroll); };
     this._onScroll = () => {
       this._raf = 0;
       const y = window.scrollY || window.pageYOffset || 0;
+      const doc = Math.max(1, (document.documentElement.scrollHeight - window.innerHeight));
+      const p = y / doc;
+      if (this.meshA.current) this.meshA.current.style.transform = 'translate(' + (p * 22) + 'vw,' + (p * 55) + 'vh) scale(' + (1 + p * 0.25) + ')';
+      if (this.meshB.current) this.meshB.current.style.transform = 'translate(' + (-p * 26) + 'vw,' + (Math.sin(p * Math.PI) * -18) + 'vh)';
+      if (this.meshC.current) this.meshC.current.style.transform = 'translate(' + (Math.sin(p * Math.PI * 2) * 10) + 'vw,' + (-p * 48) + 'vh) scale(' + (1.15 - p * 0.2) + ')';
       const vh = window.innerHeight;
       if (this._revealInView && this._blocks && this._blocks.length) this._revealInView();
       if (this.cue.current) this.cue.current.style.opacity = Math.max(0, 1 - y / (vh * 0.45));
@@ -614,6 +658,7 @@ class Component extends DCLogic {
     return {
       showTicker, hotChai, coldCreations, lineup, events, noEvents, igPosts,
       cue: this.cue, nav: this.nav, content: this.content, heroIn: this.heroIn, par: this.par,
+      meshA: this.meshA, meshB: this.meshB, meshC: this.meshC,
       featVideo: this.featVideo, toggleFeat: this.toggleFeat, toggleVideo: this.toggleVideo, featIcon: this.state.featMuted ? '🔇' : '🔊',
       email: this.state.email, sent: this.state.sent, notSent: !this.state.sent, subErr: this.state.subErr,
       onEmail: (e) => this.setState({ email: e.target.value }),
