@@ -1,0 +1,6 @@
+{%- comment -%} One compact card in the homepage "full lineup" grid. {%- endcomment -%}
+<div style="background:#2E1D13;border:1px solid rgba(243,232,211,0.08);border-radius:18px;padding:17px 18px 19px;transition:border-color .3s ease" style-hover="border:1px solid rgba(242,169,60,0.45)">
+  <span style="display:inline-block;font-family:'DM Mono',monospace;font-size:11px;color:#F2A93C;background:rgba(242,169,60,0.14);padding:3px 9px;border-radius:999px;text-transform:uppercase;letter-spacing:0.08em">{{ include.tag }}</span>
+  <h3 style="font-family:'Instrument Serif',serif;font-weight:400;font-size:1.08rem;margin:11px 0 0;letter-spacing:0">{{ include.d.name }}</h3>
+  <p style="font-size:0.88rem;line-height:1.4;color:#C7B29E;margin:5px 0 0">{{ include.d.short | default: include.d.desc }}</p>
+</div>

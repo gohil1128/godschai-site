@@ -1,0 +1,73 @@
+---
+layout: default
+title: "Chai Pop-Ups in Saskatoon | God's Chai Events"
+description: "Where to find the God's Chai cart in Saskatoon — markets, street festivals and pop-ups all season. Fresh masala chai, hot or iced, poured on the spot."
+breadcrumb: "Events"
+og_image: "uploads/opt/pour-a-1280.jpg"
+---
+
+<section aria-labelledby="page-h1" style="max-width:1240px;margin:0 auto;padding:clamp(110px,14vh,170px) clamp(18px,4vw,40px) clamp(10px,2vw,20px)">
+  <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.2em;text-transform:uppercase;color:#F2A93C;margin-bottom:14px">Find us in the wild</div>
+  <h1 id="page-h1" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(2.3rem,6vw,4.2rem);line-height:0.98;letter-spacing:0;margin:0;max-width:26ch">Chai Pop-Ups in <span style="color:#FF6F61;font-style:italic">Saskatoon</span></h1>
+  <p style="font-size:clamp(1.05rem,1.5vw,1.25rem);line-height:1.6;color:#E7D6C4;max-width:54ch;margin:22px 0 0">We're a cart, not a storefront — so the chai moves. Here's where to catch us this season: markets, street festivals, and one-off collabs across the city.</p>
+</section>
+
+<div data-gc-reveal>
+
+{% include events-grid.html heading="The schedule" heading_id="schedule-h2" %}
+
+<section aria-labelledby="book-h2" style="background:rgba(29,18,11,0.6);border-top:1px solid rgba(243,232,211,0.08)">
+  <div style="max-width:1240px;margin:0 auto;padding:clamp(46px,6vw,88px) clamp(18px,4vw,40px)">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:clamp(20px,3vw,32px)">
+      <div>
+        <h2 id="book-h2" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(1.8rem,4vw,2.6rem);letter-spacing:0;line-height:1.05;margin:0;color:#F3E8D3">Want us at your event?</h2>
+        <p style="font-size:1.05rem;line-height:1.6;color:#D6C7B4;max-width:44ch;margin:14px 0 22px">We cater weddings, office mornings, markets and private parties around Saskatoon — the same masala chai, poured fresh on site.</p>
+        <a href="{{ '/catering/' | relative_url }}" style="text-decoration:none;background:#F2A93C;color:#2B1B12;font-weight:700;font-size:16px;padding:15px 26px;border-radius:999px" style-hover="background:#FFBA55">Chai catering in Saskatoon →</a>
+      </div>
+      <div>
+        <h2 style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(1.8rem,4vw,2.6rem);letter-spacing:0;line-height:1.05;margin:0;color:#F3E8D3">Never miss a drop</h2>
+        <p style="font-size:1.05rem;line-height:1.6;color:#D6C7B4;max-width:44ch;margin:14px 0 22px">New pop-ups get announced first on Instagram, and to the mailing list right after.</p>
+        {% include signup-form.html id="events" button="Get the schedule" %}
+      </div>
+    </div>
+  </div>
+</section>
+
+</div>
+
+{% comment %} One Event block per pop-up. Only emitted when events actually exist. {% endcomment %}
+{%- if site.data.events and site.data.events.size > 0 %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {%- for e in site.data.events %}
+    {
+      "@type": "Event",
+      "name": {{ e.name | jsonify }},
+      "description": {{ e.desc | jsonify }},
+      "startDate": "{{ e.start | date: '%Y-%m-%d' }}",
+      "endDate": "{{ e.end | date: '%Y-%m-%d' }}",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+      "url": "{{ page.url | absolute_url }}",
+      "image": "{{ 'uploads/og-image.jpg' | absolute_url }}",
+      "location": {
+        "@type": "Place",
+        "name": {{ e.venue | default: "Saskatoon" | jsonify }},
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Saskatoon",
+          "addressRegion": "SK",
+          "addressCountry": "CA"
+        }
+      },
+      "organizer": { "@id": "{{ '/' | absolute_url }}#organization" },
+      "performer": { "@id": "{{ '/' | absolute_url }}#organization" },
+      "isAccessibleForFree": true
+    }{% unless forloop.last %},{% endunless %}
+    {%- endfor %}
+  ]
+}
+</script>
+{%- endif %}

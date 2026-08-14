@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="{{ site.lang }}">
+<head>
+{% include head.html %}
+<style>
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:#FDF6E4}
+  ::selection{background:#D57245;color:#FFFAF3}
+  a{color:#C05A30}
+  .gc-skip{position:absolute;left:-9999px;top:0;z-index:200;background:#4A2F25;color:#FDF6E4;font-family:'Hanken Grotesk',sans-serif;font-weight:700;font-size:14px;padding:12px 18px;border-radius:0 0 10px 0;text-decoration:none}
+  .gc-skip:focus{left:0}
+  :focus-visible{outline:2px solid #C05A30;outline-offset:3px}
+  /* Tap targets: nav and footer links are only 18-22px tall on their own. */
+  header nav > div > a{padding:11px 0!important}
+  footer a{padding:5px 0!important;display:inline-block}
+  /* Section headers pair a nowrap heading with a nowrap label either side of a
+     rigid divider, so on narrow phones the label was pushed past the padding
+     edge and clipped. Let the row wrap instead. */
+  @media (max-width:389px){
+    #hot > div:first-of-type,
+    #cold > div > div:first-of-type,
+    #snacks > div > div:first-of-type{flex-wrap:wrap!important;row-gap:4px!important}
+  }
+</style>
+</head>
+<body style="font-family:'Hanken Grotesk',system-ui,sans-serif;color:#4A2F25;background:linear-gradient(180deg,#FFE7D3 0%,#FFF1E0 320px,#FDF6E4 760px);overflow-x:hidden;-webkit-font-smoothing:antialiased">
+<a class="gc-skip" href="#main">Skip to content</a>
+
+<!-- NAV -->
+<header style="position:sticky;top:0;z-index:50;background:rgba(253,246,228,0.86);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid rgba(74,47,37,0.10)">
+  <nav aria-label="Primary" style="max-width:1240px;margin:0 auto;padding:14px clamp(18px,4vw,40px);display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap">
+    <a href="{{ '/' | relative_url }}" style="text-decoration:none;display:flex;align-items:center;line-height:1" aria-label="God's Chai — home">
+      {% include img.html base="artboard" ext="png" widths="128,256" sizes="64px" w="256" h="256" alt="God's Chai — Not Your Average Chai" priority=true wrap="display:block" style="height:64px;width:auto;display:block" %}
+    </a>
+    <div style="display:flex;align-items:center;gap:clamp(14px,2vw,30px);flex-wrap:wrap;font-weight:500;font-size:15px">
+      <a href="#hot" style="text-decoration:none;color:#4A2F25">Hot</a>
+      <a href="#cold" style="text-decoration:none;color:#4A2F25">Iced</a>
+      <a href="#snacks" style="text-decoration:none;color:#4A2F25">Snacks</a>
+      <a href="{{ '/premixes/' | relative_url }}" style="text-decoration:none;color:#4A2F25">Premixes</a>
+    </div>
+    <a href="{{ '/' | relative_url }}" style="text-decoration:none;background:#4A2F25;color:#FDF6E4;font-weight:600;font-size:14px;padding:10px 18px;border-radius:999px;white-space:nowrap" style-hover="background:#37231C">← Home</a>
+  </nav>
+</header>
+
+<main id="main">
+{{ content }}
+</main>
+
+<!-- FOOTER -->
+<footer style="background:#4A2F25;color:#FDF6E4">
+  <div style="max-width:1240px;margin:0 auto;padding:clamp(40px,5vw,64px) clamp(18px,4vw,40px) 30px;display:flex;gap:clamp(24px,4vw,56px);flex-wrap:wrap;justify-content:space-between;align-items:center">
+    <div style="display:flex;align-items:center;gap:12px">
+      {% include img.html base="logo-cream" ext="png" widths="128,256" sizes="98px" w="256" h="256" alt="" wrap="display:block" style="height:98px;width:auto;display:block" %}
+    </div>
+    <div style="display:flex;gap:22px;flex-wrap:wrap;font-weight:600;font-size:15px">
+      <a href="{{ '/how-to-make-masala-chai/' | relative_url }}" style="color:#FFD7C5;text-decoration:none;border-bottom:2px solid rgba(255,215,197,0.4);padding-bottom:2px">Brew guide</a>
+      <a href="{{ '/catering/' | relative_url }}" style="color:#FFD7C5;text-decoration:none;border-bottom:2px solid rgba(255,215,197,0.4);padding-bottom:2px">Catering</a>
+      <a href="{{ '/' | relative_url }}" style="color:#FFD7C5;text-decoration:none;border-bottom:2px solid rgba(255,215,197,0.4);padding-bottom:2px">← Back to home</a>
+    </div>
+  </div>
+  <div style="border-top:1px solid rgba(253,246,228,0.12)">
+    <div style="max-width:1240px;margin:0 auto;padding:18px clamp(18px,4vw,40px);display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.06em;color:#967466">
+      <span>© {{ 'now' | date: "%Y" }} God's Chai · Saskatoon, SK</span>
+      <span>{{ site.season }} menu · Made fresh in Saskatoon</span>
+    </div>
+  </div>
+</footer>
+<script src="{{ '/assets/js/site.js' | relative_url }}" defer></script>
+</body>
+</html>

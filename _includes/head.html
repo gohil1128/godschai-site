@@ -1,0 +1,60 @@
+{%- comment -%}
+  Shared <head> for every page. Pages set these in their front matter:
+    title        — <60 chars, must pair the brand with Saskatoon/Saskatchewan
+    description  — 140-160 chars
+    og_image     — optional, defaults to the site OG image
+    theme_color  — optional, defaults to the dark palette
+{%- endcomment -%}
+{%- assign og_img = page.og_image | default: "uploads/og-image.jpg" -%}
+{%- assign theme = page.theme_color | default: "#100A05" -%}
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Content-Security-Policy. GitHub Pages can't send response headers, so it ships as a
+     meta tag. 'unsafe-inline' covers the inline styles the design relies on; there is no
+     'unsafe-eval' because the site no longer evaluates JS at runtime. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://*.list-manage.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://pub-cebe510d78a84528b5ea883bd62fe46c.r2.dev https://*.google-analytics.com https://*.googletagmanager.com; media-src 'self' https://pub-cebe510d78a84528b5ea883bd62fe46c.r2.dev; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://stats.g.doubleclick.net; object-src 'none'; base-uri 'self'; form-action 'self'; frame-src 'none'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+
+<title>{{ page.title }}</title>
+<meta name="description" content="{{ page.description }}">
+<link rel="canonical" href="{{ page.url | absolute_url }}">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="theme-color" content="{{ theme }}">
+<meta name="geo.region" content="CA-SK">
+<meta name="geo.placename" content="Saskatoon">
+
+<!-- Open Graph -->
+<meta property="og:type" content="{{ page.og_type | default: 'website' }}">
+<meta property="og:site_name" content="{{ site.title }}">
+<meta property="og:title" content="{{ page.title }}">
+<meta property="og:description" content="{{ page.description }}">
+<meta property="og:url" content="{{ page.url | absolute_url }}">
+<meta property="og:image" content="{{ og_img | absolute_url }}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="God's Chai — masala chai brewed fresh in Saskatoon">
+<meta property="og:locale" content="{{ site.locale }}">
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{ page.title }}">
+<meta name="twitter:description" content="{{ page.description }}">
+<meta name="twitter:image" content="{{ og_img | absolute_url }}">
+
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>☕</text></svg>">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Hanken+Grotesk:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id={{ site.ga_measurement_id }}"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', '{{ site.ga_measurement_id }}');
+</script>
+
+{% include schema-organization.html %}
+{%- if page.breadcrumb %}{% include schema-breadcrumb.html %}{% endif -%}

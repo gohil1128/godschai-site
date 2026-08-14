@@ -1,0 +1,45 @@
+title: "God's Chai"
+tagline: "Not your average chai."
+description: "Masala chai made with whole spices from Kerala and single-origin Assam tea, brewed fresh in Saskatoon, SK."
+url: "https://godschai.com"
+baseurl: ""
+lang: "en-CA"
+locale: "en_CA"
+
+social:
+  instagram: "https://www.instagram.com/godschai"
+  tiktok: "https://www.tiktok.com/@godschaii"
+  instagram_handle: "@godschai"
+
+# Google Analytics 4
+ga_measurement_id: "G-618Y5RK3T3"
+
+# Mailchimp (JSONP signup endpoint pieces)
+mailchimp:
+  u: "6dbcb24537761b9433540d839"
+  id: "963c7fe1aa"
+  f_id: "0099dbe0f0"
+  host: "godschai.us9.list-manage.com"
+
+# Season label shown on the menu
+season: "Summer 2026"
+# Year the events in _data/events.yml take place (used to build ISO dates)
+events_year: 2026
+
+plugins:
+  - jekyll-sitemap
+
+sass:
+  style: compressed
+
+exclude:
+  - README.md
+  - SEO.md
+  - Gemfile
+  - Gemfile.lock
+  - vendor
+  - .jekyll-cache
+  - node_modules
+
+# Pretty URLs: /menu/index.html -> /menu/
+permalink: pretty

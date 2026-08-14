@@ -1,0 +1,168 @@
+---
+layout: default
+title: "How to Make Masala Chai (The Proper Way)"
+description: "The real way to make masala chai on the stovetop: the water-to-milk ratio, why the double boil matters, which whole spices to use, and the mistakes to avoid."
+breadcrumb: "How to Make Masala Chai"
+og_image: "uploads/opt/pour-a-1280.jpg"
+---
+
+<section aria-labelledby="page-h1" style="max-width:1240px;margin:0 auto;padding:clamp(110px,14vh,170px) clamp(18px,4vw,40px) clamp(20px,3vw,30px)">
+  <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.2em;text-transform:uppercase;color:#F2A93C;margin-bottom:14px">Brew it your way</div>
+  <h1 id="page-h1" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(2.3rem,6vw,4.2rem);line-height:0.98;letter-spacing:0;margin:0;max-width:24ch">How to Make Masala Chai <span style="color:#FF6F61;font-style:italic">(the proper way)</span></h1>
+  <p style="font-size:clamp(1.05rem,1.5vw,1.25rem);line-height:1.6;color:#E7D6C4;max-width:56ch;margin:22px 0 0">Chai isn't a teabag in hot milk. It's whole spices, real tea and a pot that gets your full attention for about eight minutes. Here's exactly how we brew it in Saskatoon — and how to get the same cup at home.</p>
+  <div style="display:flex;gap:24px;margin-top:28px;flex-wrap:wrap;font-family:'DM Mono',monospace;font-size:11.5px;letter-spacing:0.1em;text-transform:uppercase;color:#CBB6A6">
+    <span>Serves {{ site.data.brew.serves }}</span>
+    <span style="color:#F2A93C">·</span>
+    <span>About 10 minutes</span>
+    <span style="color:#F2A93C">·</span>
+    <span>Stovetop only</span>
+  </div>
+</section>
+
+<div data-gc-reveal>
+
+<!-- WHAT YOU NEED -->
+<section aria-labelledby="need-h2" style="max-width:1240px;margin:0 auto;padding:clamp(30px,4vw,50px) clamp(18px,4vw,40px)">
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:clamp(16px,2vw,24px)">
+    <div style="padding:28px 26px 30px;background:rgba(28,17,10,0.8);border:1px solid rgba(242,169,60,0.16);border-radius:22px">
+      <h2 id="need-h2" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:1.5rem;margin:0 0 14px;color:#F3E8D3">What you need</h2>
+      <ul style="margin:0;padding-left:20px;color:#C7B29E;line-height:1.7">
+        {%- for s in site.data.brew.supplies %}
+        <li>{{ s }}</li>
+        {%- endfor %}
+      </ul>
+    </div>
+    <div style="padding:28px 26px 30px;background:rgba(28,17,10,0.8);border:1px solid rgba(242,169,60,0.16);border-radius:22px">
+      <h2 style="font-family:'Instrument Serif',serif;font-weight:400;font-size:1.5rem;margin:0 0 14px;color:#F3E8D3">Kit</h2>
+      <ul style="margin:0;padding-left:20px;color:#C7B29E;line-height:1.7">
+        {%- for t in site.data.brew.tools %}
+        <li>{{ t }}</li>
+        {%- endfor %}
+      </ul>
+      <p style="color:#AB9280;font-size:0.92rem;line-height:1.55;margin:14px 0 0">No fancy equipment. A pot and a strainer is the whole setup.</p>
+    </div>
+  </div>
+</section>
+
+<!-- THE FOUR STEPS -->
+<section aria-labelledby="steps-h2" style="background:linear-gradient(180deg,#1A100A,#241610);border-top:1px solid rgba(242,169,60,0.14);border-bottom:1px solid rgba(242,169,60,0.14)">
+  <div style="max-width:1240px;margin:0 auto;padding:clamp(48px,6vw,90px) clamp(18px,4vw,40px)">
+    <h2 id="steps-h2" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(2rem,4.6vw,3.3rem);line-height:1;letter-spacing:0;margin:0 0 clamp(28px,4vw,40px);color:#F3E8D3">Four steps. One proper cup.</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:clamp(14px,1.8vw,20px)">
+      {%- for s in site.data.brew.steps %}
+      {%- if s.accent %}{% assign bc = "rgba(255,122,102,0.3)" %}{% assign nc = "#FF7A66" %}{% assign lc = "#FF7A66" %}
+      {%- else %}{% assign bc = "rgba(242,169,60,0.16)" %}{% assign nc = "#F2A93C" %}{% assign lc = "#C58A2E" %}{% endif %}
+      <div style="padding:26px 24px 28px;background:rgba(46,29,19,0.72);border:1px solid {{ bc }};border-radius:22px">
+        <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding-bottom:16px;border-bottom:1px solid rgba(243,232,211,0.10)">
+          <span style="font-family:'Instrument Serif',serif;font-size:44px;line-height:0.8;color:{{ nc }}">0{{ forloop.index }}</span>
+          <span style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:{{ lc }}">{{ s.label }}</span>
+        </div>
+        <h3 style="font-family:'Instrument Serif',serif;font-weight:400;font-size:1.32rem;margin:20px 0 0;color:#F3E8D3">{{ s.title }}</h3>
+        <p style="color:#C7B29E;line-height:1.55;margin:9px 0 0;font-size:0.95rem">{{ s.desc }}</p>
+      </div>
+      {%- endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- LONG-FORM GUIDE -->
+<section aria-labelledby="deep-h2" style="max-width:1240px;margin:0 auto;padding:clamp(48px,6vw,90px) clamp(18px,4vw,40px)">
+  <div style="max-width:68ch" class="gc-prose">
+    <h2 id="deep-h2">Why the double boil matters</h2>
+    <p>This is the step people skip, and it's the one that makes chai taste like chai. Letting the pot rise and pulling it back — two or three times — does two things at once. It drives the spice oils out of the whole spices and into the milk, and it thickens the milk slightly so the cup has body instead of tasting watery.</p>
+    <p>A single boil gives you spiced milk. Two or three gives you <strong>kadak</strong> — strong, full, the kind of cup that stands up on its own. Watch the pot, let it climb to the rim, lift it off the heat for a few seconds, put it back. Repeat. That's the whole trick, and it costs you about three minutes.</p>
+
+    <h2>The water-to-milk ratio</h2>
+    <p>Equal parts. One cup water, one cup milk, for two small cups of chai. Start the spices and tea in the water so they have a chance to open up, then let the milk in on the boil.</p>
+    <p>Want it richer? Push it to 1 part water and 1.5 parts milk. Want the spice louder and the dairy quieter? Go the other way. What you shouldn't do is brew tea in milk alone — the tea can't extract properly and you end up with a flat, sweet cup that tastes like a dessert instead of a drink.</p>
+    <p>Oat milk works, and it's what we use in the Iced Banana Bread Chai. It foams well and takes spice nicely. Almond milk splits more easily on a hard boil — keep the heat lower if that's what you've got.</p>
+
+    <h2>The spices — and why each one is there</h2>
+    <p>Our blend is built on whole spices from Kerala, ground in small batches. If you're building your own, this is the working logic:</p>
+    <ul>
+      <li><strong>Green cardamom</strong> — the backbone. Floral, cooling, unmistakably chai. If you only use one spice, it's this one.</li>
+      <li><strong>Ginger</strong> — the heat and the bite. Fresh gives you brightness; dried gives you a deeper, slower warmth.</li>
+      <li><strong>Cinnamon or cassia bark</strong> — the sweetness that isn't sugar. It rounds the sharp edges off the ginger.</li>
+      <li><strong>Cloves</strong> — powerful and easy to overdo. Two or three for a pot is plenty; more and they take the whole cup over.</li>
+      <li><strong>Black pepper</strong> — the one nobody guesses. A few cracks lift everything else and leave a warmth at the back of the throat.</li>
+    </ul>
+    <p>Crush whole spices lightly before they go in — you want them cracked open, not powdered. Powder clouds the cup and turns bitter fast.</p>
+
+    <h2>Which tea to use</h2>
+    <p>Assam, loose leaf, strong. We use single-origin Assam because it's malty enough to hold its own against milk and spice — a delicate tea just disappears. A robust CTC works well too, and it's what most Indian households reach for.</p>
+    <p>Two teaspoons for two cups. Add it to the water with the spices, not at the end.</p>
+
+    <h2>Common mistakes</h2>
+    <ul>
+      <li><strong>Boiling the tea too long.</strong> Past about four minutes of hard boiling, tannins take over and the cup turns bitter. Strong isn't the same as over-brewed.</li>
+      <li><strong>Adding sugar at the end.</strong> Sugar in during the boil integrates. Sugar stirred in after sits on top and tastes like a separate ingredient.</li>
+      <li><strong>Powdered spice mixes.</strong> Pre-ground blends go stale and taste dusty. Whole spices, cracked fresh, are a different drink entirely.</li>
+      <li><strong>Skipping the strain.</strong> A fine mesh strainer is not optional. Grit ruins an otherwise perfect cup.</li>
+      <li><strong>Walking away.</strong> Chai boils over the second you stop watching. Ask anyone.</li>
+    </ul>
+
+    <h2>How to adjust the strength</h2>
+    <p>Three dials, and it's worth knowing which one to turn.</p>
+    <p>For <strong>more spice</strong>, add more masala at the start — not at the end. For <strong>stronger tea</strong>, add more leaf rather than boiling longer, which only adds bitterness. For a <strong>thicker, creamier</strong> cup, add an extra rise and let it reduce a little further.</p>
+    <p>And if it comes out too strong, don't dilute it with water — that flattens everything. Add a splash more hot milk instead.</p>
+
+    <h2>Or let us pour it</h2>
+    <p>If you'd rather skip the pot, we're out at pop-ups across Saskatoon all summer with the same brew — hot, iced, and a few things you won't make at home.</p>
+  </div>
+
+  <div style="display:flex;gap:13px;flex-wrap:wrap;margin-top:34px">
+    <a href="{{ '/menu/' | relative_url }}" style="text-decoration:none;background:#F2A93C;color:#2B1B12;font-weight:700;font-size:16px;padding:15px 26px;border-radius:999px" style-hover="background:#FFBA55">See the menu →</a>
+    <a href="{{ '/events/' | relative_url }}" style="text-decoration:none;background:rgba(243,232,211,0.10);color:#F3E8D3;font-weight:600;font-size:16px;padding:15px 24px;border-radius:999px;border:1.5px solid rgba(243,232,211,0.3)" style-hover="border-color:#F2A93C">Find us this week</a>
+  </div>
+</section>
+
+<!-- PREMIX NUDGE -->
+<section aria-labelledby="premix-h2" style="background:linear-gradient(135deg,#3D2A1B,#2E1D13)">
+  <div style="max-width:1240px;margin:0 auto;padding:clamp(46px,6vw,80px) clamp(18px,4vw,40px)">
+    <div style="display:inline-block;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.16em;text-transform:uppercase;color:#2B1B12;background:#F2A93C;padding:7px 13px;border-radius:999px;font-weight:500">Coming soon</div>
+    <h2 id="premix-h2" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(1.9rem,4.4vw,3rem);letter-spacing:0;line-height:1;color:#F3E8D3;margin:18px 0 0">Want the blend, not the shopping list?</h2>
+    <p style="font-size:1.05rem;line-height:1.6;color:#D6C7B4;max-width:46ch;margin:14px 0 24px">Our masala chai premixes and concentrates are on the way — same Kerala-and-Assam recipe, four steps down to one. Get the launch note.</p>
+    {% include signup-form.html id="brewpage" button="Get launch updates" big=true %}
+  </div>
+</section>
+
+</div>
+
+{% comment %} HowTo — rich-result eligible, generated from _data/brew.yml. {% endcomment %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "@id": "{{ page.url | absolute_url }}#howto",
+  "name": "How to Make Masala Chai (The Proper Way)",
+  "description": {{ page.description | jsonify }},
+  "image": "{{ 'uploads/opt/pour-a-1280.jpg' | absolute_url }}",
+  "totalTime": "{{ site.data.brew.total_time }}",
+  "prepTime": "{{ site.data.brew.prep_time }}",
+  "cookTime": "{{ site.data.brew.cook_time }}",
+  "yield": "{{ site.data.brew.serves }} cups",
+  "inLanguage": "en-CA",
+  "supply": [
+    {%- for s in site.data.brew.supplies %}
+    { "@type": "HowToSupply", "name": {{ s | jsonify }} }{% unless forloop.last %},{% endunless %}
+    {%- endfor %}
+  ],
+  "tool": [
+    {%- for t in site.data.brew.tools %}
+    { "@type": "HowToTool", "name": {{ t | jsonify }} }{% unless forloop.last %},{% endunless %}
+    {%- endfor %}
+  ],
+  "step": [
+    {%- for s in site.data.brew.steps %}
+    {
+      "@type": "HowToStep",
+      "position": {{ forloop.index }},
+      "name": {{ s.title | jsonify }},
+      "text": {{ s.desc | jsonify }},
+      "url": "{{ page.url | absolute_url }}#steps-h2"
+    }{% unless forloop.last %},{% endunless %}
+    {%- endfor %}
+  ],
+  "publisher": { "@id": "{{ '/' | absolute_url }}#organization" }
+}
+</script>

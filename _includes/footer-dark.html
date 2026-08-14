@@ -1,0 +1,38 @@
+<footer style="background:#170E08;color:#F3E8D3">
+  <div style="max-width:1240px;margin:0 auto;padding:clamp(44px,5vw,72px) clamp(18px,4vw,40px) 34px;display:flex;gap:clamp(28px,4vw,64px);flex-wrap:wrap;justify-content:space-between">
+    <div style="flex:1 1 260px;min-width:240px">
+      <div style="display:flex;align-items:center;gap:12px">
+        {% include img.html base="logo-cream" ext="png" widths="128,256" sizes="110px" w="256" h="256" alt="" wrap="display:block" style="height:110px;width:auto;display:block" %}
+      </div>
+      <p style="color:#AB9280;line-height:1.55;max-width:30ch;margin:18px 0 0">Not your average chai. Masala chai made the real way — whole spices from Kerala and single-origin Assam tea, brewed fresh in Saskatoon, SK, Canada.</p>
+    </div>
+    <div style="flex:0 1 auto">
+      <div style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#AB9280;margin-bottom:14px">Explore</div>
+      <div class="gc-footer-links" style="display:flex;flex-direction:column;gap:11px;font-size:15px">
+        <a href="{{ '/menu/' | relative_url }}" style="text-decoration:none;color:#F3E8D3">Menu</a>
+        <a href="{{ '/how-to-make-masala-chai/' | relative_url }}" style="text-decoration:none;color:#F3E8D3">Brew Guide</a>
+        <a href="{{ '/events/' | relative_url }}" style="text-decoration:none;color:#F3E8D3">Events</a>
+        <a href="{{ '/premixes/' | relative_url }}" style="text-decoration:none;color:#F3E8D3">Premixes</a>
+        <a href="{{ '/catering/' | relative_url }}" style="text-decoration:none;color:#F3E8D3">Catering</a>
+      </div>
+      <div style="display:flex;gap:12px;margin-top:16px">
+        <a href="{{ site.social.instagram }}" target="_blank" rel="noopener" aria-label="God's Chai on Instagram" style="display:flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:999px;border:1px solid rgba(243,232,211,0.22);color:#F3E8D3" style-hover="border-color:#F2A93C;color:#F2A93C">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true" focusable="false"><rect x="2.5" y="2.5" width="19" height="19" rx="5.5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none"/></svg>
+        </a>
+        <a href="{{ site.social.tiktok }}" target="_blank" rel="noopener" aria-label="God's Chai on TikTok" style="display:flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:999px;border:1px solid rgba(243,232,211,0.22);color:#F3E8D3" style-hover="border-color:#F2A93C;color:#F2A93C">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M13.2 2h2.9c.2 1.6 1 3 2.3 3.8.7.5 1.6.8 2.5.9v3c-1.7 0-3.3-.5-4.7-1.4v6.7c0 3.4-2.8 6.2-6.2 6.2S3.8 18.4 3.8 15s2.8-6.2 6.2-6.2c.3 0 .7 0 1 .1v3.1c-.3-.1-.7-.2-1-.2-1.8 0-3.2 1.4-3.2 3.2s1.4 3.2 3.2 3.2 3.2-1.4 3.2-3.2V2z"/></svg>
+        </a>
+      </div>
+    </div>
+    <div style="flex:1 1 300px;min-width:260px">
+      <div style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#AB9280;margin-bottom:14px">Stay in the loop</div>
+      {% include signup-form.html id="footer" button="Sign up" max="360px" %}
+    </div>
+  </div>
+  <div style="border-top:1px solid rgba(243,232,211,0.12)">
+    <div style="max-width:1240px;margin:0 auto;padding:18px clamp(18px,4vw,40px);display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.06em;color:#AB9280">
+      <span>© {{ 'now' | date: "%Y" }} God's Chai · Saskatoon, SK</span>
+      <span>Made the real way · Premixes coming soon</span>
+    </div>
+  </div>
+</footer>

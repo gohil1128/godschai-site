@@ -1,0 +1,80 @@
+# God's Chai pop-up schedule — single source of truth.
+# Powers the /events/ page, the homepage teaser, and the Event JSON-LD.
+#
+# start / end are ISO dates (YYYY-MM-DD) and are what the structured data uses.
+# `mon` and `day` are the display strings on the date chip (e.g. Sep / 4–5).
+# Past events are hidden from visitors by assets/js/site.js but stay in the
+# HTML so search engines and AI crawlers can still read the full history.
+# See SEO.md for how to add an event.
+
+- mon: "Jul"
+  day: "1"
+  start: 2026-07-01
+  end: 2026-07-01
+  name: "Canada Day at River Landing"
+  where: "River Landing · Noon–late"
+  venue: "River Landing"
+  desc: "Find our cart in the all-day riverside celebration — cold chai through the afternoon, right up to the 10:30pm fireworks."
+
+- mon: "Jul"
+  day: "9–11"
+  start: 2026-07-09
+  end: 2026-07-11
+  name: "DTNYXE Sidewalk Sale"
+  where: "Downtown YXE · 2nd Ave + 21st St"
+  venue: "Downtown Saskatoon — 2nd Ave & 21st St"
+  desc: "Three days of downtown deals, food and music. Catch our chai cart in the heart of the city — open late till 7pm."
+
+- mon: "Jul"
+  day: "12"
+  start: 2026-07-12
+  end: 2026-07-12
+  name: "Pop-Up at Smoove Ice Cream"
+  where: "In front of Smoove Ice Cream"
+  venue: "Smoove Ice Cream, Saskatoon"
+  desc: "A one-day collab — God's Chai poured fresh right outside Smoove. Chai, meet ice cream."
+
+- mon: "Jul"
+  day: "24–26"
+  start: 2026-07-24
+  end: 2026-07-26
+  name: "Foodtruck Wars Street Festival"
+  where: "2700 Porter St · Lions Arena"
+  venue: "Lions Arena, 2700 Porter St, Saskatoon"
+  desc: "We're in the ring at YXE's biggest food festival. Three days, 25+ trucks — come hunt down our chai."
+
+- mon: "Aug"
+  day: "15–16"
+  start: 2026-08-15
+  end: 2026-08-16
+  name: "Creatures of the Night Market"
+  where: "Saskatoon · After dark"
+  venue: "Saskatoon"
+  desc: "After-dark market vibes and our chai under the lights. Come find us when the sun goes down."
+
+- mon: "Aug"
+  day: "30"
+  start: 2026-08-30
+  end: 2026-08-30
+  name: "Art in the Park — Finale"
+  where: "Buena Vista Park · 10am–3pm"
+  venue: "Buena Vista Park, Saskatoon"
+  desc: "The last Art in the Park of the summer — local artists, makers and our chai cart in the park."
+
+- mon: "Sep"
+  day: "4–5"
+  start: 2026-09-04
+  end: 2026-09-05
+  name: "Nutrien Fireworks Festival"
+  where: "River Landing · Fireworks 9:30pm"
+  venue: "River Landing, Saskatoon"
+  desc: "Two nights on the river's edge to send off summer. Grab a cold chai and watch the sky light up at 9:30 each night."
+
+- mon: "Sep"
+  day: "12"
+  start: 2026-09-12
+  end: 2026-09-12
+  name: "Broadway Street Fair"
+  where: "Broadway Ave · 10am–5pm"
+  venue: "Broadway Avenue, Saskatoon"
+  desc: "Broadway's 43rd street fair turns the avenue into an open-air market. Find us among 20,000+ visitors."

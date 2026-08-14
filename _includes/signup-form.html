@@ -1,0 +1,29 @@
+{%- comment -%}
+  Mailchimp signup. Progressively enhanced: without JS it posts straight to
+  Mailchimp's hosted form; with JS, assets/js/site.js intercepts it, submits via
+  JSONP and swaps in an inline success/error message.
+  Params: id (unique), button (label), max (max-width), note (small print), big (larger sizing)
+{%- endcomment -%}
+{%- assign fid = include.id | default: "form" -%}
+{%- assign maxw = include.max | default: "480px" -%}
+{%- if include.big -%}
+  {%- assign in_pad = "15px 20px" -%}{%- assign in_fs = "16px" -%}
+  {%- assign bt_pad = "15px 28px" -%}{%- assign bt_fs = "16px" -%}
+{%- else -%}
+  {%- assign in_pad = "13px 18px" -%}{%- assign in_fs = "15px" -%}
+  {%- assign bt_pad = "13px 22px" -%}{%- assign bt_fs = "15px" -%}
+{%- endif -%}
+<form data-gc-signup
+      action="https://{{ site.mailchimp.host }}/subscribe/post?u={{ site.mailchimp.u }}&amp;id={{ site.mailchimp.id }}&amp;f_id={{ site.mailchimp.f_id }}"
+      method="post" target="_blank"
+      style="display:flex;gap:{% if include.big %}10px{% else %}8px{% endif %};flex-wrap:wrap;max-width:{{ maxw }}">
+  <label for="gc-email-{{ fid }}" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap">Email address</label>
+  <input id="gc-email-{{ fid }}" type="email" name="EMAIL" required autocomplete="email" placeholder="you@email.com"
+         style="flex:1 1 {% if include.big %}220px{% else %}180px{% endif %};min-width:0;border:1px solid rgba(243,232,211,0.18);border-radius:999px;padding:{{ in_pad }};font-size:{{ in_fs }};font-family:'Hanken Grotesk',sans-serif;color:#F3E8D3;background:rgba(243,232,211,0.05);outline:none"/>
+  <button type="submit"
+          style="border:none;cursor:pointer;background:#F2A93C;color:#2B1B12;font-weight:700;font-size:{{ bt_fs }};font-family:'Hanken Grotesk',sans-serif;padding:{{ bt_pad }};border-radius:999px" style-hover="background:#FFBA55">{{ include.button | default: "Sign up" }}</button>
+  <p data-gc-signup-msg role="status" aria-live="polite" style="display:none;flex:1 1 100%;margin:2px 0 0;font-size:14px;font-weight:600"></p>
+</form>
+{%- if include.note %}
+<p style="font-family:'DM Mono',monospace;font-size:11px;color:#C7B29E;margin:12px 0 0;letter-spacing:0.04em">{{ include.note }}</p>
+{%- endif -%}
