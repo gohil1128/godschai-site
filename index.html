@@ -45,19 +45,38 @@
   /* Phones: the nav's four links + @godschai pill overflow past the viewport edge
      (and get silently clipped by overflow-x:clip), so tighten it up down there. */
   @media (max-width:560px){
-    header nav{gap:8px!important;padding-left:14px!important;padding-right:14px!important}
+    header nav{gap:8px!important;padding-left:13px!important;padding-right:13px!important}
     header nav img{height:44px!important}
-    header nav > div{gap:11px!important;font-size:13px!important}
-    header nav > a:last-child{font-size:12px!important;padding:8px 12px!important}
+    header nav > div{gap:10px!important;font-size:13px!important}
+    header nav > a:last-child{font-size:12px!important;padding:10px 11px!important}
   }
   @media (max-width:400px){
-    header nav{gap:6px!important;padding-left:11px!important;padding-right:11px!important}
-    header nav img{height:38px!important}
-    header nav > div{gap:9px!important;font-size:12px!important}
-    header nav > a:last-child{font-size:11.5px!important;padding:7px 10px!important}
+    header nav{gap:5px!important;padding-left:10px!important;padding-right:10px!important}
+    header nav img{height:36px!important}
+    header nav > div{gap:6px!important;font-size:11.5px!important}
+    header nav > a:last-child{font-size:11px!important;padding:9px 9px!important}
   }
-  @media (max-width:345px){
+  @media (max-width:355px){
     header nav{flex-wrap:wrap!important;justify-content:center!important;row-gap:6px!important}
+    /* the wrapped nav is ~102px tall, so the 84px anchor offset no longer clears it */
+    section[id]{scroll-margin-top:114px!important}
+  }
+  /* Tap targets: the nav and footer links are only 14-18px tall on their own.
+     Vertical padding grows the hit area without moving anything visually. */
+  header nav > div > a{padding:13px 0!important;white-space:nowrap}
+  footer a[href="menu.html"],footer a[href="#events"],footer a[href="#premix"],footer a[href="#brew"]{padding:6px 0!important}
+  footer a[href="menu.html"],footer a[href="#events"],footer a[href="#premix"],footer a[href="#brew"]{margin:-3px 0!important}
+  /* The hot-chai card's panels carry min-width:260/300px, which is wider than a
+     320px screen's content box — it forced the card to overflow. */
+  @media (max-width:430px){
+    #hot > div > div{min-width:0!important}
+  }
+  /* Community grid: with three tiles, auto-fit left empty cells (a whole dead
+     column at desktop widths). Fixed column counts make the tiles tile exactly. */
+  @media (min-width:700px){
+    #community div[style*="grid-auto-rows"]{grid-template-columns:repeat(4,1fr)!important}
+    #community div[style*="grid-auto-rows"] > div:nth-child(2),
+    #community div[style*="grid-auto-rows"] > div:nth-child(3){grid-column:span 1!important;grid-row:span 2!important}
   }
 </style>
 </helmet>
@@ -325,12 +344,12 @@
       <sc-for list="{{ events }}" as="e" hint-placeholder-count="8">
         <div style="display:flex;gap:16px;background:rgba(52,34,22,0.82);backdrop-filter:blur(3px);border:1px solid rgba(243,232,211,0.08);border-radius:20px;padding:18px;align-items:flex-start;transition:border-color .3s ease" style-hover="border:1px solid rgba(242,169,60,0.4)">
           <div style="flex:none;min-width:64px;text-align:center;background:#F2A93C;color:#2B1B12;border-radius:14px;padding:11px 8px">
-            <div style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase">{{ e.mon }}</div>
+            <div style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase">{{ e.mon }}</div>
             <div style="font-family:'Instrument Serif',serif;font-weight:400;font-size:{{ e.dayFs }};line-height:1;margin-top:2px;white-space:nowrap">{{ e.day }}</div>
           </div>
           <div style="flex:1">
             <h3 style="font-family:'Instrument Serif',serif;font-weight:400;font-size:1.18rem;margin:0;letter-spacing:0">{{ e.name }}</h3>
-            <div style="font-family:'DM Mono',monospace;font-size:11.5px;color:#FF7A66;margin:5px 0 8px;letter-spacing:0.04em">{{ e.where }}</div>
+            <div style="font-family:'DM Mono',monospace;font-size:12px;color:#FF7A66;margin:5px 0 8px;letter-spacing:0.04em">{{ e.where }}</div>
             <p style="font-size:0.92rem;line-height:1.45;color:#C7B29E;margin:0">{{ e.desc }}</p>
           </div>
         </div>
@@ -354,24 +373,30 @@
           <h2 style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(2rem,4.6vw,3.4rem);letter-spacing:0;line-height:1;margin:10px 0 0;color:#F3E8D3">@godschai</h2>
         </div>
       </div>
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));grid-auto-rows:174px;grid-auto-flow:dense;gap:12px">
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);grid-auto-rows:174px;grid-auto-flow:dense;gap:12px">
 
         <!-- FEATURED post (replace with your #1 reel/post) -->
         <div style="grid-column:span 2;grid-row:span 2;border-radius:20px;overflow:hidden;background:#25160F;position:relative;cursor:pointer">
           <video ref="{{ featVideo }}" data-sound="1" src="https://pub-cebe510d78a84528b5ea883bd62fe46c.r2.dev/6E01C02C-6C76-463F-B10C-64BCD4A48B83.MOV" muted="true" loop="true" playsInline="true" preload="metadata" poster="uploads/pour-cup.jpeg" style="width:100%;height:100%;object-fit:cover;object-position:50% 36%;display:block"></video>
+          <span style="position:absolute;top:13px;left:13px;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#2B1B12;background:#F2A93C;padding:5px 10px;border-radius:999px;z-index:3">★ Top post</span>
           <button onClick="{{ toggleFeat }}" aria-label="Toggle sound" style="position:absolute;top:11px;right:11px;width:38px;height:38px;border-radius:999px;border:1px solid rgba(243,232,211,0.25);background:rgba(18,11,6,0.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);color:#F3E8D3;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;line-height:1;z-index:3" style-hover="background:rgba(18,11,6,0.8)">{{ featIcon }}</button>
+          <div style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:18px;background:linear-gradient(180deg,transparent 45%,rgba(18,11,6,0.82));pointer-events:none">
+            <div style="font-family:'Instrument Serif',serif;font-weight:400;font-size:1.25rem;color:#F3E8D3;letter-spacing:0">Kadak, every single cup</div>
+            <div style="font-family:'DM Mono',monospace;font-size:11.5px;color:#F2A93C;margin-top:5px;letter-spacing:0.04em">@godschai · 2.4k likes</div>
+          </div>
         </div>
 
         <!-- video -->
-        <div style="border-radius:18px;overflow:hidden;background:#25160F;position:relative;cursor:pointer;transition:transform .35s ease" style-hover="transform:scale(1.02)">
+        <div style="grid-column:span 2;grid-row:span 2;border-radius:18px;overflow:hidden;background:#25160F;position:relative;cursor:pointer;transition:transform .35s ease" style-hover="transform:scale(1.02)">
           <video muted="true" loop="true" playsInline="true" preload="none" data-lazy="https://pub-cebe510d78a84528b5ea883bd62fe46c.r2.dev/IMG_2773.MOV" poster="uploads/pour-cup.jpeg" style="width:100%;height:100%;object-fit:cover;display:block"></video>
           <button onClick="{{ toggleVideo }}" aria-label="Toggle sound" style="position:absolute;top:10px;right:10px;width:32px;height:32px;border-radius:999px;border:1px solid rgba(243,232,211,0.25);background:rgba(18,11,6,0.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);color:#F3E8D3;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;line-height:1;z-index:3" style-hover="background:rgba(18,11,6,0.8)">🔇</button>
+          <div style="position:absolute;inset:0;display:flex;align-items:flex-end;padding:11px;background:linear-gradient(180deg,transparent 55%,rgba(18,11,6,0.7));pointer-events:none"><span style="font-family:'DM Mono',monospace;font-size:11px;color:#FFFAF3">@godschai</span></div>
         </div>
 
         <!-- TAG-US CTA tile -->
         <div style="grid-column:span 2;border-radius:20px;border:1px dashed rgba(242,169,60,0.4);background:rgba(242,169,60,0.06);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:18px;gap:8px">
           <div style="font-family:'Instrument Serif',serif;font-weight:400;font-size:1.3rem;color:#F3E8D3;letter-spacing:0">Tag <a href="https://www.instagram.com/godschai" target="_blank" rel="noopener" style="color:#F2A93C;text-decoration:none">@godschai</a></div>
-          <div style="font-family:'DM Mono',monospace;font-size:10.5px;letter-spacing:0.04em;color:#C7B29E;max-width:24ch;line-height:1.5">Share your cup and we'll feature it right here.</div>
+          <div style="font-family:'DM Mono',monospace;font-size:11.5px;letter-spacing:0.04em;color:#C7B29E;max-width:24ch;line-height:1.5">Share your cup and we'll feature it right here.</div>
         </div>
 
       </div>
