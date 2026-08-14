@@ -1,0 +1,35 @@
+# The brew method — powers the homepage teaser, /how-to-make-masala-chai/,
+# and the HowTo JSON-LD (which is rich-result eligible in Google).
+
+serves: 2
+total_time: "PT10M"          # ISO 8601 duration for schema.org
+prep_time: "PT2M"
+cook_time: "PT8M"
+
+supplies:
+  - "1 cup water"
+  - "1 cup whole milk"
+  - "2 tbsp God's Chai masala blend"
+  - "Sugar to taste"
+
+tools:
+  - "Small heavy-bottomed pot"
+  - "Fine mesh strainer"
+
+steps:
+  - label: "Boil"
+    title: "1 cup water, 1 cup milk"
+    desc: "Bring both to a boil together in a small pot. Equal parts, no measuring cup gymnastics."
+    accent: false
+  - label: "Blend"
+    title: "2 tbsp God's Chai"
+    desc: "Stir in the mix and sugar to taste. Give the bag a shake first — the spices settle."
+    accent: false
+  - label: "Rise"
+    title: "Let it rise 2–3 times"
+    desc: "Let it climb the pot, pull it back, repeat. This is where the magic happens — don't skip it."
+    accent: true
+  - label: "Strain"
+    title: "Strain and enjoy"
+    desc: "Pour through a fine strainer into your cup. Kadak, spiced, exactly right."
+    accent: false

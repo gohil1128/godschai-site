@@ -1,0 +1,62 @@
+# God's Chai menu data — this is the single source of truth.
+# Editing this file updates: the /menu/ page, the homepage teasers,
+# the Menu JSON-LD structured data, and the homepage lineup grid.
+# See SEO.md for how to add a drink.
+
+# The one hot drink on the menu.
+hot:
+  - name: "Classic Hot Chai"
+    desc: "Slow-simmered masala chai — whole spices from Kerala, single-origin Assam tea and real milk. One hot on the menu, and we make it count."
+    short: "The original masala chai, hot."
+    menu_desc: "Slow-simmered masala chai — whole spices from Kerala, single-origin Assam tea and real milk. The original, served hot."
+    img: ""
+    alt: "A hot cup of God's Chai classic masala chai"
+
+# Iced & signature drinks.
+iced:
+  - name: "Iced Chai"
+    desc: "The signature, straight over ice. Spiced, smooth, and never watered down."
+    short: "Signature, over ice."
+    menu_desc: "The signature, straight over ice. Spiced, smooth and never watered down."
+    img: "uploads/pour-cup.jpeg"
+    alt: "Iced Chai — God's Chai signature masala chai served over ice"
+    logo_tile: true
+
+  - name: "Gulabo · Rose Refresher"
+    desc: "House-made rose syrup with lemon and soda. Floral, fizzy and ridiculously pretty."
+    short: "Rose, lemon & soda."
+    img: "uploads/drink-gulabo-studio.png"
+    alt: "Gulabo Rose Refresher — house rose syrup with lemon and soda"
+
+  - name: "Iced Chocolate Chai"
+    desc: "House chai concentrate with rich dark chocolate, milk, hazelnut syrup and biscuit crumbles."
+    short: "Dark chocolate & hazelnut."
+    img: "uploads/drink-chocolate.jpeg"
+    alt: "Iced Chocolate Chai with dark chocolate, hazelnut syrup and biscuit crumbles"
+
+  - name: "YXE's Mont Blanc"
+    desc: "House coffee-and-chai concentrate, coconut water, a vanilla cream top and a dusting of cocoa."
+    short: "Coffee-chai, vanilla cream."
+    img: "uploads/drink-montblanc-v2.jpeg"
+    alt: "YXE's Mont Blanc — coffee and chai concentrate with a vanilla cream top"
+
+  - name: "Iced Banana Bread Chai"
+    desc: "Decadent house-made banana bread syrup with oat milk and chai concentrate."
+    short: "Banana bread syrup, oat milk."
+    menu_name: "Iced Banana Bread Chai · Oat Milk"
+    img: "uploads/drink-bananabread.jpeg"
+    alt: "Iced Banana Bread Chai with oat milk and house banana bread syrup"
+
+  - name: "Lavender Cold Foam Chai"
+    desc: "House chai concentrate and milk under a lavender cream-cheese cold foam."
+    short: "Lavender cream-cheese foam."
+    img: "uploads/drink-lavender.jpeg"
+    alt: "Lavender Cold Foam Chai topped with lavender cream-cheese foam"
+
+# Food.
+snacks:
+  - name: "Samosa"
+    desc: "Crisp, golden pastry with a warm spiced filling."
+    short: "Crisp, golden, spiced."
+    img: ""
+    alt: "A crisp golden samosa"

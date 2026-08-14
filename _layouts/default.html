@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="{{ site.lang }}">
+<head>
+{% include head.html %}
+{% include base-styles-dark.html %}
+{{ page.head_extra }}
+</head>
+<body style="font-family:'Hanken Grotesk',system-ui,sans-serif;color:#F3E8D3;background:#100A05;-webkit-font-smoothing:antialiased">
+<a class="gc-skip" href="#main">Skip to content</a>
+{% include nav-dark.html %}
+<main id="main">
+{{ content }}
+</main>
+{% include footer-dark.html %}
+{% include popup.html %}
+<script src="{{ '/assets/js/site.js' | relative_url }}" defer></script>
+</body>
+</html>

@@ -1,0 +1,59 @@
+<style>
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  html{overflow-x:clip;scroll-behavior:smooth}
+  body{overflow-x:clip;background:#100A05}
+  ::selection{background:#F2A93C;color:#100A05}
+  a{color:#F2A93C}
+  a:hover{color:#FFBA55}
+  @keyframes gc-marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+  @keyframes gc-kb{from{transform:scale(1.03)}to{transform:scale(1.13)}}
+  @keyframes gc-cuedot{0%{transform:translateY(0);opacity:0.2}50%{transform:translateY(8px);opacity:1}100%{transform:translateY(0);opacity:0.2}}
+  /* Skip link — visible only when focused. */
+  .gc-skip{position:absolute;left:-9999px;top:0;z-index:200;background:#F2A93C;color:#2B1B12;font-family:'Hanken Grotesk',sans-serif;font-weight:700;font-size:14px;padding:12px 18px;border-radius:0 0 10px 0;text-decoration:none}
+  .gc-skip:focus{left:0}
+  :focus-visible{outline:2px solid #F2A93C;outline-offset:3px}
+  /* Phones: the nav's four links + @godschai pill overflow past the viewport edge
+     (and get silently clipped by overflow-x:clip), so tighten it up down there. */
+  @media (max-width:560px){
+    header nav{gap:8px!important;padding-left:13px!important;padding-right:13px!important}
+    header nav img{height:44px!important}
+    header nav > div{gap:10px!important;font-size:13px!important}
+    header nav > a:last-child{font-size:12px!important;padding:10px 11px!important}
+  }
+  @media (max-width:400px){
+    header nav{gap:5px!important;padding-left:10px!important;padding-right:10px!important}
+    header nav img{height:36px!important}
+    header nav > div{gap:6px!important;font-size:11.5px!important}
+    header nav > a:last-child{font-size:11px!important;padding:9px 9px!important}
+  }
+  @media (max-width:355px){
+    header nav{flex-wrap:wrap!important;justify-content:center!important;row-gap:6px!important}
+    /* the wrapped nav is ~102px tall, so the 84px anchor offset no longer clears it */
+    section[id]{scroll-margin-top:114px!important}
+  }
+  /* Tap targets: the nav and footer links are only 14-18px tall on their own.
+     Vertical padding grows the hit area without moving anything visually. */
+  header nav > div > a{padding:13px 0!important;white-space:nowrap}
+  footer .gc-footer-links a{padding:6px 0!important;margin:-3px 0!important;display:inline-block}
+  /* The hot-chai card's panels carry min-width:260/300px, which is wider than a
+     320px screen's content box — it forced the card to overflow. */
+  @media (max-width:430px){
+    #hot > div > div{min-width:0!important}
+  }
+  /* Community grid: with three tiles, auto-fit left empty cells (a whole dead
+     column at desktop widths). Fixed column counts make the tiles tile exactly. */
+  @media (min-width:700px){
+    #community div[style*="grid-auto-rows"]{grid-template-columns:repeat(4,1fr)!important}
+    #community div[style*="grid-auto-rows"] > div:nth-child(2),
+    #community div[style*="grid-auto-rows"] > div:nth-child(3){grid-column:span 1!important;grid-row:span 2!important}
+  }
+  /* Long-form article copy (brew guide, catering). Matches the site voice/palette. */
+  .gc-prose{color:#D6C7B4;font-size:1.05rem;line-height:1.65}
+  .gc-prose p{margin:0 0 18px}
+  .gc-prose h2{font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(1.6rem,3.4vw,2.3rem);letter-spacing:0;color:#F3E8D3;margin:38px 0 12px}
+  .gc-prose h3{font-family:'Instrument Serif',serif;font-weight:400;font-size:1.28rem;color:#F3E8D3;margin:26px 0 8px}
+  .gc-prose ul,.gc-prose ol{margin:0 0 18px;padding-left:22px}
+  .gc-prose li{margin:0 0 9px}
+  .gc-prose strong{color:#F3E8D3;font-weight:600}
+</style>

@@ -1,0 +1,23 @@
+{%- comment -%}
+  Newsletter modal. Timing/frequency rules live in assets/js/site.js:
+  never on the first pageview of a session, then exit-intent (desktop) or
+  30s / 50% scroll, and once dismissed it stays away for 30 days.
+{%- endcomment -%}
+<div id="gc-popup-overlay" hidden style="display:none;position:fixed;inset:0;background:rgba(16,10,5,0.85);z-index:9999;align-items:center;justify-content:center;padding:20px;">
+  <div role="dialog" aria-modal="true" aria-labelledby="gc-popup-title" style="background:#1D120B;border:1px solid rgba(242,169,60,0.35);border-radius:24px;max-width:440px;width:100%;padding:44px 36px;position:relative;text-align:center;box-shadow:0 24px 60px rgba(0,0,0,0.5);">
+    <button id="gc-popup-close" type="button" aria-label="Close" style="position:absolute;top:14px;right:18px;background:none;border:none;color:#C7B29E;font-size:24px;cursor:pointer;line-height:1;width:40px;height:40px;">×</button>
+    <p style="font-family:'DM Mono',monospace;color:#F2A93C;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;margin-bottom:14px;">Welcome to God's Chai</p>
+    <h2 id="gc-popup-title" style="font-family:'Instrument Serif',serif;color:#F3E8D3;font-size:1.65rem;font-weight:400;letter-spacing:0;margin:0 0 12px;line-height:1.15;">Sip the sacred, stay inspired.</h2>
+    <p style="font-family:'Hanken Grotesk',sans-serif;color:#C7B29E;font-size:14px;margin-bottom:26px;line-height:1.55;">New blends, events &amp; exclusive offers — straight to your inbox.</p>
+    <form id="gc-popup-form" data-gc-signup
+          action="https://{{ site.mailchimp.host }}/subscribe/post?u={{ site.mailchimp.u }}&amp;id={{ site.mailchimp.id }}&amp;f_id={{ site.mailchimp.f_id }}"
+          method="post" target="_blank"
+          style="display:flex;flex-direction:column;gap:12px;">
+      <label for="gc-email-popup" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap">Email address</label>
+      <input id="gc-email-popup" type="email" name="EMAIL" required autocomplete="email" placeholder="you@email.com" style="width:100%;box-sizing:border-box;padding:14px 18px;background:rgba(243,232,211,0.05);border:1px solid rgba(243,232,211,0.18);border-radius:999px;color:#F3E8D3;font-family:'Hanken Grotesk',sans-serif;font-size:15px;outline:none;">
+      <button type="submit" style="width:100%;padding:14px;background:#F2A93C;color:#2B1B12;font-weight:700;font-size:14px;font-family:'Hanken Grotesk',sans-serif;border:none;border-radius:999px;cursor:pointer;">Join the journey</button>
+      <p data-gc-signup-msg role="status" aria-live="polite" style="display:none;margin:0;font-size:13px;font-weight:600;"></p>
+    </form>
+    <button id="gc-popup-no-thanks" type="button" style="background:none;border:none;color:#8A7869;font-size:12px;margin-top:16px;cursor:pointer;text-decoration:underline;text-underline-offset:3px;font-family:'Hanken Grotesk',sans-serif;padding:8px 12px;">No thanks</button>
+  </div>
+</div>

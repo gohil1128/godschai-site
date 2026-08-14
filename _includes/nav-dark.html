@@ -1,0 +1,26 @@
+{%- comment -%}
+  Fixed dark nav. On the homepage it starts transparent and solidifies on scroll
+  (assets/js/site.js); on inner pages it is solid from the top so the links stay
+  readable against page content.
+{%- endcomment -%}
+{%- if page.transparent_nav -%}
+  {%- assign nav_bg = "transparent" -%}
+  {%- assign nav_border = "transparent" -%}
+{%- else -%}
+  {%- assign nav_bg = "rgba(24,15,9,0.92)" -%}
+  {%- assign nav_border = "rgba(243,232,211,0.10)" -%}
+{%- endif -%}
+<header data-gc-nav{% if page.transparent_nav %} data-gc-nav-transparent="true"{% endif %} style="position:fixed;top:0;left:0;right:0;z-index:80;background:{{ nav_bg }};border-bottom:1px solid {{ nav_border }};transition:background .5s ease,border-color .5s ease{% unless page.transparent_nav %};backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px){% endunless %}">
+  <nav aria-label="Primary" style="max-width:1320px;margin:0 auto;padding:12px clamp(16px,4vw,40px);display:flex;align-items:center;justify-content:space-between;gap:16px">
+    <a href="{{ '/' | relative_url }}" style="text-decoration:none;display:flex;align-items:center;line-height:1" aria-label="God's Chai — home">
+      {% include img.html base="logo-cream" ext="png" widths="128,256" sizes="56px" w="256" h="256" alt="God's Chai" priority=true wrap="display:block" style="height:56px;width:auto;display:block;filter:drop-shadow(0 2px 8px rgba(0,0,0,0.5))" %}
+    </a>
+    <div style="display:flex;align-items:center;gap:clamp(12px,2vw,28px);font-weight:500;font-size:14.5px">
+      <a href="{{ '/menu/' | relative_url }}" style="text-decoration:none;color:#EFE0CF">Menu</a>
+      <a href="{{ '/how-to-make-masala-chai/' | relative_url }}" style="text-decoration:none;color:#EFE0CF">Brew Guide</a>
+      <a href="{{ '/premixes/' | relative_url }}" style="text-decoration:none;color:#EFE0CF">Premixes</a>
+      <a href="{{ '/events/' | relative_url }}" style="text-decoration:none;color:#EFE0CF">Events</a>
+    </div>
+    <a href="{{ site.social.instagram }}" target="_blank" rel="noopener" style="text-decoration:none;background:#F2A93C;color:#2B1B12;font-weight:700;font-size:13.5px;padding:9px 16px;border-radius:999px;white-space:nowrap" style-hover="background:#FFBA55">{{ site.social.instagram_handle }}</a>
+  </nav>
+</header>
