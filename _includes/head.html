@@ -12,7 +12,7 @@
 <!-- Content-Security-Policy. GitHub Pages can't send response headers, so it ships as a
      meta tag. 'unsafe-inline' covers the inline styles the design relies on; there is no
      'unsafe-eval' because the site no longer evaluates JS at runtime. -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://*.list-manage.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://pub-cebe510d78a84528b5ea883bd62fe46c.r2.dev https://*.google-analytics.com https://*.googletagmanager.com; media-src 'self' https://pub-cebe510d78a84528b5ea883bd62fe46c.r2.dev; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://stats.g.doubleclick.net; object-src 'none'; base-uri 'self'; form-action 'self'; frame-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://*.list-manage.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https://pub-cebe510d78a84528b5ea883bd62fe46c.r2.dev https://*.google-analytics.com https://*.googletagmanager.com; media-src 'self' https://pub-cebe510d78a84528b5ea883bd62fe46c.r2.dev; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://stats.g.doubleclick.net; object-src 'none'; base-uri 'self'; form-action 'self'; frame-src 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 
 <title>{{ page.title }}</title>
@@ -43,9 +43,10 @@
 
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>☕</text></svg>">
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Hanken+Grotesk:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<!-- Self-hosted fonts: no third-party origin, no render-blocking stylesheet.
+     The two faces used above the fold are preloaded; the rest arrive with the CSS. -->
+<link rel="preload" href="{{ '/assets/fonts/instrument-serif-400.woff2' | relative_url }}" as="font" type="font/woff2" crossorigin>
+<style>{% include fonts.css %}</style>
 
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id={{ site.ga_measurement_id }}"></script>
