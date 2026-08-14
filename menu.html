@@ -37,6 +37,17 @@
   html{scroll-behavior:smooth}
   body{background:#FDF6E4}
   ::selection{background:#D57245;color:#FFFAF3}
+  /* Tap targets: nav and footer links are only 18-22px tall on their own. */
+  header nav > div > a{padding:11px 0!important}
+  footer a{padding:5px 0!important;display:inline-block}
+  /* Section headers pair a nowrap heading with a nowrap label either side of a
+     rigid divider, so on narrow phones the label was pushed past the padding
+     edge and clipped. Let the row wrap instead. */
+  @media (max-width:389px){
+    #hot > div:first-of-type,
+    #cold > div > div:first-of-type,
+    #snacks > div > div:first-of-type{flex-wrap:wrap!important;row-gap:4px!important}
+  }
 </style>
 </helmet>
 
@@ -108,7 +119,7 @@
               <div style="aspect-ratio:4/5;overflow:hidden;background:#2A1A13"><img src="{{ d.img }}" alt="{{ d.name }}" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block"/></div>
             </sc-if>
             <sc-if value="{{ d.noImg }}" hint-placeholder-val="{{ false }}">
-              <div style="aspect-ratio:4/5;background:repeating-linear-gradient(135deg,#E1865D,#E1865D 14px,#D57245 14px,#D57245 28px);position:relative"><span style="position:absolute;left:12px;bottom:12px;font-family:'DM Mono',monospace;font-size:10.5px;color:#FFFAF3;background:rgba(15,8,5,0.5);padding:5px 9px;border-radius:8px">{{ d.shot }}</span></div>
+              <div style="aspect-ratio:4/5;background:repeating-linear-gradient(135deg,#E1865D,#E1865D 14px,#D57245 14px,#D57245 28px);position:relative"><span style="position:absolute;left:12px;bottom:12px;font-family:'DM Mono',monospace;font-size:11.5px;color:#FFFAF3;background:rgba(15,8,5,0.5);padding:5px 9px;border-radius:8px">{{ d.shot }}</span></div>
             </sc-if>
             <div style="padding:16px 18px 19px">
               <h3 style="font-family:'Instrument Serif',serif;font-weight:400;font-size:1.12rem;margin:0;letter-spacing:0;color:#FDF6E4">{{ d.name }}</h3>
