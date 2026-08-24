@@ -146,13 +146,15 @@ layout: null
     });
   }
 
-  /* ---------- 4b. Brand sting: the logo animation, played exactly once ----------
-     The card ships with the animation's last frame as a plain <img>, so with JS
-     off — or with prefers-reduced-motion set — visitors just see the finished
-     lockup and nothing moves. When motion is fine we lay a silent, non-looping
-     video over that still and let it run the first time the card scrolls into
-     view. It is never preloaded, never repeats, and there is no audio, so it
-     reads as a brand moment rather than something demanding attention. */
+  /* ---------- 4b. Brand sting: the looping logo animation ----------
+     The band ships with the animation's last frame as a plain <img>, so with JS
+     off — or with prefers-reduced-motion set — visitors get the finished lockup
+     and nothing moves. When motion is fine we put a silent, looping video
+     underneath that still and hide the still so the video shows through.
+
+     The loop only ever runs while it is actually on screen, and clicking (or
+     pressing Enter/Space on) it stops the loop and settles back on the finished
+     lockup. Clicking again starts it going. */
   var sting = d.querySelector('[data-gc-sting]');
   if (sting && !reduceMotion && 'IntersectionObserver' in window) {
     var probe = d.createElement('video');
@@ -167,10 +169,10 @@ layout: null
       sv.setAttribute('preload', 'none');
       sv.setAttribute('aria-hidden', 'true');   // the still already carries the alt text
       sv.setAttribute('tabindex', '-1');
-      sv.muted = true; sv.defaultMuted = true; sv.volume = 0; sv.loop = false;
+      sv.muted = true; sv.defaultMuted = true; sv.volume = 0; sv.loop = true;
       sv.disablePictureInPicture = true;
       sv.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;' +
-                         'display:block;background:#F4EFE5;border:0';
+                         'display:block;background:#1C1209;border:0;z-index:1';
       [['{{ "/uploads/logo-sting.webm" | relative_url }}', 'video/webm'],
        ['{{ "/uploads/logo-sting.mp4"  | relative_url }}', 'video/mp4']].forEach(function (pair) {
         var s = d.createElement('source');
@@ -178,32 +180,86 @@ layout: null
         sv.appendChild(s);
       });
       sting.appendChild(sv);
-      // Swap to the video now, while the card is still far below the fold, so
-      // nobody watches the finished lockup blink out at the moment it starts.
+
+      var hint = d.createElement('span');
+      hint.className = 'gc-sting-hint';
+      hint.setAttribute('aria-hidden', 'true');
+      hint.textContent = 'Pause';
+      sting.appendChild(hint);
+
+      sting.setAttribute('role', 'button');
+      sting.setAttribute('tabindex', '0');
+      sting.setAttribute('aria-label', 'Pause the God’s Chai logo animation');
+      // The still sits above the video, so showing it is what "stopped" looks like.
+      stingStill.style.transition = 'opacity .3s ease';
       stingStill.style.opacity = '0';
 
+      var stingBroken = false;
       var stingFallback = function () {
+        stingBroken = true;
         stingStill.style.opacity = '1';
         if (sv.parentNode) sv.parentNode.removeChild(sv);
+        if (hint.parentNode) hint.parentNode.removeChild(hint);
+        sting.removeAttribute('role');
+        sting.removeAttribute('tabindex');
+        sting.removeAttribute('aria-label');
+        sting.classList.remove('is-stopped');
       };
       sv.addEventListener('error', stingFallback);
 
-      var stingPlayed = false;
+      var stingStopped = false;    // the visitor asked it to stop
+      var stingInView = false;
+      var stingLoaded = false;
+
+      var stingSync = function () {
+        if (stingBroken) return;
+        if (stingStopped || !stingInView) {
+          try { sv.pause(); } catch (err) {}
+          return;
+        }
+        if (!stingLoaded) {
+          stingLoaded = true;
+          var guard = setTimeout(stingFallback, 4000);   // autoplay blocked, or the file never arrived
+          sv.addEventListener('playing', function () { clearTimeout(guard); }, { once: true });
+          try { sv.load(); } catch (err) {}
+        }
+        var pr = sv.play();
+        if (pr && pr.catch) pr.catch(function () { if (!stingLoaded || sv.readyState === 0) stingFallback(); });
+      };
+
+      var stingToggle = function () {
+        if (stingBroken) return;
+        stingStopped = !stingStopped;
+        stingStill.style.opacity = stingStopped ? '1' : '0';
+        sting.classList.toggle('is-stopped', stingStopped);
+        hint.textContent = stingStopped ? 'Play' : 'Pause';
+        sting.setAttribute('aria-label', (stingStopped ? 'Play' : 'Pause') +
+                           ' the God’s Chai logo animation');
+        stingSync();
+      };
+
+      sting.addEventListener('click', stingToggle);
+      sting.addEventListener('keydown', function (ev) {
+        if (ev.key === 'Enter' || ev.key === ' ' || ev.key === 'Spacebar') {
+          ev.preventDefault();
+          stingToggle();
+        }
+      });
+
+      // Only ever run the loop while it is on screen — off screen it is just
+      // battery. A short beat on the first pass so the band's fade-in lands first.
+      var stingFirst = true;
       var sio = new IntersectionObserver(function (entries) {
         entries.forEach(function (e) {
-          if (!e.isIntersecting || stingPlayed) return;
-          stingPlayed = true;
-          sio.disconnect();
-          // A short beat so the section's own fade-in lands first.
-          setTimeout(function () {
-            var guard = setTimeout(stingFallback, 4000);   // autoplay blocked, or the file never arrived
-            sv.addEventListener('playing', function () { clearTimeout(guard); }, { once: true });
-            try { sv.load(); } catch (err) {}
-            var pr = sv.play();
-            if (pr && pr.catch) pr.catch(function () { clearTimeout(guard); stingFallback(); });
-          }, 180);
+          stingInView = e.isIntersecting;
+          if (stingInView && stingFirst) {
+            stingFirst = false;
+            setTimeout(stingSync, 180);
+          } else {
+            stingSync();
+          }
         });
-      }, { threshold: 0.6 });
+      }, { threshold: 0.4 });
       sio.observe(sting);
     }
   }

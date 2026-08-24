@@ -86,47 +86,50 @@ The longer written guide on that page is normal text in
 
 ## The logo animation on the home page
 
-Just under the hero there's a cream tile that draws the logo on, once, as you
-scroll past it. It's deliberately quiet: no sound, it never repeats, and it
-doesn't start downloading until you actually scroll near it.
+Just under the hero, on its own dark strip, the logo draws itself on and keeps
+looping. Click (or tap) it and it stops on the finished logo; click again and it
+starts up. It has no sound, it only runs while it is actually on screen, and it
+doesn't start downloading until you scroll near it.
+
+The animation you sent had a cream background, which would have sat on the page
+as a pale box. It has been recoloured to the brand's dark-background lockup —
+the same cream-and-terracotta version as `uploads/logo-cream.png` in the header
+and footer — and its background baked to `#1C1209`, the exact colour of the
+strip behind it. That is why you can't see where the video starts and stops.
 
 Four files make it work:
 
 | File | What it is |
 | --- | --- |
-| `uploads/logo-sting.mp4` | the animation (Safari plays this one) |
+| `uploads/logo-sting.mp4` | the animation (Safari and iPhones play this one) |
 | `uploads/logo-sting.webm` | the same animation, smaller (Chrome, Firefox, Edge) |
 | `uploads/logo-sting.png` | its last frame — the finished lockup |
-| `uploads/opt/logo-sting-*.jpg` / `.webp` | the sized copies of that last frame |
+| `uploads/opt/logo-sting-*.png` / `.webp` | the sized copies of that last frame |
 
-The last frame is what shows for anyone who has turned animations off in their
-phone or computer settings, and for anyone whose browser can't play the video.
-That's why it has to stay in step with the animation.
+The last frame is what shows while the animation is stopped, for anyone who has
+turned animations off in their phone or computer settings, and for anyone whose
+browser can't play the video. So it has to stay in step with the animation, and
+its background has to stay `#1C1209`.
 
 The full-length original is kept at `uploads/_src/logo-sting-master.mp4`. Jekyll
 ignores anything in a folder starting with `_`, so it stays in the repo for
 re-cutting but is never published to the live site.
 
-**To swap in a new animation** you need `ffmpeg` (`pip install imageio-ffmpeg`):
+**Swapping in a new animation** is not a one-liner, because of the recolouring.
+The script that did it is `tools/recolour-sting.py` — it reads the sting frame
+by frame, works out which of the two inks laid down each pixel, and rebuilds it
+in the dark-background colours. Run it and it prints what to do next:
 
 ```bash
-# 1. crop to a square around the logo, trim off any blank tail, shrink to 640px
-ffmpeg -i new-sting.mp4 -t 4.45 -vf "crop=880:880:522:90,scale=640:640" -an \
-       -c:v libx264 -pix_fmt yuv420p -crf 24 -movflags +faststart uploads/logo-sting.mp4
-ffmpeg -i new-sting.mp4 -t 4.45 -vf "crop=880:880:522:90,scale=640:640" -an \
-       -c:v libvpx-vp9 -crf 36 -b:v 0 uploads/logo-sting.webm
-
-# 2. save its final frame as the still
-ffmpeg -y -ss 4.40 -i new-sting.mp4 -vf "crop=880:880:522:90,scale=640:640" \
-       -frames:v 1 uploads/logo-sting.png
-
-# 3. remake the sized copies
+pip install imageio-ffmpeg numpy Pillow
+python3 tools/recolour-sting.py uploads/_src/logo-sting-master.mp4
 python3 tools/optimize-images.py
 ```
 
-The `crop` numbers are cut to *this* animation's framing (a 1920×1080 source
-with the logo in the middle). A different animation will need different ones —
-or none at all, if it's already square.
+Its crop, trim and colour settings are cut to *this* animation. A different one
+will need them adjusted — they're the constants at the top of the file, each
+with a note saying what it is. If that's more than you want to take on, it's a
+reasonable thing to hand to whoever made the animation.
 
 ---
 
