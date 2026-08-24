@@ -63,6 +63,22 @@ og_image: "uploads/og-image.jpg"
     </div>
   </div>
 
+  <!-- ================= BRAND STING =================
+       The logo animation. It sits a full screen below the hero so it never
+       touches LCP, it is silent, and it plays exactly once when it scrolls
+       into view (assets/js/site.js). The still below is the animation's last
+       frame: it is what shows with JS off, and what stays if the visitor has
+       asked for reduced motion. -->
+  <section style="max-width:1240px;margin:0 auto;padding:clamp(46px,7vw,92px) clamp(18px,4vw,40px)">
+    <div style="display:flex;align-items:center;gap:clamp(14px,4vw,40px)">
+      <span aria-hidden="true" style="flex:1;height:1px;background:linear-gradient(90deg,rgba(242,169,60,0) 0%,rgba(242,169,60,0.45) 100%)"></span>
+      <div data-gc-sting style="position:relative;flex:0 0 auto;width:clamp(190px,40vw,290px);border-radius:26px;overflow:hidden;background:#F4EFE5;border:1px solid rgba(242,169,60,0.32);box-shadow:0 24px 64px rgba(0,0,0,0.5)">
+        {% include img.html base="logo-sting" ext="jpg" widths="320,640" sizes="(max-width:760px) 40vw, 290px" w="640" h="640" alt="God's Chai — not your average chai" wrap="display:block" style="width:100%;height:auto;display:block" %}
+      </div>
+      <span aria-hidden="true" style="flex:1;height:1px;background:linear-gradient(90deg,rgba(242,169,60,0.45) 0%,rgba(242,169,60,0) 100%)"></span>
+    </div>
+  </section>
+
   <!-- HOT -->
   {%- assign hot = site.data.menu.hot | first %}
   <section id="hot" aria-labelledby="hot-h2" style="max-width:1240px;margin:0 auto;padding:clamp(60px,8vw,110px) clamp(18px,4vw,40px) clamp(20px,3vw,36px);scroll-margin-top:84px">

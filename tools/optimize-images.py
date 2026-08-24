@@ -51,6 +51,13 @@ LOGOS = {
     "artboard.png": (128, 256),
 }
 
+# Flat artwork (crisp edges, few colours) needs a higher quality than photos or
+# JPEG ringing shows up around the letterforms. logo-sting.png is the final
+# frame of uploads/logo-sting.mp4 and is what shows before the sting plays.
+FLAT_ART = {
+    "logo-sting.png": (320, 640),
+}
+
 OG_SOURCE = "hero-journey-web.jpeg"
 
 
@@ -119,6 +126,18 @@ def main():
             emit(im, base, w, "png", 82)
         made += len(widths)
         print(f"  logo  {name} -> {', '.join(str(w) for w in widths)}")
+
+    for name, widths in FLAT_ART.items():
+        path = os.path.join(SRC, name)
+        if not os.path.exists(path):
+            print(f"  skip (missing): {name}")
+            continue
+        base = os.path.splitext(name)[0]
+        im = Image.open(path).convert("RGB")
+        for w in widths:
+            emit(im, base, w, "jpg", 90)
+        made += len(widths)
+        print(f"  flat  {name} -> {', '.join(str(w) for w in widths)}")
 
     og_src = os.path.join(SRC, OG_SOURCE)
     if os.path.exists(og_src):

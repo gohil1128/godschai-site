@@ -96,7 +96,7 @@ layout: null
   }
 
   /* ---------- 4. Videos: load when visible, one audio source at a time ---------- */
-  var videos = [].slice.call(d.querySelectorAll('video'));
+  var videos = [].slice.call(d.querySelectorAll('video:not([data-gc-sting-video])'));
   if (videos.length) {
     videos.forEach(function (v) { v.muted = true; v.defaultMuted = true; v.volume = 0; });
     if ('IntersectionObserver' in window) {
@@ -144,6 +144,68 @@ layout: null
       btn.setAttribute('aria-pressed', willUnmute ? 'true' : 'false');
       if (willUnmute) { var p2 = v.play(); if (p2 && p2.catch) p2.catch(function () {}); }
     });
+  }
+
+  /* ---------- 4b. Brand sting: the logo animation, played exactly once ----------
+     The card ships with the animation's last frame as a plain <img>, so with JS
+     off — or with prefers-reduced-motion set — visitors just see the finished
+     lockup and nothing moves. When motion is fine we lay a silent, non-looping
+     video over that still and let it run the first time the card scrolls into
+     view. It is never preloaded, never repeats, and there is no audio, so it
+     reads as a brand moment rather than something demanding attention. */
+  var sting = d.querySelector('[data-gc-sting]');
+  if (sting && !reduceMotion && 'IntersectionObserver' in window) {
+    var probe = d.createElement('video');
+    var canPlay = probe.canPlayType &&
+      (probe.canPlayType('video/webm; codecs="vp9"') || probe.canPlayType('video/mp4; codecs="avc1.640028"'));
+    var stingStill = sting.querySelector('picture') || sting.querySelector('img');
+    if (canPlay && stingStill) {
+      var sv = d.createElement('video');
+      sv.setAttribute('data-gc-sting-video', '');
+      sv.setAttribute('playsinline', '');
+      sv.setAttribute('webkit-playsinline', '');
+      sv.setAttribute('preload', 'none');
+      sv.setAttribute('aria-hidden', 'true');   // the still already carries the alt text
+      sv.setAttribute('tabindex', '-1');
+      sv.muted = true; sv.defaultMuted = true; sv.volume = 0; sv.loop = false;
+      sv.disablePictureInPicture = true;
+      sv.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;' +
+                         'display:block;background:#F4EFE5;border:0';
+      [['{{ "/uploads/logo-sting.webm" | relative_url }}', 'video/webm'],
+       ['{{ "/uploads/logo-sting.mp4"  | relative_url }}', 'video/mp4']].forEach(function (pair) {
+        var s = d.createElement('source');
+        s.src = pair[0]; s.type = pair[1];
+        sv.appendChild(s);
+      });
+      sting.appendChild(sv);
+      // Swap to the video now, while the card is still far below the fold, so
+      // nobody watches the finished lockup blink out at the moment it starts.
+      stingStill.style.opacity = '0';
+
+      var stingFallback = function () {
+        stingStill.style.opacity = '1';
+        if (sv.parentNode) sv.parentNode.removeChild(sv);
+      };
+      sv.addEventListener('error', stingFallback);
+
+      var stingPlayed = false;
+      var sio = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (!e.isIntersecting || stingPlayed) return;
+          stingPlayed = true;
+          sio.disconnect();
+          // A short beat so the section's own fade-in lands first.
+          setTimeout(function () {
+            var guard = setTimeout(stingFallback, 4000);   // autoplay blocked, or the file never arrived
+            sv.addEventListener('playing', function () { clearTimeout(guard); }, { once: true });
+            try { sv.load(); } catch (err) {}
+            var pr = sv.play();
+            if (pr && pr.catch) pr.catch(function () { clearTimeout(guard); stingFallback(); });
+          }, 180);
+        });
+      }, { threshold: 0.6 });
+      sio.observe(sting);
+    }
   }
 
   /* ---------- 5. Hide events whose date has passed ---------- */

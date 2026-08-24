@@ -84,6 +84,52 @@ The longer written guide on that page is normal text in
 
 ---
 
+## The logo animation on the home page
+
+Just under the hero there's a cream tile that draws the logo on, once, as you
+scroll past it. It's deliberately quiet: no sound, it never repeats, and it
+doesn't start downloading until you actually scroll near it.
+
+Four files make it work:
+
+| File | What it is |
+| --- | --- |
+| `uploads/logo-sting.mp4` | the animation (Safari plays this one) |
+| `uploads/logo-sting.webm` | the same animation, smaller (Chrome, Firefox, Edge) |
+| `uploads/logo-sting.png` | its last frame — the finished lockup |
+| `uploads/opt/logo-sting-*.jpg` / `.webp` | the sized copies of that last frame |
+
+The last frame is what shows for anyone who has turned animations off in their
+phone or computer settings, and for anyone whose browser can't play the video.
+That's why it has to stay in step with the animation.
+
+The full-length original is kept at `uploads/_src/logo-sting-master.mp4`. Jekyll
+ignores anything in a folder starting with `_`, so it stays in the repo for
+re-cutting but is never published to the live site.
+
+**To swap in a new animation** you need `ffmpeg` (`pip install imageio-ffmpeg`):
+
+```bash
+# 1. crop to a square around the logo, trim off any blank tail, shrink to 640px
+ffmpeg -i new-sting.mp4 -t 4.45 -vf "crop=880:880:522:90,scale=640:640" -an \
+       -c:v libx264 -pix_fmt yuv420p -crf 24 -movflags +faststart uploads/logo-sting.mp4
+ffmpeg -i new-sting.mp4 -t 4.45 -vf "crop=880:880:522:90,scale=640:640" -an \
+       -c:v libvpx-vp9 -crf 36 -b:v 0 uploads/logo-sting.webm
+
+# 2. save its final frame as the still
+ffmpeg -y -ss 4.40 -i new-sting.mp4 -vf "crop=880:880:522:90,scale=640:640" \
+       -frames:v 1 uploads/logo-sting.png
+
+# 3. remake the sized copies
+python3 tools/optimize-images.py
+```
+
+The `crop` numbers are cut to *this* animation's framing (a 1920×1080 source
+with the logo in the middle). A different animation will need different ones —
+or none at all, if it's already square.
+
+---
+
 ## Change site-wide details
 
 **`_config.yml`** holds the things that appear everywhere: Instagram and TikTok
