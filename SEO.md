@@ -113,62 +113,36 @@ Until that file loads, the header shows the ordinary logo picture — so the top
 bar is never empty, and it stays that way for anyone with JavaScript off or
 animations turned off in their device settings.
 
-Its colour comes from the `tint` on the `<gods-chai-logo>` tag in
-`_includes/nav-dark.html`, currently cream (`#F3E8D3`). One colour for the whole
-mark — it can't do the two-tone terracotta-and-cream version.
+### Its colours
+
+The lockup is two-tone: **"God's" and the brush stroke under it in brand orange
+(`#F2A93C`)**, "CHAI" and the tagline in cream.
+
+The component itself can only paint the whole mark one colour, so the cream
+comes from the `tint` on the `<gods-chai-logo>` tag in `_includes/nav-dark.html`
+and the orange is painted over the five orange pieces by a rule in
+`_includes/base-styles-dark.html`.
+
+The ordinary logo pictures — the header's fallback, the footer, the menu page —
+have been recoloured to match, so every God's Chai mark on the site is the same
+two-tone. The originals are kept at `uploads/_src/*-source.png`.
+
+**To change the orange**, three things have to move together:
+
+```bash
+# 1. edit BRAND at the top of tools/recolour-logo.py, then
+python3 tools/recolour-logo.py
+python3 tools/optimize-images.py
+# 2. change the matching #F2A93C in _includes/base-styles-dark.html
+#    (the rule just under "gods-chai-logo:defined")
+```
+
+Change one without the others and the animated logo and the still ones stop
+matching.
 
 If you make the header logo a different size, the number to change with it is
 `scroll-margin-top` in `_includes/base-styles-dark.html`. That's what stops the
 top of a section hiding behind the bar when someone clicks Menu or Events.
-
----
-
-## The logo animation on the home page
-
-Just under the hero, on its own dark strip, the logo draws itself on and keeps
-looping. Click (or tap) it and it stops on the finished logo; click again and it
-starts up. It has no sound, it only runs while it is actually on screen, and it
-doesn't start downloading until you scroll near it.
-
-The animation you sent had a cream background, which would have sat on the page
-as a pale box. It has been recoloured to the brand's dark-background lockup —
-the same cream-and-terracotta version as `uploads/logo-cream.png` in the header
-and footer — and its background baked to `#1C1209`, the exact colour of the
-strip behind it. That is why you can't see where the video starts and stops.
-
-Four files make it work:
-
-| File | What it is |
-| --- | --- |
-| `uploads/logo-sting.mp4` | the animation (Safari and iPhones play this one) |
-| `uploads/logo-sting.webm` | the same animation, smaller (Chrome, Firefox, Edge) |
-| `uploads/logo-sting.png` | its last frame — the finished lockup |
-| `uploads/opt/logo-sting-*.png` / `.webp` | the sized copies of that last frame |
-
-The last frame is what shows while the animation is stopped, for anyone who has
-turned animations off in their phone or computer settings, and for anyone whose
-browser can't play the video. So it has to stay in step with the animation, and
-its background has to stay `#1C1209`.
-
-The full-length original is kept at `uploads/_src/logo-sting-master.mp4`. Jekyll
-ignores anything in a folder starting with `_`, so it stays in the repo for
-re-cutting but is never published to the live site.
-
-**Swapping in a new animation** is not a one-liner, because of the recolouring.
-The script that did it is `tools/recolour-sting.py` — it reads the sting frame
-by frame, works out which of the two inks laid down each pixel, and rebuilds it
-in the dark-background colours. Run it and it prints what to do next:
-
-```bash
-pip install imageio-ffmpeg numpy Pillow
-python3 tools/recolour-sting.py uploads/_src/logo-sting-master.mp4
-python3 tools/optimize-images.py
-```
-
-Its crop, trim and colour settings are cut to *this* animation. A different one
-will need them adjusted — they're the constants at the top of the file, each
-with a note saying what it is. If that's more than you want to take on, it's a
-reasonable thing to hand to whoever made the animation.
 
 ---
 

@@ -17,6 +17,16 @@
      static logo inside it is what shows, and it keeps showing if the script
      never arrives; once :defined matches, the component's own layers take over. */
   gods-chai-logo:defined > picture{display:none!important}  /* beats the include's inline display:block */
+  /* The component tints all eleven strokes with one colour, but the lockup is
+     two-tone: "God's" and the brush stroke under it in brand orange, "CHAI" and
+     the tagline in the cream set by the tint attribute. tools/optimize-logo-sting.py
+     stamps data-layer on each stroke so these can be picked out by name.
+     Overriding an inline background-color needs !important. */
+  gods-chai-logo [data-layer="G"],
+  gods-chai-logo [data-layer="od"],
+  gods-chai-logo [data-layer="apos"],
+  gods-chai-logo [data-layer="s"],
+  gods-chai-logo [data-layer="swash"]{background-color:#F2A93C!important}
   /* The fixed nav is 100px tall with the 76px lockup, so anchored sections need
      to clear more than the 84px they carry inline. */
   section[id]{scroll-margin-top:108px!important}
@@ -58,26 +68,6 @@
     #community div[style*="grid-auto-rows"] > div:nth-child(2),
     #community div[style*="grid-auto-rows"] > div:nth-child(3){grid-column:span 1!important;grid-row:span 2!important}
   }
-  /* Brand sting (home page). The video's baked background and the band behind
-     it are the same colour, so the only thing that could give the rectangle
-     away is a rounding difference of a unit or two after decoding. Feathering
-     the outer 6% removes the hard edge entirely — the logo's ink starts at 16%
-     in, so nothing of the mark is touched. */
-  [data-gc-sting] video{
-    -webkit-mask-image:linear-gradient(to right,transparent,#000 6%,#000 94%,transparent),linear-gradient(to bottom,transparent,#000 6%,#000 94%,transparent);
-    mask-image:linear-gradient(to right,transparent,#000 6%,#000 94%,transparent),linear-gradient(to bottom,transparent,#000 6%,#000 94%,transparent);
-    -webkit-mask-composite:source-in;
-    mask-composite:intersect;
-  }
-  /* Only interactive once the script has actually put a video there. */
-  [data-gc-sting][role="button"]{cursor:pointer;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
-  [data-gc-sting][role="button"]:focus-visible{outline:2px solid #F2A93C;outline-offset:8px;border-radius:10px}
-  .gc-sting-hint{position:absolute;left:50%;top:100%;transform:translateX(-50%);margin-top:12px;font-family:'DM Mono',monospace;font-size:10px;line-height:1;letter-spacing:0.16em;text-transform:uppercase;color:#F2A93C;background:rgba(16,10,5,0.8);border:1px solid rgba(242,169,60,0.35);padding:6px 12px;border-radius:999px;white-space:nowrap;opacity:0;transition:opacity .28s ease;pointer-events:none;z-index:3}
-  [data-gc-sting]:hover .gc-sting-hint,
-  [data-gc-sting]:focus-visible .gc-sting-hint,
-  [data-gc-sting].is-stopped .gc-sting-hint{opacity:1}
-  @media (prefers-reduced-motion:reduce){.gc-sting-hint{transition:none}}
-
   /* Long-form article copy (brew guide, catering). Matches the site voice/palette. */
   .gc-prose{color:#D6C7B4;font-size:1.05rem;line-height:1.65}
   .gc-prose p{margin:0 0 18px}
