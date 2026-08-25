@@ -84,6 +84,94 @@ The longer written guide on that page is normal text in
 
 ---
 
+## The animated logo in the header
+
+The logo in the top bar draws itself on, over and over, cycling through three
+different builds: strokes brushing themselves in, the script landing with CHAI
+rising under it, then everything pouring in from above and wobbling to rest.
+It runs on every page except the menu page.
+
+It isn't a video — it's the mark cut into eleven separate pieces, each one
+animated on its own, so it sits on the page with nothing behind it and stays
+sharp at any size. Two files:
+
+| File | What it is |
+| --- | --- |
+| `assets/_src/logo-sting-original.js` | the design export, kept but never published |
+| `assets/js/logo-sting.js` | what the site loads — same thing, half the size |
+
+`tools/optimize-logo-sting.py` makes the second from the first. The pieces are
+stored with colour information the page never uses, and stripping it halves the
+download without changing a pixel. **When a new export arrives**, drop it in as
+`assets/_src/logo-sting-original.js` and run:
+
+```bash
+python3 tools/optimize-logo-sting.py
+```
+
+Until that file loads, the header shows the ordinary logo picture — so the top
+bar is never empty, and it stays that way for anyone with JavaScript off or
+animations turned off in their device settings.
+
+Its colour comes from the `tint` on the `<gods-chai-logo>` tag in
+`_includes/nav-dark.html`, currently cream (`#F3E8D3`). One colour for the whole
+mark — it can't do the two-tone terracotta-and-cream version.
+
+If you make the header logo a different size, the number to change with it is
+`scroll-margin-top` in `_includes/base-styles-dark.html`. That's what stops the
+top of a section hiding behind the bar when someone clicks Menu or Events.
+
+---
+
+## The logo animation on the home page
+
+Just under the hero, on its own dark strip, the logo draws itself on and keeps
+looping. Click (or tap) it and it stops on the finished logo; click again and it
+starts up. It has no sound, it only runs while it is actually on screen, and it
+doesn't start downloading until you scroll near it.
+
+The animation you sent had a cream background, which would have sat on the page
+as a pale box. It has been recoloured to the brand's dark-background lockup —
+the same cream-and-terracotta version as `uploads/logo-cream.png` in the header
+and footer — and its background baked to `#1C1209`, the exact colour of the
+strip behind it. That is why you can't see where the video starts and stops.
+
+Four files make it work:
+
+| File | What it is |
+| --- | --- |
+| `uploads/logo-sting.mp4` | the animation (Safari and iPhones play this one) |
+| `uploads/logo-sting.webm` | the same animation, smaller (Chrome, Firefox, Edge) |
+| `uploads/logo-sting.png` | its last frame — the finished lockup |
+| `uploads/opt/logo-sting-*.png` / `.webp` | the sized copies of that last frame |
+
+The last frame is what shows while the animation is stopped, for anyone who has
+turned animations off in their phone or computer settings, and for anyone whose
+browser can't play the video. So it has to stay in step with the animation, and
+its background has to stay `#1C1209`.
+
+The full-length original is kept at `uploads/_src/logo-sting-master.mp4`. Jekyll
+ignores anything in a folder starting with `_`, so it stays in the repo for
+re-cutting but is never published to the live site.
+
+**Swapping in a new animation** is not a one-liner, because of the recolouring.
+The script that did it is `tools/recolour-sting.py` — it reads the sting frame
+by frame, works out which of the two inks laid down each pixel, and rebuilds it
+in the dark-background colours. Run it and it prints what to do next:
+
+```bash
+pip install imageio-ffmpeg numpy Pillow
+python3 tools/recolour-sting.py uploads/_src/logo-sting-master.mp4
+python3 tools/optimize-images.py
+```
+
+Its crop, trim and colour settings are cut to *this* animation. A different one
+will need them adjusted — they're the constants at the top of the file, each
+with a note saying what it is. If that's more than you want to take on, it's a
+reasonable thing to hand to whoever made the animation.
+
+---
+
 ## Change site-wide details
 
 **`_config.yml`** holds the things that appear everywhere: Instagram and TikTok

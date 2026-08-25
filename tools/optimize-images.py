@@ -51,6 +51,15 @@ LOGOS = {
     "artboard.png": (128, 256),
 }
 
+# Flat artwork: crisp edges, four colours, and a large area of one flat dark
+# tone that has to sit invisibly against the band behind it. Lossy compression
+# bands that flat area and rings the letterforms, so these go out lossless —
+# on artwork this simple that still costs less than a photo of the same size.
+# logo-sting.png is the last frame of uploads/logo-sting.mp4.
+FLAT_ART = {
+    "logo-sting.png": (320, 640),
+}
+
 OG_SOURCE = "hero-journey-web.jpeg"
 
 
@@ -67,11 +76,15 @@ def crop_to_ratio(im, rw, rh):
     return im.crop((0, top, w, top + nh))
 
 
-def emit(im, base, width, fallback_ext, quality):
+def emit(im, base, width, fallback_ext, quality, lossless=False):
     h = round(im.height * (width / im.width))
     resized = im.resize((width, h), Image.LANCZOS)
-    resized.save(os.path.join(OUT, f"{base}-{width}.webp"), "WEBP",
-                 quality=quality, method=6)
+    if lossless:
+        resized.save(os.path.join(OUT, f"{base}-{width}.webp"), "WEBP",
+                     lossless=True, method=6)
+    else:
+        resized.save(os.path.join(OUT, f"{base}-{width}.webp"), "WEBP",
+                     quality=quality, method=6)
     if fallback_ext == "png":
         resized.save(os.path.join(OUT, f"{base}-{width}.png"), "PNG", optimize=True)
     else:
@@ -119,6 +132,18 @@ def main():
             emit(im, base, w, "png", 82)
         made += len(widths)
         print(f"  logo  {name} -> {', '.join(str(w) for w in widths)}")
+
+    for name, widths in FLAT_ART.items():
+        path = os.path.join(SRC, name)
+        if not os.path.exists(path):
+            print(f"  skip (missing): {name}")
+            continue
+        base = os.path.splitext(name)[0]
+        im = Image.open(path).convert("RGB")
+        for w in widths:
+            emit(im, base, w, "png", 100, lossless=True)
+        made += len(widths)
+        print(f"  flat  {name} -> {', '.join(str(w) for w in widths)}")
 
     og_src = os.path.join(SRC, OG_SOURCE)
     if os.path.exists(og_src):
