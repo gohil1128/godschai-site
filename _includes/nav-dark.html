@@ -12,8 +12,16 @@
 {%- endif -%}
 <header data-gc-nav{% if page.transparent_nav %} data-gc-nav-transparent="true"{% endif %} style="position:fixed;top:0;left:0;right:0;z-index:80;background:{{ nav_bg }};border-bottom:1px solid {{ nav_border }};transition:background .5s ease,border-color .5s ease{% unless page.transparent_nav %};backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px){% endunless %}">
   <nav aria-label="Primary" style="max-width:1320px;margin:0 auto;padding:12px clamp(16px,4vw,40px);display:flex;align-items:center;justify-content:space-between;gap:16px">
+    {%- comment -%}
+      The animated lockup (assets/js/logo-sting.js). The static logo inside it is
+      what shows until the script defines the element — and for good, with JS off
+      — so the header is never empty. base-styles-dark.html hides it on :defined.
+      Both are the same artwork on the same 2048 canvas, so nothing shifts.
+    {%- endcomment -%}
     <a href="{{ '/' | relative_url }}" style="text-decoration:none;display:flex;align-items:center;line-height:1" aria-label="God's Chai — home">
-      {% include img.html base="logo-cream" ext="png" widths="128,256" sizes="56px" w="256" h="256" alt="God's Chai" priority=true wrap="display:block" style="height:56px;width:auto;display:block;filter:drop-shadow(0 2px 8px rgba(0,0,0,0.5))" %}
+      <gods-chai-logo tint="#F3E8D3" aria-hidden="true" style="height:76px;width:76px;display:block;filter:drop-shadow(0 2px 8px rgba(0,0,0,0.5))">
+        {% include img.html base="logo-cream" ext="png" widths="128,256" sizes="76px" w="256" h="256" alt="" priority=true wrap="display:block" style="height:76px;width:76px;display:block" %}
+      </gods-chai-logo>
     </a>
     <div style="display:flex;align-items:center;gap:clamp(12px,2vw,28px);font-weight:500;font-size:14.5px">
       <a href="{{ '/menu/' | relative_url }}" style="text-decoration:none;color:#EFE0CF">Menu</a>

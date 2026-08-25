@@ -84,6 +84,45 @@ The longer written guide on that page is normal text in
 
 ---
 
+## The animated logo in the header
+
+The logo in the top bar draws itself on, over and over, cycling through three
+different builds: strokes brushing themselves in, the script landing with CHAI
+rising under it, then everything pouring in from above and wobbling to rest.
+It runs on every page except the menu page.
+
+It isn't a video — it's the mark cut into eleven separate pieces, each one
+animated on its own, so it sits on the page with nothing behind it and stays
+sharp at any size. Two files:
+
+| File | What it is |
+| --- | --- |
+| `assets/_src/logo-sting-original.js` | the design export, kept but never published |
+| `assets/js/logo-sting.js` | what the site loads — same thing, half the size |
+
+`tools/optimize-logo-sting.py` makes the second from the first. The pieces are
+stored with colour information the page never uses, and stripping it halves the
+download without changing a pixel. **When a new export arrives**, drop it in as
+`assets/_src/logo-sting-original.js` and run:
+
+```bash
+python3 tools/optimize-logo-sting.py
+```
+
+Until that file loads, the header shows the ordinary logo picture — so the top
+bar is never empty, and it stays that way for anyone with JavaScript off or
+animations turned off in their device settings.
+
+Its colour comes from the `tint` on the `<gods-chai-logo>` tag in
+`_includes/nav-dark.html`, currently cream (`#F3E8D3`). One colour for the whole
+mark — it can't do the two-tone terracotta-and-cream version.
+
+If you make the header logo a different size, the number to change with it is
+`scroll-margin-top` in `_includes/base-styles-dark.html`. That's what stops the
+top of a section hiding behind the bar when someone clicks Menu or Events.
+
+---
+
 ## The logo animation on the home page
 
 Just under the hero, on its own dark strip, the logo draws itself on and keeps

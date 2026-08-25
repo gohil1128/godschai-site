@@ -50,6 +50,27 @@ layout: null
     // failsafe: never leave content hidden
     setTimeout(function () { revealTargets.forEach(reveal); }, 1600);
     window.addEventListener('scroll', revealInView, { passive: true });
+
+    /* Anchor links vs. the reveal animation. Jumping to a section that has not
+       revealed yet lands it 34px too high: the browser scrolls to where the
+       translated box currently sits, then the transform settles to none and the
+       section slides up behind the fixed nav. Reveal the target first — with no
+       transition, so it is already in place — then re-align. */
+    var alignTo = function (hash) {
+      if (!hash || hash.length < 2) return;
+      var el;
+      try { el = d.querySelector(hash); } catch (err) { return; }
+      if (!el) return;
+      var sec = el.closest && el.closest('[data-gc-reveal] > section');
+      if (sec) { sec.style.transition = 'none'; reveal(sec); }
+      requestAnimationFrame(function () { el.scrollIntoView(); });
+    };
+    d.addEventListener('click', function (ev) {
+      var a = ev.target.closest && ev.target.closest('a[href^="#"]');
+      if (a) alignTo(a.getAttribute('href'));
+    });
+    window.addEventListener('hashchange', function () { alignTo(location.hash); });
+    if (location.hash) alignTo(location.hash);
   }
 
   /* ---------- 3. Nav solidify + mesh drift + parallax band ---------- */

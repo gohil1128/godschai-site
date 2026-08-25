@@ -13,24 +13,34 @@
   .gc-skip{position:absolute;left:-9999px;top:0;z-index:200;background:#F2A93C;color:#2B1B12;font-family:'Hanken Grotesk',sans-serif;font-weight:700;font-size:14px;padding:12px 18px;border-radius:0 0 10px 0;text-decoration:none}
   .gc-skip:focus{left:0}
   :focus-visible{outline:2px solid #F2A93C;outline-offset:3px}
+  /* Animated logo in the header. Until the script registers the element the
+     static logo inside it is what shows, and it keeps showing if the script
+     never arrives; once :defined matches, the component's own layers take over. */
+  gods-chai-logo:defined > picture{display:none!important}  /* beats the include's inline display:block */
+  /* The fixed nav is 100px tall with the 76px lockup, so anchored sections need
+     to clear more than the 84px they carry inline. */
+  section[id]{scroll-margin-top:108px!important}
+
   /* Phones: the nav's four links + @godschai pill overflow past the viewport edge
      (and get silently clipped by overflow-x:clip), so tighten it up down there. */
   @media (max-width:560px){
     header nav{gap:8px!important;padding-left:13px!important;padding-right:13px!important}
-    header nav img{height:44px!important}
+    header nav gods-chai-logo,header nav img{height:56px!important;width:56px!important}
     header nav > div{gap:10px!important;font-size:13px!important}
     header nav > a:last-child{font-size:12px!important;padding:10px 11px!important}
+    section[id]{scroll-margin-top:88px!important}
   }
   @media (max-width:400px){
     header nav{gap:5px!important;padding-left:10px!important;padding-right:10px!important}
-    header nav img{height:36px!important}
+    header nav gods-chai-logo,header nav img{height:46px!important;width:46px!important}
     header nav > div{gap:6px!important;font-size:11.5px!important}
     header nav > a:last-child{font-size:11px!important;padding:9px 9px!important}
+    section[id]{scroll-margin-top:78px!important}
   }
   @media (max-width:355px){
     header nav{flex-wrap:wrap!important;justify-content:center!important;row-gap:6px!important}
-    /* the wrapped nav is ~102px tall, so the 84px anchor offset no longer clears it */
-    section[id]{scroll-margin-top:114px!important}
+    /* the wrapped nav is taller again, so the anchor offset has to clear that */
+    section[id]{scroll-margin-top:124px!important}
   }
   /* Tap targets: the nav and footer links are only 14-18px tall on their own.
      Vertical padding grows the hit area without moving anything visually. */
