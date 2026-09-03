@@ -149,12 +149,16 @@ top of a section hiding behind the bar when someone clicks Menu or Events.
 ## The email signup tab
 
 Nothing pops open on its own any more. About five seconds in, a small amber tab
-slides in at the right edge of the screen reading **"psst — join the list"**.
-Tapping it opens the signup box; tapping the little × puts it away. Either way
-it stays gone for 30 days, and it never appears again for someone who has
-already subscribed.
+slides in at the left edge of the screen reading **"spiced, never spammy"** — a
+nod to "spiced, never syruped" on the ticker. Tapping it opens the signup box;
+tapping the little × puts it away. Either way it stays gone for 30 days, and it
+never appears again for someone who has already subscribed.
 
-It covers under 1% of the screen on a laptop and about 2% on a phone — the old
+It sits lower on a laptop than on a phone. A laptop has room to the left of the
+headline; a phone doesn't, so there it moves up into the gap between the header
+and the first line of text.
+
+It covers half a percent of the screen on a laptop and about 1.6% on a phone — the old
 version covered the whole page — so people can read without dismissing anything
 first. That is also better for Google, which marks sites down for covering the
 page with something the visitor didn't ask for.

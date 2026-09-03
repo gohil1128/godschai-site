@@ -238,7 +238,11 @@ layout: null
   var overlay = d.getElementById('gc-popup-overlay');
   var nudge = d.getElementById('gc-nudge');
   if (overlay) {
-    var DISMISS_KEY = 'gc_popup_dismissed_until';
+    // Its own key, deliberately not the one the old auto-opening modal used.
+    // Sharing that one meant anyone who had closed the old popup in the last
+    // 30 days never saw the tab at all — and the tab is a different, far
+    // smaller thing to have turned down.
+    var DISMISS_KEY = 'gc_nudge_dismissed_until';
     var lastFocus = null;
     var shown = false;
 
@@ -247,8 +251,6 @@ layout: null
         if (localStorage.getItem('gc_subscribed')) return true;
         var until = parseInt(localStorage.getItem(DISMISS_KEY) || '0', 10);
         if (until && Date.now() < until) return true;
-        // legacy key from the old always-on popup
-        if (sessionStorage.getItem('gc_popup_dismissed')) return true;
       } catch (e) {}
       return false;
     };
