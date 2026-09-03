@@ -1,0 +1,15 @@
+# The two premix pouches. Used on the homepage premix section and /premixes/.
+# img: the filename in uploads/ without its extension (run tools/optimize-images.py
+# after adding a new one). tilt: how the pouch leans on the homepage.
+- name: "Original Masala"
+  notes: "Bold · Warm · Rich"
+  blurb: "The cart recipe, in a pouch. Cardamom, ginger, cassia, clove and pepper from Kerala, ground in small batches with single-origin Assam."
+  img: "pouch-masala-front"
+  alt: "God's Chai Original Masala premix pouch, 125g, makes 25 cups"
+  tilt: "rotate(-3deg)"
+- name: "Rose & Cardamom"
+  notes: "Floral · Warm · Smooth"
+  blurb: "Softer and more perfumed — rose petals lifting the cardamom, with the same Assam base underneath. The one to make for people who say chai is too strong."
+  img: "pouch-rose-front"
+  alt: "God's Chai Rose and Cardamom premix pouch, 125g, makes 25 cups"
+  tilt: "rotate(3deg) translateY(-18px)"
