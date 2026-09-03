@@ -2,7 +2,7 @@
   Pop-up schedule grid. Every event is rendered server-side so crawlers and AI
   answer engines can read the whole schedule; assets/js/site.js hides the ones
   whose date has passed for human visitors.
-  Params: limit (optional), heading_id, show_link (link out to /events/)
+  Params: limit (optional), heading, heading_id
 {%- endcomment -%}
 {%- assign evs = site.data.events -%}
 {%- if include.limit -%}{% assign evs = evs | slice: 0, include.limit %}{%- endif -%}
@@ -12,9 +12,6 @@
       <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.18em;text-transform:uppercase;color:#F2A93C">Find us in the wild</div>
       <h2 id="{{ include.heading_id | default: 'events-h2' }}" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(2rem,4.4vw,3.3rem);letter-spacing:0;line-height:1;margin:10px 0 0">{{ include.heading | default: "Events &amp; pop-ups" }}</h2>
     </div>
-    {%- if include.show_link %}
-    <a href="{{ '/events/' | relative_url }}" style="text-decoration:none;color:#F2A93C;font-weight:600;font-size:15px;border-bottom:2px solid rgba(242,169,60,0.5);padding:6px 0 4px;display:inline-block">See the full schedule →</a>
-    {%- endif %}
   </div>
   <div data-gc-events style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:clamp(16px,2vw,24px)">
     {%- for e in evs %}
