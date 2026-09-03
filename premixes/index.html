@@ -1,34 +1,33 @@
 ---
 layout: default
-title: "Masala Chai Premix & Concentrate | God's Chai"
-description: "Our masala chai premixes and concentrates are coming to Canada — the same Kerala spices and Assam tea we pour in Saskatoon, made at home in minutes."
+title: "Masala Chai Premix, Saskatoon | God's Chai"
+description: "Two masala chai premixes, hand crafted in Saskatoon: Original Masala and Rose & Cardamom. Kerala spices, Assam tea, 25 cups a pouch. Launching this fall."
 breadcrumb: "Premixes"
 og_image: "uploads/og-image.jpg"
 ---
 
 <section aria-labelledby="page-h1" style="max-width:1240px;margin:0 auto;padding:clamp(110px,14vh,170px) clamp(18px,4vw,40px) clamp(20px,3vw,30px)">
-  <div style="display:inline-block;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.16em;text-transform:uppercase;color:#2B1B12;background:#F2A93C;padding:7px 13px;border-radius:999px;font-weight:500">Coming soon</div>
-  <h1 id="page-h1" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(2.3rem,6vw,4.2rem);line-height:0.98;letter-spacing:0;margin:18px 0 0;max-width:26ch">Masala Chai Premix <span style="color:#FF6F61;font-style:italic">&amp; Concentrate</span></h1>
-  <p style="font-size:clamp(1.05rem,1.5vw,1.25rem);line-height:1.6;color:#E7D6C4;max-width:54ch;margin:22px 0 28px">We're bottling what we pour. Same whole spices from Kerala, same single-origin Assam tea — just without the shopping list. Be first to know when it drops across Canada.</p>
+  <div style="display:inline-block;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.16em;text-transform:uppercase;color:#2B1B12;background:#F2A93C;padding:7px 13px;border-radius:999px;font-weight:500">Launching this fall</div>
+  <h1 id="page-h1" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(2.3rem,6vw,4.2rem);line-height:0.98;letter-spacing:0;margin:18px 0 0;max-width:26ch">Masala Chai Premix, <span style="color:#FF6F61;font-style:italic">made in Saskatoon</span></h1>
+  <p style="font-size:clamp(1.05rem,1.5vw,1.25rem);line-height:1.6;color:#E7D6C4;max-width:54ch;margin:22px 0 28px">We're bagging what we pour. Two blends, hand crafted here in Saskatoon, stove-top ready in minutes — and each 125g pouch makes 25 cups. Be first to know when they drop.</p>
   {% include signup-form.html id="premixhero" button="Get launch updates" big=true note="No spam. One note when the premixes are ready." %}
 </section>
 
 <div data-gc-reveal>
 
 <section aria-labelledby="what-h2" style="max-width:1240px;margin:0 auto;padding:clamp(30px,4vw,60px) clamp(18px,4vw,40px)">
-  <h2 id="what-h2" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(1.9rem,4.4vw,3rem);letter-spacing:0;margin:0 0 28px;color:#F3E8D3">Two ways to get it home</h2>
+  <h2 id="what-h2" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(1.9rem,4.4vw,3rem);letter-spacing:0;margin:0 0 28px;color:#F3E8D3">The two blends</h2>
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:clamp(16px,2vw,24px)">
-    <div style="padding:30px 28px 32px;background:rgba(28,17,10,0.8);border:1px solid rgba(242,169,60,0.16);border-radius:22px">
-      <div style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#C58A2E">Dry blend</div>
-      <h3 style="font-family:'Instrument Serif',serif;font-weight:400;font-size:1.5rem;margin:12px 0 0;color:#F3E8D3">The premix</h3>
-      <p style="color:#C7B29E;line-height:1.6;margin:10px 0 0">Ground masala and Assam tea in one tin. Two tablespoons, one cup water, one cup milk — the full stovetop ritual in about eight minutes. For people who like the pot.</p>
+    {% for pouch in site.data.premixes %}
+    <div style="padding:28px 28px 32px;background:rgba(28,17,10,0.8);border:1px solid rgba(242,169,60,0.16);border-radius:22px;display:flex;flex-direction:column;align-items:center;text-align:center">
+      {% include img.html base=pouch.img ext="jpg" widths="250,500" sizes="(max-width:700px) 60vw, 250px" w="544" h="952" alt=pouch.alt wrap="display:block;width:min(72%,230px)" style="width:100%;height:auto;display:block;border-radius:10px 10px 14px 14px;box-shadow:0 24px 44px -20px rgba(0,0,0,0.7)" %}
+      <h3 style="font-family:'Instrument Serif',serif;font-weight:400;font-size:1.5rem;margin:22px 0 0;color:#F3E8D3">{{ pouch.name }}</h3>
+      <div style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:#F2A93C;margin-top:7px">{{ pouch.notes }}</div>
+      <p style="color:#C7B29E;line-height:1.6;margin:14px 0 0;max-width:38ch">{{ pouch.blurb }}</p>
     </div>
-    <div style="padding:30px 28px 32px;background:rgba(28,17,10,0.8);border:1px solid rgba(242,169,60,0.16);border-radius:22px">
-      <div style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#C58A2E">Liquid</div>
-      <h3 style="font-family:'Instrument Serif',serif;font-weight:400;font-size:1.5rem;margin:12px 0 0;color:#F3E8D3">The concentrate</h3>
-      <p style="color:#C7B29E;line-height:1.6;margin:10px 0 0">Already brewed, already spiced. Add milk, hot or over ice, and you're done in thirty seconds. This is the one that makes iced chai at home actually work.</p>
-    </div>
+    {% endfor %}
   </div>
+  <p style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#C58A2E;text-align:center;margin:26px 0 0">125 g a pouch · 25 cups · hand crafted in Saskatoon</p>
 </section>
 
 <section aria-labelledby="why-h2" style="background:rgba(29,18,11,0.6);border-top:1px solid rgba(243,232,211,0.08);border-bottom:1px solid rgba(243,232,211,0.08)">
@@ -44,7 +43,7 @@ og_image: "uploads/og-image.jpg"
 
 <section aria-labelledby="list-h2" style="max-width:1240px;margin:0 auto;padding:clamp(46px,6vw,84px) clamp(18px,4vw,40px)">
   <h2 id="list-h2" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(1.9rem,4.4vw,2.8rem);letter-spacing:0;margin:0 0 14px;color:#F3E8D3">Get the launch note</h2>
-  <p style="font-size:1.05rem;line-height:1.6;color:#D6C7B4;max-width:46ch;margin:0 0 24px">One email when the premixes and concentrates go on sale. That's it.</p>
+  <p style="font-size:1.05rem;line-height:1.6;color:#D6C7B4;max-width:46ch;margin:0 0 24px">One email when the premixes go on sale. That's it.</p>
   {% include signup-form.html id="premixfoot" button="Join the list" big=true %}
 </section>
 

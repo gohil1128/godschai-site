@@ -51,6 +51,13 @@ LOGOS = {
     "artboard.png": (128, 256),
 }
 
+# Packaging renders: flat artwork with small bilingual type on it, so they need
+# a higher quality than a photo would to keep the ingredient lines legible.
+PRODUCT = {
+    "pouch-masala-front.png": (250, 500),
+    "pouch-rose-front.png": (250, 500),
+}
+
 OG_SOURCE = "hero-journey-web.jpeg"
 
 
@@ -119,6 +126,18 @@ def main():
             emit(im, base, w, "png", 82)
         made += len(widths)
         print(f"  logo  {name} -> {', '.join(str(w) for w in widths)}")
+
+    for name, widths in PRODUCT.items():
+        path = os.path.join(SRC, name)
+        if not os.path.exists(path):
+            print(f"  skip (missing): {name}")
+            continue
+        base = os.path.splitext(name)[0]
+        im = Image.open(path).convert("RGB")
+        for w in widths:
+            emit(im, base, w, "jpg", 84)
+        made += len(widths)
+        print(f"  pouch {name} -> {', '.join(str(w) for w in widths)}")
 
     og_src = os.path.join(SRC, OG_SOURCE)
     if os.path.exists(og_src):

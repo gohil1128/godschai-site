@@ -55,10 +55,10 @@ og_image: "uploads/og-image.jpg"
   <div aria-hidden="true" style="background:#1D120B;color:#F2A93C;overflow:hidden;white-space:nowrap;border-top:1px solid rgba(242,169,60,0.2);border-bottom:1px solid rgba(242,169,60,0.2)">
     <div style="display:flex;width:max-content;animation:gc-marquee 26s linear infinite">
       <div style="display:flex;align-items:center;gap:42px;padding:11px 21px;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.18em;text-transform:uppercase">
-        <span>Real spices from Kerala</span><span style="color:#FF7A66">✶</span><span>Single-origin Assam tea</span><span style="color:#FF7A66">✶</span><span>Spiced, never syruped</span><span style="color:#FF7A66">✶</span><span>Brewed in Saskatoon</span><span style="color:#FF7A66">✶</span><span>Premixes coming soon</span><span style="color:#FF7A66">✶</span>
+        <span>Real spices from Kerala</span><span style="color:#FF7A66">✶</span><span>Single-origin Assam tea</span><span style="color:#FF7A66">✶</span><span>Spiced, never syruped</span><span style="color:#FF7A66">✶</span><span>Brewed in Saskatoon</span><span style="color:#FF7A66">✶</span><span>Premixes launching this fall</span><span style="color:#FF7A66">✶</span>
       </div>
       <div style="display:flex;align-items:center;gap:42px;padding:11px 21px;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.18em;text-transform:uppercase">
-        <span>Real spices from Kerala</span><span style="color:#FF7A66">✶</span><span>Single-origin Assam tea</span><span style="color:#FF7A66">✶</span><span>Spiced, never syruped</span><span style="color:#FF7A66">✶</span><span>Brewed in Saskatoon</span><span style="color:#FF7A66">✶</span><span>Premixes coming soon</span><span style="color:#FF7A66">✶</span>
+        <span>Real spices from Kerala</span><span style="color:#FF7A66">✶</span><span>Single-origin Assam tea</span><span style="color:#FF7A66">✶</span><span>Spiced, never syruped</span><span style="color:#FF7A66">✶</span><span>Brewed in Saskatoon</span><span style="color:#FF7A66">✶</span><span>Premixes launching this fall</span><span style="color:#FF7A66">✶</span>
       </div>
     </div>
   </div>
@@ -222,11 +222,23 @@ og_image: "uploads/og-image.jpg"
   <section id="premix" aria-labelledby="premix-h2" style="background:linear-gradient(135deg,#3D2A1B,#2E1D13);scroll-margin-top:84px">
     <div style="max-width:1240px;margin:0 auto;padding:clamp(46px,6vw,88px) clamp(18px,4vw,40px);display:flex;gap:clamp(28px,4vw,60px);align-items:center;flex-wrap:wrap">
       <div style="flex:1 1 400px;min-width:300px">
-        <div style="display:inline-block;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.16em;text-transform:uppercase;color:#2B1B12;background:#F2A93C;padding:7px 13px;border-radius:999px;font-weight:500">Coming soon</div>
-        <h2 id="premix-h2" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(2.1rem,5vw,3.6rem);letter-spacing:0;line-height:0.98;color:#F3E8D3;margin:18px 0 0">Premixes &amp; concentrates.<br>The same chai, at home.</h2>
-        <p style="font-size:1.08rem;line-height:1.55;color:#D6C7B4;max-width:40ch;margin:16px 0 26px">We're bottling our recipes into easy masala chai premixes and concentrates — the real Kerala-and-Assam ritual, made in minutes on your own stove. Be first to know when they drop.</p>
-        {% include signup-form.html id="premix" button="Get launch updates" big=true note="No spam. Just one note when the premixes are ready." %}
+        <div style="display:inline-block;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.16em;text-transform:uppercase;color:#2B1B12;background:#F2A93C;padding:7px 13px;border-radius:999px;font-weight:500">Launching this fall</div>
+        <h2 id="premix-h2" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(2.1rem,5vw,3.6rem);letter-spacing:0;line-height:0.98;color:#F3E8D3;margin:18px 0 0">Premixes.<br>The same chai, at home.</h2>
+        <p style="font-size:1.08rem;line-height:1.55;color:#D6C7B4;max-width:40ch;margin:16px 0 26px">Two blends, hand crafted in Saskatoon and stove-top ready in minutes — each pouch makes 25 cups. Get first dibs the day they drop.</p>
+        {% include signup-form.html id="premix" button="Get launch updates" big=true note="No spam. Just one note on launch day." %}
         <p style="margin:18px 0 0"><a href="{{ '/premixes/' | relative_url }}" style="text-decoration:none;color:#F2A93C;font-weight:600;font-size:15px;border-bottom:2px solid rgba(242,169,60,0.5);padding-bottom:2px">More about the premixes →</a></p>
+      </div>
+      {%- comment -%} The real pouch fronts, tilted against each other. {%- endcomment -%}
+      <div style="flex:1 1 420px;min-width:280px;display:flex;gap:clamp(14px,2vw,26px);justify-content:center;align-items:flex-end">
+        {% for pouch in site.data.premixes %}
+        <div style="flex:0 1 250px;min-width:0;display:flex;flex-direction:column;gap:14px;transform:{{ pouch.tilt }}">
+          {% include img.html base=pouch.img ext="jpg" widths="250,500" sizes="(max-width:700px) 42vw, 250px" w="544" h="952" alt=pouch.alt wrap="display:block" style="width:100%;height:auto;display:block;border-radius:12px 12px 16px 16px;box-shadow:0 30px 50px -22px rgba(0,0,0,0.7)" %}
+          <div style="text-align:center">
+            <div style="font-family:'Instrument Serif',serif;font-size:1.25rem;color:#F3E8D3;line-height:1.1">{{ pouch.name }}</div>
+            <div style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:#F2A93C;margin-top:5px">{{ pouch.notes }}</div>
+          </div>
+        </div>
+        {% endfor %}
       </div>
     </div>
   </section>

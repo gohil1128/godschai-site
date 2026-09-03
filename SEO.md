@@ -73,6 +73,37 @@ Keep `start` and `end` accurate — those are what Google shows in event results
 
 ---
 
+## Change the premix pouches
+
+**`_data/premixes.yml`** holds the two blends — name, tasting notes, the longer
+description, and which pouch picture to use. Editing it updates the Premixes
+block on the homepage **and** the `/premixes/` page together.
+
+```yaml
+- name: "Original Masala"
+  notes: "Bold · Warm · Rich"          # the small uppercase line
+  blurb: "The cart recipe, in a pouch…" # only shown on /premixes/
+  img: "pouch-masala-front"             # uploads/pouch-masala-front.png, no extension
+  alt: "God's Chai Original Masala premix pouch, 125g, makes 25 cups"
+  tilt: "rotate(-3deg)"                 # how it leans on the homepage
+```
+
+Adding a third blend is just another block — both pages lay themselves out
+around however many there are.
+
+**New pouch artwork:** drop the file in `uploads/`, add it to the `PRODUCT` list
+at the top of `tools/optimize-images.py`, then run:
+
+```bash
+python3 tools/optimize-images.py
+```
+
+The launch wording ("Launching this fall") appears on the homepage, the menu
+page, the brew guide and `/premixes/`. When they actually launch, search the
+project for that phrase so none of them get left behind.
+
+---
+
 ## Change the brew guide
 
 **`_data/brew.yml`** holds the four steps, the ingredient list and the timings.
