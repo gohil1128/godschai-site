@@ -71,6 +71,11 @@ search tools can still see your history. Delete them only if you want to tidy up
 
 Keep `start` and `end` accurate — those are what Google shows in event results.
 
+The homepage and the `/events/` page both show the whole list, so adding one
+block puts it in both places. If the homepage says "No events on the calendar
+right now", it means every `end` date in the file has passed — add the next
+pop-up and it comes straight back.
+
 ---
 
 ## Change the premix pouches
@@ -174,6 +179,24 @@ matching.
 If you make the header logo a different size, the number to change with it is
 `scroll-margin-top` in `_includes/base-styles-dark.html`. That's what stops the
 top of a section hiding behind the bar when someone clicks Menu or Events.
+
+---
+
+## The browser-tab icon
+
+The little icon on the browser tab is the **G from the logo** — the actual
+letterform, taken out of the animated logo's own artwork, dark on a marigold
+tile (the same pairing as the @godschai button).
+
+`tools/make-favicon.py` builds `favicon.ico`, `favicon-32.png` and
+`apple-touch-icon.png`. Re-run it if the logo artwork ever changes:
+
+```bash
+python3 tools/make-favicon.py
+```
+
+A plain orange G with no tile was tried first — it disappears against a white
+tab strip at small sizes, which is why it sits on a tile.
 
 ---
 
