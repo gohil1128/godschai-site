@@ -230,11 +230,15 @@ layout: null
     });
   });
 
-  /* ---------- 7. Newsletter popup: polite timing + 30-day frequency cap ---------- */
+  /* ---------- 7. Newsletter: an edge tab, not an interruption ----------
+     Nothing opens on its own. A small tab slides in at the side of the screen
+     after a few seconds and the modal only opens if the visitor taps it, so the
+     page is never covered by something they did not ask for. Dismissing the tab
+     — or closing the modal, or subscribing — puts it away for 30 days. */
   var overlay = d.getElementById('gc-popup-overlay');
+  var nudge = d.getElementById('gc-nudge');
   if (overlay) {
     var DISMISS_KEY = 'gc_popup_dismissed_until';
-    var SEEN_KEY = 'gc_session_seen';
     var lastFocus = null;
     var shown = false;
 
@@ -252,6 +256,7 @@ layout: null
     function openPopup() {
       if (shown || suppressed()) return;
       shown = true;
+      hideNudge();
       lastFocus = d.activeElement;
       overlay.hidden = false;
       overlay.style.display = 'flex';
@@ -260,6 +265,11 @@ layout: null
       d.addEventListener('keydown', onKeydown, true);
     }
     window.closePopup = closePopup;
+    function hideNudge() {
+      if (!nudge) return;
+      nudge.classList.remove('is-in');
+      nudge.hidden = true;
+    }
     function closePopup() {
       overlay.style.display = 'none';
       overlay.hidden = true;
@@ -285,28 +295,23 @@ layout: null
     if (noThanks) noThanks.addEventListener('click', closePopup);
     overlay.addEventListener('click', function (e) { if (e.target === overlay) closePopup(); });
 
-    // Never on the first pageview of a session.
-    var firstVisit = false;
-    try {
-      firstVisit = !sessionStorage.getItem(SEEN_KEY);
-      sessionStorage.setItem(SEEN_KEY, '1');
-    } catch (e) {}
-
-    if (!firstVisit && !suppressed()) {
-      var isDesktop = window.matchMedia && window.matchMedia('(min-width: 900px)').matches;
-      // 30 seconds, or 50% scroll depth, whichever comes first
-      setTimeout(openPopup, 30000);
-      var onDepth = function () {
-        var sc = window.scrollY || 0;
-        var max = Math.max(1, d.documentElement.scrollHeight - window.innerHeight);
-        if (sc / max >= 0.5) { window.removeEventListener('scroll', onDepth); openPopup(); }
-      };
-      window.addEventListener('scroll', onDepth, { passive: true });
-      // desktop exit-intent
-      if (isDesktop) {
-        d.addEventListener('mouseout', function (e) {
-          if (!e.relatedTarget && e.clientY <= 0) openPopup();
-        });
+    if (nudge) {
+      var nudgeOpen = d.getElementById('gc-nudge-open');
+      var nudgeClose = d.getElementById('gc-nudge-close');
+      if (nudgeOpen) nudgeOpen.addEventListener('click', openPopup);
+      if (nudgeClose) nudgeClose.addEventListener('click', function () {
+        hideNudge();
+        try { localStorage.setItem(DISMISS_KEY, String(Date.now() + 30 * 24 * 60 * 60 * 1000)); } catch (e) {}
+      });
+      if (!suppressed()) {
+        setTimeout(function () {
+          if (suppressed() || shown) return;
+          nudge.hidden = false;
+          // let the browser lay it out off-screen before sliding it in
+          requestAnimationFrame(function () {
+            requestAnimationFrame(function () { nudge.classList.add('is-in'); });
+          });
+        }, 5000);
       }
     }
   }

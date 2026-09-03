@@ -1,8 +1,16 @@
 {%- comment -%}
-  Newsletter modal. Timing/frequency rules live in assets/js/site.js:
-  never on the first pageview of a session, then exit-intent (desktop) or
-  30s / 50% scroll, and once dismissed it stays away for 30 days.
+  Newsletter signup. Nothing opens on its own any more: a small tab slides in
+  at the edge of the screen and the modal below only opens if the visitor taps
+  it. Rules live in assets/js/site.js — the tab appears after 5s, and once
+  dismissed (or once they subscribe) it stays away for 30 days.
 {%- endcomment -%}
+<div id="gc-nudge" hidden>
+  <button id="gc-nudge-open" type="button">
+    <span>psst — join the list</span>
+  </button>
+  <button id="gc-nudge-close" type="button" aria-label="Dismiss">&times;</button>
+</div>
+
 <div id="gc-popup-overlay" hidden style="display:none;position:fixed;inset:0;background:rgba(16,10,5,0.85);z-index:9999;align-items:center;justify-content:center;padding:20px;">
   <div role="dialog" aria-modal="true" aria-labelledby="gc-popup-title" style="background:#1D120B;border:1px solid rgba(242,169,60,0.35);border-radius:24px;max-width:440px;width:100%;padding:44px 36px;position:relative;text-align:center;box-shadow:0 24px 60px rgba(0,0,0,0.5);">
     <button id="gc-popup-close" type="button" aria-label="Close" style="position:absolute;top:14px;right:18px;background:none;border:none;color:#C7B29E;font-size:24px;cursor:pointer;line-height:1;width:40px;height:40px;">×</button>

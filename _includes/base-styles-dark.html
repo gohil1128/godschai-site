@@ -52,6 +52,30 @@
     /* the wrapped nav is taller again, so the anchor offset has to clear that */
     section[id]{scroll-margin-top:124px!important}
   }
+  /* Newsletter tab. Replaces the modal that used to open by itself: this sits
+     at the edge of the screen, covers almost nothing, and only opens the signup
+     if it is actually tapped. Slides in from off-screen so it is noticed. */
+  /* Right edge, below the middle: this page's copy is left-aligned and the hero
+     buttons stop well short of the right side, so the tab sits in space nothing
+     else uses. On the left it would clip the first characters of body text. */
+  #gc-nudge{position:fixed;right:0;top:62%;z-index:9998;transform:translate(110%,-50%);
+    transition:transform .55s cubic-bezier(.2,.7,.2,1)}
+  #gc-nudge.is-in{transform:translate(0,-50%)}
+  #gc-nudge-open{display:block;background:#F2A93C;color:#2B1B12;border:0;
+    border-radius:16px 0 0 16px;padding:20px 12px;cursor:pointer;
+    font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.1em;line-height:1;
+    box-shadow:0 10px 30px rgba(0,0,0,0.45);transition:background .25s ease}
+  #gc-nudge-open:hover{background:#FFBA55}
+  /* Bottom-to-top, like a shop-front tab. */
+  #gc-nudge-open span{writing-mode:vertical-rl;transform:rotate(180deg);display:block}
+  #gc-nudge-close{position:absolute;top:-13px;left:-13px;width:30px;height:30px;
+    display:flex;align-items:center;justify-content:center;padding:0;
+    background:#2B1B12;color:#F3E8D3;border:1px solid rgba(242,169,60,0.45);
+    border-radius:999px;font-size:15px;line-height:1;cursor:pointer;
+    font-family:'Hanken Grotesk',sans-serif}
+  #gc-nudge-close:hover{background:#3D2A1B}
+  @media (prefers-reduced-motion:reduce){#gc-nudge{transition:none}}
+
   /* Tap targets: the nav and footer links are only 14-18px tall on their own.
      Vertical padding grows the hit area without moving anything visually. */
   header nav > div > a{padding:13px 0!important;white-space:nowrap}
