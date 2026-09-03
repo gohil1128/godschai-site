@@ -146,6 +146,32 @@ top of a section hiding behind the bar when someone clicks Menu or Events.
 
 ---
 
+## The email signup tab
+
+Nothing pops open on its own any more. About five seconds in, a small amber tab
+slides in at the right edge of the screen reading **"psst — join the list"**.
+Tapping it opens the signup box; tapping the little × puts it away. Either way
+it stays gone for 30 days, and it never appears again for someone who has
+already subscribed.
+
+It covers under 1% of the screen on a laptop and about 2% on a phone — the old
+version covered the whole page — so people can read without dismissing anything
+first. That is also better for Google, which marks sites down for covering the
+page with something the visitor didn't ask for.
+
+| What to change | Where |
+| --- | --- |
+| The wording on the tab | `_includes/popup.html` — the text inside `gc-nudge-open` |
+| The five-second delay | `assets/js/site.js`, section 7 — the `5000` |
+| The 30-day gap before it returns | same section — the `30 * 24 * 60 * 60 * 1000` |
+| Where it sits, and its colours | `_includes/base-styles-dark.html` — the `#gc-nudge` rules |
+| The wording inside the signup box | `_includes/popup.html` |
+
+Keep the tab short. It's rotated on its side, so long wording makes it tall
+enough to start covering things.
+
+---
+
 ## Change site-wide details
 
 **`_config.yml`** holds the things that appear everywhere: Instagram and TikTok
