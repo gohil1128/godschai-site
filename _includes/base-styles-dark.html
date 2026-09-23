@@ -97,6 +97,11 @@
     #community div[style*="grid-auto-rows"] > div:nth-child(2),
     #community div[style*="grid-auto-rows"] > div:nth-child(3){grid-column:span 1!important;grid-row:span 2!important}
   }
+  /* Five spice cards: auto-fit gives a clean row of five from 1180px and 3+2 on a
+     tablet, but leaves a 4+1 orphan in the band between. Pin it to three there. */
+  @media (min-width:900px) and (max-width:1179px){
+    #spice-grid{grid-template-columns:repeat(3,1fr)!important}
+  }
   /* Long-form article copy (brew guide, catering). Matches the site voice/palette. */
   .gc-prose{color:#D6C7B4;font-size:1.05rem;line-height:1.65}
   .gc-prose p{margin:0 0 18px}

@@ -1,0 +1,37 @@
+# The iced method — powers /how-to-make-iced-chai/ and its HowTo structured data.
+# Same shape as brew.yml.
+
+serves: 2
+total_time: "PT3H10M"        # ISO 8601 — most of it is chilling time
+prep_time: "PT2M"
+cook_time: "PT8M"
+
+supplies:
+  - "1/2 cup water"
+  - "1 cup whole milk (or barista oat)"
+  - "2 tbsp God's Chai masala blend"
+  - "Sugar to taste, added hot"
+  - "A tray of chai ice cubes"
+
+tools:
+  - "Small heavy-bottomed pot"
+  - "Fine mesh strainer"
+  - "Ice cube tray"
+
+steps:
+  - label: "Concentrate"
+    title: "Brew it double-strength"
+    desc: "Half the water, everything else the same. It should taste slightly too strong hot — that is the point."
+    accent: false
+  - label: "Sweeten"
+    title: "Sugar goes in hot"
+    desc: "Sweeten and taste while it is still in the pot. Sugar will not dissolve once it is cold."
+    accent: false
+  - label: "Chill"
+    title: "Strain, then cool it right down"
+    desc: "Strain the spices out first or they keep extracting. Two to three hours in the fridge, or fifteen minutes in a sink of cold water."
+    accent: true
+  - label: "Pour"
+    title: "Over chai ice, not water ice"
+    desc: "Freeze a batch of chai in a tray and use those cubes. They melt into the drink instead of watering it down."
+    accent: false
