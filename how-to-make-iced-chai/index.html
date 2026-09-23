@@ -1,0 +1,129 @@
+---
+layout: default
+title: "How to Make Iced Chai That Isn't Watery"
+description: "Iced masala chai goes weak because hot chai poured on ice dilutes itself. Brew double-strength, chill it properly, and use chai ice cubes. Here's the method."
+breadcrumb: "How to Make Iced Chai"
+og_image: "uploads/opt/pour-cup-640.jpg"
+---
+
+<section aria-labelledby="page-h1" style="max-width:1240px;margin:0 auto;padding:clamp(110px,14vh,170px) clamp(18px,4vw,40px) clamp(20px,3vw,30px)">
+  <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.2em;text-transform:uppercase;color:#F2A93C;margin-bottom:14px">Cold, done right</div>
+  <h1 id="page-h1" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(2.3rem,6vw,4.2rem);line-height:0.98;letter-spacing:0;margin:0;max-width:22ch">How to make iced chai that <span style="color:#FF6F61;font-style:italic">isn't watery</span></h1>
+  <p style="font-size:clamp(1.05rem,1.5vw,1.25rem);line-height:1.6;color:#E7D6C4;max-width:56ch;margin:22px 0 0">Almost every weak iced chai has the same cause, and it isn't the recipe. It's what happens between the pot and the glass.</p>
+</section>
+
+<div data-gc-reveal>
+
+<section aria-labelledby="why-h2" style="max-width:1240px;margin:0 auto;padding:clamp(20px,3vw,34px) clamp(18px,4vw,40px)">
+  <div style="max-width:68ch" class="gc-prose">
+    <h2 id="why-h2">The problem</h2>
+    <p>Hot chai poured straight over ice melts roughly a third of that ice on contact. You've just added a third of a glass of water to a drink you spent eight minutes concentrating. Then it sits, and the rest of the ice keeps going.</p>
+    <p>Cold also mutes flavour. The same cup that tasted balanced hot will taste thin and under-spiced at fridge temperature — your tongue simply picks up less. So iced chai has to start stronger than you think, twice over.</p>
+  </div>
+</section>
+
+<section aria-labelledby="steps-h2" style="background:rgba(29,18,11,0.6);border-top:1px solid rgba(243,232,211,0.08);border-bottom:1px solid rgba(243,232,211,0.08)">
+  <div style="max-width:1240px;margin:0 auto;padding:clamp(46px,6vw,88px) clamp(18px,4vw,40px)">
+    <h2 id="steps-h2" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(2rem,4.6vw,3.3rem);line-height:1;letter-spacing:0;margin:0 0 clamp(28px,4vw,40px);color:#F3E8D3">Four steps, one cold cup</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:clamp(14px,1.8vw,20px)">
+      {% assign steps = site.data.iced.steps %}
+      {% for s in steps %}
+      {% if s.accent %}{% assign bc = "rgba(255,122,102,0.3)" %}{% assign nc = "#FF7A66" %}{% assign lc = "#FF7A66" %}
+      {% else %}{% assign bc = "rgba(242,169,60,0.16)" %}{% assign nc = "#F2A93C" %}{% assign lc = "#C58A2E" %}{% endif %}
+      <div style="padding:26px 24px 28px;background:rgba(46,29,19,0.72);border:1px solid {{ bc }};border-radius:22px">
+        <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding-bottom:16px;border-bottom:1px solid rgba(243,232,211,0.10)">
+          <span style="font-family:'Instrument Serif',serif;font-size:44px;line-height:0.8;color:{{ nc }}">0{{ forloop.index }}</span>
+          <span style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:{{ lc }}">{{ s.label }}</span>
+        </div>
+        <h3 style="font-family:'Instrument Serif',serif;font-weight:400;font-size:1.32rem;margin:20px 0 0;color:#F3E8D3">{{ s.title }}</h3>
+        <p style="color:#C7B29E;line-height:1.55;margin:9px 0 0;font-size:0.95rem">{{ s.desc }}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section aria-labelledby="deep-h2" style="max-width:1240px;margin:0 auto;padding:clamp(34px,5vw,60px) clamp(18px,4vw,40px)">
+  <div style="max-width:68ch" class="gc-prose">
+    <h2 id="deep-h2">Chai ice cubes are the whole trick</h2>
+    <p>Freeze a batch of chai in an ice tray and use those instead of water ice. As they melt they add chai, not water, so the last mouthful is as strong as the first. It costs you nothing but a tray and some forethought, and it is the single biggest improvement you can make.</p>
+    <p>Brew a double batch, drink half hot, freeze the rest. A tray keeps for about a month before it starts picking up freezer smells.</p>
+
+    <h2>Don't pour it hot</h2>
+    <p>Chill the chai properly before it meets ice. In the fridge that's two or three hours; if you're in a hurry, stand the pot in a sink of cold water and stir, which takes about fifteen minutes. Pouring hot over ice is the mistake that causes the problem in the first place.</p>
+    <p>Never chill it uncovered next to anything strong-smelling. Milk takes on odours fast.</p>
+
+    <h2>Sweeten while it's hot</h2>
+    <p>Sugar barely dissolves in cold liquid — it sinks and sits at the bottom, so the first sip is bland and the last is syrup. Sweeten the pot while it's still hot, taste it warm, and remember it will read slightly less sweet once cold. If you prefer to sweeten later, use a simple syrup rather than granulated.</p>
+
+    <h2>Which milk</h2>
+    <p>Whole milk gives the best body cold, where thin milk shows up immediately. Oat is the best of the plant milks here — it stays creamy chilled and doesn't split when it hits acidic spice. Almond tends to separate and go chalky. If you're using oat, the barista versions are worth it for exactly this reason.</p>
+
+    <h2>Getting the strength right</h2>
+    <p>Aim for a hot cup that tastes slightly too strong — a bit tannic, a bit too spiced. That's the right starting point. Cold and dilution will pull it back to balanced. If it tastes perfect hot, it will taste weak cold, every time.</p>
+    <p>In practice that means about half the water and the same everything else. Our <a href="{{ '/how-to-make-masala-chai/' | relative_url }}">hot brewing guide</a> has the base method; this is that, concentrated.</p>
+
+    <h2>Common mistakes</h2>
+    <ul>
+      <li><strong>Pouring hot chai over ice.</strong> The cause of most watery iced chai.</li>
+      <li><strong>Normal-strength brew.</strong> Right hot means wrong cold.</li>
+      <li><strong>Sweetening cold.</strong> The sugar never dissolves.</li>
+      <li><strong>Water ice.</strong> Every minute it sits, it gets weaker.</li>
+      <li><strong>Leaving the spices in while it chills.</strong> Cloves and cassia keep extracting in the fridge and will take over by morning. Strain first.</li>
+    </ul>
+
+    <h2>Or skip all of it</h2>
+    <p>We keep a cold lineup at the cart precisely because this is fiddly to get right at home — the signature <strong>Iced Chai</strong>, plus things you probably wouldn't build yourself like the <strong>Lavender Cold Foam Chai</strong> and <strong>YXE's Mont Blanc</strong>. The <a href="{{ '/menu/' | relative_url }}">full menu is here</a>, and <a href="{{ '/events/' | relative_url }}">here's where we're parked next</a>.</p>
+
+    <h2>Keep reading</h2>
+    <ul>
+      <li><a href="{{ '/how-to-make-masala-chai/' | relative_url }}">How to make masala chai the proper way</a></li>
+      <li><a href="{{ '/masala-chai-spices/' | relative_url }}">The spices in masala chai, and what each one does</a></li>
+      <li><a href="{{ '/chai-tea-latte-vs-masala-chai/' | relative_url }}">Chai tea latte vs masala chai</a></li>
+    </ul>
+  </div>
+</section>
+
+{% include cta-premix.html id="icedpage" heading="Want the base blend at home?" %}
+
+</div>
+
+{% comment %} HowTo, generated from _data/iced.yml. {% endcomment %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "@id": "{{ page.url | absolute_url }}#howto",
+  "name": "How to Make Iced Masala Chai",
+  "description": {{ page.description | jsonify }},
+  "image": "{{ 'uploads/opt/pour-cup-640.jpg' | absolute_url }}",
+  "inLanguage": "{{ site.lang }}",
+  "totalTime": "{{ site.data.iced.total_time }}",
+  "prepTime": "{{ site.data.iced.prep_time }}",
+  "cookTime": "{{ site.data.iced.cook_time }}",
+  "yield": "{{ site.data.iced.serves }} servings",
+  "supply": [
+    {%- for item in site.data.iced.supplies %}
+    { "@type": "HowToSupply", "name": {{ item | jsonify }} }{% unless forloop.last %},{% endunless %}
+    {%- endfor %}
+  ],
+  "tool": [
+    {%- for item in site.data.iced.tools %}
+    { "@type": "HowToTool", "name": {{ item | jsonify }} }{% unless forloop.last %},{% endunless %}
+    {%- endfor %}
+  ],
+  "step": [
+    {%- for s in site.data.iced.steps %}
+    {
+      "@type": "HowToStep",
+      "position": {{ forloop.index }},
+      "name": {{ s.title | jsonify }},
+      "text": {{ s.desc | jsonify }},
+      "url": "{{ page.url | absolute_url }}#steps-h2"
+    }{% unless forloop.last %},{% endunless %}
+    {%- endfor %}
+  ],
+  "author": { "@id": "{{ '/' | absolute_url }}#organization" },
+  "publisher": { "@id": "{{ '/' | absolute_url }}#organization" }
+}
+</script>

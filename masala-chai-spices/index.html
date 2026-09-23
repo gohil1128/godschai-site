@@ -1,0 +1,100 @@
+---
+layout: default
+title: "Masala Chai Spices: What Goes In and Why"
+description: "Cardamom, ginger, cassia, clove and black pepper — what each spice does in masala chai, how much to use, and which ones ruin the pot if you overdo them."
+breadcrumb: "Masala Chai Spices"
+og_image: "uploads/opt/pour-a-1280.jpg"
+---
+
+<section aria-labelledby="page-h1" style="max-width:1240px;margin:0 auto;padding:clamp(110px,14vh,170px) clamp(18px,4vw,40px) clamp(20px,3vw,30px)">
+  <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.2em;text-transform:uppercase;color:#F2A93C;margin-bottom:14px">What's in the pot</div>
+  <h1 id="page-h1" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(2.3rem,6vw,4.2rem);line-height:0.98;letter-spacing:0;margin:0;max-width:22ch">The spices in <span style="color:#FF6F61;font-style:italic">masala chai</span></h1>
+  <p style="font-size:clamp(1.05rem,1.5vw,1.25rem);line-height:1.6;color:#E7D6C4;max-width:56ch;margin:22px 0 0">Five spices do almost all the work. Knowing what each one is for is the difference between following a recipe and actually being able to fix a cup that tastes wrong.</p>
+</section>
+
+<div data-gc-reveal>
+
+<section aria-labelledby="five-h2" style="max-width:1240px;margin:0 auto;padding:clamp(20px,3vw,34px) clamp(18px,4vw,40px)">
+  <h2 id="five-h2" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(1.9rem,4.4vw,2.6rem);letter-spacing:0;margin:0 0 8px;color:#F3E8D3">The five that matter</h2>
+  <p style="font-size:1.05rem;line-height:1.6;color:#C7B29E;max-width:52ch;margin:0 0 28px">Rough amounts for two cups. Crush the whole spices first — a rolling pin and a tea towel is plenty.</p>
+  <div id="spice-grid" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(205px,1fr));gap:clamp(12px,1.6vw,18px)">
+    {% for sp in site.data.spices %}
+    <div style="padding:22px 20px 24px;background:rgba(28,17,10,0.8);border:1px solid rgba(242,169,60,0.16);border-radius:22px">
+      <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding-bottom:14px;border-bottom:1px solid rgba(243,232,211,0.10)">
+        <span style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#F2A93C">{{ sp.role }}</span>
+        <span style="font-family:'DM Mono',monospace;font-size:11px;color:#C58A2E;white-space:nowrap">{{ sp.amount }}</span>
+      </div>
+      <h3 style="font-family:'Instrument Serif',serif;font-weight:400;font-size:1.32rem;margin:16px 0 0;color:#F3E8D3">{{ sp.name }}</h3>
+      <p style="color:#C7B29E;line-height:1.55;margin:9px 0 0;font-size:0.95rem">{{ sp.desc }}</p>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+<section aria-labelledby="deep-h2" style="max-width:1240px;margin:0 auto;padding:clamp(34px,5vw,60px) clamp(18px,4vw,40px)">
+  <div style="max-width:68ch" class="gc-prose">
+    <h2 id="deep-h2">Whole, not ground</h2>
+    <p>Ground spice has already lost most of what you're paying for. The volatile oils that make cardamom smell like cardamom start leaving the moment the pod is opened, and by the time a jar of pre-ground powder reaches a shelf there is very little left but colour and dust.</p>
+    <p>Whole spices keep those oils sealed until you crack them, which is why the method is always: crush, then boil in water. The boiling water pulls the oils out. Powder dumped into milk just sits there being brown.</p>
+
+    <h2>Order matters more than quantity</h2>
+    <p>Spices go in first, with the water, and get a hard boil to themselves before anything else joins them. Tea goes in next. Milk goes in last.</p>
+    <p>Put the milk in early and the fat coats the spices, which stops the water getting at them — you end up boiling for ten minutes and wondering why it tastes of almost nothing. This is the single most common mistake, and it's why our <a href="{{ '/how-to-make-masala-chai/' | relative_url }}">brewing guide</a> is so insistent about the order.</p>
+
+    <h2>The ones you can add</h2>
+    <ul>
+      <li><strong>Fennel</strong> — a sweet aniseed note. Common in Gujarati households, divisive everywhere else.</li>
+      <li><strong>Star anise</strong> — same idea, much louder. One point of one star, not a whole one.</li>
+      <li><strong>Nutmeg</strong> — a scrape, at the end. Warm and slightly sweet; easy to overdo.</li>
+      <li><strong>Bay leaf</strong> — <em>tej patta</em>, the Indian kind, which tastes more of cassia than the Mediterranean bay in your cupboard.</li>
+      <li><strong>Saffron</strong> — for a festive pot. Beautiful, and wasted under heavy spicing.</li>
+    </ul>
+
+    <h2>The ones to leave out</h2>
+    <p>Vanilla, allspice and pumpkin spice blends all belong to a different drink. They aren't wrong, but they'll pull the cup towards dessert and away from tea. If a shop's chai tastes like a bakery, this is usually why — see <a href="{{ '/chai-tea-latte-vs-masala-chai/' | relative_url }}">chai tea latte vs masala chai</a> for the rest of that story.</p>
+
+    <h2>Why we buy from Kerala</h2>
+    <p>Most of our whole spices come from Kerala, on India's southwest coast — cardamom especially, which grows in the hills there and has done for centuries. It isn't sentiment: cardamom is one of the few spices where origin is obvious in the cup. The tea is single-origin Assam, from the other end of the country, because it's malty and strong enough to still be tea after a pot of milk has been boiled into it.</p>
+    <p>We grind in small batches rather than buying ground, for the reason above. That's the whole trick, and it isn't a secret — it's just slower.</p>
+
+    <h2>How to fix a cup that tastes wrong</h2>
+    <ul>
+      <li><strong>Tastes like hot milk</strong> — not enough tea, or the milk went in too early.</li>
+      <li><strong>Tastes harsh and bitter</strong> — the tea boiled too long. Add it later next time.</li>
+      <li><strong>Tastes like a candle</strong> — too much cassia, or a clove too many.</li>
+      <li><strong>Tastes flat</strong> — no ginger, no pepper, or both.</li>
+      <li><strong>Smells better than it tastes</strong> — you used ground spice.</li>
+    </ul>
+
+    <h2>Keep reading</h2>
+    <ul>
+      <li><a href="{{ '/how-to-make-masala-chai/' | relative_url }}">How to make masala chai the proper way</a></li>
+      <li><a href="{{ '/chai-tea-latte-vs-masala-chai/' | relative_url }}">Chai tea latte vs masala chai</a></li>
+      <li><a href="{{ '/how-to-make-iced-chai/' | relative_url }}">How to make iced chai that isn't watery</a></li>
+    </ul>
+  </div>
+</section>
+
+{% include cta-premix.html id="spices" heading="Rather not buy five spices?" %}
+
+</div>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "@id": "{{ page.url | absolute_url }}#article",
+  "headline": "Masala Chai Spices: What Goes In and Why",
+  "description": {{ page.description | jsonify }},
+  "image": "{{ 'uploads/opt/pour-a-1280.jpg' | absolute_url }}",
+  "inLanguage": "{{ site.lang }}",
+  "mainEntityOfPage": { "@type": "WebPage", "@id": "{{ page.url | absolute_url }}" },
+  "author": { "@id": "{{ '/' | absolute_url }}#organization" },
+  "publisher": { "@id": "{{ '/' | absolute_url }}#organization" },
+  "about": [
+    { "@type": "Thing", "name": "Masala chai" },
+    { "@type": "Thing", "name": "Cardamom" },
+    { "@type": "Thing", "name": "Spice blend" }
+  ]
+}
+</script>

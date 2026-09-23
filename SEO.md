@@ -230,6 +230,33 @@ enough to start covering things.
 
 ---
 
+## The guide pages
+
+Four long-form pages that exist to get found in search, then send people to the
+menu and the launch list:
+
+| Page | Goes after |
+| --- | --- |
+| `/how-to-make-masala-chai/` | people looking for the method |
+| `/masala-chai-spices/` | people wanting to know what's in it |
+| `/how-to-make-iced-chai/` | people whose iced chai keeps coming out weak |
+| `/chai-tea-latte-vs-masala-chai/` | people who don't know there's a difference |
+
+They all link to each other and to the menu, which is the point — a cluster of
+pages on one subject does better than the same words on one page. All four are
+in the footer.
+
+Two of them read their lists from data files you can edit: `_data/spices.yml`
+(the five spice cards) and `_data/iced.yml` (the four iced steps, which also
+feed that page's Google recipe data).
+
+**Adding another guide?** Copy an existing one, change the front matter, and add
+a link to it in `_includes/footer-dark.html` and in the "Keep reading" list at
+the foot of the others. Not the top menu — it only fits four links plus the
+Instagram button on a phone.
+
+---
+
 ## Change site-wide details
 
 **`_config.yml`** holds the things that appear everywhere: Instagram and TikTok
