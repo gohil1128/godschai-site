@@ -3,17 +3,19 @@ layout: null
 permalink: /menu.html
 sitemap: false
 ---
+{%- comment -%} The oldest menu address. Goes straight to the homepage lineup
+  rather than hopping through /menu/, which is itself a forwarder now. {%- endcomment -%}
 <!DOCTYPE html>
 <html lang="en-CA">
 <head>
 <meta charset="utf-8">
 <title>God's Chai Menu — Saskatoon</title>
-<link rel="canonical" href="https://godschai.com/menu/">
+<link rel="canonical" href="{{ '/' | absolute_url }}">
 <meta name="robots" content="noindex, follow">
-<meta http-equiv="refresh" content="0; url=/menu/">
-<script>location.replace('/menu/');</script>
+<meta http-equiv="refresh" content="0; url={{ '/' | relative_url }}#menu">
+<script>location.replace('{{ '/' | relative_url }}#menu');</script>
 </head>
 <body style="font-family:system-ui,sans-serif;background:#FDF6E4;color:#4A2F25;padding:40px">
-<p>The menu has moved to <a href="/menu/">godschai.com/menu/</a>.</p>
+<p>The menu is on the <a href="{{ '/' | relative_url }}#menu">homepage</a> now.</p>
 </body>
 </html>
