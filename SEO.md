@@ -36,17 +36,25 @@ That one edit updates the `/menu/` page, the homepage lineup, **and** the
 ### Adding a photo
 
 1. Put the original in `uploads/` (any size — big is fine).
-2. Run the image tool once so the small, fast versions get made:
+2. Add its filename to the right list at the top of `tools/optimize-images.py`
+   — drinks go in `DRINKS_4x5`.
+3. Run the image tool once so the small, fast versions get made:
 
    ```bash
    python3 tools/optimize-images.py
    ```
 
-3. Reference the original filename in `menu.yml` (e.g. `uploads/drink-cardamom.jpeg`).
+4. Reference the original filename in `menu.yml` (e.g. `uploads/drink-cardamom.jpeg`).
    The site automatically serves the WebP and correctly-sized versions.
 
-If you skip step 2 the photo won't appear, because the page looks for the
+If you skip step 3 the photo won't appear, because the page looks for the
 optimised copies in `uploads/opt/`.
+
+**Where the original ends up.** The tool moves it into `uploads/_src/`. That
+folder is kept in the project but left out of the built website, so a 3 MB
+photo stays here for re-cropping later without every visitor downloading it.
+The only pictures the site actually sends people are the small copies in
+`uploads/opt/` and the social preview `uploads/og-image.jpg`.
 
 ---
 
@@ -182,6 +190,31 @@ top of a section hiding behind the bar when someone clicks Menu or Events.
 
 ---
 
+## The two clips in the community strip
+
+The two moving tiles under the `@godschai` heading play
+`uploads/video/community-cart.mp4` and `uploads/video/community-rose.mp4`.
+Neither starts downloading until it scrolls into view, both pause when it
+scrolls away, and both are silent until someone taps the speaker button.
+
+They used to be phone recordings served from a Cloudflare bucket — one of them
+a 50 MB 4K file that started downloading on the home page. They are now ordinary
+web video kept in the project: 381 KB and 199 KB. Phones that refused the old
+format play these fine.
+
+**To swap a clip**, put the new one in `uploads/video/` with the same name. It
+wants to be H.264 MP4, no wider than about 500px, 30fps — anything bigger is
+thrown away by the tile it plays in. Then grab a still from it, save it as
+`uploads/community-cart.png` (or `-rose`), and run:
+
+```bash
+python3 tools/optimize-images.py
+```
+
+That still is what people see for the moment before the video arrives.
+
+---
+
 ## The browser-tab icon
 
 The little icon on the browser tab is the **G from the logo** — the actual
@@ -197,6 +230,36 @@ python3 tools/make-favicon.py
 
 A plain orange G with no tile was tried first — it disappears against a white
 tab strip at small sizes, which is why it sits on a tile.
+
+---
+
+## How the site moves
+
+Nothing on the page used to react to being pointed at. Every button, card and
+link carried an instruction for what it should do on hover, but those were read
+by a piece of software that was taken out of the site months ago, so they sat
+there doing nothing while the page looked like it ought to respond. That is
+fixed: buttons warm up, cards lift, the ticker stops so you can read it, and
+everything also responds to a keyboard and to a finger — a phone has no hover
+at all, so buttons now press in when tapped instead.
+
+The other half is arrival. Sections already faded in as you scrolled to them;
+now the cards *inside* a section come in one after another, 55 thousandths of a
+second apart. It is the difference between a page loading and a page being laid
+out. The menu page had none of this and now has both.
+
+| What to change | Where |
+| --- | --- |
+| Any hover colour or lift | `_includes/base-styles-dark.html`, the "Interactive states" block |
+| The same on the menu page | `_layouts/light.html` (that page is light, so it has its own) |
+| How fast cards arrive, and how far apart | `assets/js/site.js`, section 2b — `STEP` and `CAP` |
+| Which grids do it at all | the `data-gc-stagger` attribute on a grid |
+
+**If someone has "reduce motion" turned on** in their phone or computer
+settings, all of it stops: no fading in, no lifting, no ticker, no smooth
+scrolling. Hover colours stay, because those only happen when someone chooses
+to point at something. Keep that in mind if you add anything that moves — the
+switch is the `prefers-reduced-motion` block at the foot of each stylesheet.
 
 ---
 

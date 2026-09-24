@@ -110,4 +110,90 @@
   .gc-prose ul,.gc-prose ol{margin:0 0 18px;padding-left:22px}
   .gc-prose li{margin:0 0 9px}
   .gc-prose strong{color:#F3E8D3;font-weight:600}
+
+  /* ================= Interactive states =================
+     Every hover on this site used to be a style-hover="..." attribute — a
+     leftover from the React runtime that was removed, which nothing has read
+     since. So nothing on the page answered a cursor, while the transition:
+     declarations sat beside them animating properties that never changed.
+     These are those same values as real CSS.
+
+     :focus-visible gets the identical treatment so a keyboard sees what a mouse
+     sees, and :active gives a press, which is the only feedback a touchscreen
+     ever gets — there is no hover on a phone.
+
+     !important throughout: the thing being overridden is an inline style
+     attribute, which otherwise wins. */
+  .gc-pill,.gc-pill-coral,.gc-pill-ghost,.gc-ico,.gc-iconbtn,.gc-pill-dark,.gc-pill-cream{
+    transition:background-color .26s ease,border-color .26s ease,color .26s ease,
+               box-shadow .26s ease,transform .16s cubic-bezier(.2,.7,.2,1)}
+  .gc-pill:hover,.gc-pill:focus-visible{background:#FFBA55!important}
+  .gc-pill-coral:hover,.gc-pill-coral:focus-visible{background:#FF9C8A!important}
+  .gc-pill-ghost:hover,.gc-pill-ghost:focus-visible{border-color:#F2A93C!important;background:rgba(242,169,60,0.12)!important}
+  .gc-ico:hover,.gc-ico:focus-visible{border-color:#F2A93C!important;color:#F2A93C!important}
+  .gc-iconbtn:hover,.gc-iconbtn:focus-visible{background:rgba(18,11,6,0.8)!important}
+  .gc-pill:active,.gc-pill-coral:active,.gc-pill-ghost:active,
+  .gc-ico:active,.gc-iconbtn:active{transform:scale(0.955)}
+
+  /* Cards. --gc-bh lets a card name its own hover edge (the coral brew step)
+     without needing a class of its own. */
+  .gc-card{transition:border-color .32s ease}
+  .gc-card:hover,.gc-card:focus-within{border-color:var(--gc-bh,rgba(242,169,60,0.45))!important}
+  .gc-lift{transition:transform .35s cubic-bezier(.2,.7,.2,1),border-color .35s ease,box-shadow .35s ease}
+  .gc-lift:hover,.gc-lift:focus-within{transform:translateY(-4px)}
+  .gc-zoom{transition:transform .45s cubic-bezier(.2,.7,.2,1)}
+  .gc-zoom:hover,.gc-zoom:focus-within{transform:scale(1.02)}
+
+  /* Prose and nav links. The nav had no feedback at all; this draws a rule
+     under the link from the left rather than switching a colour on. */
+  a{transition:color .22s ease}
+  header nav > div > a{position:relative}
+  header nav > div > a::after{content:"";position:absolute;left:0;right:0;bottom:9px;height:1.5px;
+    background:#F2A93C;transform:scaleX(0);transform-origin:left center;
+    transition:transform .34s cubic-bezier(.2,.7,.2,1)}
+  header nav > div > a:hover::after,header nav > div > a:focus-visible::after{transform:scaleX(1)}
+
+  /* The signup box. It used to appear on its own, fully formed, the instant
+     the page loaded. Now it only opens when someone taps the tab, so it can
+     afford to arrive rather than just be there. The animation restarts by
+     itself every time the overlay goes from display:none to display:flex. */
+  @keyframes gc-fade{from{opacity:0}to{opacity:1}}
+  @keyframes gc-pop{from{opacity:0;transform:translateY(16px) scale(.975)}to{opacity:1;transform:none}}
+  #gc-popup-overlay{animation:gc-fade .3s ease both}
+  #gc-popup-overlay > div{animation:gc-pop .42s cubic-bezier(.2,.8,.2,1) both}
+  #gc-popup-close,#gc-popup-no-thanks{transition:color .22s ease}
+  #gc-popup-close:hover,#gc-popup-close:focus-visible,
+  #gc-popup-no-thanks:hover,#gc-popup-no-thanks:focus-visible{color:#F3E8D3}
+
+  /* Email fields. Their only feedback was the focus ring the browser draws
+     around them; the field itself never acknowledged the cursor. */
+  input[type="email"]{transition:border-color .22s ease,background-color .22s ease}
+  input[type="email"]:hover{border-color:rgba(243,232,211,0.34)!important}
+  input[type="email"]:focus{border-color:rgba(242,169,60,0.55)!important;background:rgba(243,232,211,0.09)!important}
+  /* Both email fields carry outline:none inline, which also deleted the focus
+     ring for anyone moving through the form on a keyboard. Put it back. */
+  input[type="email"]:focus-visible{outline:2px solid #F2A93C!important;outline-offset:2px}
+
+  /* The ticker runs on a loop; stop it while someone is reading it. */
+  /* !important: the track sets animation as an inline shorthand, which carries
+     an inline animation-play-state:running with it. */
+  [data-gc-marquee]:hover [data-gc-marquee-track],
+  [data-gc-marquee]:focus-within [data-gc-marquee-track]{animation-play-state:paused!important}
+
+  /* Hovering is a deliberate act, so it stays. Everything that moves on its
+     own, or moves the page under someone, comes off. */
+  @media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    /* The ticker looped forever with nothing to stop it. */
+    [data-gc-marquee-track]{animation:none!important}
+    #gc-popup-overlay,#gc-popup-overlay > div{animation:none}
+    input[type="email"]{transition:none}
+    .gc-pill,.gc-pill-coral,.gc-pill-ghost,.gc-ico,.gc-iconbtn,.gc-pill-dark,.gc-pill-cream,
+    .gc-card,.gc-lift,.gc-zoom,a,header nav > div > a::after{transition:none}
+    .gc-lift:hover,.gc-lift:focus-within,.gc-zoom:hover,.gc-zoom:focus-within{transform:none}
+    .gc-pill:active,.gc-pill-coral:active,.gc-pill-ghost:active,
+    .gc-ico:active,.gc-iconbtn:active{transform:none}
+    header nav > div > a::after{transform:scaleX(0)}
+    header nav > div > a:hover::after,header nav > div > a:focus-visible::after{transform:scaleX(1)}
+  }
 </style>

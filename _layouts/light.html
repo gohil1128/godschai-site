@@ -15,6 +15,27 @@
   /* Tap targets: nav and footer links are only 18-22px tall on their own. */
   header nav > div > a{padding:11px 0!important}
   footer a{padding:5px 0!important;display:inline-block}
+  /* Interactive states. Same story as the dark pages: these were style-hover
+     attributes left behind by a runtime that is gone, so nothing here answered
+     a cursor. !important because what they override is an inline style. */
+  .gc-pill-dark,.gc-pill-cream{transition:background-color .26s ease,transform .16s cubic-bezier(.2,.7,.2,1)}
+  .gc-pill-dark:hover,.gc-pill-dark:focus-visible{background:#37231C!important}
+  .gc-pill-cream:hover,.gc-pill-cream:focus-visible{background:#FFD7C5!important}
+  .gc-pill-dark:active,.gc-pill-cream:active{transform:scale(0.955)}
+  .gc-lift{transition:transform .35s cubic-bezier(.2,.7,.2,1),box-shadow .35s ease}
+  .gc-lift:hover,.gc-lift:focus-within{transform:translateY(-4px);box-shadow:0 20px 40px rgba(192,90,48,0.16)}
+  a{transition:color .22s ease}
+  header nav > div > a{position:relative}
+  header nav > div > a::after{content:"";position:absolute;left:0;right:0;bottom:7px;height:1.5px;
+    background:#D57245;transform:scaleX(0);transform-origin:left center;
+    transition:transform .34s cubic-bezier(.2,.7,.2,1)}
+  header nav > div > a:hover::after,header nav > div > a:focus-visible::after{transform:scaleX(1)}
+  @media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    .gc-pill-dark,.gc-pill-cream,.gc-lift,a,header nav > div > a::after{transition:none}
+    .gc-pill-dark:active,.gc-pill-cream:active,.gc-lift:hover,.gc-lift:focus-within{transform:none}
+    header nav > div > a:hover::after,header nav > div > a:focus-visible::after{transform:scaleX(1)}
+  }
   /* Section headers pair a nowrap heading with a nowrap label either side of a
      rigid divider, so on narrow phones the label was pushed past the padding
      edge and clipped. Let the row wrap instead. */
@@ -40,7 +61,7 @@
       <a href="#snacks" style="text-decoration:none;color:#4A2F25">Snacks</a>
       <a href="{{ '/premixes/' | relative_url }}" style="text-decoration:none;color:#4A2F25">Premixes</a>
     </div>
-    <a href="{{ '/' | relative_url }}" style="text-decoration:none;background:#4A2F25;color:#FDF6E4;font-weight:600;font-size:14px;padding:10px 18px;border-radius:999px;white-space:nowrap" style-hover="background:#37231C">← Home</a>
+    <a href="{{ '/' | relative_url }}" style="text-decoration:none;background:#4A2F25;color:#FDF6E4;font-weight:600;font-size:14px;padding:10px 18px;border-radius:999px;white-space:nowrap" class="gc-pill-dark">← Home</a>
   </nav>
 </header>
 

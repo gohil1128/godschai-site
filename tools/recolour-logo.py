@@ -5,8 +5,9 @@
 
 Reads  uploads/_src/logo-cream-source.png   (cream lockup, for dark backgrounds)
        uploads/_src/artboard-source.png     (dark lockup, for light backgrounds)
-Writes uploads/logo-cream.png
-       uploads/artboard.png
+Writes uploads/_src/logo-cream.png
+       uploads/_src/artboard.png
+       (then run tools/optimize-images.py to rebuild the published copies)
 
 Both files are flat two-ink artwork: "God's" and its brush stroke in one colour,
 "CHAI" and the tagline in the other. Only the first is changed here, so the
@@ -46,7 +47,7 @@ FILES = [
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SRC = os.path.join(ROOT, "uploads", "_src")
-OUT = os.path.join(ROOT, "uploads")
+OUT = os.path.join(ROOT, "uploads", "_src")
 
 
 def main():

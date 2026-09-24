@@ -7,7 +7,10 @@ Run this after adding a photo to uploads/:
 
 It writes WebP + original-format fallbacks into uploads/opt/ at the widths the
 pages ask for, and regenerates uploads/og-image.jpg (the 1200x630 social preview).
-Originals in uploads/ are never modified.
+
+Originals are never modified, but they are moved: they live in uploads/_src/,
+which Jekyll leaves out of the built site. That way a 3 MB photo stays in the
+repo for re-cropping later without every visitor downloading it.
 
 Needs Pillow:  pip install Pillow
 """
@@ -23,8 +26,9 @@ except ImportError:
 Image.MAX_IMAGE_PIXELS = None
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SRC = os.path.join(ROOT, "uploads")
-OUT = os.path.join(SRC, "opt")
+SRC = os.path.join(ROOT, "uploads", "_src")
+PUB = os.path.join(ROOT, "uploads")
+OUT = os.path.join(PUB, "opt")
 
 # Drink photos render in a 4:5 card with object-fit:cover, so crop to 4:5 first
 # and ship only the pixels that are actually visible.
@@ -34,7 +38,7 @@ DRINKS_4x5 = [
     "drink-montblanc-v2.jpeg",
     "drink-bananabread.jpeg",
     "drink-lavender.jpeg",
-    "pour-cup.jpeg",          # also used as the video poster
+    "pour-cup.jpeg",
 ]
 DRINK_WIDTHS = (320, 640)
 
@@ -42,7 +46,6 @@ DRINK_WIDTHS = (320, 640)
 FULL_BLEED = {
     "hero-journey-web.jpeg": (480, 960, 1600),
     "pour-a.jpeg": (640, 1280),
-    "pour-c.jpeg": (480,),
 }
 
 # Logos are square with transparency, so the fallback stays PNG.
@@ -58,7 +61,36 @@ PRODUCT = {
     "pouch-rose-front.png": (250, 500),
 }
 
+# First frames of the two community clips, shown while the video is still
+# loading. The clips themselves are only ~405px wide, so there is nothing to be
+# gained by making the still that stands in for them any bigger than they are.
+POSTERS = {
+    "community-cart.png": (400,),
+    "community-rose.png": (400,),
+}
+
 OG_SOURCE = "hero-journey-web.jpeg"
+
+
+def resolve(name):
+    """Find an original, and keep originals out of the published folder.
+
+    Originals live in uploads/_src/. Jekyll ignores anything starting with an
+    underscore, so they stay in the repo without being uploaded to every
+    visitor — the site only ever serves the small copies in uploads/opt/.
+    Dropping a new photo straight into uploads/ still works: it gets moved
+    into _src/ the first time this runs.
+    """
+    src = os.path.join(SRC, name)
+    if os.path.exists(src):
+        return src
+    stray = os.path.join(PUB, name)
+    if os.path.exists(stray):
+        os.makedirs(SRC, exist_ok=True)
+        os.replace(stray, src)
+        print(f"  moved {name} into uploads/_src/ (originals aren't published)")
+        return src
+    return None
 
 
 def crop_to_ratio(im, rw, rh):
@@ -91,21 +123,23 @@ def main():
     made = 0
 
     for name in DRINKS_4x5:
-        path = os.path.join(SRC, name)
-        if not os.path.exists(path):
+        path = resolve(name)
+        if not path:
             print(f"  skip (missing): {name}")
             continue
-        base, ext = os.path.splitext(name)
-        fallback = "png" if ext.lower() == ".png" else "jpg"
-        im = crop_to_ratio(Image.open(path), 4, 5)
+        base = os.path.splitext(name)[0]
+        # Always JPEG, whatever the original is. One of these arrived as a PNG
+        # and its 640px fallback came out at 593 KB against 11 KB for the WebP
+        # beside it — 55x the weight for the same picture.
+        im = crop_to_ratio(Image.open(path).convert("RGB"), 4, 5)
         for w in DRINK_WIDTHS:
-            emit(im, base, w, fallback, 72)
+            emit(im, base, w, "jpg", 72)
         made += len(DRINK_WIDTHS)
         print(f"  4:5   {name} -> {', '.join(str(w) for w in DRINK_WIDTHS)}")
 
     for name, widths in FULL_BLEED.items():
-        path = os.path.join(SRC, name)
-        if not os.path.exists(path):
+        path = resolve(name)
+        if not path:
             print(f"  skip (missing): {name}")
             continue
         base = os.path.splitext(name)[0]
@@ -116,8 +150,8 @@ def main():
         print(f"  full  {name} -> {', '.join(str(w) for w in widths)}")
 
     for name, widths in LOGOS.items():
-        path = os.path.join(SRC, name)
-        if not os.path.exists(path):
+        path = resolve(name)
+        if not path:
             print(f"  skip (missing): {name}")
             continue
         base = os.path.splitext(name)[0]
@@ -128,8 +162,8 @@ def main():
         print(f"  logo  {name} -> {', '.join(str(w) for w in widths)}")
 
     for name, widths in PRODUCT.items():
-        path = os.path.join(SRC, name)
-        if not os.path.exists(path):
+        path = resolve(name)
+        if not path:
             print(f"  skip (missing): {name}")
             continue
         base = os.path.splitext(name)[0]
@@ -139,10 +173,24 @@ def main():
         made += len(widths)
         print(f"  pouch {name} -> {', '.join(str(w) for w in widths)}")
 
-    og_src = os.path.join(SRC, OG_SOURCE)
-    if os.path.exists(og_src):
+    for name, widths in POSTERS.items():
+        path = resolve(name)
+        if not path:
+            print(f"  skip (missing): {name}")
+            continue
+        base = os.path.splitext(name)[0]
+        im = Image.open(path).convert("RGB")
+        for w in widths:
+            emit(im, base, w, "jpg", 70)
+        made += len(widths)
+        print(f"  poster {name} -> {', '.join(str(w) for w in widths)}")
+
+    # og-image.jpg is the one file in uploads/ that browsers fetch directly:
+    # Facebook, X and iMessage read it straight off the <meta> tag.
+    og_src = resolve(OG_SOURCE)
+    if og_src:
         og = crop_to_ratio(Image.open(og_src), 1200, 630).resize((1200, 630), Image.LANCZOS)
-        og.convert("RGB").save(os.path.join(SRC, "og-image.jpg"), "JPEG",
+        og.convert("RGB").save(os.path.join(PUB, "og-image.jpg"), "JPEG",
                                quality=82, optimize=True, progressive=True)
         print("  og    og-image.jpg (1200x630)")
 

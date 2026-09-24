@@ -73,6 +73,63 @@ layout: null
     if (location.hash) alignTo(location.hash);
   }
 
+  /* ---------- 2b. Grids arrive card by card ---------- */
+  /* A whole section fading in as one slab reads as a page still loading. The
+     same cards arriving a beat apart reads as the page being laid out. The
+     offsets are small — 14px, 55ms between cards, capped so a long grid never
+     keeps its last card waiting — and, like the section reveal above, the
+     starting state is set from here rather than in CSS, so with JavaScript off
+     nothing is ever hidden. */
+  var staggerHosts = [].slice.call(d.querySelectorAll('[data-gc-stagger]'));
+  if (staggerHosts.length && !reduceMotion && 'IntersectionObserver' in window) {
+    var STEP = 55, CAP = 7, EASE = 'cubic-bezier(.2,.7,.2,1)';
+    /* Named apart from section 5's own `cards`, which is a different thing in
+       the same scope and is assigned later than these closures run. */
+    var liveCards = function (host) {
+      return [].slice.call(host.children).filter(function (el) {
+        return !el.hasAttribute('hidden') && el.style.display !== 'none';
+      });
+    };
+    var park = function (el) {
+      // whatever transition the card carries is its hover; it has to survive
+      if (el._gcTransition === undefined) el._gcTransition = el.style.transition || '';
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(14px)';
+    };
+    staggerHosts.forEach(function (host) {
+      [].slice.call(host.children).forEach(park);
+    });
+    var settleAll = function (host) {
+      /* Delays are worked out here, not up front, because the events grid drops
+         its past dates after this runs — counting them would leave the cards
+         that are left all waiting on the same capped delay. */
+      liveCards(host).forEach(function (el, i) {
+        if (el._gcSettled) return;
+        el._gcSettled = true;
+        var ms = Math.min(i, CAP) * STEP;
+        el.style.transition = 'opacity .62s ' + EASE + ' ' + ms + 'ms, transform .62s ' + EASE + ' ' + ms + 'ms';
+        el.style.opacity = '1';
+        el.style.transform = 'none';
+        // hand the card back its own transition afterwards, or a hover would
+        // inherit the stagger's delay and lag behind the cursor
+        window.setTimeout(function () {
+          el.style.transition = el._gcTransition;
+          el.style.removeProperty('transform');
+        }, ms + 900);
+      });
+    };
+    var sio = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        settleAll(e.target);
+        sio.unobserve(e.target);
+      });
+    }, { threshold: 0.05, rootMargin: '0px 0px -4% 0px' });
+    staggerHosts.forEach(function (h) { sio.observe(h); });
+    // failsafe: never leave a grid invisible
+    window.setTimeout(function () { staggerHosts.forEach(settleAll); }, 2600);
+  }
+
   /* ---------- 3. Nav solidify + mesh drift + parallax band ---------- */
   var nav = d.querySelector('[data-gc-nav][data-gc-nav-transparent]');
   var meshA = d.querySelector('[data-gc-mesh="a"]');

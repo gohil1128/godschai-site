@@ -13,11 +13,11 @@
       <h2 id="{{ include.heading_id | default: 'events-h2' }}" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(2rem,4.4vw,3.3rem);letter-spacing:0;line-height:1;margin:10px 0 0">{{ include.heading | default: "Events &amp; pop-ups" }}</h2>
     </div>
   </div>
-  <div data-gc-events style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:clamp(16px,2vw,24px)">
+  <div data-gc-events data-gc-stagger style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:clamp(16px,2vw,24px)">
     {%- for e in evs %}
     {%- assign daylen = e.day | size -%}
     {%- if daylen > 2 %}{% assign dayfs = "18px" %}{% else %}{% assign dayfs = "26px" %}{% endif -%}
-    <div data-gc-event-end="{{ e.end | date: '%Y-%m-%d' }}" style="display:flex;gap:16px;background:#342216;border:1px solid rgba(243,232,211,0.08);border-radius:20px;padding:18px;align-items:flex-start;transition:border-color .3s ease" style-hover="border:1px solid rgba(242,169,60,0.4)">
+    <div data-gc-event-end="{{ e.end | date: '%Y-%m-%d' }}" style="display:flex;gap:16px;background:#342216;border:1px solid rgba(243,232,211,0.08);border-radius:20px;padding:18px;align-items:flex-start;transition:border-color .3s ease" class="gc-card">
       <div style="flex:none;min-width:64px;text-align:center;background:#F2A93C;color:#2B1B12;border-radius:14px;padding:11px 8px">
         <div style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase">{{ e.mon }}</div>
         <div style="font-family:'Instrument Serif',serif;font-weight:400;font-size:{{ dayfs }};line-height:1;margin-top:2px;white-space:nowrap">{{ e.day }}</div>
