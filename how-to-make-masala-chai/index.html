@@ -23,7 +23,7 @@ og_image: "uploads/opt/pour-a-1280.jpg"
 
 <!-- WHAT YOU NEED -->
 <section aria-labelledby="need-h2" style="max-width:1240px;margin:0 auto;padding:clamp(30px,4vw,50px) clamp(18px,4vw,40px)">
-  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:clamp(16px,2vw,24px)">
+  <div data-gc-stagger style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:clamp(16px,2vw,24px)">
     <div style="padding:28px 26px 30px;background:rgba(28,17,10,0.8);border:1px solid rgba(242,169,60,0.16);border-radius:22px">
       <h2 id="need-h2" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:1.5rem;margin:0 0 14px;color:#F3E8D3">What you need</h2>
       <ul style="margin:0;padding-left:20px;color:#C7B29E;line-height:1.7">
@@ -48,11 +48,11 @@ og_image: "uploads/opt/pour-a-1280.jpg"
 <section aria-labelledby="steps-h2" style="background:linear-gradient(180deg,#1A100A,#241610);border-top:1px solid rgba(242,169,60,0.14);border-bottom:1px solid rgba(242,169,60,0.14)">
   <div style="max-width:1240px;margin:0 auto;padding:clamp(48px,6vw,90px) clamp(18px,4vw,40px)">
     <h2 id="steps-h2" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(2rem,4.6vw,3.3rem);line-height:1;letter-spacing:0;margin:0 0 clamp(28px,4vw,40px);color:#F3E8D3">Four steps. One proper cup.</h2>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:clamp(14px,1.8vw,20px)">
+    <div data-gc-stagger style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:clamp(14px,1.8vw,20px)">
       {%- for s in site.data.brew.steps %}
-      {%- if s.accent %}{% assign bc = "rgba(255,122,102,0.3)" %}{% assign nc = "#FF7A66" %}{% assign lc = "#FF7A66" %}
-      {%- else %}{% assign bc = "rgba(242,169,60,0.16)" %}{% assign nc = "#F2A93C" %}{% assign lc = "#C58A2E" %}{% endif %}
-      <div style="padding:26px 24px 28px;background:rgba(46,29,19,0.72);border:1px solid {{ bc }};border-radius:22px">
+      {%- if s.accent %}{% assign bc = "rgba(255,122,102,0.3)" %}{% assign bh = "rgba(255,122,102,0.65)" %}{% assign nc = "#FF7A66" %}{% assign lc = "#FF7A66" %}
+      {%- else %}{% assign bc = "rgba(242,169,60,0.16)" %}{% assign bh = "rgba(242,169,60,0.5)" %}{% assign nc = "#F2A93C" %}{% assign lc = "#C58A2E" %}{% endif %}
+      <div style="padding:26px 24px 28px;background:rgba(46,29,19,0.72);border:1px solid {{ bc }};border-radius:22px;--gc-bh:{{ bh }}" class="gc-card gc-lift">
         <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding-bottom:16px;border-bottom:1px solid rgba(243,232,211,0.10)">
           <span style="font-family:'Instrument Serif',serif;font-size:44px;line-height:0.8;color:{{ nc }}">0{{ forloop.index }}</span>
           <span style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:{{ lc }}">{{ s.label }}</span>
@@ -118,8 +118,8 @@ og_image: "uploads/opt/pour-a-1280.jpg"
   </div>
 
   <div style="display:flex;gap:13px;flex-wrap:wrap;margin-top:34px">
-    <a href="{{ '/menu/' | relative_url }}" style="text-decoration:none;background:#F2A93C;color:#2B1B12;font-weight:700;font-size:16px;padding:15px 26px;border-radius:999px" style-hover="background:#FFBA55">See the menu →</a>
-    <a href="{{ '/events/' | relative_url }}" style="text-decoration:none;background:rgba(243,232,211,0.10);color:#F3E8D3;font-weight:600;font-size:16px;padding:15px 24px;border-radius:999px;border:1.5px solid rgba(243,232,211,0.3)" style-hover="border-color:#F2A93C">Find us this week</a>
+    <a href="{{ '/menu/' | relative_url }}" style="text-decoration:none;background:#F2A93C;color:#2B1B12;font-weight:700;font-size:16px;padding:15px 26px;border-radius:999px" class="gc-pill">See the menu →</a>
+    <a href="{{ '/events/' | relative_url }}" style="text-decoration:none;background:rgba(243,232,211,0.10);color:#F3E8D3;font-weight:600;font-size:16px;padding:15px 24px;border-radius:999px;border:1.5px solid rgba(243,232,211,0.3)" class="gc-pill-ghost">Find us this week</a>
   </div>
 </section>
 

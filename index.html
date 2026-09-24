@@ -34,8 +34,8 @@ og_image: "uploads/og-image.jpg"
         <p style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(3rem,9vw,7rem);line-height:0.92;letter-spacing:0;margin:16px 0 0;text-shadow:0 6px 40px rgba(0,0,0,0.5)">Not your<br><span style="color:#FF6F61;font-style:italic">average</span> chai.</p>
         <p style="font-size:clamp(1.05rem,1.5vw,1.3rem);line-height:1.5;color:#E7D6C4;max-width:36ch;margin:20px 0 0;text-shadow:0 2px 16px rgba(0,0,0,0.6)">Whole spices from Kerala. Single-origin Assam tea. Poured fresh, the real way.</p>
         <div style="display:flex;gap:13px;flex-wrap:wrap;margin-top:30px">
-          <a href="{{ '/menu/' | relative_url }}" style="text-decoration:none;background:#FF7A66;color:#2B1B12;font-weight:700;font-size:16px;padding:15px 26px;border-radius:999px;box-shadow:0 12px 34px rgba(255,122,102,0.45)" style-hover="background:#FF9C8A">View the menu →</a>
-          <a href="#hot" style="text-decoration:none;background:rgba(243,232,211,0.10);color:#F3E8D3;font-weight:600;font-size:16px;padding:15px 24px;border-radius:999px;border:1.5px solid rgba(243,232,211,0.3);backdrop-filter:blur(4px)" style-hover="border-color:#F2A93C">Explore the chai</a>
+          <a href="{{ '/menu/' | relative_url }}" style="text-decoration:none;background:#FF7A66;color:#2B1B12;font-weight:700;font-size:16px;padding:15px 26px;border-radius:999px;box-shadow:0 12px 34px rgba(255,122,102,0.45)" class="gc-pill-coral">View the menu →</a>
+          <a href="#hot" style="text-decoration:none;background:rgba(243,232,211,0.10);color:#F3E8D3;font-weight:600;font-size:16px;padding:15px 24px;border-radius:999px;border:1.5px solid rgba(243,232,211,0.3);backdrop-filter:blur(4px)" class="gc-pill-ghost">Explore the chai</a>
         </div>
         <div style="display:flex;gap:24px;margin-top:32px;flex-wrap:wrap">
           <div><div style="font-family:'Instrument Serif',serif;font-weight:400;font-size:26px;color:#F2A93C">100%</div><div style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.1em;color:#CBB6A6;text-transform:uppercase;margin-top:2px">Real spices</div></div>
@@ -52,8 +52,8 @@ og_image: "uploads/og-image.jpg"
   <!-- ================= CONTENT ================= -->
   <div data-gc-reveal style="position:relative;z-index:2;background:rgba(21,13,7,0.28)">
 
-  <div aria-hidden="true" style="background:#1D120B;color:#F2A93C;overflow:hidden;white-space:nowrap;border-top:1px solid rgba(242,169,60,0.2);border-bottom:1px solid rgba(242,169,60,0.2)">
-    <div style="display:flex;width:max-content;animation:gc-marquee 26s linear infinite">
+  <div data-gc-marquee aria-hidden="true" style="background:#1D120B;color:#F2A93C;overflow:hidden;white-space:nowrap;border-top:1px solid rgba(242,169,60,0.2);border-bottom:1px solid rgba(242,169,60,0.2)">
+    <div data-gc-marquee-track style="display:flex;width:max-content;animation:gc-marquee 26s linear infinite">
       <div style="display:flex;align-items:center;gap:42px;padding:11px 21px;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.18em;text-transform:uppercase">
         <span>Real spices from Kerala</span><span style="color:#FF7A66">✶</span><span>Single-origin Assam tea</span><span style="color:#FF7A66">✶</span><span>Spiced, never syruped</span><span style="color:#FF7A66">✶</span><span>Brewed in Saskatoon</span><span style="color:#FF7A66">✶</span><span>Premixes launching this fall</span><span style="color:#FF7A66">✶</span>
       </div>
@@ -93,9 +93,9 @@ og_image: "uploads/og-image.jpg"
         </div>
         <p style="max-width:34ch;font-size:1.02rem;line-height:1.5;color:#C7B29E;margin:0">Same real chai, served loud. Layered, spiced, and ridiculously photogenic over ice.</p>
       </div>
-      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(165px,1fr));gap:clamp(12px,1.5vw,18px)">
+      <div data-gc-stagger style="display:grid;grid-template-columns:repeat(auto-fill,minmax(165px,1fr));gap:clamp(12px,1.5vw,18px)">
         {%- for d in site.data.menu.iced %}
-        <div style="background:#2E1D13;border:1px solid rgba(243,232,211,0.10);border-radius:22px;overflow:hidden;transition:transform .35s ease" style-hover="transform:translateY(-4px)">
+        <div style="background:#2E1D13;border:1px solid rgba(243,232,211,0.10);border-radius:22px;overflow:hidden" class="gc-lift">
           {%- if d.logo_tile %}
           <div style="aspect-ratio:4/5;overflow:hidden;position:relative;background:radial-gradient(120% 100% at 50% 34%,#3A2517 0%,#1C110A 100%);display:flex;align-items:center;justify-content:center;padding:24px">
             {% include img.html base="logo-cream" ext="png" widths="128,256" sizes="160px" w="256" h="256" alt="God's Chai logo" wrap="display:block;width:76%;max-height:64%" style="width:100%;height:100%;object-fit:contain;display:block" %}
@@ -133,8 +133,8 @@ og_image: "uploads/og-image.jpg"
   <section id="why" aria-labelledby="why-h2" style="max-width:1240px;margin:0 auto;padding:clamp(48px,6vw,90px) clamp(18px,4vw,40px);scroll-margin-top:84px">
     <h2 id="why-h2" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(1.9rem,4vw,3rem);letter-spacing:0;text-align:center;margin:0 0 8px">Why God's Chai is different</h2>
     <p style="text-align:center;color:#C7B29E;font-size:1.05rem;margin:0 auto 42px;max-width:46ch">No syrups pretending to be spice. No powders, no shortcuts. Just real masala chai, done properly.</p>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:clamp(16px,2vw,24px)">
-      <div style="padding:30px 28px 32px;background:rgba(28,17,10,0.8);backdrop-filter:blur(3px);border:1px solid rgba(242,169,60,0.16);border-radius:22px;transition:border-color .35s ease" style-hover="border-color:rgba(242,169,60,0.5)">
+    <div data-gc-stagger style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:clamp(16px,2vw,24px)">
+      <div style="padding:30px 28px 32px;background:rgba(28,17,10,0.8);backdrop-filter:blur(3px);border:1px solid rgba(242,169,60,0.16);border-radius:22px;--gc-bh:rgba(242,169,60,0.5)" class="gc-card">
         <div style="display:flex;align-items:baseline;gap:14px;padding-bottom:18px;border-bottom:1px solid rgba(243,232,211,0.10)">
           <span style="font-family:'Instrument Serif',serif;font-weight:400;font-size:46px;line-height:0.8;color:#F2A93C;letter-spacing:0">01</span>
           <span style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#C58A2E">Sourcing</span>
@@ -142,7 +142,7 @@ og_image: "uploads/og-image.jpg"
         <h3 style="font-family:'Instrument Serif',serif;font-weight:400;font-size:1.32rem;margin:20px 0 0">Sourced, not faked</h3>
         <p style="color:#C7B29E;line-height:1.55;margin:9px 0 0">Whole spices from Kerala and single-origin tea from Assam. Ground and blended in small batches.</p>
       </div>
-      <div style="padding:30px 28px 32px;background:rgba(28,17,10,0.8);backdrop-filter:blur(3px);border:1px solid rgba(242,169,60,0.16);border-radius:22px;transition:border-color .35s ease" style-hover="border-color:rgba(242,169,60,0.5)">
+      <div style="padding:30px 28px 32px;background:rgba(28,17,10,0.8);backdrop-filter:blur(3px);border:1px solid rgba(242,169,60,0.16);border-radius:22px;--gc-bh:rgba(242,169,60,0.5)" class="gc-card">
         <div style="display:flex;align-items:baseline;gap:14px;padding-bottom:18px;border-bottom:1px solid rgba(243,232,211,0.10)">
           <span style="font-family:'Instrument Serif',serif;font-weight:400;font-size:46px;line-height:0.8;color:#F2A93C;letter-spacing:0">02</span>
           <span style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#C58A2E">Philosophy</span>
@@ -150,7 +150,7 @@ og_image: "uploads/og-image.jpg"
         <h3 style="font-family:'Instrument Serif',serif;font-weight:400;font-size:1.32rem;margin:20px 0 0">Real spices, done right</h3>
         <p style="color:#C7B29E;line-height:1.55;margin:9px 0 0">Whole spices, freshly ground and slow-brewed the proper way — never from a premade base.</p>
       </div>
-      <div style="padding:30px 28px 32px;background:rgba(28,17,10,0.8);backdrop-filter:blur(3px);border:1px solid rgba(242,169,60,0.16);border-radius:22px;transition:border-color .35s ease" style-hover="border-color:rgba(242,169,60,0.5)">
+      <div style="padding:30px 28px 32px;background:rgba(28,17,10,0.8);backdrop-filter:blur(3px);border:1px solid rgba(242,169,60,0.16);border-radius:22px;--gc-bh:rgba(242,169,60,0.5)" class="gc-card">
         <div style="display:flex;align-items:baseline;gap:14px;padding-bottom:18px;border-bottom:1px solid rgba(243,232,211,0.10)">
           <span style="font-family:'Instrument Serif',serif;font-weight:400;font-size:46px;line-height:0.8;color:#F2A93C;letter-spacing:0">03</span>
           <span style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#C58A2E">Roots</span>
@@ -169,9 +169,9 @@ og_image: "uploads/og-image.jpg"
           <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.18em;text-transform:uppercase;color:#F2A93C">A taste of the menu</div>
           <h2 id="menu-h2" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(2rem,4.4vw,3.3rem);letter-spacing:0;line-height:1;margin:10px 0 0">The full lineup</h2>
         </div>
-        <a href="{{ '/menu/' | relative_url }}" style="text-decoration:none;background:#F2A93C;color:#2B1B12;font-weight:700;font-size:15px;padding:13px 22px;border-radius:999px;white-space:nowrap" style-hover="background:#FFBA55">See the full menu →</a>
+        <a href="{{ '/menu/' | relative_url }}" style="text-decoration:none;background:#F2A93C;color:#2B1B12;font-weight:700;font-size:15px;padding:13px 22px;border-radius:999px;white-space:nowrap" class="gc-pill">See the full menu →</a>
       </div>
-      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:clamp(14px,1.8vw,20px)">
+      <div data-gc-stagger style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:clamp(14px,1.8vw,20px)">
         {%- for d in site.data.menu.hot %}{% include lineup-card.html d=d tag="Hot" %}{% endfor -%}
         {%- for d in site.data.menu.iced %}{% include lineup-card.html d=d tag="Iced" %}{% endfor -%}
         {%- for d in site.data.menu.snacks %}{% include lineup-card.html d=d tag="Snack" %}{% endfor -%}
@@ -198,11 +198,11 @@ og_image: "uploads/og-image.jpg"
         <span>Serves {{ site.data.brew.serves }}</span>
         <span style="flex:1;height:1px;background:rgba(242,169,60,0.2)"></span>
       </div>
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:clamp(14px,1.8vw,20px)">
+      <div data-gc-stagger style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:clamp(14px,1.8vw,20px)">
         {%- for s in site.data.brew.steps %}
         {%- if s.accent %}{% assign bc = "rgba(255,122,102,0.3)" %}{% assign bh = "rgba(255,122,102,0.65)" %}{% assign nc = "#FF7A66" %}{% assign lc = "#FF7A66" %}
         {%- else %}{% assign bc = "rgba(242,169,60,0.16)" %}{% assign bh = "rgba(242,169,60,0.5)" %}{% assign nc = "#F2A93C" %}{% assign lc = "#C58A2E" %}{% endif %}
-        <div style="padding:26px 24px 28px;background:rgba(46,29,19,0.72);border:1px solid {{ bc }};border-radius:22px;transition:border-color .35s ease,transform .35s ease" style-hover="border-color:{{ bh }};transform:translateY(-4px)">
+        <div style="padding:26px 24px 28px;background:rgba(46,29,19,0.72);border:1px solid {{ bc }};border-radius:22px;--gc-bh:{{ bh }}" class="gc-card gc-lift">
           <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding-bottom:16px;border-bottom:1px solid rgba(243,232,211,0.10)">
             <span style="font-family:'Instrument Serif',serif;font-size:44px;line-height:0.8;color:{{ nc }}">0{{ forloop.index }}</span>
             <span style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:{{ lc }}">{{ s.label }}</span>
@@ -251,7 +251,7 @@ og_image: "uploads/og-image.jpg"
         <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.18em;text-transform:uppercase;color:#FF7A66">Weddings · offices · parties</div>
         <h2 id="catering-h2" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(2rem,4.4vw,3.3rem);letter-spacing:0;line-height:1;margin:10px 0 0;color:#F3E8D3">Chai catering in Saskatoon</h2>
         <p style="font-size:1.05rem;line-height:1.6;color:#D6C7B4;max-width:46ch;margin:16px 0 24px">Bring the cart to your event. We pour fresh masala chai for weddings, office mornings, markets and private parties across Saskatoon and area — hot in winter, iced in summer, always kadak.</p>
-        <a href="{{ '/catering/' | relative_url }}" style="text-decoration:none;background:#F2A93C;color:#2B1B12;font-weight:700;font-size:16px;padding:15px 26px;border-radius:999px" style-hover="background:#FFBA55">Book chai for your event →</a>
+        <a href="{{ '/catering/' | relative_url }}" style="text-decoration:none;background:#F2A93C;color:#2B1B12;font-weight:700;font-size:16px;padding:15px 26px;border-radius:999px" class="gc-pill">Book chai for your event →</a>
       </div>
     </div>
   </section>
@@ -265,13 +265,13 @@ og_image: "uploads/og-image.jpg"
           <h2 id="community-h2" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(2rem,4.6vw,3.4rem);letter-spacing:0;line-height:1;margin:10px 0 0;color:#F3E8D3">{{ site.social.instagram_handle }}</h2>
         </div>
       </div>
-      <div style="display:grid;grid-template-columns:repeat(2,1fr);grid-auto-rows:174px;grid-auto-flow:dense;gap:12px">
+      <div data-gc-stagger style="display:grid;grid-template-columns:repeat(2,1fr);grid-auto-rows:174px;grid-auto-flow:dense;gap:12px">
 
         <!-- FEATURED post -->
         <div data-gc-tile style="grid-column:span 2;grid-row:span 2;border-radius:20px;overflow:hidden;background:#25160F;position:relative">
           <video data-src="{{ '/uploads/video/community-cart.mp4' | relative_url }}::video/mp4" muted loop playsinline preload="none" poster="{{ '/uploads/opt/community-cart-400.jpg' | relative_url }}" width="406" height="720" aria-label="Three God's Chai cups held up in front of the cart under its orange canopy" style="width:100%;height:100%;object-fit:cover;object-position:50% 36%;display:block"></video>
           <span style="position:absolute;top:13px;left:13px;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#2B1B12;background:#F2A93C;padding:5px 10px;border-radius:999px;z-index:3">★ Top post</span>
-          <button type="button" data-gc-mute aria-label="Toggle sound" aria-pressed="false" style="position:absolute;top:11px;right:11px;width:38px;height:38px;border-radius:999px;border:1px solid rgba(243,232,211,0.25);background:rgba(18,11,6,0.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);color:#F3E8D3;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;line-height:1;z-index:3" style-hover="background:rgba(18,11,6,0.8)">🔇</button>
+          <button type="button" data-gc-mute aria-label="Toggle sound" aria-pressed="false" style="position:absolute;top:11px;right:11px;width:38px;height:38px;border-radius:999px;border:1px solid rgba(243,232,211,0.25);background:rgba(18,11,6,0.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);color:#F3E8D3;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;line-height:1;z-index:3" class="gc-iconbtn">🔇</button>
           <div style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:18px;background:linear-gradient(180deg,transparent 45%,rgba(18,11,6,0.82));pointer-events:none">
             <div style="font-family:'Instrument Serif',serif;font-weight:400;font-size:1.25rem;color:#F3E8D3;letter-spacing:0">Kadak, every single cup</div>
             <div style="font-family:'DM Mono',monospace;font-size:11.5px;color:#F2A93C;margin-top:5px;letter-spacing:0.04em">{{ site.social.instagram_handle }} · 2.4k likes</div>
@@ -279,9 +279,9 @@ og_image: "uploads/og-image.jpg"
         </div>
 
         <!-- video -->
-        <div data-gc-tile style="grid-column:span 2;grid-row:span 2;border-radius:18px;overflow:hidden;background:#25160F;position:relative;transition:transform .35s ease" style-hover="transform:scale(1.02)">
+        <div data-gc-tile style="grid-column:span 2;grid-row:span 2;border-radius:18px;overflow:hidden;background:#25160F;position:relative" class="gc-zoom">
           <video data-src="{{ '/uploads/video/community-rose.mp4' | relative_url }}::video/mp4" muted loop playsinline preload="none" poster="{{ '/uploads/opt/community-rose-400.jpg' | relative_url }}" width="404" height="720" aria-label="An iced God's Chai topped with rose petals" style="width:100%;height:100%;object-fit:cover;display:block"></video>
-          <button type="button" data-gc-mute aria-label="Toggle sound" aria-pressed="false" style="position:absolute;top:10px;right:10px;width:32px;height:32px;border-radius:999px;border:1px solid rgba(243,232,211,0.25);background:rgba(18,11,6,0.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);color:#F3E8D3;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;line-height:1;z-index:3" style-hover="background:rgba(18,11,6,0.8)">🔇</button>
+          <button type="button" data-gc-mute aria-label="Toggle sound" aria-pressed="false" style="position:absolute;top:10px;right:10px;width:32px;height:32px;border-radius:999px;border:1px solid rgba(243,232,211,0.25);background:rgba(18,11,6,0.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);color:#F3E8D3;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;line-height:1;z-index:3" class="gc-iconbtn">🔇</button>
           <div style="position:absolute;inset:0;display:flex;align-items:flex-end;padding:11px;background:linear-gradient(180deg,transparent 55%,rgba(18,11,6,0.7));pointer-events:none"><span style="font-family:'DM Mono',monospace;font-size:11px;color:#FFFAF3">{{ site.social.instagram_handle }}</span></div>
         </div>
 

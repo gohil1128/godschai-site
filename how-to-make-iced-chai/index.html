@@ -25,12 +25,12 @@ og_image: "uploads/opt/pour-cup-640.jpg"
 <section aria-labelledby="steps-h2" style="background:rgba(29,18,11,0.6);border-top:1px solid rgba(243,232,211,0.08);border-bottom:1px solid rgba(243,232,211,0.08)">
   <div style="max-width:1240px;margin:0 auto;padding:clamp(46px,6vw,88px) clamp(18px,4vw,40px)">
     <h2 id="steps-h2" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(2rem,4.6vw,3.3rem);line-height:1;letter-spacing:0;margin:0 0 clamp(28px,4vw,40px);color:#F3E8D3">Four steps, one cold cup</h2>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:clamp(14px,1.8vw,20px)">
+    <div data-gc-stagger style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:clamp(14px,1.8vw,20px)">
       {% assign steps = site.data.iced.steps %}
       {% for s in steps %}
-      {% if s.accent %}{% assign bc = "rgba(255,122,102,0.3)" %}{% assign nc = "#FF7A66" %}{% assign lc = "#FF7A66" %}
-      {% else %}{% assign bc = "rgba(242,169,60,0.16)" %}{% assign nc = "#F2A93C" %}{% assign lc = "#C58A2E" %}{% endif %}
-      <div style="padding:26px 24px 28px;background:rgba(46,29,19,0.72);border:1px solid {{ bc }};border-radius:22px">
+      {% if s.accent %}{% assign bc = "rgba(255,122,102,0.3)" %}{% assign bh = "rgba(255,122,102,0.65)" %}{% assign nc = "#FF7A66" %}{% assign lc = "#FF7A66" %}
+      {% else %}{% assign bc = "rgba(242,169,60,0.16)" %}{% assign bh = "rgba(242,169,60,0.5)" %}{% assign nc = "#F2A93C" %}{% assign lc = "#C58A2E" %}{% endif %}
+      <div style="padding:26px 24px 28px;background:rgba(46,29,19,0.72);border:1px solid {{ bc }};border-radius:22px;--gc-bh:{{ bh }}" class="gc-card gc-lift">
         <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding-bottom:16px;border-bottom:1px solid rgba(243,232,211,0.10)">
           <span style="font-family:'Instrument Serif',serif;font-size:44px;line-height:0.8;color:{{ nc }}">0{{ forloop.index }}</span>
           <span style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:{{ lc }}">{{ s.label }}</span>

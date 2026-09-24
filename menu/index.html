@@ -24,6 +24,8 @@ og_image: "uploads/opt/pour-cup-640.jpg"
   </div>
 </section>
 
+<div data-gc-reveal>
+
 <!-- HOT -->
 <section id="hot" aria-labelledby="hot-h2" style="max-width:1240px;margin:0 auto;padding:clamp(28px,4vw,44px) clamp(18px,4vw,40px);scroll-margin-top:104px">
   <div style="display:flex;align-items:center;gap:16px;margin-bottom:24px">
@@ -50,9 +52,9 @@ og_image: "uploads/opt/pour-cup-640.jpg"
       <div style="flex:1;height:1px;background:rgba(253,246,228,0.2)"></div>
       <span style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:#BB9F94;white-space:nowrap">This summer</span>
     </div>
-    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:clamp(16px,2vw,24px)">
+    <div data-gc-stagger style="display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:clamp(16px,2vw,24px)">
       {%- for d in site.data.menu.iced %}
-      <div style="background:#412C22;border:1px solid rgba(253,246,228,0.10);border-radius:22px;overflow:hidden;box-shadow:0 12px 30px rgba(0,0,0,0.3)" style-hover="transform:translateY(-4px)">
+      <div style="background:#412C22;border:1px solid rgba(253,246,228,0.10);border-radius:22px;overflow:hidden;box-shadow:0 12px 30px rgba(0,0,0,0.3)" class="gc-lift">
         <div style="aspect-ratio:4/5;overflow:hidden;background:#2A1A13">
           {%- assign dbase = d.img | split: "/" | last | split: "." | first -%}
                     {% include img.html base=dbase ext="jpg" widths="320,640" sizes="(max-width:700px) 90vw, 300px" w="640" h="800" alt=d.alt wrap="display:block;width:100%;height:100%" style="width:100%;height:100%;object-fit:cover;display:block" %}
@@ -75,7 +77,7 @@ og_image: "uploads/opt/pour-cup-640.jpg"
       <div style="flex:1;height:1px;background:rgba(74,47,37,0.16)"></div>
       <span style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:#75584B;white-space:nowrap">Pairs with chai</span>
     </div>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:clamp(16px,2.2vw,24px);align-items:stretch">
+    <div data-gc-stagger style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:clamp(16px,2.2vw,24px);align-items:stretch">
       {%- for d in site.data.menu.snacks %}
       <div style="display:flex;gap:16px;align-items:center;background:#FDF6E4;border:1px solid rgba(74,47,37,0.08);border-radius:20px;padding:22px">
         <div style="flex:none;width:64px;height:64px;border-radius:16px;background:linear-gradient(150deg,#E1865D,#D57245);display:flex;align-items:center;justify-content:center;font-family:'Instrument Serif',serif;font-weight:400;color:#FFFAF3;font-size:1.5rem">{{ d.name | slice: 0 }}</div>
@@ -104,11 +106,13 @@ og_image: "uploads/opt/pour-cup-640.jpg"
   <div style="max-width:1240px;margin:0 auto;padding:clamp(34px,4vw,56px) clamp(18px,4vw,40px);display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap">
     <h2 style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(1.5rem,3.4vw,2.4rem);letter-spacing:0;color:#FFFAF3;margin:0;max-width:20ch">Come find us — or book the cart.</h2>
     <div style="display:flex;gap:12px;flex-wrap:wrap">
-      <a href="{{ '/events/' | relative_url }}" style="text-decoration:none;background:#4A2F25;color:#FFFAF3;font-weight:700;font-size:15px;padding:14px 24px;border-radius:999px" style-hover="background:#37231C">See events →</a>
-      <a href="{{ '/catering/' | relative_url }}" style="text-decoration:none;background:#FFFAF3;color:#4A2F25;font-weight:700;font-size:15px;padding:14px 24px;border-radius:999px" style-hover="background:#FFD7C5">Catering</a>
+      <a href="{{ '/events/' | relative_url }}" style="text-decoration:none;background:#4A2F25;color:#FFFAF3;font-weight:700;font-size:15px;padding:14px 24px;border-radius:999px" class="gc-pill-dark">See events →</a>
+      <a href="{{ '/catering/' | relative_url }}" style="text-decoration:none;background:#FFFAF3;color:#4A2F25;font-weight:700;font-size:15px;padding:14px 24px;border-radius:999px" class="gc-pill-cream">Catering</a>
     </div>
   </div>
 </section>
+
+</div>
 
 {% comment %} Menu structured data, generated from _data/menu.yml so it can never drift. {% endcomment %}
 <script type="application/ld+json">

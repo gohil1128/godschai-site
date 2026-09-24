@@ -233,6 +233,36 @@ tab strip at small sizes, which is why it sits on a tile.
 
 ---
 
+## How the site moves
+
+Nothing on the page used to react to being pointed at. Every button, card and
+link carried an instruction for what it should do on hover, but those were read
+by a piece of software that was taken out of the site months ago, so they sat
+there doing nothing while the page looked like it ought to respond. That is
+fixed: buttons warm up, cards lift, the ticker stops so you can read it, and
+everything also responds to a keyboard and to a finger — a phone has no hover
+at all, so buttons now press in when tapped instead.
+
+The other half is arrival. Sections already faded in as you scrolled to them;
+now the cards *inside* a section come in one after another, 55 thousandths of a
+second apart. It is the difference between a page loading and a page being laid
+out. The menu page had none of this and now has both.
+
+| What to change | Where |
+| --- | --- |
+| Any hover colour or lift | `_includes/base-styles-dark.html`, the "Interactive states" block |
+| The same on the menu page | `_layouts/light.html` (that page is light, so it has its own) |
+| How fast cards arrive, and how far apart | `assets/js/site.js`, section 2b — `STEP` and `CAP` |
+| Which grids do it at all | the `data-gc-stagger` attribute on a grid |
+
+**If someone has "reduce motion" turned on** in their phone or computer
+settings, all of it stops: no fading in, no lifting, no ticker, no smooth
+scrolling. Hover colours stay, because those only happen when someone chooses
+to point at something. Keep that in mind if you add anything that moves — the
+switch is the `prefers-reduced-motion` block at the foot of each stylesheet.
+
+---
+
 ## The email signup tab
 
 Nothing pops open on its own any more. About five seconds in, a small amber tab

@@ -17,9 +17,9 @@ og_image: "uploads/og-image.jpg"
 
 <section aria-labelledby="what-h2" style="max-width:1240px;margin:0 auto;padding:clamp(30px,4vw,60px) clamp(18px,4vw,40px)">
   <h2 id="what-h2" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(1.9rem,4.4vw,3rem);letter-spacing:0;margin:0 0 28px;color:#F3E8D3">The two blends</h2>
-  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:clamp(16px,2vw,24px)">
+  <div data-gc-stagger style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:clamp(16px,2vw,24px)">
     {% for pouch in site.data.premixes %}
-    <div style="padding:28px 28px 32px;background:rgba(28,17,10,0.8);border:1px solid rgba(242,169,60,0.16);border-radius:22px;display:flex;flex-direction:column;align-items:center;text-align:center">
+    <div style="padding:28px 28px 32px;background:rgba(28,17,10,0.8);border:1px solid rgba(242,169,60,0.16);border-radius:22px;display:flex;flex-direction:column;align-items:center;text-align:center" class="gc-card">
       {% include img.html base=pouch.img ext="jpg" widths="250,500" sizes="(max-width:700px) 60vw, 250px" w="544" h="952" alt=pouch.alt wrap="display:block;width:min(72%,230px)" style="width:100%;height:auto;display:block;border-radius:10px 10px 14px 14px;box-shadow:0 24px 44px -20px rgba(0,0,0,0.7)" %}
       <h3 style="font-family:'Instrument Serif',serif;font-weight:400;font-size:1.5rem;margin:22px 0 0;color:#F3E8D3">{{ pouch.name }}</h3>
       <div style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:#F2A93C;margin-top:7px">{{ pouch.notes }}</div>
