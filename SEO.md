@@ -36,17 +36,25 @@ That one edit updates the `/menu/` page, the homepage lineup, **and** the
 ### Adding a photo
 
 1. Put the original in `uploads/` (any size — big is fine).
-2. Run the image tool once so the small, fast versions get made:
+2. Add its filename to the right list at the top of `tools/optimize-images.py`
+   — drinks go in `DRINKS_4x5`.
+3. Run the image tool once so the small, fast versions get made:
 
    ```bash
    python3 tools/optimize-images.py
    ```
 
-3. Reference the original filename in `menu.yml` (e.g. `uploads/drink-cardamom.jpeg`).
+4. Reference the original filename in `menu.yml` (e.g. `uploads/drink-cardamom.jpeg`).
    The site automatically serves the WebP and correctly-sized versions.
 
-If you skip step 2 the photo won't appear, because the page looks for the
+If you skip step 3 the photo won't appear, because the page looks for the
 optimised copies in `uploads/opt/`.
+
+**Where the original ends up.** The tool moves it into `uploads/_src/`. That
+folder is kept in the project but left out of the built website, so a 3 MB
+photo stays here for re-cropping later without every visitor downloading it.
+The only pictures the site actually sends people are the small copies in
+`uploads/opt/` and the social preview `uploads/og-image.jpg`.
 
 ---
 
@@ -179,6 +187,31 @@ matching.
 If you make the header logo a different size, the number to change with it is
 `scroll-margin-top` in `_includes/base-styles-dark.html`. That's what stops the
 top of a section hiding behind the bar when someone clicks Menu or Events.
+
+---
+
+## The two clips in the community strip
+
+The two moving tiles under the `@godschai` heading play
+`uploads/video/community-cart.mp4` and `uploads/video/community-rose.mp4`.
+Neither starts downloading until it scrolls into view, both pause when it
+scrolls away, and both are silent until someone taps the speaker button.
+
+They used to be phone recordings served from a Cloudflare bucket — one of them
+a 50 MB 4K file that started downloading on the home page. They are now ordinary
+web video kept in the project: 381 KB and 199 KB. Phones that refused the old
+format play these fine.
+
+**To swap a clip**, put the new one in `uploads/video/` with the same name. It
+wants to be H.264 MP4, no wider than about 500px, 30fps — anything bigger is
+thrown away by the tile it plays in. Then grab a still from it, save it as
+`uploads/community-cart.png` (or `-rose`), and run:
+
+```bash
+python3 tools/optimize-images.py
+```
+
+That still is what people see for the moment before the video arrives.
 
 ---
 

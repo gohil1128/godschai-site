@@ -103,9 +103,7 @@ og_image: "uploads/og-image.jpg"
           {%- else %}
           <div style="aspect-ratio:4/5;overflow:hidden;background:#25160F;position:relative">
             {%- assign dbase = d.img | split: "/" | last | split: "." | first %}
-            {%- assign dext = d.img | split: "." | last %}
-            {%- if dext == "png" %}{% assign fb = "png" %}{% else %}{% assign fb = "jpg" %}{% endif %}
-            {% include img.html base=dbase ext=fb widths="320,640" sizes="(max-width:700px) 45vw, 200px" w="640" h="800" alt=d.alt wrap="display:block;width:100%;height:100%" style="width:100%;height:100%;object-fit:cover;display:block;filter:saturate(1.18) contrast(1.04) brightness(1.06)" %}
+                        {% include img.html base=dbase ext="jpg" widths="320,640" sizes="(max-width:700px) 45vw, 200px" w="640" h="800" alt=d.alt wrap="display:block;width:100%;height:100%" style="width:100%;height:100%;object-fit:cover;display:block;filter:saturate(1.18) contrast(1.04) brightness(1.06)" %}
             <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 58%,rgba(20,12,7,0.45) 100%)"></div>
           </div>
           {%- endif %}
@@ -271,7 +269,7 @@ og_image: "uploads/og-image.jpg"
 
         <!-- FEATURED post -->
         <div data-gc-tile style="grid-column:span 2;grid-row:span 2;border-radius:20px;overflow:hidden;background:#25160F;position:relative">
-          <video data-src="https://pub-cebe510d78a84528b5ea883bd62fe46c.r2.dev/6E01C02C-6C76-463F-B10C-64BCD4A48B83.MOV::video/quicktime" muted loop playsinline preload="none" poster="{{ '/uploads/opt/pour-cup-320.jpg' | relative_url }}" width="640" height="800" style="width:100%;height:100%;object-fit:cover;object-position:50% 36%;display:block"></video>
+          <video data-src="{{ '/uploads/video/community-cart.mp4' | relative_url }}::video/mp4" muted loop playsinline preload="none" poster="{{ '/uploads/opt/community-cart-400.jpg' | relative_url }}" width="406" height="720" aria-label="Three God's Chai cups held up in front of the cart under its orange canopy" style="width:100%;height:100%;object-fit:cover;object-position:50% 36%;display:block"></video>
           <span style="position:absolute;top:13px;left:13px;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#2B1B12;background:#F2A93C;padding:5px 10px;border-radius:999px;z-index:3">★ Top post</span>
           <button type="button" data-gc-mute aria-label="Toggle sound" aria-pressed="false" style="position:absolute;top:11px;right:11px;width:38px;height:38px;border-radius:999px;border:1px solid rgba(243,232,211,0.25);background:rgba(18,11,6,0.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);color:#F3E8D3;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;line-height:1;z-index:3" style-hover="background:rgba(18,11,6,0.8)">🔇</button>
           <div style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:18px;background:linear-gradient(180deg,transparent 45%,rgba(18,11,6,0.82));pointer-events:none">
@@ -282,7 +280,7 @@ og_image: "uploads/og-image.jpg"
 
         <!-- video -->
         <div data-gc-tile style="grid-column:span 2;grid-row:span 2;border-radius:18px;overflow:hidden;background:#25160F;position:relative;transition:transform .35s ease" style-hover="transform:scale(1.02)">
-          <video data-src="https://pub-cebe510d78a84528b5ea883bd62fe46c.r2.dev/IMG_2773.MOV::video/quicktime" muted loop playsinline preload="none" poster="{{ '/uploads/opt/pour-cup-320.jpg' | relative_url }}" width="640" height="800" style="width:100%;height:100%;object-fit:cover;display:block"></video>
+          <video data-src="{{ '/uploads/video/community-rose.mp4' | relative_url }}::video/mp4" muted loop playsinline preload="none" poster="{{ '/uploads/opt/community-rose-400.jpg' | relative_url }}" width="404" height="720" aria-label="An iced God's Chai topped with rose petals" style="width:100%;height:100%;object-fit:cover;display:block"></video>
           <button type="button" data-gc-mute aria-label="Toggle sound" aria-pressed="false" style="position:absolute;top:10px;right:10px;width:32px;height:32px;border-radius:999px;border:1px solid rgba(243,232,211,0.25);background:rgba(18,11,6,0.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);color:#F3E8D3;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;line-height:1;z-index:3" style-hover="background:rgba(18,11,6,0.8)">🔇</button>
           <div style="position:absolute;inset:0;display:flex;align-items:flex-end;padding:11px;background:linear-gradient(180deg,transparent 55%,rgba(18,11,6,0.7));pointer-events:none"><span style="font-family:'DM Mono',monospace;font-size:11px;color:#FFFAF3">{{ site.social.instagram_handle }}</span></div>
         </div>
