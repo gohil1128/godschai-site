@@ -21,6 +21,7 @@
           action="https://{{ site.mailchimp.host }}/subscribe/post?u={{ site.mailchimp.u }}&amp;id={{ site.mailchimp.id }}&amp;f_id={{ site.mailchimp.f_id }}"
           method="post" target="_blank"
           style="display:flex;flex-direction:column;gap:12px;">
+      <input type="hidden" name="SOURCE" value="newsletter">
       <label for="gc-email-popup" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap">Email address</label>
       <input id="gc-email-popup" type="email" name="EMAIL" required autocomplete="email" placeholder="you@email.com" style="width:100%;box-sizing:border-box;padding:14px 18px;background:rgba(243,232,211,0.05);border:1px solid rgba(243,232,211,0.18);border-radius:999px;color:#F3E8D3;font-family:'Hanken Grotesk',sans-serif;font-size:15px;outline:none;">
       <button type="submit" style="width:100%;padding:14px;background:#F2A93C;color:#2B1B12;font-weight:700;font-size:14px;font-family:'Hanken Grotesk',sans-serif;border:none;border-radius:999px;cursor:pointer;" class="gc-pill">Join the journey</button>

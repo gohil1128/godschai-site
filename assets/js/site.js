@@ -243,7 +243,10 @@ layout: null
 
   /* ---------- 6. Mailchimp signup (JSONP) ---------- */
   var MC = 'https://{{ site.mailchimp.host }}/subscribe/post-json?u={{ site.mailchimp.u }}&id={{ site.mailchimp.id }}&f_id={{ site.mailchimp.f_id }}';
-  function subscribe(email, done) {
+  /* Sends every named field in the form, not just EMAIL: the hidden SOURCE
+     field is how Mailchimp learns which form someone used (premix-launch,
+     events or newsletter). */
+  function subscribe(form, done) {
     var cb = 'gcMc' + Math.random().toString(36).slice(2);
     var settled = false;
     var settle = function (ok, msg) {
@@ -257,7 +260,12 @@ layout: null
       settle(!!data && (data.result === 'success' || already), already ? "You're already on the list. ✶" : null);
     };
     var s = d.createElement('script');
-    s.src = MC + '&EMAIL=' + encodeURIComponent(email) + '&c=' + cb;
+    var q = '';
+    [].slice.call(form.elements).forEach(function (el) {
+      if (!el.name || el.disabled || !el.value) return;
+      q += '&' + encodeURIComponent(el.name) + '=' + encodeURIComponent(el.value);
+    });
+    s.src = MC + q + '&c=' + cb;
     s.onerror = function () { settle(false); };
     d.body.appendChild(s);
     setTimeout(function () { settle(false); if (s.parentNode) s.parentNode.removeChild(s); }, 8000);
@@ -272,7 +280,7 @@ layout: null
     if (!input || !input.value) return;
     if (btn) { btn.disabled = true; btn.dataset.label = btn.textContent; btn.textContent = 'Sending…'; }
     if (msg) { msg.style.display = 'none'; msg.textContent = ''; }
-    subscribe(input.value, function (ok, custom) {
+    subscribe(form, function (ok, custom) {
       if (btn) { btn.disabled = false; btn.textContent = btn.dataset.label || 'Sign up'; }
       if (!msg) return;
       msg.style.display = 'block';
