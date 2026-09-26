@@ -2,10 +2,17 @@
   Mailchimp signup. Progressively enhanced: without JS it posts straight to
   Mailchimp's hosted form; with JS, assets/js/site.js intercepts it, submits via
   JSONP and swaps in an inline success/error message.
-  Params: id (unique), button (label), max (max-width), note (small print), big (larger sizing)
+  Params: id (unique), button (label), max (max-width), note (small print), big (larger sizing),
+          list (which group the signup is recorded under — see below)
+
+  list is sent to Mailchimp as SOURCE, so each subscriber is stamped with what
+  they signed up for: "premix-launch" (forms that promise a single launch-day
+  note), "events" or "newsletter" (the default). Mailchimp only keeps it if the
+  audience has a text field whose merge tag is SOURCE — see SEO.md.
 {%- endcomment -%}
 {%- assign fid = include.id | default: "form" -%}
 {%- assign maxw = include.max | default: "480px" -%}
+{%- assign list = include.list | default: "newsletter" -%}
 {%- if include.big -%}
   {%- assign in_pad = "15px 20px" -%}{%- assign in_fs = "16px" -%}
   {%- assign bt_pad = "15px 28px" -%}{%- assign bt_fs = "16px" -%}
@@ -17,6 +24,7 @@
       action="https://{{ site.mailchimp.host }}/subscribe/post?u={{ site.mailchimp.u }}&amp;id={{ site.mailchimp.id }}&amp;f_id={{ site.mailchimp.f_id }}"
       method="post" target="_blank"
       style="display:flex;gap:{% if include.big %}10px{% else %}8px{% endif %};flex-wrap:wrap;max-width:{{ maxw }}">
+  <input type="hidden" name="SOURCE" value="{{ list }}">
   <label for="gc-email-{{ fid }}" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap">Email address</label>
   <input id="gc-email-{{ fid }}" type="email" name="EMAIL" required autocomplete="email" placeholder="you@email.com"
          style="flex:1 1 {% if include.big %}220px{% else %}180px{% endif %};min-width:0;border:1px solid rgba(243,232,211,0.18);border-radius:999px;padding:{{ in_pad }};font-size:{{ in_fs }};font-family:'Hanken Grotesk',sans-serif;color:#F3E8D3;background:rgba(243,232,211,0.05);outline:none"/>

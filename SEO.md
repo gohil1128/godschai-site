@@ -15,7 +15,7 @@ Open **`_data/menu.yml`**. There are three lists: `hot`, `iced` and `snacks`.
 Copy an existing block, keep the indentation exactly as it is, and change the text.
 
 ```yaml
-  - name: "Iced Cardamom Chai"          # shows on the menu and homepage
+  - name: "Iced Cardamom Chai"          # shows in the homepage lineup
     desc: "Cardamom-forward, over ice." # the longer description
     short: "Cardamom, over ice."        # the short line in the homepage grid
     img: "uploads/drink-cardamom.jpeg"  # photo (see "Adding a photo" below)
@@ -26,12 +26,18 @@ Optional extras:
 
 | Field | What it does |
 |---|---|
-| `menu_name` | A longer name used only on the `/menu/` page |
-| `menu_desc` | A longer description used only on the `/menu/` page |
+| `menu_name` | A longer name, used only in the menu data Google reads |
+| `menu_desc` | A longer description, same |
 | `logo_tile` | `true` shows the God's Chai logo instead of a photo |
 
-That one edit updates the `/menu/` page, the homepage lineup, **and** the
-`Menu` structured data Google reads. They can't drift apart.
+That one edit updates the homepage lineup **and** the `Menu` structured data
+Google reads. They can't drift apart.
+
+**There is no separate menu page any more.** The lineup on the homepage is the
+menu — every hot drink, iced drink and snack is in it — and the Menu link in
+the top bar and the footer scrolls straight to it. The old addresses
+(`/menu/` and `/menu.html`) forward there, so links already posted to Instagram
+or sitting in Google don't break.
 
 ### Adding a photo
 
@@ -111,8 +117,8 @@ at the top of `tools/optimize-images.py`, then run:
 python3 tools/optimize-images.py
 ```
 
-The launch wording ("Launching this fall") appears on the homepage, the menu
-page, the brew guide and `/premixes/`. When they actually launch, search the
+The launch wording ("Launching this fall") appears on the homepage, at the foot
+of all four guide pages (`_includes/cta-premix.html`) and on `/premixes/`. When they actually launch, search the
 project for that phrase so none of them get left behind.
 
 ---
@@ -133,7 +139,7 @@ The longer written guide on that page is normal text in
 The logo in the top bar draws itself on, over and over, cycling through three
 different builds: strokes brushing themselves in, the script landing with CHAI
 rising under it, then everything pouring in from above and wobbling to rest.
-It runs on every page except the menu page.
+It runs on every page.
 
 It isn't a video — it's the mark cut into eleven separate pieces, each one
 animated on its own, so it sits on the page with nothing behind it and stays
@@ -167,7 +173,7 @@ comes from the `tint` on the `<gods-chai-logo>` tag in `_includes/nav-dark.html`
 and the orange is painted over the five orange pieces by a rule in
 `_includes/base-styles-dark.html`.
 
-The ordinary logo pictures — the header's fallback, the footer, the menu page —
+The ordinary logo pictures — the header's fallback and the footer —
 have been recoloured to match, so every God's Chai mark on the site is the same
 two-tone. The originals are kept at `uploads/_src/*-source.png`.
 
@@ -246,12 +252,11 @@ at all, so buttons now press in when tapped instead.
 The other half is arrival. Sections already faded in as you scrolled to them;
 now the cards *inside* a section come in one after another, 55 thousandths of a
 second apart. It is the difference between a page loading and a page being laid
-out. The menu page had none of this and now has both.
+out.
 
 | What to change | Where |
 | --- | --- |
 | Any hover colour or lift | `_includes/base-styles-dark.html`, the "Interactive states" block |
-| The same on the menu page | `_layouts/light.html` (that page is light, so it has its own) |
 | How fast cards arrive, and how far apart | `assets/js/site.js`, section 2b — `STEP` and `CAP` |
 | Which grids do it at all | the `data-gc-stagger` attribute on a grid |
 
@@ -290,6 +295,47 @@ page with something the visitor didn't ask for.
 
 Keep the tab short. It's rotated on its side, so long wording makes it tall
 enough to start covering things.
+
+---
+
+## Your email list
+
+Every signup form on the site sends addresses to **Mailchimp** — the website
+itself stores none. Log in at mailchimp.com and open **Audience → All
+contacts** to see everyone.
+
+Each signup is also stamped with what the person signed up for, so you can
+email one group without the others:
+
+| Label | Where they signed up | What they were promised |
+| --- | --- | --- |
+| `premix-launch` | homepage premix box, both forms on `/premixes/`, the end of all four guide pages | one email when the premixes launch |
+| `events` | `/events/` | the pop-up schedule |
+| `newsletter` | the footer, and the side tab | general news |
+
+**One-time setup in Mailchimp** — without this, Mailchimp quietly throws the
+label away:
+
+1. **Audience → Settings → Audience fields and \*|MERGE|\* tags → Add a field → Text.**
+2. Call it **Signed up for**, and set its merge tag to exactly **`SOURCE`**.
+3. Untick **Visible**, so it doesn't appear on Mailchimp's own signup page. Save.
+
+**Emailing one group:** in **Audience → All contacts**, make a segment where
+*Signed up for* **is** `premix-launch` (or `events`, or `newsletter`) and save
+it. When you create a campaign, send it to that segment instead of the whole
+audience.
+
+Two things to know:
+
+- Anyone who signed up **before** the labels went live has a blank label. Treat
+  blanks as "unknown" — if in doubt, only send them the premix launch note.
+- Someone already on the list who signs up again from a different form keeps
+  their first label; Mailchimp doesn't update existing subscribers from these
+  forms.
+
+To change which label a form uses, it's the `list="..."` on that form's line in
+the page (for the guide pages, in `_includes/cta-premix.html`). A new label
+needs no setup in Mailchimp — it lands in the same field.
 
 ---
 
@@ -402,13 +448,15 @@ These matter for search but can't be done in code:
    version gets replaced.
 3. **Instagram and TikTok bios** — add the godschai.com link.
 4. **Mailchimp double opt-in** — recommended so bots can't spam-subscribe addresses.
+5. **Mailchimp "Signed up for" field** — the one-time setup under *Your email
+   list* above. Until it exists, signups arrive without their label.
 
 ---
 
-## Two things not to touch
+## Things not to touch
 
 - **`CNAME`** — this is what points godschai.com at the site. Deleting it takes
   the domain down.
-- **`menu.html`** in the root — it's a small forwarder that sends the old
-  `/menu.html` address to the new `/menu/` page, so old links and Google's index
-  keep working.
+- **`menu.html`** in the root and **`menu/index.html`** — both are small
+  forwarders that send the old menu addresses to the lineup on the homepage, so
+  old links and Google's index keep working. Delete them and those links 404.

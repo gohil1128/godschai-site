@@ -34,7 +34,7 @@ og_image: "uploads/og-image.jpg"
         <p style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(3rem,9vw,7rem);line-height:0.92;letter-spacing:0;margin:16px 0 0;text-shadow:0 6px 40px rgba(0,0,0,0.5)">Not your<br><span style="color:#FF6F61;font-style:italic">average</span> chai.</p>
         <p style="font-size:clamp(1.05rem,1.5vw,1.3rem);line-height:1.5;color:#E7D6C4;max-width:36ch;margin:20px 0 0;text-shadow:0 2px 16px rgba(0,0,0,0.6)">Whole spices from Kerala. Single-origin Assam tea. Poured fresh, the real way.</p>
         <div style="display:flex;gap:13px;flex-wrap:wrap;margin-top:30px">
-          <a href="{{ '/menu/' | relative_url }}" style="text-decoration:none;background:#FF7A66;color:#2B1B12;font-weight:700;font-size:16px;padding:15px 26px;border-radius:999px;box-shadow:0 12px 34px rgba(255,122,102,0.45)" class="gc-pill-coral">View the menu →</a>
+          <a href="#menu" style="text-decoration:none;background:#FF7A66;color:#2B1B12;font-weight:700;font-size:16px;padding:15px 26px;border-radius:999px;box-shadow:0 12px 34px rgba(255,122,102,0.45)" class="gc-pill-coral">View the menu →</a>
           <a href="#hot" style="text-decoration:none;background:rgba(243,232,211,0.10);color:#F3E8D3;font-weight:600;font-size:16px;padding:15px 24px;border-radius:999px;border:1.5px solid rgba(243,232,211,0.3);backdrop-filter:blur(4px)" class="gc-pill-ghost">Explore the chai</a>
         </div>
         <div style="display:flex;gap:24px;margin-top:32px;flex-wrap:wrap">
@@ -166,10 +166,9 @@ og_image: "uploads/og-image.jpg"
     <div style="max-width:1240px;margin:0 auto;padding:clamp(44px,6vw,84px) clamp(18px,4vw,40px)">
       <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:18px;flex-wrap:wrap;margin-bottom:30px">
         <div>
-          <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.18em;text-transform:uppercase;color:#F2A93C">A taste of the menu</div>
+          <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.18em;text-transform:uppercase;color:#F2A93C">The menu</div>
           <h2 id="menu-h2" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(2rem,4.4vw,3.3rem);letter-spacing:0;line-height:1;margin:10px 0 0">The full lineup</h2>
         </div>
-        <a href="{{ '/menu/' | relative_url }}" style="text-decoration:none;background:#F2A93C;color:#2B1B12;font-weight:700;font-size:15px;padding:13px 22px;border-radius:999px;white-space:nowrap" class="gc-pill">See the full menu →</a>
       </div>
       <div data-gc-stagger style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:clamp(14px,1.8vw,20px)">
         {%- for d in site.data.menu.hot %}{% include lineup-card.html d=d tag="Hot" %}{% endfor -%}
@@ -223,7 +222,7 @@ og_image: "uploads/og-image.jpg"
         <div style="display:inline-block;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.16em;text-transform:uppercase;color:#2B1B12;background:#F2A93C;padding:7px 13px;border-radius:999px;font-weight:500">Launching this fall</div>
         <h2 id="premix-h2" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(2.1rem,5vw,3.6rem);letter-spacing:0;line-height:0.98;color:#F3E8D3;margin:18px 0 0">Premixes.<br>The same chai, at home.</h2>
         <p style="font-size:1.08rem;line-height:1.55;color:#D6C7B4;max-width:40ch;margin:16px 0 26px">Two blends, hand crafted in Saskatoon and stove-top ready in minutes — each pouch makes 25 cups. Get first dibs the day they drop.</p>
-        {% include signup-form.html id="premix" button="Get launch updates" big=true note="No spam. Just one note on launch day." %}
+        {% include signup-form.html id="premix" button="Get launch updates" big=true list="premix-launch" note="No spam. Just one note on launch day." %}
         <p style="margin:18px 0 0"><a href="{{ '/premixes/' | relative_url }}" style="text-decoration:none;color:#F2A93C;font-weight:600;font-size:15px;border-bottom:2px solid rgba(242,169,60,0.5);padding-bottom:2px">More about the premixes →</a></p>
       </div>
       {%- comment -%} The real pouch fronts, tilted against each other. {%- endcomment -%}
@@ -306,7 +305,7 @@ og_image: "uploads/og-image.jpg"
   "name": "God's Chai",
   "url": "{{ '/' | absolute_url }}",
   "image": "{{ 'uploads/og-image.jpg' | absolute_url }}",
-  "logo": "{{ 'uploads/logo-cream.png' | absolute_url }}",
+  "logo": "{{ 'uploads/opt/logo-cream-256.png' | absolute_url }}",
   "description": "Masala chai made with whole spices from Kerala and single-origin Assam tea, brewed fresh at pop-ups around Saskatoon.",
   "servesCuisine": "Indian",
   "priceRange": "$",
@@ -317,11 +316,70 @@ og_image: "uploads/og-image.jpg"
     "addressRegion": "SK",
     "addressCountry": "CA"
   },
-  "hasMenu": "{{ '/menu/' | absolute_url }}",
+  "hasMenu": { "@id": "{{ '/' | absolute_url }}#menu" },
   "sameAs": [
     "{{ site.social.instagram }}",
     "{{ site.social.tiktok }}"
   ],
   "parentOrganization": { "@id": "{{ '/' | absolute_url }}#organization" }
+}
+</script>
+
+{% comment %} Menu structured data, generated from _data/menu.yml so it can never drift. {% endcomment %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Menu",
+  "@id": "{{ '/' | absolute_url }}#menu",
+  "name": "God's Chai Menu — Saskatoon",
+  "url": "{{ '/' | absolute_url }}#menu",
+  "inLanguage": "en-CA",
+  "provider": { "@id": "{{ '/' | absolute_url }}#business" },
+  "hasMenuSection": [
+    {
+      "@type": "MenuSection",
+      "name": "Hot Chai",
+      "hasMenuItem": [
+        {%- for d in site.data.menu.hot %}
+        {
+          "@type": "MenuItem",
+          "name": {{ d.name | jsonify }},
+          "description": {{ d.menu_desc | default: d.desc | jsonify }}
+        }{% unless forloop.last %},{% endunless %}
+        {%- endfor %}
+      ]
+    },
+    {
+      "@type": "MenuSection",
+      "name": "Iced & Signature",
+      "hasMenuItem": [
+        {%- for d in site.data.menu.iced %}
+        {
+          "@type": "MenuItem",
+          "name": {{ d.menu_name | default: d.name | jsonify }},
+          "description": {{ d.menu_desc | default: d.desc | jsonify }}
+          {%- if d.img and d.img != "" %},
+          {%- comment %} Point at the optimised copy, not the multi-megabyte original. {% endcomment %}
+          {%- assign ibase = d.img | split: "/" | last | split: "." | first %}
+          "image": "{{ '/uploads/opt/' | absolute_url }}{{ ibase }}-640.jpg"
+          {%- endif %}
+        }{% unless forloop.last %},{% endunless %}
+        {%- endfor %}
+      ]
+    },
+    {
+      "@type": "MenuSection",
+      "name": "Snacks & Combos",
+      "hasMenuItem": [
+        {%- for d in site.data.menu.snacks %}
+        {
+          "@type": "MenuItem",
+          "name": {{ d.name | jsonify }},
+          "description": {{ d.desc | jsonify }}
+        }{% unless forloop.last %},{% endunless %}
+        {%- endfor %}
+      ]
+    }
+  ]
 }
 </script>
