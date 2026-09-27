@@ -180,6 +180,29 @@
   [data-gc-marquee]:hover [data-gc-marquee-track],
   [data-gc-marquee]:focus-within [data-gc-marquee-track]{animation-play-state:paused!important}
 
+  /* Particle stage (assets/js/particles.js) above the brew and iced steps.
+     The tabs mirror the step cards below; the card on show lights up. */
+  .gc-pstage{position:relative;margin:0 0 clamp(18px,2.4vw,28px);
+    background:radial-gradient(closest-side,rgba(242,169,60,0.08),transparent 78%)}
+  .gc-pstage[hidden]{display:none}
+  .gc-pstage canvas{display:block;width:100%;height:clamp(250px,32vw,390px)}
+  .gc-ptabs{display:flex;gap:4px;width:max-content;max-width:100%;margin:0 auto;padding:4px;
+    border-radius:999px;background:rgba(243,232,211,0.05);border:1px solid rgba(243,232,211,0.09);
+    overflow-x:auto;scrollbar-width:none}
+  .gc-ptabs::-webkit-scrollbar{display:none}
+  .gc-ptabs button{font-family:'DM Mono',monospace;font-size:11.5px;letter-spacing:0.12em;text-transform:uppercase;
+    color:#AB9280;background:transparent;border:0;border-radius:999px;padding:9px 15px;cursor:pointer;white-space:nowrap;
+    transition:background-color .25s ease,color .25s ease}
+  .gc-ptabs button:hover{color:#F3E8D3}
+  .gc-ptabs button[aria-pressed="true"]{background:rgba(243,232,211,0.11);color:#F3E8D3}
+  @media (max-width:430px){.gc-ptabs button{padding:8px 10px;letter-spacing:0.06em;font-size:11px}}
+  [data-gc-pcard]{cursor:pointer}
+  .gc-card.is-on{border-color:var(--gc-bh,rgba(242,169,60,0.5))!important;
+    box-shadow:0 0 0 1px var(--gc-bh,rgba(242,169,60,0.5)),0 18px 40px -24px var(--gc-bh,rgba(242,169,60,0.5))}
+  /* The signup box's light: idle, sending, done. */
+  .gc-status{display:block;width:124px;height:124px;margin:-16px auto 6px}
+  .gc-status[hidden]{display:none}
+
   /* Hovering is a deliberate act, so it stays. Everything that moves on its
      own, or moves the page under someone, comes off. */
   @media (prefers-reduced-motion:reduce){
@@ -189,7 +212,7 @@
     #gc-popup-overlay,#gc-popup-overlay > div{animation:none}
     input[type="email"]{transition:none}
     .gc-pill,.gc-pill-coral,.gc-pill-ghost,.gc-ico,.gc-iconbtn,.gc-pill-dark,.gc-pill-cream,
-    .gc-card,.gc-lift,.gc-zoom,a,header nav > div > a::after{transition:none}
+    .gc-card,.gc-lift,.gc-zoom,a,header nav > div > a::after,.gc-ptabs button{transition:none}
     .gc-lift:hover,.gc-lift:focus-within,.gc-zoom:hover,.gc-zoom:focus-within{transform:none}
     .gc-pill:active,.gc-pill-coral:active,.gc-pill-ghost:active,
     .gc-ico:active,.gc-iconbtn:active{transform:none}

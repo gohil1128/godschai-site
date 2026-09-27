@@ -1,0 +1,18 @@
+{%- comment -%}
+  The particle stage above a set of steps (assets/js/particles.js).
+  Params: steps (the list from _data/brew.yml or _data/iced.yml), label.
+
+  Each step's label picks its shape — see PRESETS in particles.js. The step
+  cards below mark themselves with data-gc-pcard so the one on show lights up.
+  Starts hidden: with JavaScript off, or no canvas support, nothing shows and
+  the cards read exactly as they always have.
+{%- endcomment -%}
+<div data-gc-particles class="gc-pstage" hidden>
+  <div class="gc-ptabs" role="group" aria-label="{{ include.label | default: 'Show a step' }}">
+    {%- for s in include.steps %}
+    <button type="button" data-gc-ptab="{{ s.label | downcase }}" aria-pressed="{% if forloop.first %}true{% else %}false{% endif %}">{{ s.label }}</button>
+    {%- endfor %}
+  </div>
+  <canvas aria-hidden="true"></canvas>
+</div>
+<script src="{{ '/assets/js/particles.js' | relative_url }}" defer></script>
