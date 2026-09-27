@@ -268,6 +268,40 @@ switch is the `prefers-reduced-motion` block at the foot of each stylesheet.
 
 ---
 
+## The particle animation
+
+Above the four brew steps (on the homepage and the brew guide) and the four
+iced-chai steps, a cloud of up to 12,000 glowing specks flies apart and
+re-forms into a new shape for each step:
+
+| Step | Shape |
+| --- | --- |
+| Boil | a slowly breathing sphere |
+| Blend | a swirling ribbon — the spice going in |
+| Rise | four rings in the outline of a pot, climbing |
+| Strain | a cutting-chai glass with steam coming off it |
+| Concentrate | a dense, packed core |
+| Sweeten | a falling stream of sugar |
+| Chill | ice cubes |
+| Pour | a tall glass with cubes floating in it |
+
+It moves on to the next step by itself every few seconds; tapping a step (or
+its card) jumps to it and stops the auto-play. The step on show lights up.
+
+The signup box has a small one too: a slow sphere while it waits, a swirl
+while the signup is sending, and a tick once it has gone through.
+
+It's all one file, `assets/js/particles.js` — no outside library. It only runs
+while it's on screen; with "reduce motion" switched on it changes shape
+instantly and holds still; and with JavaScript off it simply isn't there.
+
+**The shape follows the step's name**, not its position. Rename a step in
+`_data/brew.yml` or `_data/iced.yml` and it falls back to the sphere unless you
+also add the new name to `PRESETS` near the top of `particles.js` — that's also
+where each step's colour lives.
+
+---
+
 ## The email signup tab
 
 Nothing pops open on its own any more. About five seconds in, a small amber tab
