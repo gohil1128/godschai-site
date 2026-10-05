@@ -9,23 +9,31 @@ og_image: "uploads/og-image.jpg"
 
 <section aria-labelledby="page-h1" style="max-width:1240px;margin:0 auto;padding:clamp(110px,14vh,170px) clamp(18px,4vw,40px) clamp(20px,3vw,30px)">
   {%- if site.data.shop.open %}
-  {%- comment -%} The shop is open (_data/shop.yml): the words on the left, the order box on the right. {%- endcomment %}
-  <div style="display:flex;gap:clamp(28px,4vw,56px);align-items:flex-start;flex-wrap:wrap">
-    <div style="flex:1 1 380px;min-width:280px">
-      <div style="display:inline-block;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.16em;text-transform:uppercase;color:#2B1B12;background:#F2A93C;padding:7px 13px;border-radius:999px;font-weight:500">Now delivering</div>
-      <h1 id="page-h1" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(2.3rem,6vw,4.2rem);line-height:0.98;letter-spacing:0;margin:18px 0 0;max-width:26ch">Masala Chai Premix, <span style="color:#FF6F61;font-style:italic">made in Saskatoon</span></h1>
-      <p style="font-size:clamp(1.05rem,1.5vw,1.25rem);line-height:1.6;color:#E7D6C4;max-width:46ch;margin:22px 0 0">We're bagging what we pour. Two blends, hand crafted here in Saskatoon, stove-top ready in minutes — and each 125g pouch makes 25 cups.</p>
-      <ul style="list-style:none;margin:24px 0 0;padding:0;display:flex;flex-direction:column;gap:10px;font-size:15px;color:#C7B29E">
-        <li><span style="color:#F2A93C">✶</span>&nbsp; ${% include money.html v=site.data.shop.price %} a pouch, plus {{ site.data.shop.zones.saskatoon.tax | times: 100 | round }}% {{ site.data.shop.zones.saskatoon.tax_name }} on Saskatoon orders</li>
-        <li><span style="color:#F2A93C">✶</span>&nbsp; Free delivery anywhere in Saskatoon</li>
-        <li><span style="color:#F2A93C">✶</span>&nbsp; ${% include money.html v=site.data.shop.zones.canada.fee %} tracked shipping to the rest of Canada — free on {{ site.data.shop.zones.canada.free_from }}+ pouches</li>
-        <li><span style="color:#F2A93C">✶</span>&nbsp; <a href="{{ '/refunds/' | relative_url }}" style="color:#C7B29E">Refunds even on opened pouches</a>, if something's wrong</li>
+  {%- comment -%} The shop is open (_data/shop.yml): the two blends as cards with
+    "Add to cart" (assets/js/cart.js), each linking to its own page. {%- endcomment %}
+  <div style="display:inline-block;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.16em;text-transform:uppercase;color:#2B1B12;background:#F2A93C;padding:7px 13px;border-radius:999px;font-weight:500">Now delivering</div>
+  <h1 id="page-h1" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(2.3rem,6vw,4.2rem);line-height:0.98;letter-spacing:0;margin:18px 0 0;max-width:26ch">Masala Chai Premix, <span style="color:#FF6F61;font-style:italic">made in Saskatoon</span></h1>
+  <p style="font-size:clamp(1.05rem,1.5vw,1.25rem);line-height:1.6;color:#E7D6C4;max-width:52ch;margin:22px 0 0">We're bagging what we pour. Two blends, hand crafted here in Saskatoon, stove-top ready in minutes — and each 125g pouch makes 25 cups. Unsweetened, so you choose how sweet.</p>
+  <div id="shop" data-gc-stagger style="display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:clamp(16px,2vw,24px);margin:clamp(28px,4vw,44px) 0 0;scroll-margin-top:110px">
+    {%- for p in site.data.premixes %}
+    {% include product-card.html p=p %}
+    {%- endfor %}
+  </div>
+  <p style="font-size:13.5px;color:#AB9280;margin:16px 0 0">${% include money.html v=site.data.shop.price %} a pouch, plus {{ site.data.shop.zones.saskatoon.tax | times: 100 | round }}% {{ site.data.shop.zones.saskatoon.tax_name }} on Saskatoon orders. Up to {{ site.data.shop.max_each }} of each blend per online order.</p>
+  <div style="margin:clamp(22px,3vw,32px) 0 0">{% include trust-strip.html %}</div>
+  <noscript>
+    <div style="margin-top:22px;font-size:15px;line-height:1.6;color:#C7B29E">
+      <p style="margin:0 0 10px">Ordering one pouch without JavaScript? Pick it here, or {% include shop-contact.html %}.</p>
+      <ul style="margin:0;padding-left:20px">
+        {%- for p in site.data.premixes %}{% for z in site.data.shop.zones %}
+        {%- capture k %}{% for q in site.data.premixes %}{{ q.key }}{% if q.key == p.key %}1{% else %}0{% endif %}{% endfor %}-{{ z[0] }}{% endcapture %}
+        {%- if site.data.shop.links[k] != "" %}
+        <li><a href="{{ site.data.shop.links[k] }}">{{ p.name }}, {{ z[1].label }}</a></li>
+        {%- endif %}
+        {%- endfor %}{% endfor %}
       </ul>
     </div>
-    <div style="flex:1 1 400px;min-width:min(100%,300px);display:flex;justify-content:center">
-      {% include shop-order.html %}
-    </div>
-  </div>
+  </noscript>
   {%- else %}
   <div style="display:inline-block;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.16em;text-transform:uppercase;color:#2B1B12;background:#F2A93C;padding:7px 13px;border-radius:999px;font-weight:500">Launching this fall</div>
   <h1 id="page-h1" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(2.3rem,6vw,4.2rem);line-height:0.98;letter-spacing:0;margin:18px 0 0;max-width:26ch">Masala Chai Premix, <span style="color:#FF6F61;font-style:italic">made in Saskatoon</span></h1>
@@ -36,6 +44,7 @@ og_image: "uploads/og-image.jpg"
 
 <div data-gc-reveal>
 
+{%- unless site.data.shop.open %}
 <section aria-labelledby="what-h2" style="max-width:1240px;margin:0 auto;padding:clamp(30px,4vw,60px) clamp(18px,4vw,40px)">
   <h2 id="what-h2" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(1.9rem,4.4vw,3rem);letter-spacing:0;margin:0 0 28px;color:#F3E8D3">The two blends</h2>
   <div data-gc-stagger style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:clamp(16px,2vw,24px)">
@@ -50,6 +59,7 @@ og_image: "uploads/og-image.jpg"
   </div>
   <p style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#C58A2E;text-align:center;margin:26px 0 0">125 g a pouch · 25 cups · hand crafted in Saskatoon</p>
 </section>
+{%- endunless %}
 
 <section aria-labelledby="why-h2" style="background:rgba(29,18,11,0.6);border-top:1px solid rgba(243,232,211,0.08);border-bottom:1px solid rgba(243,232,211,0.08)">
   <div style="max-width:1240px;margin:0 auto;padding:clamp(46px,6vw,84px) clamp(18px,4vw,40px)">
@@ -77,51 +87,14 @@ og_image: "uploads/og-image.jpg"
 </div>
 
 {%- if site.data.shop.open %}
-{%- assign shop = site.data.shop %}
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@graph": [
+  "@type": "ItemList",
+  "name": "God's Chai masala chai premixes",
+  "itemListElement": [
     {%- for p in site.data.premixes %}
-    {
-      "@type": "Product",
-      "@id": "{{ page.url | absolute_url }}#{{ p.img }}",
-      "name": "{{ p.name | escape }} Masala Chai Premix, 125 g",
-      "description": {{ p.blurb | jsonify }},
-      "image": "{{ '/uploads/opt/' | absolute_url }}{{ p.img }}-500.jpg",
-      "brand": { "@type": "Brand", "name": "God's Chai" },
-      "weight": { "@type": "QuantitativeValue", "value": 125, "unitCode": "GRM" },
-      "offers": {
-        "@type": "Offer",
-        "url": "{{ page.url | absolute_url }}#order",
-        "price": "{% include money.html v=shop.price %}",
-        "priceCurrency": "CAD",
-        "availability": "https://schema.org/InStock",
-        "itemCondition": "https://schema.org/NewCondition",
-        "seller": { "@id": "{{ '/' | absolute_url }}#organization" },
-        "shippingDetails": [
-          {
-            "@type": "OfferShippingDetails",
-            "shippingRate": { "@type": "MonetaryAmount", "value": "{% include money.html v=shop.zones.saskatoon.fee %}", "currency": "CAD" },
-            "shippingDestination": { "@type": "DefinedRegion", "addressCountry": "CA", "addressRegion": "SK", "postalCodePrefix": "S7" }
-          },
-          {
-            "@type": "OfferShippingDetails",
-            "shippingRate": { "@type": "MonetaryAmount", "value": "{% include money.html v=shop.zones.canada.fee %}", "currency": "CAD" },
-            "shippingDestination": { "@type": "DefinedRegion", "addressCountry": "CA" }
-          }
-        ],
-        "hasMerchantReturnPolicy": {
-          "@type": "MerchantReturnPolicy",
-          "url": "{{ '/refunds/' | absolute_url }}",
-          "applicableCountry": "CA",
-          "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
-          "merchantReturnDays": {{ shop.refund_days }},
-          "returnFees": "https://schema.org/FreeReturn",
-          "refundType": "https://schema.org/FullRefund"
-        }
-      }
-    }{% unless forloop.last %},{% endunless %}
+    { "@type": "ListItem", "position": {{ forloop.index }}, "url": "{{ '/premixes/' | absolute_url }}{{ p.slug }}/" }{% unless forloop.last %},{% endunless %}
     {%- endfor %}
   ]
 }

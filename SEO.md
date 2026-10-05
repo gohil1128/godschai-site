@@ -139,6 +139,19 @@ When they've paid, Square emails their receipt and sends them back to
 the Square app) with their address, and a note saying *Saskatoon delivery* or
 *Canada Post*.
 
+**How people buy.** Every premix card and product page has an *Add to cart*
+button. The bag in the top bar opens the cart, which slides in from the
+right. It shows the pouches, the delivery choice, PST and a "free shipping"
+progress bar, then the Square checkout button. The cart is remembered in the
+visitor's own browser as they move around the site. It empties itself once
+they reach `/order-confirmed/`. The code is in `assets/js/cart.js` and
+`_includes/cart-drawer.html`.
+
+**Each blend has its own page**: `/premixes/original-masala/` and
+`/premixes/rose-cardamom/`. Their words come from `_data/premixes.yml`:
+`tagline` (the line on the cards), `inside` (what's in the pouch) and `brew`
+(the steps). Edit them there.
+
 **Everything about the shop is in `_data/shop.yml`:**
 
 | Setting | What it does |

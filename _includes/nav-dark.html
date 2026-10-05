@@ -29,6 +29,15 @@
       <a href="{{ '/premixes/' | relative_url }}" style="text-decoration:none;color:#EFE0CF">Premixes</a>
       <a href="{{ '/events/' | relative_url }}" style="text-decoration:none;color:#EFE0CF">Events</a>
     </div>
-    <a href="{{ site.social.instagram }}" target="_blank" rel="noopener" style="text-decoration:none;background:#F2A93C;color:#2B1B12;font-weight:700;font-size:13.5px;padding:9px 16px;border-radius:999px;white-space:nowrap" class="gc-pill">{{ site.social.instagram_handle }}</a>
+    {%- comment -%} The bag opens the cart (_includes/cart-drawer.html); it only exists while the shop is open, and stays hidden until cart.js runs. {%- endcomment %}
+    <span class="gc-navend" style="display:flex;align-items:center;gap:10px">
+      {%- if site.data.shop.open %}
+      <button type="button" class="gc-cartbtn gc-ico" data-gc-cart-open aria-label="Cart" hidden>
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M5 8h14l-1.2 11.2a2 2 0 0 1-2 1.8H8.2a2 2 0 0 1-2-1.8L5 8z"/><path d="M9 10V6.5a3 3 0 0 1 6 0V10"/></svg>
+        <b data-gc-badge hidden>0</b>
+      </button>
+      {%- endif %}
+      <a href="{{ site.social.instagram }}" target="_blank" rel="noopener" style="text-decoration:none;background:#F2A93C;color:#2B1B12;font-weight:700;font-size:13.5px;padding:9px 16px;border-radius:999px;white-space:nowrap" class="gc-pill">{{ site.social.instagram_handle }}</a>
+    </span>
   </nav>
 </header>
