@@ -178,6 +178,12 @@ bigger ones ask people to try again. Prices, PST and the shipping rule are
 written in `checkout/api/checkout.js` as well as in `shop.yml`, so change them
 in both places.
 
+**Receipts and order emails.** Square emails every customer its own receipt;
+brand it with the logo and text in `receipt-kit/README.md`. Once the checkout
+service is running, `checkout/api/square-webhook.js` also sends two emails for
+every website order: our branded order confirmation to the customer, and a
+new-order alert to you. Setup is in `checkout/README.md`.
+
 **"Add to your order"** is the small box inside the cart. It suggests
 every product from `_data/premixes.yml` that isn't in the cart yet, so a new
 product appears there on its own. A new product also needs its own Square item
