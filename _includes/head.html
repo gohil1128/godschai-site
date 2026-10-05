@@ -7,6 +7,9 @@
 {%- endcomment -%}
 {%- assign og_img = page.og_image | default: "uploads/og-image.jpg" -%}
 {%- assign theme = page.theme_color | default: "#100A05" -%}
+{%- comment -%} The checkout service's address has to be allowed for the cart to reach it. {%- endcomment -%}
+{%- assign api_origin = "" -%}
+{%- if site.data.shop.open and site.data.shop.checkout_api != "" -%}{%- assign api_parts = site.data.shop.checkout_api | split: "/" -%}{%- capture api_origin %} {{ api_parts[0] }}//{{ api_parts[2] }}{% endcapture -%}{%- endif -%}
 {%- comment -%} description_open: an alternative description for once the shop is open (_data/shop.yml). {%- endcomment -%}
 {%- assign desc = page.description -%}
 {%- if site.data.shop.open and page.description_open -%}{%- assign desc = page.description_open -%}{%- endif -%}
@@ -15,7 +18,7 @@
 <!-- Content-Security-Policy. GitHub Pages can't send response headers, so it ships as a
      meta tag. 'unsafe-inline' covers the inline styles the design relies on; there is no
      'unsafe-eval' because the site no longer evaluates JS at runtime. -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://*.list-manage.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https://*.google-analytics.com https://*.googletagmanager.com; media-src 'self'; connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://stats.g.doubleclick.net; object-src 'none'; base-uri 'self'; form-action 'self'; frame-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://*.list-manage.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https://*.google-analytics.com https://*.googletagmanager.com; media-src 'self'; connect-src 'self'{{ api_origin }} https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://stats.g.doubleclick.net; object-src 'none'; base-uri 'self'; form-action 'self'; frame-src 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 
 <title>{{ page.title }}</title>

@@ -34,8 +34,13 @@ og_image: "uploads/og-image.jpg"
         <p style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(3rem,9vw,7rem);line-height:0.92;letter-spacing:0;margin:16px 0 0;text-shadow:0 6px 40px rgba(0,0,0,0.5)">Not your<br><span style="color:#FF6F61;font-style:italic">average</span> chai.</p>
         <p style="font-size:clamp(1.05rem,1.5vw,1.3rem);line-height:1.5;color:#E7D6C4;max-width:36ch;margin:20px 0 0;text-shadow:0 2px 16px rgba(0,0,0,0.6)">Whole spices from Kerala. Single-origin Assam tea. Poured fresh, the real way.</p>
         <div style="display:flex;gap:13px;flex-wrap:wrap;margin-top:30px">
+          {%- if site.data.shop.open %}
+          <a href="{{ '/premixes/' | relative_url }}" style="text-decoration:none;background:#FF7A66;color:#2B1B12;font-weight:700;font-size:16px;padding:15px 26px;border-radius:999px;box-shadow:0 12px 34px rgba(255,122,102,0.45)" class="gc-pill-coral">Shop premixes →</a>
+          <a href="#menu" style="text-decoration:none;background:rgba(243,232,211,0.10);color:#F3E8D3;font-weight:600;font-size:16px;padding:15px 24px;border-radius:999px;border:1.5px solid rgba(243,232,211,0.3);backdrop-filter:blur(4px)" class="gc-pill-ghost">View the menu</a>
+          {%- else %}
           <a href="#menu" style="text-decoration:none;background:#FF7A66;color:#2B1B12;font-weight:700;font-size:16px;padding:15px 26px;border-radius:999px;box-shadow:0 12px 34px rgba(255,122,102,0.45)" class="gc-pill-coral">View the menu →</a>
           <a href="#hot" style="text-decoration:none;background:rgba(243,232,211,0.10);color:#F3E8D3;font-weight:600;font-size:16px;padding:15px 24px;border-radius:999px;border:1.5px solid rgba(243,232,211,0.3);backdrop-filter:blur(4px)" class="gc-pill-ghost">Explore the chai</a>
+          {%- endif %}
         </div>
         <div style="display:flex;gap:24px;margin-top:32px;flex-wrap:wrap">
           <div><div style="font-family:'Instrument Serif',serif;font-weight:400;font-size:26px;color:#F2A93C">100%</div><div style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.1em;color:#CBB6A6;text-transform:uppercase;margin-top:2px">Real spices</div></div>
@@ -62,6 +67,42 @@ og_image: "uploads/og-image.jpg"
       </div>
     </div>
   </div>
+
+  <!-- PREMIXES -->
+  <section id="premix" aria-labelledby="premix-h2" style="background:linear-gradient(135deg,#3D2A1B,#2E1D13);scroll-margin-top:84px">
+    <div style="max-width:1240px;margin:0 auto;padding:clamp(46px,6vw,88px) clamp(18px,4vw,40px);display:flex;gap:clamp(28px,4vw,60px);align-items:center;flex-wrap:wrap">
+      <div style="flex:1 1 400px;min-width:300px">
+        <div style="display:inline-block;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.16em;text-transform:uppercase;color:#2B1B12;background:#F2A93C;padding:7px 13px;border-radius:999px;font-weight:500">{% if site.data.shop.open %}Now delivering{% else %}Launching this fall{% endif %}</div>
+        <h2 id="premix-h2" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(2.1rem,5vw,3.6rem);letter-spacing:0;line-height:0.98;color:#F3E8D3;margin:18px 0 0">Premixes.<br>The same chai, at home.</h2>
+        {%- if site.data.shop.open %}
+        <p style="font-size:1.08rem;line-height:1.55;color:#D6C7B4;max-width:40ch;margin:16px 0 26px">Two blends, hand crafted in Saskatoon and stove-top ready in minutes — each pouch makes 25 cups. ${% include money.html v=site.data.shop.price %} a pouch, delivered free anywhere in Saskatoon.</p>
+        <a href="{{ '/premixes/' | relative_url }}" style="display:inline-block;text-decoration:none;background:#F2A93C;color:#2B1B12;font-weight:700;font-size:16px;padding:15px 28px;border-radius:999px" class="gc-pill">Shop the premixes</a>
+        <p style="margin:14px 0 0;font-size:13px;color:#AB9280">Shipped across Canada too · <a href="{{ '/shipping/' | relative_url }}" style="color:#AB9280">delivery details</a></p>
+        {%- else %}
+        <p style="font-size:1.08rem;line-height:1.55;color:#D6C7B4;max-width:40ch;margin:16px 0 26px">Two blends, hand crafted in Saskatoon and stove-top ready in minutes — each pouch makes 25 cups. Get first dibs the day they drop.</p>
+        {% include signup-form.html id="premix" button="Get launch updates" big=true list="premix-launch" note="No spam. Just one note on launch day." %}
+        <p style="margin:18px 0 0"><a href="{{ '/premixes/' | relative_url }}" style="text-decoration:none;color:#F2A93C;font-weight:600;font-size:15px;border-bottom:2px solid rgba(242,169,60,0.5);padding-bottom:2px">More about the premixes →</a></p>
+        {%- endif %}
+      </div>
+      {%- comment -%} The real pouch fronts, tilted against each other. {%- endcomment -%}
+      <div style="flex:1 1 420px;min-width:280px;display:flex;gap:clamp(14px,2vw,26px);justify-content:center;align-items:flex-end">
+        {% for pouch in site.data.premixes %}
+        <div style="flex:0 1 250px;min-width:0;display:flex;flex-direction:column;gap:14px;transform:{{ pouch.tilt }}">
+          {%- if site.data.shop.open %}<a href="{{ '/premixes/' | relative_url }}{{ pouch.slug }}/" style="display:block" tabindex="-1" aria-hidden="true">{% endif %}
+          {% include img.html base=pouch.img ext="jpg" widths="250,500" sizes="(max-width:700px) 42vw, 250px" w="544" h="952" alt=pouch.alt wrap="display:block" style="width:100%;height:auto;display:block;border-radius:12px 12px 16px 16px;box-shadow:0 30px 50px -22px rgba(0,0,0,0.7)" %}
+          {%- if site.data.shop.open %}</a>{% endif %}
+          <div style="text-align:center">
+            <div style="font-family:'Instrument Serif',serif;font-size:1.25rem;color:#F3E8D3;line-height:1.1">{% if site.data.shop.open %}<a href="{{ '/premixes/' | relative_url }}{{ pouch.slug }}/" style="color:inherit;text-decoration:none">{{ pouch.name }}</a>{% else %}{{ pouch.name }}{% endif %}</div>
+            <div style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:#F2A93C;margin-top:5px">{{ pouch.notes }}</div>
+            {%- if site.data.shop.open %}
+            <button type="button" class="gc-add gc-pill" data-gc-add="{{ pouch.key }}" hidden style="margin-top:12px;padding:10px 18px;font-size:14px">Add · ${% include money.html v=site.data.shop.price %}</button>
+            {%- endif %}
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
 
   <!-- HOT -->
   {%- assign hot = site.data.menu.hot | first %}
@@ -213,42 +254,6 @@ og_image: "uploads/og-image.jpg"
         {%- endfor %}
       </div>
       <p style="margin:26px 0 0"><a href="{{ '/how-to-make-masala-chai/' | relative_url }}" style="text-decoration:none;color:#F2A93C;font-weight:600;font-size:15px;border-bottom:2px solid rgba(242,169,60,0.5);padding-bottom:2px">Read the full guide to making masala chai →</a></p>
-    </div>
-  </section>
-
-  <!-- PREMIXES -->
-  <section id="premix" aria-labelledby="premix-h2" style="background:linear-gradient(135deg,#3D2A1B,#2E1D13);scroll-margin-top:84px">
-    <div style="max-width:1240px;margin:0 auto;padding:clamp(46px,6vw,88px) clamp(18px,4vw,40px);display:flex;gap:clamp(28px,4vw,60px);align-items:center;flex-wrap:wrap">
-      <div style="flex:1 1 400px;min-width:300px">
-        <div style="display:inline-block;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.16em;text-transform:uppercase;color:#2B1B12;background:#F2A93C;padding:7px 13px;border-radius:999px;font-weight:500">{% if site.data.shop.open %}Now delivering{% else %}Launching this fall{% endif %}</div>
-        <h2 id="premix-h2" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(2.1rem,5vw,3.6rem);letter-spacing:0;line-height:0.98;color:#F3E8D3;margin:18px 0 0">Premixes.<br>The same chai, at home.</h2>
-        {%- if site.data.shop.open %}
-        <p style="font-size:1.08rem;line-height:1.55;color:#D6C7B4;max-width:40ch;margin:16px 0 26px">Two blends, hand crafted in Saskatoon and stove-top ready in minutes — each pouch makes 25 cups. ${% include money.html v=site.data.shop.price %} a pouch, delivered free anywhere in Saskatoon.</p>
-        <a href="{{ '/premixes/' | relative_url }}" style="display:inline-block;text-decoration:none;background:#F2A93C;color:#2B1B12;font-weight:700;font-size:16px;padding:15px 28px;border-radius:999px" class="gc-pill">Shop the premixes</a>
-        <p style="margin:14px 0 0;font-size:13px;color:#AB9280">Shipped across Canada too · <a href="{{ '/shipping/' | relative_url }}" style="color:#AB9280">delivery details</a></p>
-        {%- else %}
-        <p style="font-size:1.08rem;line-height:1.55;color:#D6C7B4;max-width:40ch;margin:16px 0 26px">Two blends, hand crafted in Saskatoon and stove-top ready in minutes — each pouch makes 25 cups. Get first dibs the day they drop.</p>
-        {% include signup-form.html id="premix" button="Get launch updates" big=true list="premix-launch" note="No spam. Just one note on launch day." %}
-        <p style="margin:18px 0 0"><a href="{{ '/premixes/' | relative_url }}" style="text-decoration:none;color:#F2A93C;font-weight:600;font-size:15px;border-bottom:2px solid rgba(242,169,60,0.5);padding-bottom:2px">More about the premixes →</a></p>
-        {%- endif %}
-      </div>
-      {%- comment -%} The real pouch fronts, tilted against each other. {%- endcomment -%}
-      <div style="flex:1 1 420px;min-width:280px;display:flex;gap:clamp(14px,2vw,26px);justify-content:center;align-items:flex-end">
-        {% for pouch in site.data.premixes %}
-        <div style="flex:0 1 250px;min-width:0;display:flex;flex-direction:column;gap:14px;transform:{{ pouch.tilt }}">
-          {%- if site.data.shop.open %}<a href="{{ '/premixes/' | relative_url }}{{ pouch.slug }}/" style="display:block" tabindex="-1" aria-hidden="true">{% endif %}
-          {% include img.html base=pouch.img ext="jpg" widths="250,500" sizes="(max-width:700px) 42vw, 250px" w="544" h="952" alt=pouch.alt wrap="display:block" style="width:100%;height:auto;display:block;border-radius:12px 12px 16px 16px;box-shadow:0 30px 50px -22px rgba(0,0,0,0.7)" %}
-          {%- if site.data.shop.open %}</a>{% endif %}
-          <div style="text-align:center">
-            <div style="font-family:'Instrument Serif',serif;font-size:1.25rem;color:#F3E8D3;line-height:1.1">{% if site.data.shop.open %}<a href="{{ '/premixes/' | relative_url }}{{ pouch.slug }}/" style="color:inherit;text-decoration:none">{{ pouch.name }}</a>{% else %}{{ pouch.name }}{% endif %}</div>
-            <div style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:#F2A93C;margin-top:5px">{{ pouch.notes }}</div>
-            {%- if site.data.shop.open %}
-            <button type="button" class="gc-add gc-pill" data-gc-add="{{ pouch.key }}" hidden style="margin-top:12px;padding:10px 18px;font-size:14px">Add · ${% include money.html v=site.data.shop.price %}</button>
-            {%- endif %}
-          </div>
-        </div>
-        {% endfor %}
-      </div>
     </div>
   </section>
 

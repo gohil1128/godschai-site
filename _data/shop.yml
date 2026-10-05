@@ -17,6 +17,13 @@ price: 14.99
 # checkout links below, so raise it with care.
 max_each: 3
 
+# The checkout service: checkout/ in this repo, hosted on Vercel. It builds a
+# Square checkout for any quantity on the spot. While checkout_api is blank,
+# the cart uses the pre-made links at the bottom of this file, and max_each
+# applies. Once it's set, people can order up to max_each_api of each blend.
+checkout_api: ""
+max_each_api: 99
+
 # Contact for orders and refunds. Shown on the shipping, refund, privacy and
 # thank-you pages, and set as the support email on every Square checkout.
 # Leave it blank and those pages point people at Instagram instead.

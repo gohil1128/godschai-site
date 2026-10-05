@@ -11,6 +11,7 @@
   the product pages (_layouts/product.html).
 {%- endcomment -%}
 {%- assign shop = site.data.shop -%}
+{%- if shop.checkout_api != "" -%}{%- assign shop_max = shop.max_each_api -%}{%- else -%}{%- assign shop_max = shop.max_each -%}{%- endif -%}
 <style>
   /* Bag in the nav */
   .gc-cartbtn{position:relative;display:flex;align-items:center;justify-content:center;width:42px;height:42px;
@@ -169,7 +170,7 @@
         </div>
       </div>
       {%- endfor %}
-      <p data-gc-limit hidden style="margin:10px 0 0;font-size:13px;color:#AB9280">Up to {{ shop.max_each }} of each blend online. Want more? {% include shop-contact.html %}.</p>
+      <p data-gc-limit hidden style="margin:10px 0 0;font-size:13px;color:#AB9280">Up to {{ shop_max }} of each blend online. Want more? {% include shop-contact.html %}.</p>
 
       {%- comment -%}
         "Add to your order": every product from _data/premixes.yml that isn't in
@@ -219,5 +220,5 @@
     </div>
   </div>
 </div>
-<script type="application/json" data-gc-cart-data>{"price":{{ shop.price }},"max":{{ shop.max_each }},"blends":[{% for p in site.data.premixes %}{{ p.key | jsonify }}{% unless forloop.last %},{% endunless %}{% endfor %}],"fees":{ {%- for z in shop.zones -%}{{ z[0] | jsonify }}:{{ z[1].fee }}{% unless forloop.last %},{% endunless %}{%- endfor -%} },"tax":{ {%- for z in shop.zones -%}{{ z[0] | jsonify }}:{{ z[1].tax | default: 0 }}{% unless forloop.last %},{% endunless %}{%- endfor -%} },"free":{ {%- for z in shop.zones -%}{{ z[0] | jsonify }}:{{ z[1].free_from | default: 0 }}{% unless forloop.last %},{% endunless %}{%- endfor -%} },"links":{{ shop.links | jsonify }},"instagram":{{ site.social.instagram | jsonify }}}</script>
+<script type="application/json" data-gc-cart-data>{"price":{{ shop.price }},"max":{{ shop_max }},"api":{{ shop.checkout_api | jsonify }},"blends":[{% for p in site.data.premixes %}{{ p.key | jsonify }}{% unless forloop.last %},{% endunless %}{% endfor %}],"fees":{ {%- for z in shop.zones -%}{{ z[0] | jsonify }}:{{ z[1].fee }}{% unless forloop.last %},{% endunless %}{%- endfor -%} },"tax":{ {%- for z in shop.zones -%}{{ z[0] | jsonify }}:{{ z[1].tax | default: 0 }}{% unless forloop.last %},{% endunless %}{%- endfor -%} },"free":{ {%- for z in shop.zones -%}{{ z[0] | jsonify }}:{{ z[1].free_from | default: 0 }}{% unless forloop.last %},{% endunless %}{%- endfor -%} },"links":{{ shop.links | jsonify }},"instagram":{{ site.social.instagram | jsonify }}}</script>
 <script src="{{ '/assets/js/cart.js' | relative_url }}" defer></script>
