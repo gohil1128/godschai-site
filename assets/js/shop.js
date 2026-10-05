@@ -74,10 +74,18 @@
         var more = freeAt - n;
         nudge.textContent = 'Add ' + more + ' more pouch' + (more === 1 ? '' : 'es') + ' and shipping is free.';
       }
+      // Sales tax, worked out the way Square does it: per blend, in cents,
+      // rounded, on the pouches only (never on shipping).
+      var rate = z ? data.tax[z] : 0, tax = 0;
+      if (rate) for (var k in qty) tax += Math.round(qty[k] * Math.round(data.price * 100) * rate);
+      tax /= 100;
+      var taxRow = root.querySelector('[data-gc-taxrow]');
+      taxRow.hidden = !tax;
+      if (tax) root.querySelector('[data-gc-tax]').textContent = money(tax);
       root.querySelector('[data-gc-count]').textContent = n === 1 ? '1 pouch' : n + ' pouches';
       root.querySelector('[data-gc-sub]').textContent = money(sub);
       root.querySelector('[data-gc-fee]').textContent = !z ? '—' : fee ? money(fee) : 'Free';
-      root.querySelector('[data-gc-total]').textContent = money(sub + fee);
+      root.querySelector('[data-gc-total]').textContent = money(sub + tax + fee);
 
       var link = n && z ? data.links[name + '-' + z] || '' : '';
       url = SQUARE.test(link) ? link : '';

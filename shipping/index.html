@@ -19,6 +19,9 @@ breadcrumb: "Shipping & Delivery"
   <div style="max-width:66ch" class="gc-prose">
     <h2>In Saskatoon: free</h2>
     <p>{{ yxe.how }} {{ yxe.when }} Choose <strong>{{ yxe.label }}</strong> on the order box, and give your address on Square's checkout page. If we need to reach you about the drop-off, we'll use the email or phone number you gave there.</p>
+    {%- if yxe.tax %}
+    <p>Saskatoon orders include {{ yxe.tax | times: 100 | round }}% {{ yxe.tax_name }} on the pouches. Orders shipped elsewhere in Canada don't.</p>
+    {%- endif %}
 
     <h2>Everywhere else in Canada: ${% include money.html v=ca.fee %}, or free on {{ ca.free_from }}+</h2>
     <p>{{ ca.how }} {{ ca.when }} We'll email you the tracking number once it's in the post.</p>

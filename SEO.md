@@ -144,10 +144,10 @@ the Square app) with their address, and a note saying *Saskatoon delivery* or
 | Setting | What it does |
 | --- | --- |
 | `open` | The launch switch. `false` shows "launching this fall" and the email signups; `true` turns every premix box on the site into "order now". |
-| `price` | $14.99 a pouch. No tax is added. |
+| `price` | $14.99 a pouch, before tax. |
 | `max_each` | Most pouches of one blend in an order (3). |
 | `email` | Your contact for orders and refunds (sip@godschai.com). Blank means the pages say "message us on Instagram" instead. |
-| `zones` | Saskatoon (free) and the rest of Canada ($9.99, free from 5 pouches): the fee, the free-shipping point (`free_from`), and the delivery wording shown on the order box, `/shipping/` and `/order-confirmed/`. |
+| `zones` | Saskatoon (free delivery, 6% PST) and the rest of Canada ($9.99, free from 5 pouches, no PST): the fee, the tax (`tax`, `tax_name`), the free-shipping point (`free_from`), and the delivery wording shown on the order box, `/shipping/` and `/order-confirmed/`. |
 | `refund_days` | How long people have to ask for a refund (30). |
 | `links` | The 30 Square checkout links, one for every mix of pouches and zone. `o2r1-canada` is two Original Masala and one Rose & Cardamom, shipped. The three Canada links with 5 or more pouches carry no shipping fee. |
 
@@ -184,9 +184,13 @@ dollar or two more.
 refund**. The policy on `/refunds/` covers opened pouches when there's a
 genuine problem, and nobody has to post anything back.
 
-**GST:** none is charged for now. If sales go past $30,000 in four quarters in a
-row, you'll have to register for GST. Then turn tax on for the items in Square,
-and change the "no tax added" line on `/premixes/`.
+**Tax:** Saskatoon orders charge your Square PST (6%) on the pouches; orders
+shipped elsewhere in Canada charge none, and shipping is never taxed. The
+Saskatoon checkout links carry the PST themselves, so changing the rate means
+changing it in Square and `tax:` in `shop.yml` together. No GST is charged for
+now. If sales go past $30,000 in four quarters in a row, you'll have to
+register for GST, and every checkout link will need it added — a job for
+Claude with Square connected.
 
 ---
 
