@@ -1,0 +1,36 @@
+---
+layout: default
+title: "Order Confirmed | God's Chai Saskatoon"
+description: "Thank you for ordering God's Chai masala chai premix. Your receipt is on its way from Square, and here is what happens next with your delivery."
+sitemap: false
+head_extra: '<meta name="robots" content="noindex, follow">'
+---
+{%- comment -%}
+  Where Square sends people after they pay (the redirect on every checkout
+  link in _data/shop.yml). Square adds the order's IDs to the address; this
+  page doesn't read them.
+{%- endcomment -%}
+{%- assign shop = site.data.shop -%}
+<section aria-labelledby="page-h1" style="max-width:760px;margin:0 auto;padding:clamp(110px,14vh,170px) clamp(18px,4vw,40px) clamp(60px,8vw,100px);text-align:center">
+  <canvas class="gc-status" data-gc-done="{{ '/assets/js/particles.js' | relative_url }}" aria-hidden="true" hidden></canvas>
+  <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.2em;text-transform:uppercase;color:#F2A93C;margin-bottom:14px">Order confirmed</div>
+  <h1 id="page-h1" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(2.3rem,6vw,4rem);line-height:1;letter-spacing:0;margin:0">Thank you. <span style="color:#FF6F61;font-style:italic">That's ordered.</span></h1>
+  <p style="font-size:clamp(1.05rem,1.5vw,1.2rem);line-height:1.6;color:#E7D6C4;max-width:48ch;margin:22px auto 0">Square is emailing your receipt now. Here's what happens next.</p>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin:36px 0 0;text-align:left">
+    {%- for z in shop.zones %}
+    <div style="padding:22px 22px 24px;background:rgba(28,17,10,0.8);border:1px solid rgba(242,169,60,0.16);border-radius:20px">
+      <div style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#F2A93C">{{ z[1].label }}</div>
+      <p style="color:#C7B29E;line-height:1.55;margin:10px 0 0;font-size:0.97rem">{{ z[1].how }} {{ z[1].when }}{% if z[0] == "canada" %} We'll email the tracking number.{% endif %}</p>
+    </div>
+    {%- endfor %}
+  </div>
+
+  <p style="color:#AB9280;line-height:1.6;margin:28px auto 0;max-width:52ch;font-size:0.97rem" class="gc-prose">Something not right with the order? Just {% include shop-contact.html %}.</p>
+
+  <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin:30px 0 0">
+    <a href="{{ '/how-to-make-masala-chai/' | relative_url }}" style="text-decoration:none;background:#F2A93C;color:#2B1B12;font-weight:700;font-size:15px;padding:14px 24px;border-radius:999px" class="gc-pill">Read the brew guide while you wait</a>
+    <a href="{{ '/' | relative_url }}" style="text-decoration:none;border:1px solid rgba(243,232,211,0.28);color:#F3E8D3;font-weight:600;font-size:15px;padding:13px 24px;border-radius:999px" class="gc-pill-ghost">Back to home</a>
+  </div>
+</section>
+<script src="{{ '/assets/js/shop.js' | relative_url }}" defer></script>

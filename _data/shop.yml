@@ -1,0 +1,80 @@
+# The premix shop. Everything about selling lives here; SEO.md ("The shop")
+# walks through it in plain English.
+#
+# Payment happens on Square's own checkout page, never on this site: the
+# buttons on /premixes/ just send people to one of the Square checkout links
+# below. Card numbers and addresses go straight to Square.
+
+# The switch. false: the site shows "launching this fall" and the email
+# signups, exactly as before. true: every premix box turns into "order now".
+open: false
+
+# Per pouch, in dollars. This is what the site shows; what people are actually
+# charged is set in Square, so change both together. No tax is added.
+price: 14.99
+
+# Most pouches of one blend in a single order. Each extra step means more
+# checkout links below, so raise it with care.
+max_each: 3
+
+# Contact for orders and refunds. Shown on the shipping, refund, privacy and
+# thank-you pages, and set as the support email on every Square checkout.
+# Leave it blank and those pages point people at Instagram instead.
+email: ""
+
+# Where it can go. No pickups: every order is delivered or shipped.
+# fee is in dollars and must match the shipping fee on that zone's Square links.
+zones:
+  saskatoon:
+    label: "Saskatoon"
+    fee: 0
+    short: "Free delivery"
+    how: "We drop it at your door, free, anywhere in Saskatoon."
+    when: "Usually within 3 days of your order."
+  canada:
+    label: "Anywhere else in Canada"
+    fee: 12.99
+    short: "Canada Post, tracked"
+    how: "We ship it by Canada Post Expedited Parcel, with tracking."
+    when: "Packed within 2 business days, then usually 2–7 business days in the post."
+
+# Refunds. days: how long after delivery someone has to ask.
+refund_days: 30
+
+# One Square checkout link per order: o<Original pouches>r<Rose pouches>-<zone>.
+# So o2r1-canada is two Original Masala and one Rose & Cardamom, shipped.
+# Every link asks for a shipping address and sends people back to
+# /order-confirmed/ once they've paid. A blank one just shows "message us"
+# for that order, so the shop never sends anyone to a dead link.
+links:
+  o0r1-saskatoon: ""
+  o0r2-saskatoon: ""
+  o0r3-saskatoon: ""
+  o1r0-saskatoon: ""
+  o1r1-saskatoon: ""
+  o1r2-saskatoon: ""
+  o1r3-saskatoon: ""
+  o2r0-saskatoon: ""
+  o2r1-saskatoon: ""
+  o2r2-saskatoon: ""
+  o2r3-saskatoon: ""
+  o3r0-saskatoon: ""
+  o3r1-saskatoon: ""
+  o3r2-saskatoon: ""
+  o3r3-saskatoon: ""
+
+  o0r1-canada: ""
+  o0r2-canada: ""
+  o0r3-canada: ""
+  o1r0-canada: ""
+  o1r1-canada: ""
+  o1r2-canada: ""
+  o1r3-canada: ""
+  o2r0-canada: ""
+  o2r1-canada: ""
+  o2r2-canada: ""
+  o2r3-canada: ""
+  o3r0-canada: ""
+  o3r1-canada: ""
+  o3r2-canada: ""
+  o3r3-canada: ""

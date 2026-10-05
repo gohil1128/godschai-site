@@ -1,0 +1,10 @@
+{%- comment -%}
+  How to reach us about an order: the shop email from _data/shop.yml, or
+  Instagram until there is one. Reads as the end of a sentence:
+  "…just {% include shop-contact.html %}."
+{%- endcomment -%}
+{%- if site.data.shop.email != "" -%}
+email us at <a href="mailto:{{ site.data.shop.email }}">{{ site.data.shop.email }}</a>
+{%- else -%}
+message us on <a href="{{ site.social.instagram }}" target="_blank" rel="noopener">Instagram ({{ site.social.instagram_handle }})</a>
+{%- endif -%}

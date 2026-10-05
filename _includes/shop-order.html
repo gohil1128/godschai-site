@@ -1,0 +1,111 @@
+{%- comment -%}
+  The order box on /premixes/ (only rendered once _data/shop.yml says open).
+
+  It never takes a payment. People pick pouches and a delivery zone, and the
+  button sends them to the matching Square checkout link from _data/shop.yml;
+  Square's page is where the card and address are typed. assets/js/shop.js
+  does the adding up. Without JavaScript the box stays hidden and the
+  <noscript> list of single-pouch links shows instead.
+{%- endcomment -%}
+{%- assign shop = site.data.shop -%}
+<style>
+  .gc-shop{scroll-margin-top:100px;max-width:540px;background:rgba(28,17,10,0.86);border:1px solid rgba(242,169,60,0.22);
+    border-radius:24px;padding:clamp(20px,3.2vw,30px);box-shadow:0 30px 60px -36px rgba(0,0,0,0.8)}
+  .gc-shop[hidden]{display:none}
+  .gc-shop fieldset{border:0;margin:0 0 22px;padding:0;min-width:0}
+  .gc-shop legend{padding:0;margin:0 0 12px;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.16em;
+    text-transform:uppercase;color:#F2A93C}
+  .gc-shop-row{display:flex;align-items:center;gap:14px;padding:10px 0;border-top:1px solid rgba(243,232,211,0.08)}
+  .gc-shop-row:first-of-type{border-top:0}
+  .gc-shop-row img{width:40px;height:auto;border-radius:5px 5px 7px 7px;display:block}
+  .gc-shop-name{flex:1 1 auto;min-width:0}
+  .gc-shop-name b{display:block;font-family:'Instrument Serif',serif;font-weight:400;font-size:1.22rem;color:#F3E8D3;line-height:1.15}
+  .gc-shop-name span{display:block;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.08em;color:#AB9280;margin-top:3px}
+  .gc-step{display:flex;align-items:center;gap:6px;flex:0 0 auto}
+  .gc-step button{width:38px;height:38px;border-radius:999px;border:1px solid rgba(243,232,211,0.22);background:transparent;
+    color:#F3E8D3;font-size:19px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}
+  .gc-step button:disabled{opacity:0.3;cursor:default;border-color:rgba(243,232,211,0.22)!important;color:#F3E8D3!important}
+  .gc-step output{min-width:26px;text-align:center;font-family:'DM Mono',monospace;font-size:16px;color:#F3E8D3}
+  .gc-zone{display:flex;align-items:center;gap:12px;padding:13px 16px;margin:0 0 10px;border:1px solid rgba(243,232,211,0.14);
+    border-radius:16px;cursor:pointer;background:rgba(243,232,211,0.03)}
+  .gc-zone input{accent-color:#F2A93C;width:18px;height:18px;margin:0;flex:0 0 auto}
+  .gc-zone > span{flex:1 1 auto;min-width:0}
+  .gc-zone b{display:block;color:#F3E8D3;font-weight:600;font-size:15px}
+  .gc-zone small{display:block;color:#AB9280;font-size:13px;margin-top:2px}
+  .gc-zone em{font-style:normal;font-family:'DM Mono',monospace;font-size:13px;color:#F2A93C;white-space:nowrap}
+  .gc-zone.is-on{background:rgba(242,169,60,0.07)}
+  .gc-shop-sum{border-top:1px solid rgba(243,232,211,0.12);padding-top:14px;margin:0 0 18px;font-size:15px;color:#C7B29E}
+  .gc-shop-sum div{display:flex;justify-content:space-between;gap:12px;padding:3px 0}
+  .gc-shop-sum span:last-child{font-family:'DM Mono',monospace;color:#F3E8D3}
+  .gc-shop-sum .gc-shop-total{margin-top:6px;font-size:17px;color:#F3E8D3;font-weight:600}
+  .gc-shop-go{width:100%;border:0;cursor:pointer;background:#F2A93C;color:#2B1B12;font-weight:700;font-size:16px;
+    font-family:'Hanken Grotesk',sans-serif;padding:16px 26px;border-radius:999px}
+  .gc-shop .gc-shop-go:disabled{background:#F2A93C!important;opacity:0.42;cursor:not-allowed;transform:none}
+  .gc-shop-hint{min-height:1.4em;margin:10px 0 0;text-align:center;font-size:14px;color:#E7D6C4}
+  .gc-shop-safe{display:flex;gap:10px;align-items:flex-start;margin:16px 0 0;font-size:13px;line-height:1.5;color:#AB9280}
+  .gc-shop-safe svg{flex:0 0 auto;margin-top:2px;color:#C58A2E}
+  .gc-shop a{color:#F2A93C}
+  @media (prefers-reduced-motion:reduce){.gc-step button{transition:none}}
+</style>
+
+<div id="order" class="gc-shop" data-gc-shop hidden>
+  <fieldset>
+    <legend>1 · Pick your pouches</legend>
+    {%- for p in site.data.premixes %}
+    <div class="gc-shop-row" data-gc-blend="{{ p.key }}">
+      {% include img.html base=p.img ext="jpg" widths="250" sizes="40px" w="544" h="952" alt="" wrap="display:block;flex:0 0 auto" %}
+      <div class="gc-shop-name"><b>{{ p.name }}</b><span>${% include money.html v=shop.price %} · 125 g · 25 cups</span></div>
+      <div class="gc-step" role="group" aria-label="{{ p.name }} pouches">
+        <button type="button" class="gc-ico" data-gc-less aria-label="One fewer {{ p.name }}">&minus;</button>
+        <output aria-label="{{ p.name }} pouches">0</output>
+        <button type="button" class="gc-ico" data-gc-more aria-label="One more {{ p.name }}">+</button>
+      </div>
+    </div>
+    {%- endfor %}
+  </fieldset>
+
+  <fieldset>
+    <legend>2 · Where's it going?</legend>
+    {%- for z in shop.zones %}
+    {%- assign zfee = z[1].fee %}
+    <label class="gc-zone gc-card">
+      <input type="radio" name="gc-zone" value="{{ z[0] }}">
+      <span><b>{{ z[1].label }}</b><small>{{ z[1].short }} · {{ z[1].when }}</small></span>
+      <em>{% if zfee == 0 %}Free{% else %}${% include money.html v=zfee %}{% endif %}</em>
+    </label>
+    {%- endfor %}
+    <p style="margin:4px 2px 0;font-size:13px;color:#AB9280">No pickups — every order comes to you. <a href="{{ '/shipping/' | relative_url }}">How delivery works</a></p>
+  </fieldset>
+
+  <div class="gc-shop-sum" aria-live="polite">
+    <div><span data-gc-count>Pouches</span><span data-gc-sub>$0.00</span></div>
+    <div><span>Delivery</span><span data-gc-fee>—</span></div>
+    <div class="gc-shop-total"><span>Total</span><span data-gc-total>$0.00</span></div>
+  </div>
+
+  <button type="button" class="gc-shop-go gc-pill" data-gc-go disabled>Checkout securely with Square</button>
+  <p class="gc-shop-hint" data-gc-hint aria-live="polite"></p>
+
+  <p class="gc-shop-safe">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false"><rect x="4" y="10.5" width="16" height="10.5" rx="2.5"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg>
+    <span>You pay on Square's secure checkout. Your card and address go straight to Square — never through this site — and we never see your card number. Opened a pouch and something's wrong? <a href="{{ '/refunds/' | relative_url }}">We'll still refund it.</a></span>
+  </p>
+
+  <script type="application/json" data-gc-shop-data>{"price":{{ shop.price }},"max":{{ shop.max_each }},"blends":[{% for p in site.data.premixes %}{{ p.key | jsonify }}{% unless forloop.last %},{% endunless %}{% endfor %}],"fees":{ {%- for z in shop.zones -%}{{ z[0] | jsonify }}:{{ z[1].fee }}{% unless forloop.last %},{% endunless %}{%- endfor -%} },"links":{{ shop.links | jsonify }},"instagram":{{ site.social.instagram | jsonify }}}</script>
+</div>
+
+<noscript>
+  <div class="gc-shop" style="font-size:15px;line-height:1.6;color:#C7B29E">
+    <p style="margin:0 0 12px">Ordering one pouch? Pick it here. For more than one, turn on JavaScript or {% include shop-contact.html %}.</p>
+    <ul style="margin:0;padding-left:20px">
+      {%- for p in site.data.premixes %}{% for z in shop.zones %}
+      {%- capture k %}{% for q in site.data.premixes %}{{ q.key }}{% if q.key == p.key %}1{% else %}0{% endif %}{% endfor %}-{{ z[0] }}{% endcapture %}
+      {%- assign zfee = z[1].fee %}
+      {%- if shop.links[k] != "" %}
+      <li><a href="{{ shop.links[k] }}">{{ p.name }}, {{ z[1].label }}</a> — ${% include money.html v=shop.price %}{% if zfee != 0 %} + ${% include money.html v=zfee %} shipping{% endif %}</li>
+      {%- endif %}
+      {%- endfor %}{% endfor %}
+    </ul>
+  </div>
+</noscript>
+<script src="{{ '/assets/js/shop.js' | relative_url }}" defer></script>
