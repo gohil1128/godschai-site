@@ -147,6 +147,13 @@ visitor's own browser as they move around the site. It empties itself once
 they reach `/order-confirmed/`. The code is in `assets/js/cart.js` and
 `_includes/cart-drawer.html`.
 
+**Each pre-made link works for one sale only.** Square closes a checkout
+link once it has been paid. Anyone who opens a used link lands straight on
+`/order-confirmed/` without paying. So until the checkout service below is
+switched on, every order uses up its link, and that link has to be replaced
+(a job for Claude with Square connected). Once the service is on, it makes a
+fresh checkout for every order and this stops mattering.
+
 **Any quantity: the checkout service.** On its own, the cart can only check out
 orders it has a pre-made Square link for (`links:` in `_data/shop.yml`, up to
 3 of each blend). The `checkout/` folder holds a small service that builds a
