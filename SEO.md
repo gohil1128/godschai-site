@@ -147,6 +147,13 @@ visitor's own browser as they move around the site. It empties itself once
 they reach `/order-confirmed/`. The code is in `assets/js/cart.js` and
 `_includes/cart-drawer.html`.
 
+**"Add to your order"** is the small box inside the cart. It suggests
+every product from `_data/premixes.yml` that isn't in the cart yet, so a new
+product appears there on its own. A new product also needs its own Square item
+and checkout links, and adding a third product changes how the links are named,
+so it's a job to hand to Claude with Square connected. The box's heading is
+`upsell_title` in `_data/shop.yml`.
+
 **Each blend has its own page**: `/premixes/original-masala/` and
 `/premixes/rose-cardamom/`. Their words come from `_data/premixes.yml`:
 `tagline` (the line on the cards), `inside` (what's in the pouch) and `brew`

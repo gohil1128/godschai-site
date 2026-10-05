@@ -46,6 +46,11 @@ zones:
     how: "We ship it by Canada Post Expedited Parcel, with tracking."
     when: "Packed within 2 business days, then usually 2–7 business days in the post."
 
+# The small "Add to your order" box in the cart. It lists every product in
+# _data/premixes.yml that isn't in the cart yet, so a new product appears in
+# it on its own once it's added there (it also needs its Square links).
+upsell_title: "Add to your order"
+
 # Refunds. days: how long after delivery someone has to ask.
 refund_days: 30
 

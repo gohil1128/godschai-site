@@ -82,6 +82,15 @@
       root.querySelector('[data-gc-less="' + k + '"]').disabled = q <= 0;
       root.querySelector('[data-gc-more="' + k + '"]').disabled = q >= data.max;
     });
+    // "Add to your order": whatever isn't in the cart yet.
+    var ups = 0;
+    data.blends.forEach(function (k) {
+      var item = root.querySelector('[data-gc-up-item="' + k + '"]');
+      if (!item) return;
+      item.hidden = state.q[k] > 0;
+      if (!item.hidden) ups++;
+    });
+    root.querySelector('[data-gc-up]').hidden = !n || !ups;
     var atMax = data.blends.some(function (k) { return state.q[k] >= data.max; });
     root.querySelector('[data-gc-limit]').hidden = !atMax;
 
