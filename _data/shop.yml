@@ -7,10 +7,10 @@
 
 # The switch. false: the site shows "launching this fall" and the email
 # signups, exactly as before. true: every premix box turns into "order now".
-open: false
+open: true
 
 # Per pouch, in dollars. This is what the site shows; what people are actually
-# charged is set in Square, so change both together. No tax is added.
+# charged is set in Square, so change both together.
 price: 14.99
 
 # Most pouches of one blend in a single order. Each extra step means more
@@ -24,12 +24,17 @@ email: "sip@godschai.com"
 
 # Where it can go. No pickups: every order is delivered or shipped.
 # fee is in dollars and must match the shipping fee on that zone's Square links.
+# tax: the sales tax on that zone's orders, as a fraction (0.06 = 6%), and
+# tax_name what it's called. It must match the tax on that zone's Square links:
+# the Saskatoon links carry Square's 6% PST; the rest-of-Canada links don't.
 # free_from: orders with at least this many pouches ship free, so their Square
 # links carry no shipping fee.
 zones:
   saskatoon:
     label: "Saskatoon"
     fee: 0
+    tax: 0.06
+    tax_name: "PST"
     short: "Free delivery"
     how: "We drop it at your door, free, anywhere in Saskatoon."
     when: "Usually within 3 days of your order."
@@ -52,34 +57,34 @@ refund_days: 30
 # just shows "message us" for that order, so the shop never sends anyone to a
 # dead link.
 links:
-  o0r1-saskatoon: ""
-  o0r2-saskatoon: ""
-  o0r3-saskatoon: ""
-  o1r0-saskatoon: ""
-  o1r1-saskatoon: ""
-  o1r2-saskatoon: ""
-  o1r3-saskatoon: ""
-  o2r0-saskatoon: ""
-  o2r1-saskatoon: ""
-  o2r2-saskatoon: ""
-  o2r3-saskatoon: ""
-  o3r0-saskatoon: ""
-  o3r1-saskatoon: ""
-  o3r2-saskatoon: ""
-  o3r3-saskatoon: ""
+  o0r1-saskatoon: "https://square.link/u/XSRWj6TT"
+  o0r2-saskatoon: "https://square.link/u/aH5HhtL9"
+  o0r3-saskatoon: "https://square.link/u/g19j46Od"
+  o1r0-saskatoon: "https://square.link/u/Twq12HMt"
+  o1r1-saskatoon: "https://square.link/u/rjeHFPGn"
+  o1r2-saskatoon: "https://square.link/u/CNtSiA9c"
+  o1r3-saskatoon: "https://square.link/u/riwpkA0P"
+  o2r0-saskatoon: "https://square.link/u/HEVMYFRX"
+  o2r1-saskatoon: "https://square.link/u/RYgbLdjs"
+  o2r2-saskatoon: "https://square.link/u/gxnRe8nY"
+  o2r3-saskatoon: "https://square.link/u/2cLvnGCC"
+  o3r0-saskatoon: "https://square.link/u/u4ynuLNA"
+  o3r1-saskatoon: "https://square.link/u/GoLAycZn"
+  o3r2-saskatoon: "https://square.link/u/m2TbtsOB"
+  o3r3-saskatoon: "https://square.link/u/aGFdnnKr"
 
-  o0r1-canada: ""
-  o0r2-canada: ""
-  o0r3-canada: ""
-  o1r0-canada: ""
-  o1r1-canada: ""
-  o1r2-canada: ""
-  o1r3-canada: ""
-  o2r0-canada: ""
-  o2r1-canada: ""
-  o2r2-canada: ""
-  o2r3-canada: ""
-  o3r0-canada: ""
-  o3r1-canada: ""
-  o3r2-canada: ""
-  o3r3-canada: ""
+  o0r1-canada: "https://square.link/u/JnBDH2I2"
+  o0r2-canada: "https://square.link/u/AUDpQjUP"
+  o0r3-canada: "https://square.link/u/gjjSUrv6"
+  o1r0-canada: "https://square.link/u/Yb4JT7Ee"
+  o1r1-canada: "https://square.link/u/MntoUuC8"
+  o1r2-canada: "https://square.link/u/XN4mklVk"
+  o1r3-canada: "https://square.link/u/KG0wYBk2"
+  o2r0-canada: "https://square.link/u/KiBW3i08"
+  o2r1-canada: "https://square.link/u/KMPjJmUj"
+  o2r2-canada: "https://square.link/u/jL0x4NnI"
+  o2r3-canada: "https://square.link/u/zHQK7NZA"
+  o3r0-canada: "https://square.link/u/PJQAd1RN"
+  o3r1-canada: "https://square.link/u/dZNl0OzX"
+  o3r2-canada: "https://square.link/u/r5tKw5Nn"
+  o3r3-canada: "https://square.link/u/dJbH31et"

@@ -37,6 +37,7 @@
   .gc-zone.is-on{background:rgba(242,169,60,0.07)}
   .gc-shop-sum{border-top:1px solid rgba(243,232,211,0.12);padding-top:14px;margin:0 0 18px;font-size:15px;color:#C7B29E}
   .gc-shop-sum div{display:flex;justify-content:space-between;gap:12px;padding:3px 0}
+  .gc-shop-sum div[hidden]{display:none}
   .gc-shop-sum span:last-child{font-family:'DM Mono',monospace;color:#F3E8D3}
   .gc-shop-sum .gc-shop-total{margin-top:6px;font-size:17px;color:#F3E8D3;font-weight:600}
   .gc-shop-go{width:100%;border:0;cursor:pointer;background:#F2A93C;color:#2B1B12;font-weight:700;font-size:16px;
@@ -80,6 +81,7 @@
 
   <div class="gc-shop-sum" aria-live="polite">
     <div><span data-gc-count>Pouches</span><span data-gc-sub>$0.00</span></div>
+    <div data-gc-taxrow hidden><span>{{ shop.zones.saskatoon.tax_name | default: "Tax" }}</span><span data-gc-tax></span></div>
     <div><span>Delivery</span><span data-gc-fee>—</span></div>
     <p data-gc-nudge style="margin:2px 0 0;font-size:13px;color:#F2A93C" hidden></p>
     <div class="gc-shop-total"><span>Total</span><span data-gc-total>$0.00</span></div>
@@ -93,7 +95,7 @@
     <span>You pay on Square's secure checkout. Your card and address go straight to Square — never through this site — and we never see your card number. Opened a pouch and something's wrong? <a href="{{ '/refunds/' | relative_url }}">We'll still refund it.</a></span>
   </p>
 
-  <script type="application/json" data-gc-shop-data>{"price":{{ shop.price }},"max":{{ shop.max_each }},"blends":[{% for p in site.data.premixes %}{{ p.key | jsonify }}{% unless forloop.last %},{% endunless %}{% endfor %}],"fees":{ {%- for z in shop.zones -%}{{ z[0] | jsonify }}:{{ z[1].fee }}{% unless forloop.last %},{% endunless %}{%- endfor -%} },"free":{ {%- for z in shop.zones -%}{{ z[0] | jsonify }}:{{ z[1].free_from | default: 0 }}{% unless forloop.last %},{% endunless %}{%- endfor -%} },"links":{{ shop.links | jsonify }},"instagram":{{ site.social.instagram | jsonify }}}</script>
+  <script type="application/json" data-gc-shop-data>{"price":{{ shop.price }},"max":{{ shop.max_each }},"blends":[{% for p in site.data.premixes %}{{ p.key | jsonify }}{% unless forloop.last %},{% endunless %}{% endfor %}],"fees":{ {%- for z in shop.zones -%}{{ z[0] | jsonify }}:{{ z[1].fee }}{% unless forloop.last %},{% endunless %}{%- endfor -%} },"tax":{ {%- for z in shop.zones -%}{{ z[0] | jsonify }}:{{ z[1].tax | default: 0 }}{% unless forloop.last %},{% endunless %}{%- endfor -%} },"free":{ {%- for z in shop.zones -%}{{ z[0] | jsonify }}:{{ z[1].free_from | default: 0 }}{% unless forloop.last %},{% endunless %}{%- endfor -%} },"links":{{ shop.links | jsonify }},"instagram":{{ site.social.instagram | jsonify }}}</script>
 </div>
 
 <noscript>
