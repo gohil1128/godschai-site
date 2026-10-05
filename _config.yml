@@ -41,5 +41,5 @@ exclude:
   - .jekyll-cache
   - node_modules
 
-# Pretty URLs: /menu/index.html -> /menu/
+# Pretty URLs: /events/index.html -> /events/
 permalink: pretty

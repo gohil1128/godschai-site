@@ -243,7 +243,10 @@ layout: null
 
   /* ---------- 6. Mailchimp signup (JSONP) ---------- */
   var MC = 'https://{{ site.mailchimp.host }}/subscribe/post-json?u={{ site.mailchimp.u }}&id={{ site.mailchimp.id }}&f_id={{ site.mailchimp.f_id }}';
-  function subscribe(email, done) {
+  /* Sends every named field in the form, not just EMAIL: the hidden SOURCE
+     field is how Mailchimp learns which form someone used (premix-launch,
+     events or newsletter). */
+  function subscribe(form, done) {
     var cb = 'gcMc' + Math.random().toString(36).slice(2);
     var settled = false;
     var settle = function (ok, msg) {
@@ -257,7 +260,12 @@ layout: null
       settle(!!data && (data.result === 'success' || already), already ? "You're already on the list. ✶" : null);
     };
     var s = d.createElement('script');
-    s.src = MC + '&EMAIL=' + encodeURIComponent(email) + '&c=' + cb;
+    var q = '';
+    [].slice.call(form.elements).forEach(function (el) {
+      if (!el.name || el.disabled || !el.value) return;
+      q += '&' + encodeURIComponent(el.name) + '=' + encodeURIComponent(el.value);
+    });
+    s.src = MC + q + '&c=' + cb;
     s.onerror = function () { settle(false); };
     d.body.appendChild(s);
     setTimeout(function () { settle(false); if (s.parentNode) s.parentNode.removeChild(s); }, 8000);
@@ -270,19 +278,24 @@ layout: null
     var msg = form.querySelector('[data-gc-signup-msg]');
     var btn = form.querySelector('button[type="submit"]');
     if (!input || !input.value) return;
+    var tell = function (state) {
+      try { form.dispatchEvent(new CustomEvent('gc:signup', { detail: state })); } catch (e) {}
+    };
+    tell('sending');
     if (btn) { btn.disabled = true; btn.dataset.label = btn.textContent; btn.textContent = 'Sending…'; }
     if (msg) { msg.style.display = 'none'; msg.textContent = ''; }
-    subscribe(input.value, function (ok, custom) {
+    subscribe(form, function (ok, custom) {
       if (btn) { btn.disabled = false; btn.textContent = btn.dataset.label || 'Sign up'; }
       if (!msg) return;
       msg.style.display = 'block';
       msg.style.color = ok ? '#F2A93C' : '#FF7A66';
       msg.textContent = ok ? (custom || "Thanks — you're subscribed. ✶")
                            : "That didn't go through — check your email and try again.";
+      tell(ok ? 'done' : 'error');
       if (ok) {
         input.value = '';
         try { localStorage.setItem('gc_subscribed', '1'); } catch (e) {}
-        if (form.id === 'gc-popup-form') setTimeout(closePopup, 2200);
+        if (form.id === 'gc-popup-form') setTimeout(closePopup, 2800);
       }
     });
   });
@@ -319,11 +332,37 @@ layout: null
       lastFocus = d.activeElement;
       overlay.hidden = false;
       overlay.style.display = 'flex';
+      loadLight();
       var first = overlay.querySelector('input, button');
       if (first) first.focus();
       d.addEventListener('keydown', onKeydown, true);
     }
     window.closePopup = closePopup;
+
+    /* The particle light at the top of the box. particles.js is only fetched
+       once somebody actually opens the box, so nobody else pays for it. */
+    var light = null, lightCanvas = overlay.querySelector('[data-gc-status]');
+    function loadLight() {
+      if (!lightCanvas || light || loadLight.busy) return;
+      var go = function () {
+        if (!window.GCParticles) return;
+        lightCanvas.hidden = false;
+        light = window.GCParticles.status(lightCanvas);
+        if (!light) lightCanvas.hidden = true;
+      };
+      if (window.GCParticles) return go();
+      loadLight.busy = true;
+      var sc = d.createElement('script');
+      sc.src = '{{ "/assets/js/particles.js" | relative_url }}';
+      sc.onload = go;
+      d.head.appendChild(sc);
+    }
+    var popupForm = d.getElementById('gc-popup-form');
+    if (popupForm) popupForm.addEventListener('gc:signup', function (e) {
+      if (!light) return;
+      light.show(e.detail, true);
+      if (e.detail === 'error') setTimeout(function () { if (light) light.show('idle', true); }, 2200);
+    });
     function hideNudge() {
       if (!nudge) return;
       nudge.classList.remove('is-in');
