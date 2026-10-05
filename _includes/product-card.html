@@ -1,0 +1,18 @@
+{%- comment -%}
+  One premix as a shop card: picture and name link to its page, then the
+  price and "Add to cart" (assets/js/cart.js). Param: p (an entry from
+  _data/premixes.yml). Styles live in cart-drawer.html.
+{%- endcomment -%}
+{%- assign p = include.p -%}
+{%- capture purl %}{{ '/premixes/' | relative_url }}{{ p.slug }}/{% endcapture -%}
+<div class="gc-pcard gc-card">
+  <a href="{{ purl }}" tabindex="-1" aria-hidden="true">{% include img.html base=p.img ext="jpg" widths="250,500" sizes="(max-width:700px) 60vw, 220px" w="544" h="952" alt=p.alt wrap="display:block" style="width:100%;height:auto;display:block;border-radius:10px 10px 14px 14px;box-shadow:0 24px 44px -20px rgba(0,0,0,0.7)" %}</a>
+  <h3><a href="{{ purl }}">{{ p.name }}</a></h3>
+  <div class="gc-pcard-notes">{{ p.notes }}</div>
+  <p>{{ p.tagline }}</p>
+  <div class="gc-pcard-buy">
+    <span class="gc-price">${% include money.html v=site.data.shop.price %}</span>
+    <button type="button" class="gc-add gc-pill" data-gc-add="{{ p.key }}" hidden>Add to cart</button>
+  </div>
+  <a class="gc-more" href="{{ purl }}">What's inside &amp; how to brew →</a>
+</div>

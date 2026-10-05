@@ -3,8 +3,19 @@
 # after adding a new one). tilt: how the pouch leans on the homepage.
 # key: the blend's letter in the checkout link names in _data/shop.yml — don't
 # change it once the Square links exist.
+# slug: its page, /premixes/<slug>/ (each blend has a small file there too).
+# tagline: one line under the name on cards. inside: what's in the pouch, as
+# shown on its page. brew: the steps on its page.
 - name: "Original Masala"
   key: "o"
+  slug: "original-masala"
+  tagline: "Our pop-up cart's bold, cardamom-forward masala chai"
+  inside: "Single-origin Assam black tea, cardamom, ginger, cassia, clove and black pepper. Unsweetened, nothing else added."
+  brew:
+    - "Bring ½ cup of water to a boil with 1 heaped teaspoon (5 g) of premix per cup."
+    - "Add ½ cup of milk and let it come back up to a rolling boil."
+    - "Simmer for 2–3 minutes, until it turns a deep caramel colour."
+    - "Strain into your cup and sweeten to taste."
   notes: "Bold · Warm · Rich"
   blurb: "The cart recipe, in a pouch. Cardamom, ginger, cassia, clove and pepper from Kerala, ground in small batches with single-origin Assam."
   img: "pouch-masala-front"
@@ -12,6 +23,14 @@
   tilt: "rotate(-3deg)"
 - name: "Rose & Cardamom"
   key: "r"
+  slug: "rose-cardamom"
+  tagline: "Softer and floral, for people who say chai is too strong"
+  inside: "Single-origin Assam black tea, rose petals and cardamom. Unsweetened, nothing else added."
+  brew:
+    - "Bring ½ cup of water to a boil with 1 heaped teaspoon (5 g) of premix per cup."
+    - "Add ½ cup of milk and let it come back up to a rolling boil."
+    - "Simmer for 2 minutes — a little less than the Original, so the rose stays bright."
+    - "Strain into your cup and sweeten to taste."
   notes: "Floral · Warm · Smooth"
   blurb: "Softer and more perfumed — rose petals lifting the cardamom, with the same Assam base underneath. The one to make for people who say chai is too strong."
   img: "pouch-rose-front"

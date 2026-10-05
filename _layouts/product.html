@@ -1,0 +1,180 @@
+---
+layout: default
+---
+{%- comment -%}
+  A premix's own page: /premixes/<slug>/. The page file only names the blend
+  (front matter "blend: o"); everything else comes from _data/premixes.yml
+  and _data/shop.yml. Buying goes through the cart (assets/js/cart.js).
+{%- endcomment -%}
+{%- assign shop = site.data.shop -%}
+{%- assign p = site.data.premixes | where: "key", page.blend | first -%}
+{%- assign other = site.data.premixes | where_exp: "x", "x.key != page.blend" | first -%}
+<style>
+  .gc-prod{max-width:1240px;margin:0 auto;padding:clamp(108px,13vh,150px) clamp(18px,4vw,40px) clamp(20px,3vw,34px);
+    display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:clamp(28px,5vw,72px);align-items:start}
+  .gc-prod-pic{display:flex;justify-content:center;align-items:center;padding:clamp(18px,4vw,48px);border-radius:28px;
+    background:radial-gradient(closest-side,rgba(242,169,60,0.16),transparent 80%),rgba(28,17,10,0.55);border:1px solid rgba(242,169,60,0.12)}
+  .gc-prod-pic picture{width:min(78%,360px)}
+  .gc-prod h1{font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(2.4rem,5.5vw,4rem);line-height:0.98;margin:14px 0 0;color:#F3E8D3}
+  .gc-prod-lede{font-size:clamp(1.02rem,1.4vw,1.15rem);line-height:1.6;color:#E7D6C4;margin:18px 0 0;max-width:48ch}
+  .gc-prod-price{display:flex;align-items:baseline;gap:14px;margin:22px 0 0;flex-wrap:wrap}
+  .gc-prod-price b{font-family:'DM Mono',monospace;font-weight:400;font-size:1.7rem;color:#F3E8D3}
+  .gc-prod-price span{font-size:14px;color:#AB9280}
+  .gc-buy{display:flex;gap:12px;align-items:center;margin:20px 0 0;flex-wrap:wrap}
+  .gc-buy .gc-step button{width:42px;height:42px}
+  .gc-buy .gc-add{padding:15px 30px;font-size:16px;flex:1 1 200px;max-width:320px}
+  .gc-prod-ship{list-style:none;margin:20px 0 0;padding:0;font-size:14px;color:#C7B29E;display:flex;flex-direction:column;gap:6px}
+  .gc-prod-ship li::before{content:"✶";color:#F2A93C;margin-right:8px}
+  .gc-acc{max-width:1240px;margin:0 auto;padding:clamp(10px,2vw,20px) clamp(18px,4vw,40px) clamp(30px,4vw,50px)}
+  .gc-acc details{border-top:1px solid rgba(243,232,211,0.12);max-width:820px}
+  .gc-acc details:last-of-type{border-bottom:1px solid rgba(243,232,211,0.12)}
+  .gc-acc summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:16px;
+    padding:20px 2px;font-family:'Instrument Serif',serif;font-size:1.45rem;color:#F3E8D3}
+  .gc-acc summary::-webkit-details-marker{display:none}
+  .gc-acc summary::after{content:"+";font-family:'DM Mono',monospace;font-size:20px;color:#F2A93C;transition:transform .25s ease}
+  .gc-acc details[open] summary::after{transform:rotate(45deg)}
+  .gc-acc .gc-prose{padding:0 2px 22px;max-width:64ch}
+  .gc-acc ol{margin:0 0 14px;padding-left:22px}
+  .gc-acc li{margin:0 0 8px}
+  .gc-pair{max-width:1240px;margin:0 auto;padding:clamp(20px,3vw,40px) clamp(18px,4vw,40px) clamp(50px,7vw,90px)}
+  .gc-sticky{position:fixed;left:0;right:0;bottom:0;z-index:70;display:none;align-items:center;gap:12px;padding:10px 16px calc(10px + env(safe-area-inset-bottom));
+    background:rgba(23,14,8,0.96);border-top:1px solid rgba(242,169,60,0.25);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    transform:translateY(110%);transition:transform .3s cubic-bezier(.2,.8,.2,1)}
+  .gc-sticky.is-on{transform:none}
+  .gc-sticky div{flex:1 1 auto;min-width:0}
+  .gc-sticky b{display:block;font-family:'Instrument Serif',serif;font-weight:400;font-size:1.1rem;color:#F3E8D3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .gc-sticky span{font-family:'DM Mono',monospace;font-size:12.5px;color:#AB9280}
+  @media (max-width:820px){
+    .gc-prod{grid-template-columns:1fr}
+    .gc-prod-pic picture{width:min(62%,280px)}
+    .gc-sticky{display:flex}
+  }
+  @media (prefers-reduced-motion:reduce){.gc-sticky,.gc-acc summary::after{transition:none}}
+</style>
+
+<section class="gc-prod" aria-labelledby="page-h1">
+  <div class="gc-prod-pic">
+    {% include img.html base=p.img ext="jpg" widths="250,500" sizes="(max-width:820px) 62vw, 360px" w="544" h="952" alt=p.alt priority=true wrap="display:block" style="width:100%;height:auto;display:block;border-radius:12px 12px 16px 16px;box-shadow:0 34px 60px -26px rgba(0,0,0,0.75)" %}
+  </div>
+  <div>
+    <a href="{{ '/premixes/' | relative_url }}" style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.16em;text-transform:uppercase;color:#F2A93C;text-decoration:none">← Masala chai premix</a>
+    <h1 id="page-h1">{{ p.name }}</h1>
+    <div class="gc-pcard-notes" style="margin-top:12px">{{ p.notes }}</div>
+    <p class="gc-prod-lede">{{ p.blurb }}</p>
+    {%- assign per_cup = shop.price | divided_by: 25.0 | times: 100 | round %}
+    <div class="gc-prod-price"><b>${% include money.html v=shop.price %}</b><span>125 g pouch · 25 cups · about {{ per_cup }}¢ a cup</span></div>
+    {%- if shop.open %}
+    <div class="gc-buy" data-gc-buy data-gc-buy-main>
+      <div class="gc-step" role="group" aria-label="How many pouches" data-gc-pick>
+        <button type="button" class="gc-ico" data-gc-pick-less aria-label="One fewer">&minus;</button>
+        <output>1</output>
+        <button type="button" class="gc-ico" data-gc-pick-more aria-label="One more">+</button>
+      </div>
+      <button type="button" class="gc-add gc-pill" data-gc-add="{{ p.key }}" hidden>Add to cart</button>
+    </div>
+    <noscript><p style="color:#C7B29E;margin:16px 0 0">Ordering needs JavaScript — or {% include shop-contact.html %} and we'll sort it.</p></noscript>
+    <ul class="gc-prod-ship">
+      <li>Free delivery anywhere in Saskatoon ({{ shop.zones.saskatoon.tax | times: 100 | round }}% {{ shop.zones.saskatoon.tax_name }} applies)</li>
+      <li>${% include money.html v=shop.zones.canada.fee %} tracked shipping across Canada — free on {{ shop.zones.canada.free_from }}+ pouches</li>
+      <li>Unsweetened — you choose how sweet</li>
+    </ul>
+    <div style="margin-top:24px">{% include trust-strip.html %}</div>
+    {%- endif %}
+  </div>
+</section>
+
+<div class="gc-acc">
+  <details open>
+    <summary>What's inside</summary>
+    <div class="gc-prose"><p>{{ p.inside }}</p><p>Whole spices, ground in small batches here in Saskatoon. More on why in <a href="{{ '/masala-chai-spices/' | relative_url }}">the spices</a>.</p></div>
+  </details>
+  <details>
+    <summary>How to brew it</summary>
+    <div class="gc-prose">
+      <ol>{% for s in p.brew %}<li>{{ s }}</li>{% endfor %}</ol>
+      <p>Want the whole method, and the mistakes to avoid? Read our <a href="{{ '/how-to-make-masala-chai/' | relative_url }}">masala chai guide</a>, or make it cold with the <a href="{{ '/how-to-make-iced-chai/' | relative_url }}">iced chai guide</a>.</p>
+    </div>
+  </details>
+  <details>
+    <summary>Delivery</summary>
+    <div class="gc-prose">
+      <p><strong>{{ shop.zones.saskatoon.label }}:</strong> {{ shop.zones.saskatoon.how }} {{ shop.zones.saskatoon.when }}</p>
+      <p><strong>{{ shop.zones.canada.label }}:</strong> {{ shop.zones.canada.how }} {{ shop.zones.canada.when }} ${% include money.html v=shop.zones.canada.fee %}, or free on {{ shop.zones.canada.free_from }}+ pouches.</p>
+      <p>No pickups. <a href="{{ '/shipping/' | relative_url }}">All the delivery details</a>.</p>
+    </div>
+  </details>
+  <details>
+    <summary>Refunds</summary>
+    <div class="gc-prose"><p>Something wrong with it — even after you've opened it? Tell us within {{ shop.refund_days }} days and we'll refund it. Nothing to post back. <a href="{{ '/refunds/' | relative_url }}">Our refund policy</a>.</p></div>
+  </details>
+</div>
+
+{%- if shop.open %}
+<section class="gc-pair" aria-labelledby="pair-h2">
+  <h2 id="pair-h2" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(1.8rem,4vw,2.6rem);margin:0 0 20px;color:#F3E8D3">Can't decide? Try both.</h2>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:clamp(16px,2vw,24px);align-items:stretch">
+    {% include product-card.html p=other %}
+    <div class="gc-pcard gc-card" style="justify-content:center">
+      <div class="gc-pcard-notes">One of each</div>
+      <h3 style="margin-top:12px">{{ site.data.premixes[0].name }} + {{ site.data.premixes[1].name }}</h3>
+      <p>Two pouches, fifty cups. The bold one for mornings, the floral one for later.</p>
+      <div class="gc-pcard-buy">
+        {%- assign two = shop.price | times: 2 %}
+        <span class="gc-price">${% include money.html v=two %}</span>
+        {%- assign both = site.data.premixes | map: "key" | join: "," %}
+        <button type="button" class="gc-add gc-pill" data-gc-add="{{ both }}" hidden>Add both</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="gc-sticky" data-gc-sticky>
+  <div><b>{{ p.name }}</b><span>${% include money.html v=shop.price %} · 25 cups</span></div>
+  <button type="button" class="gc-add gc-pill" data-gc-add="{{ p.key }}" hidden>Add to cart</button>
+</div>
+{%- endif %}
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "@id": "{{ page.url | absolute_url }}#product",
+  "name": "{{ p.name | escape }} Masala Chai Premix, 125 g",
+  "description": {{ p.blurb | jsonify }},
+  "image": "{{ '/uploads/opt/' | absolute_url }}{{ p.img }}-500.jpg",
+  "brand": { "@type": "Brand", "name": "God's Chai" },
+  "weight": { "@type": "QuantitativeValue", "value": 125, "unitCode": "GRM" }
+  {%- if shop.open %},
+  "offers": {
+    "@type": "Offer",
+    "url": "{{ page.url | absolute_url }}",
+    "price": "{% include money.html v=shop.price %}",
+    "priceCurrency": "CAD",
+    "availability": "https://schema.org/InStock",
+    "itemCondition": "https://schema.org/NewCondition",
+    "seller": { "@id": "{{ '/' | absolute_url }}#organization" },
+    "shippingDetails": [
+      {
+        "@type": "OfferShippingDetails",
+        "shippingRate": { "@type": "MonetaryAmount", "value": "{% include money.html v=shop.zones.saskatoon.fee %}", "currency": "CAD" },
+        "shippingDestination": { "@type": "DefinedRegion", "addressCountry": "CA", "addressRegion": "SK", "postalCodePrefix": "S7" }
+      },
+      {
+        "@type": "OfferShippingDetails",
+        "shippingRate": { "@type": "MonetaryAmount", "value": "{% include money.html v=shop.zones.canada.fee %}", "currency": "CAD" },
+        "shippingDestination": { "@type": "DefinedRegion", "addressCountry": "CA" }
+      }
+    ],
+    "hasMerchantReturnPolicy": {
+      "@type": "MerchantReturnPolicy",
+      "url": "{{ '/refunds/' | absolute_url }}",
+      "applicableCountry": "CA",
+      "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+      "merchantReturnDays": {{ shop.refund_days }},
+      "returnFees": "https://schema.org/FreeReturn",
+      "refundType": "https://schema.org/FullRefund"
+    }
+  }
+  {%- endif %}
+}
+</script>
