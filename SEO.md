@@ -147,6 +147,37 @@ visitor's own browser as they move around the site. It empties itself once
 they reach `/order-confirmed/`. The code is in `assets/js/cart.js` and
 `_includes/cart-drawer.html`.
 
+**Any quantity: the checkout service.** On its own, the cart can only check out
+orders it has a pre-made Square link for (`links:` in `_data/shop.yml`, up to
+3 of each blend). The `checkout/` folder holds a small service that builds a
+Square checkout for any order on the spot, so people can buy as many as they
+like (up to `max_each_api`, 99). It runs on Vercel, not on GitHub Pages. To
+switch it on:
+
+1. **Square:** go to developer.squareup.com and sign in with your Square
+   account. Create an application (call it "God's Chai website") and open it.
+   Switch to **Production** and copy the **Production Access token**. Treat
+   it like a password: never put it in this repo or in a chat.
+2. **Vercel:** choose Add New → Project, import `gohil1128/godschai-site`, and
+   name the project `godschai-checkout`. Set **Root Directory** to `checkout`,
+   and the Framework Preset to **Other**. Under Environment Variables, add
+   `SQUARE_ACCESS_TOKEN` with the token as its value. Deploy.
+3. Open `https://godschai-checkout.vercel.app/api/checkout`. It should say
+   `"configured":true`.
+4. Put that address in `checkout_api:` in `_data/shop.yml`.
+
+If the service is ever down, small orders fall back to the pre-made links and
+bigger ones ask people to try again. Prices, PST and the shipping rule are
+written in `checkout/api/checkout.js` as well as in `shop.yml`, so change them
+in both places.
+
+**"Add to your order"** is the small box inside the cart. It suggests
+every product from `_data/premixes.yml` that isn't in the cart yet, so a new
+product appears there on its own. A new product also needs its own Square item
+and checkout links, and adding a third product changes how the links are named,
+so it's a job to hand to Claude with Square connected. The box's heading is
+`upsell_title` in `_data/shop.yml`.
+
 **Each blend has its own page**: `/premixes/original-masala/` and
 `/premixes/rose-cardamom/`. Their words come from `_data/premixes.yml`:
 `tagline` (the line on the cards), `inside` (what's in the pouch) and `brew`

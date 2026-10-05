@@ -11,6 +11,7 @@
   the product pages (_layouts/product.html).
 {%- endcomment -%}
 {%- assign shop = site.data.shop -%}
+{%- if shop.checkout_api != "" -%}{%- assign shop_max = shop.max_each_api -%}{%- else -%}{%- assign shop_max = shop.max_each -%}{%- endif -%}
 <style>
   /* Bag in the nav */
   .gc-cartbtn{position:relative;display:flex;align-items:center;justify-content:center;width:42px;height:42px;
@@ -23,7 +24,8 @@
   @keyframes gc-bump{40%{transform:scale(1.16)}}
 
   /* The drawer */
-  .gc-cart{position:fixed;inset:0;z-index:9990}
+  /* Above the email tab (9998) and the signup box (9999), so neither sits on the cart. */
+  .gc-cart{position:fixed;inset:0;z-index:10000}
   .gc-cart[hidden]{display:none}
   .gc-cart-scrim{position:absolute;inset:0;background:rgba(10,6,3,0.62);opacity:0;transition:opacity .3s ease}
   .gc-cart-panel{position:absolute;top:0;right:0;bottom:0;width:min(440px,100%);display:flex;flex-direction:column;
@@ -52,6 +54,17 @@
   .gc-cart-quick button{display:flex;flex-direction:column;align-items:center;gap:10px;padding:14px 10px;border-radius:16px;
     border:1px solid rgba(242,169,60,0.2);background:rgba(243,232,211,0.03);color:#F3E8D3;cursor:pointer;font:600 13.5px 'Hanken Grotesk',sans-serif}
   .gc-cart-quick img{width:56px;height:auto;border-radius:6px}
+  .gc-cart-up{margin:18px 0 0;padding:14px;border-radius:16px;background:rgba(242,169,60,0.06);border:1px dashed rgba(242,169,60,0.3)}
+  .gc-cart-up[hidden],.gc-cart-up-item[hidden]{display:none}
+  .gc-cart-up h3{margin:0 0 10px;font-family:'DM Mono',monospace;font-weight:400;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#F2A93C}
+  .gc-cart-up-item{display:flex;gap:12px;align-items:center}
+  .gc-cart-up-item + .gc-cart-up-item{margin-top:12px;padding-top:12px;border-top:1px solid rgba(243,232,211,0.08)}
+  .gc-cart-up-item img{width:40px;height:auto;border-radius:5px 5px 7px 7px;display:block}
+  .gc-cart-up-item div{flex:1 1 auto;min-width:0}
+  .gc-cart-up-item b{display:block;font-family:'Instrument Serif',serif;font-weight:400;font-size:1.08rem;color:#F3E8D3;line-height:1.15}
+  .gc-cart-up-item small{display:block;font-size:12.5px;line-height:1.35;color:#AB9280;margin-top:2px}
+  .gc-cart-up-item button{flex:0 0 auto;border:1px solid rgba(242,169,60,0.6);background:transparent;color:#F2A93C;cursor:pointer;
+    font:700 13px 'Hanken Grotesk',sans-serif;padding:9px 14px;border-radius:999px;white-space:nowrap}
   .gc-cart-zones{border:0;margin:18px 0 0;padding:0;min-width:0}
   .gc-cart-zones[hidden]{display:none}
   .gc-cart-zones legend{padding:0;margin:0 0 10px;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#F2A93C}
@@ -157,7 +170,24 @@
         </div>
       </div>
       {%- endfor %}
-      <p data-gc-limit hidden style="margin:10px 0 0;font-size:13px;color:#AB9280">Up to {{ shop.max_each }} of each blend online. Want more? {% include shop-contact.html %}.</p>
+      <p data-gc-limit hidden style="margin:10px 0 0;font-size:13px;color:#AB9280">Up to {{ shop_max }} of each blend online. Want more? {% include shop-contact.html %}.</p>
+
+      {%- comment -%}
+        "Add to your order": every product from _data/premixes.yml that isn't in
+        the cart yet, so a new product shows up here by itself once it's added
+        there (with its Square links). Hidden while the cart is empty, which has
+        its own picks, and once everything's in.
+      {%- endcomment %}
+      <section class="gc-cart-up" data-gc-up hidden aria-labelledby="gc-up-h">
+        <h3 id="gc-up-h">{{ shop.upsell_title | default: "Add to your order" }}</h3>
+        {%- for p in site.data.premixes %}
+        <div class="gc-cart-up-item" data-gc-up-item="{{ p.key }}" hidden>
+          {% include img.html base=p.img ext="jpg" widths="250" sizes="40px" w="544" h="952" alt="" %}
+          <div><b>{{ p.name }}</b><small>{{ p.tagline }}</small></div>
+          <button type="button" data-gc-add="{{ p.key }}" aria-label="Add {{ p.name }}, ${% include money.html v=shop.price %}">+ ${% include money.html v=shop.price %}</button>
+        </div>
+        {%- endfor %}
+      </section>
 
       <fieldset class="gc-cart-zones" data-gc-zones hidden>
         <legend>Where's it going?</legend>
@@ -190,5 +220,5 @@
     </div>
   </div>
 </div>
-<script type="application/json" data-gc-cart-data>{"price":{{ shop.price }},"max":{{ shop.max_each }},"blends":[{% for p in site.data.premixes %}{{ p.key | jsonify }}{% unless forloop.last %},{% endunless %}{% endfor %}],"fees":{ {%- for z in shop.zones -%}{{ z[0] | jsonify }}:{{ z[1].fee }}{% unless forloop.last %},{% endunless %}{%- endfor -%} },"tax":{ {%- for z in shop.zones -%}{{ z[0] | jsonify }}:{{ z[1].tax | default: 0 }}{% unless forloop.last %},{% endunless %}{%- endfor -%} },"free":{ {%- for z in shop.zones -%}{{ z[0] | jsonify }}:{{ z[1].free_from | default: 0 }}{% unless forloop.last %},{% endunless %}{%- endfor -%} },"links":{{ shop.links | jsonify }},"instagram":{{ site.social.instagram | jsonify }}}</script>
+<script type="application/json" data-gc-cart-data>{"price":{{ shop.price }},"max":{{ shop_max }},"api":{{ shop.checkout_api | jsonify }},"blends":[{% for p in site.data.premixes %}{{ p.key | jsonify }}{% unless forloop.last %},{% endunless %}{% endfor %}],"fees":{ {%- for z in shop.zones -%}{{ z[0] | jsonify }}:{{ z[1].fee }}{% unless forloop.last %},{% endunless %}{%- endfor -%} },"tax":{ {%- for z in shop.zones -%}{{ z[0] | jsonify }}:{{ z[1].tax | default: 0 }}{% unless forloop.last %},{% endunless %}{%- endfor -%} },"free":{ {%- for z in shop.zones -%}{{ z[0] | jsonify }}:{{ z[1].free_from | default: 0 }}{% unless forloop.last %},{% endunless %}{%- endfor -%} },"links":{{ shop.links | jsonify }},"instagram":{{ site.social.instagram | jsonify }}}</script>
 <script src="{{ '/assets/js/cart.js' | relative_url }}" defer></script>

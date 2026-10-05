@@ -40,6 +40,7 @@ exclude:
   - vendor
   - .jekyll-cache
   - node_modules
+  - checkout
 
 # Pretty URLs: /events/index.html -> /events/
 permalink: pretty

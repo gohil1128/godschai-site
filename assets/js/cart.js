@@ -82,6 +82,15 @@
       root.querySelector('[data-gc-less="' + k + '"]').disabled = q <= 0;
       root.querySelector('[data-gc-more="' + k + '"]').disabled = q >= data.max;
     });
+    // "Add to your order": whatever isn't in the cart yet.
+    var ups = 0;
+    data.blends.forEach(function (k) {
+      var item = root.querySelector('[data-gc-up-item="' + k + '"]');
+      if (!item) return;
+      item.hidden = state.q[k] > 0;
+      if (!item.hidden) ups++;
+    });
+    root.querySelector('[data-gc-up]').hidden = !n || !ups;
     var atMax = data.blends.some(function (k) { return state.q[k] >= data.max; });
     root.querySelector('[data-gc-limit]').hidden = !atMax;
 
@@ -116,6 +125,9 @@
     var name = data.blends.map(function (k) { return k + state.q[k]; }).join('');
     var link = n && z ? data.links[name + '-' + z] || '' : '';
     url = SQUARE.test(link) ? link : '';
+    // The checkout service (checkout_api in shop.yml) takes any quantity;
+    // the pre-made link, when there is one, is kept as its fallback.
+    if (n && z && data.api) url = url || 'api';
     go.disabled = !url;
     hint.textContent = '';
     if (n && !z) hint.textContent = 'Choose where it’s going to see your total.';
@@ -197,7 +209,23 @@
     if (!url) return;
     go.disabled = true;
     go.textContent = 'Opening Square checkout…';
-    location.href = url;
+    if (!data.api) { location.href = url; return; }
+    // Ask the checkout service for a Square checkout for this exact order.
+    var fallback = url === 'api' ? '' : url;
+    var done = function (to) {
+      if (to && SQUARE.test(to)) { location.href = to; return; }
+      go.textContent = 'Checkout securely with Square';
+      render();
+      hint.textContent = 'Couldn’t open checkout just now — please try again in a moment, or ' +
+        'message us and we’ll sort it.';
+    };
+    fetch(data.api, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ items: state.q, zone: state.z })
+    }).then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (j) { done(j && j.url ? j.url : fallback); },
+            function () { done(fallback); });
   });
   // Back from Square: the page comes back exactly as it was. Reset the button.
   W.addEventListener('pageshow', function (e) {

@@ -26,7 +26,7 @@
     <div style="display:flex;align-items:center;gap:clamp(12px,2vw,28px);font-weight:500;font-size:14.5px">
       <a href="{{ '/' | relative_url }}#menu" style="text-decoration:none;color:#EFE0CF">Menu</a>
       <a href="{{ '/how-to-make-masala-chai/' | relative_url }}" style="text-decoration:none;color:#EFE0CF">Brew Guide</a>
-      <a href="{{ '/premixes/' | relative_url }}" style="text-decoration:none;color:#EFE0CF">Premixes</a>
+      <a href="{{ '/premixes/' | relative_url }}" style="text-decoration:none;color:#EFE0CF">{% if site.data.shop.open %}Shop{% else %}Premixes{% endif %}</a>
       <a href="{{ '/events/' | relative_url }}" style="text-decoration:none;color:#EFE0CF">Events</a>
     </div>
     {%- comment -%} The bag opens the cart (_includes/cart-drawer.html); it only exists while the shop is open, and stays hidden until cart.js runs. {%- endcomment %}
