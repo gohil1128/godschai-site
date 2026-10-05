@@ -1,0 +1,39 @@
+---
+layout: default
+title: "Shipping & Delivery | God's Chai Saskatoon"
+description: "How God's Chai premix orders reach you: free delivery anywhere in Saskatoon, and tracked Canada Post shipping across Canada, free on 5+ pouches. No pickups."
+breadcrumb: "Shipping & Delivery"
+---
+{%- assign shop = site.data.shop -%}
+{%- assign yxe = shop.zones.saskatoon -%}{%- assign ca = shop.zones.canada -%}
+<section aria-labelledby="page-h1" style="max-width:1240px;margin:0 auto;padding:clamp(110px,14vh,170px) clamp(18px,4vw,40px) clamp(20px,3vw,30px)">
+  <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.2em;text-transform:uppercase;color:#F2A93C;margin-bottom:14px">Getting it to you</div>
+  <h1 id="page-h1" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(2.3rem,6vw,4.2rem);line-height:0.98;letter-spacing:0;margin:0;max-width:22ch">Shipping &amp; <span style="color:#FF6F61;font-style:italic">delivery</span></h1>
+  <p style="font-size:clamp(1.05rem,1.5vw,1.25rem);line-height:1.6;color:#E7D6C4;max-width:56ch;margin:22px 0 0">Every premix order comes to you — we don't do pickups. In Saskatoon, delivery is free. Anywhere else in Canada, it's a flat ${% include money.html v=ca.fee %} by Canada Post, with tracking — and free when you order {{ ca.free_from }} pouches or more.</p>
+  {%- unless shop.open %}
+  <p style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.08em;color:#C58A2E;margin:18px 0 0">The shop opens soon — this is how delivery will work.</p>
+  {%- endunless %}
+</section>
+
+<section style="max-width:1240px;margin:0 auto;padding:clamp(20px,3vw,40px) clamp(18px,4vw,40px) clamp(50px,7vw,90px)">
+  <div style="max-width:66ch" class="gc-prose">
+    <h2>In Saskatoon: free</h2>
+    <p>{{ yxe.how }} {{ yxe.when }} Choose <strong>{{ yxe.label }}</strong> on the order box, and give your address on Square's checkout page. If we need to reach you about the drop-off, we'll use the email or phone number you gave there.</p>
+
+    <h2>Everywhere else in Canada: ${% include money.html v=ca.fee %}, or free on {{ ca.free_from }}+</h2>
+    <p>{{ ca.how }} {{ ca.when }} We'll email you the tracking number once it's in the post.</p>
+    <p>It's one flat ${% include money.html v=ca.fee %} for the whole order, however many pouches are in it. Order {{ ca.free_from }} or more and shipping is free.</p>
+
+    <h2>Outside Canada</h2>
+    <p>Not yet, sorry. We only ship within Canada for now.</p>
+
+    <h2>Chose Saskatoon, but you're not in Saskatoon?</h2>
+    <p>Free delivery is for Saskatoon addresses. If an order marked Saskatoon has an address somewhere else, we'll be in touch before anything ships. You can pay the shipping, or we'll refund the order in full — your choice.</p>
+
+    <h2>Arrived damaged, or didn't arrive?</h2>
+    <p>We'll replace it or refund it. Our <a href="{{ '/refunds/' | relative_url }}">refund policy</a> has the details.</p>
+
+    <h2>Questions</h2>
+    <p>Anything else about an order: just {% include shop-contact.html %}.</p>
+  </div>
+</section>

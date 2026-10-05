@@ -1,12 +1,15 @@
 {%- comment -%}
   Shared <head> for every page. Pages set these in their front matter:
     title        — <60 chars, must pair the brand with Saskatoon/Saskatchewan
-    description  — 140-160 chars
+    description  — 140-160 chars (description_open replaces it once the shop opens)
     og_image     — optional, defaults to the site OG image
     theme_color  — optional, defaults to the dark palette
 {%- endcomment -%}
 {%- assign og_img = page.og_image | default: "uploads/og-image.jpg" -%}
 {%- assign theme = page.theme_color | default: "#100A05" -%}
+{%- comment -%} description_open: an alternative description for once the shop is open (_data/shop.yml). {%- endcomment -%}
+{%- assign desc = page.description -%}
+{%- if site.data.shop.open and page.description_open -%}{%- assign desc = page.description_open -%}{%- endif -%}
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <!-- Content-Security-Policy. GitHub Pages can't send response headers, so it ships as a
@@ -16,7 +19,7 @@
 <meta name="referrer" content="strict-origin-when-cross-origin">
 
 <title>{{ page.title }}</title>
-<meta name="description" content="{{ page.description }}">
+<meta name="description" content="{{ desc }}">
 <link rel="canonical" href="{{ page.url | absolute_url }}">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <meta name="theme-color" content="{{ theme }}">
@@ -27,7 +30,7 @@
 <meta property="og:type" content="{{ page.og_type | default: 'website' }}">
 <meta property="og:site_name" content="{{ site.title }}">
 <meta property="og:title" content="{{ page.title }}">
-<meta property="og:description" content="{{ page.description }}">
+<meta property="og:description" content="{{ desc }}">
 <meta property="og:url" content="{{ page.url | absolute_url }}">
 <meta property="og:image" content="{{ og_img | absolute_url }}">
 <meta property="og:image:width" content="1200">
@@ -38,7 +41,7 @@
 <!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="{{ page.title }}">
-<meta name="twitter:description" content="{{ page.description }}">
+<meta name="twitter:description" content="{{ desc }}">
 <meta name="twitter:image" content="{{ og_img | absolute_url }}">
 
 <!-- Tab icon: the G from the logo, built by tools/make-favicon.py. -->

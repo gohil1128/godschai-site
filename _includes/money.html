@@ -1,0 +1,4 @@
+{%- comment -%} A dollar amount with two decimals: include money.html v=12.5 → 12.50 {%- endcomment -%}
+{%- assign gc_c = include.v | times: 100 | round -%}
+{%- assign gc_d = gc_c | divided_by: 100 -%}{%- assign gc_m = gc_c | modulo: 100 -%}
+{{- gc_d }}.{% if gc_m < 10 %}0{% endif %}{{ gc_m -}}

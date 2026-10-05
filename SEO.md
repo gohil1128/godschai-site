@@ -100,6 +100,7 @@ block on the homepage **and** the `/premixes/` page together.
 
 ```yaml
 - name: "Original Masala"
+  key: "o"                              # its letter in the shop's checkout links — don't change
   notes: "Bold · Warm · Rich"          # the small uppercase line
   blurb: "The cart recipe, in a pouch…" # only shown on /premixes/
   img: "pouch-masala-front"             # uploads/pouch-masala-front.png, no extension
@@ -117,9 +118,75 @@ at the top of `tools/optimize-images.py`, then run:
 python3 tools/optimize-images.py
 ```
 
-The launch wording ("Launching this fall") appears on the homepage, at the foot
-of all four guide pages (`_includes/cta-premix.html`) and on `/premixes/`. When they actually launch, search the
-project for that phrase so none of them get left behind.
+The launch wording ("Launching this fall") switches to "Now delivering" by
+itself when the shop opens — see the next section.
+
+A third blend also needs its own Square item and a new set of checkout links
+(see *The shop*), so it's a job to hand to Claude with Square connected.
+
+---
+
+## The shop
+
+The premixes sell straight from `/premixes/`. People choose their pouches and
+where it's going, and the button sends them to **Square's own checkout page**
+for exactly that order. That's where they type their card and address — never
+on godschai.com. The site has no server and no database and keeps nothing, so
+there is nothing on it for anyone to steal.
+
+When they've paid, Square emails their receipt and sends them back to
+`/order-confirmed/`. The order turns up in **Square Dashboard → Orders** (and
+the Square app) with their address, and a note saying *Saskatoon delivery* or
+*Canada Post*.
+
+**Everything about the shop is in `_data/shop.yml`:**
+
+| Setting | What it does |
+| --- | --- |
+| `open` | The launch switch. `false` shows "launching this fall" and the email signups; `true` turns every premix box on the site into "order now". |
+| `price` | $14.99 a pouch. No tax is added. |
+| `max_each` | Most pouches of one blend in an order (3). |
+| `email` | Your contact for orders and refunds (sip@godschai.com). Blank means the pages say "message us on Instagram" instead. |
+| `zones` | Saskatoon (free) and the rest of Canada ($9.99, free from 5 pouches): the fee, the free-shipping point (`free_from`), and the delivery wording shown on the order box, `/shipping/` and `/order-confirmed/`. |
+| `refund_days` | How long people have to ask for a refund (30). |
+| `links` | The 30 Square checkout links, one for every mix of pouches and zone. `o2r1-canada` is two Original Masala and one Rose & Cardamom, shipped. The three Canada links with 5 or more pouches carry no shipping fee. |
+
+A blank link isn't an error. For that one order, the button switches off and
+says "message us on Instagram", so nobody is ever sent to a dead page.
+
+**Launch day:**
+
+1. In Square, check both items have stock, and that every link in `links` is
+   filled in.
+2. Place one real order, then refund it — it takes two minutes and proves the
+   whole loop.
+3. Change `open: false` to `open: true` and commit. The site updates in a
+   minute or two.
+
+**Changing the price, the shipping fee or the free-shipping point** means changing it in Square too,
+because Square is what actually charges. The number in `shop.yml` is only what
+the site shows. Ask Claude with Square connected to do both together.
+
+**Someone picks Saskatoon but gives an address elsewhere.** The site can't
+tell, so check the address on each Saskatoon order. `/shipping/` already says
+we'll get in touch first: they either pay the shipping or get a full refund.
+
+**Posting parcels.** Join Canada Post's free *Solutions for Small Business*
+programme and buy labels online. Expedited Parcel (tracked) for a parcel under
+0.5 kg costs about $9.70–$15.30 from Saskatoon to most of Canada, plus a fuel
+surcharge. The $9.99 fee covers the nearer provinces; farther addresses cost
+you a few dollars more, and orders of 5 or more pouches you post for free.
+Remote and northern addresses cost more again. Each pouch is 125 g, so up to three pouches stay under 0.5 kg in a
+padded mailer. A full six-pouch order goes in the 1 kg band, which costs only a
+dollar or two more.
+
+**Refunds:** Square Dashboard → **Transactions** → open the payment → **Issue
+refund**. The policy on `/refunds/` covers opened pouches when there's a
+genuine problem, and nobody has to post anything back.
+
+**GST:** none is charged for now. If sales go past $30,000 in four quarters in a
+row, you'll have to register for GST. Then turn tax on for the items in Square,
+and change the "no tax added" line on `/premixes/`.
 
 ---
 
@@ -344,6 +411,7 @@ email one group without the others:
 | Label | Where they signed up | What they were promised |
 | --- | --- | --- |
 | `premix-launch` | homepage premix box, both forms on `/premixes/`, the end of all four guide pages | one email when the premixes launch |
+| `premix-news` | the form at the bottom of `/premixes/`, once the shop is open | new blends and restocks |
 | `events` | `/events/` | the pop-up schedule |
 | `newsletter` | the footer, and the side tab | general news |
 
@@ -484,6 +552,9 @@ These matter for search but can't be done in code:
 4. **Mailchimp double opt-in** — recommended so bots can't spam-subscribe addresses.
 5. **Mailchimp "Signed up for" field** — the one-time setup under *Your email
    list* above. Until it exists, signups arrive without their label.
+6. **Square** — the two premix items and the 30 checkout links behind the shop
+   (see *The shop*). The links are the only part the website needs, and they
+   live in `_data/shop.yml`.
 
 ---
 
@@ -491,6 +562,9 @@ These matter for search but can't be done in code:
 
 - **`CNAME`** — this is what points godschai.com at the site. Deleting it takes
   the domain down.
+- **`order-confirmed/index.html`** — every Square checkout link sends people
+  back to this address after they pay. Moving or renaming it breaks that step
+  for every order.
 - **`menu.html`** in the root and **`menu/index.html`** — both are small
   forwarders that send the old menu addresses to the lineup on the homepage, so
   old links and Google's index keep working. Delete them and those links 404.

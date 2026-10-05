@@ -2,15 +2,36 @@
 layout: default
 title: "Masala Chai Premix, Saskatoon | God's Chai"
 description: "Two masala chai premixes, hand crafted in Saskatoon: Original Masala and Rose & Cardamom. Kerala spices, Assam tea, 25 cups a pouch. Launching this fall."
+description_open: "Order masala chai premix from Saskatoon: Original Masala or Rose & Cardamom, $14.99 for 25 cups. Free delivery in Saskatoon, tracked shipping across Canada."
 breadcrumb: "Premixes"
 og_image: "uploads/og-image.jpg"
 ---
 
 <section aria-labelledby="page-h1" style="max-width:1240px;margin:0 auto;padding:clamp(110px,14vh,170px) clamp(18px,4vw,40px) clamp(20px,3vw,30px)">
+  {%- if site.data.shop.open %}
+  {%- comment -%} The shop is open (_data/shop.yml): the words on the left, the order box on the right. {%- endcomment %}
+  <div style="display:flex;gap:clamp(28px,4vw,56px);align-items:flex-start;flex-wrap:wrap">
+    <div style="flex:1 1 380px;min-width:280px">
+      <div style="display:inline-block;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.16em;text-transform:uppercase;color:#2B1B12;background:#F2A93C;padding:7px 13px;border-radius:999px;font-weight:500">Now delivering</div>
+      <h1 id="page-h1" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(2.3rem,6vw,4.2rem);line-height:0.98;letter-spacing:0;margin:18px 0 0;max-width:26ch">Masala Chai Premix, <span style="color:#FF6F61;font-style:italic">made in Saskatoon</span></h1>
+      <p style="font-size:clamp(1.05rem,1.5vw,1.25rem);line-height:1.6;color:#E7D6C4;max-width:46ch;margin:22px 0 0">We're bagging what we pour. Two blends, hand crafted here in Saskatoon, stove-top ready in minutes — and each 125g pouch makes 25 cups.</p>
+      <ul style="list-style:none;margin:24px 0 0;padding:0;display:flex;flex-direction:column;gap:10px;font-size:15px;color:#C7B29E">
+        <li><span style="color:#F2A93C">✶</span>&nbsp; ${% include money.html v=site.data.shop.price %} a pouch — no tax added</li>
+        <li><span style="color:#F2A93C">✶</span>&nbsp; Free delivery anywhere in Saskatoon</li>
+        <li><span style="color:#F2A93C">✶</span>&nbsp; ${% include money.html v=site.data.shop.zones.canada.fee %} tracked shipping to the rest of Canada — free on {{ site.data.shop.zones.canada.free_from }}+ pouches</li>
+        <li><span style="color:#F2A93C">✶</span>&nbsp; <a href="{{ '/refunds/' | relative_url }}" style="color:#C7B29E">Refunds even on opened pouches</a>, if something's wrong</li>
+      </ul>
+    </div>
+    <div style="flex:1 1 400px;min-width:min(100%,300px);display:flex;justify-content:center">
+      {% include shop-order.html %}
+    </div>
+  </div>
+  {%- else %}
   <div style="display:inline-block;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.16em;text-transform:uppercase;color:#2B1B12;background:#F2A93C;padding:7px 13px;border-radius:999px;font-weight:500">Launching this fall</div>
   <h1 id="page-h1" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(2.3rem,6vw,4.2rem);line-height:0.98;letter-spacing:0;margin:18px 0 0;max-width:26ch">Masala Chai Premix, <span style="color:#FF6F61;font-style:italic">made in Saskatoon</span></h1>
   <p style="font-size:clamp(1.05rem,1.5vw,1.25rem);line-height:1.6;color:#E7D6C4;max-width:54ch;margin:22px 0 28px">We're bagging what we pour. Two blends, hand crafted here in Saskatoon, stove-top ready in minutes — and each 125g pouch makes 25 cups. Be first to know when they drop.</p>
   {% include signup-form.html id="premixhero" button="Get launch updates" big=true list="premix-launch" note="No spam. One note when the premixes are ready." %}
+  {%- endif %}
 </section>
 
 <div data-gc-reveal>
@@ -36,15 +57,73 @@ og_image: "uploads/og-image.jpg"
     <div class="gc-prose" style="max-width:64ch">
       <p>Most chai premixes on a Canadian shelf are sugar and powdered flavour with a bit of tea dust in it. You can taste the shortcut immediately — it's sweet, it's flat, and it doesn't smell like anything.</p>
       <p>Ours is the recipe we've been pouring at pop-ups across Saskatoon: whole cardamom, ginger, cassia, clove and pepper from Kerala, ground in small batches, with single-origin Assam that's malty enough to stand up to milk. Nothing added to make it cheaper.</p>
-      <p>If you want to make it from scratch in the meantime, our <a href="{{ '/how-to-make-masala-chai/' | relative_url }}">guide to making masala chai</a> has the full method — ratios, spices and the mistakes to avoid.</p>
+      <p>If you want to make it from scratch {% if site.data.shop.open %}instead{% else %}in the meantime{% endif %}, our <a href="{{ '/how-to-make-masala-chai/' | relative_url }}">guide to making masala chai</a> has the full method — ratios, spices and the mistakes to avoid.</p>
     </div>
   </div>
 </section>
 
 <section aria-labelledby="list-h2" style="max-width:1240px;margin:0 auto;padding:clamp(46px,6vw,84px) clamp(18px,4vw,40px)">
+  {%- if site.data.shop.open %}
+  <h2 id="list-h2" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(1.9rem,4.4vw,2.8rem);letter-spacing:0;margin:0 0 14px;color:#F3E8D3">New blends, first</h2>
+  <p style="font-size:1.05rem;line-height:1.6;color:#D6C7B4;max-width:46ch;margin:0 0 24px">An email when there's a new blend or a restock. That's it.</p>
+  {% include signup-form.html id="premixfoot" button="Join the list" big=true list="premix-news" %}
+  {%- else %}
   <h2 id="list-h2" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(1.9rem,4.4vw,2.8rem);letter-spacing:0;margin:0 0 14px;color:#F3E8D3">Get the launch note</h2>
   <p style="font-size:1.05rem;line-height:1.6;color:#D6C7B4;max-width:46ch;margin:0 0 24px">One email when the premixes go on sale. That's it.</p>
   {% include signup-form.html id="premixfoot" button="Join the list" big=true list="premix-launch" %}
+  {%- endif %}
 </section>
 
 </div>
+
+{%- if site.data.shop.open %}
+{%- assign shop = site.data.shop %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {%- for p in site.data.premixes %}
+    {
+      "@type": "Product",
+      "@id": "{{ page.url | absolute_url }}#{{ p.img }}",
+      "name": "{{ p.name | escape }} Masala Chai Premix, 125 g",
+      "description": {{ p.blurb | jsonify }},
+      "image": "{{ '/uploads/opt/' | absolute_url }}{{ p.img }}-500.jpg",
+      "brand": { "@type": "Brand", "name": "God's Chai" },
+      "weight": { "@type": "QuantitativeValue", "value": 125, "unitCode": "GRM" },
+      "offers": {
+        "@type": "Offer",
+        "url": "{{ page.url | absolute_url }}#order",
+        "price": "{% include money.html v=shop.price %}",
+        "priceCurrency": "CAD",
+        "availability": "https://schema.org/InStock",
+        "itemCondition": "https://schema.org/NewCondition",
+        "seller": { "@id": "{{ '/' | absolute_url }}#organization" },
+        "shippingDetails": [
+          {
+            "@type": "OfferShippingDetails",
+            "shippingRate": { "@type": "MonetaryAmount", "value": "{% include money.html v=shop.zones.saskatoon.fee %}", "currency": "CAD" },
+            "shippingDestination": { "@type": "DefinedRegion", "addressCountry": "CA", "addressRegion": "SK", "postalCodePrefix": "S7" }
+          },
+          {
+            "@type": "OfferShippingDetails",
+            "shippingRate": { "@type": "MonetaryAmount", "value": "{% include money.html v=shop.zones.canada.fee %}", "currency": "CAD" },
+            "shippingDestination": { "@type": "DefinedRegion", "addressCountry": "CA" }
+          }
+        ],
+        "hasMerchantReturnPolicy": {
+          "@type": "MerchantReturnPolicy",
+          "url": "{{ '/refunds/' | absolute_url }}",
+          "applicableCountry": "CA",
+          "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+          "merchantReturnDays": {{ shop.refund_days }},
+          "returnFees": "https://schema.org/FreeReturn",
+          "refundType": "https://schema.org/FullRefund"
+        }
+      }
+    }{% unless forloop.last %},{% endunless %}
+    {%- endfor %}
+  ]
+}
+</script>
+{%- endif %}
