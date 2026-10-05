@@ -65,7 +65,15 @@
       });
 
       var sub = n * data.price;
-      var fee = z ? data.fees[z] : 0;
+      // Some zones ship free once the order is big enough (free_from in shop.yml).
+      var freeAt = z ? data.free[z] : 0;
+      var fee = z && !(freeAt && n >= freeAt) ? data.fees[z] : 0;
+      var nudge = root.querySelector('[data-gc-nudge]');
+      nudge.hidden = !(freeAt && n && n < freeAt);
+      if (!nudge.hidden) {
+        var more = freeAt - n;
+        nudge.textContent = 'Add ' + more + ' more pouch' + (more === 1 ? '' : 'es') + ' and shipping is free.';
+      }
       root.querySelector('[data-gc-count]').textContent = n === 1 ? '1 pouch' : n + ' pouches';
       root.querySelector('[data-gc-sub]').textContent = money(sub);
       root.querySelector('[data-gc-fee]').textContent = !z ? '—' : fee ? money(fee) : 'Free';

@@ -20,10 +20,12 @@ max_each: 3
 # Contact for orders and refunds. Shown on the shipping, refund, privacy and
 # thank-you pages, and set as the support email on every Square checkout.
 # Leave it blank and those pages point people at Instagram instead.
-email: ""
+email: "sip@godschai.com"
 
 # Where it can go. No pickups: every order is delivered or shipped.
 # fee is in dollars and must match the shipping fee on that zone's Square links.
+# free_from: orders with at least this many pouches ship free, so their Square
+# links carry no shipping fee.
 zones:
   saskatoon:
     label: "Saskatoon"
@@ -33,7 +35,8 @@ zones:
     when: "Usually within 3 days of your order."
   canada:
     label: "Anywhere else in Canada"
-    fee: 12.99
+    fee: 9.99
+    free_from: 5
     short: "Canada Post, tracked"
     how: "We ship it by Canada Post Expedited Parcel, with tracking."
     when: "Packed within 2 business days, then usually 2–7 business days in the post."
@@ -43,9 +46,11 @@ refund_days: 30
 
 # One Square checkout link per order: o<Original pouches>r<Rose pouches>-<zone>.
 # So o2r1-canada is two Original Masala and one Rose & Cardamom, shipped.
-# Every link asks for a shipping address and sends people back to
-# /order-confirmed/ once they've paid. A blank one just shows "message us"
-# for that order, so the shop never sends anyone to a dead link.
+# The -canada links for 5 or more pouches (o2r3, o3r2, o3r3) carry no
+# shipping fee: see free_from above. Every link asks for a shipping address
+# and sends people back to /order-confirmed/ once they've paid. A blank one
+# just shows "message us" for that order, so the shop never sends anyone to a
+# dead link.
 links:
   o0r1-saskatoon: ""
   o0r2-saskatoon: ""

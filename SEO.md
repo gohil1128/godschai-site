@@ -146,10 +146,10 @@ the Square app) with their address, and a note saying *Saskatoon delivery* or
 | `open` | The launch switch. `false` shows "launching this fall" and the email signups; `true` turns every premix box on the site into "order now". |
 | `price` | $14.99 a pouch. No tax is added. |
 | `max_each` | Most pouches of one blend in an order (3). |
-| `email` | Your contact for orders and refunds. Blank means the pages say "message us on Instagram" instead. |
-| `zones` | Saskatoon (free) and the rest of Canada ($12.99): the fee, and the delivery wording shown on the order box, `/shipping/` and `/order-confirmed/`. |
+| `email` | Your contact for orders and refunds (sip@godschai.com). Blank means the pages say "message us on Instagram" instead. |
+| `zones` | Saskatoon (free) and the rest of Canada ($9.99, free from 5 pouches): the fee, the free-shipping point (`free_from`), and the delivery wording shown on the order box, `/shipping/` and `/order-confirmed/`. |
 | `refund_days` | How long people have to ask for a refund (30). |
-| `links` | The 30 Square checkout links, one for every mix of pouches and zone. `o2r1-canada` is two Original Masala and one Rose & Cardamom, shipped. |
+| `links` | The 30 Square checkout links, one for every mix of pouches and zone. `o2r1-canada` is two Original Masala and one Rose & Cardamom, shipped. The three Canada links with 5 or more pouches carry no shipping fee. |
 
 A blank link isn't an error. For that one order, the button switches off and
 says "message us on Instagram", so nobody is ever sent to a dead page.
@@ -160,11 +160,10 @@ says "message us on Instagram", so nobody is ever sent to a dead page.
    filled in.
 2. Place one real order, then refund it — it takes two minutes and proves the
    whole loop.
-3. Fill in `email:`.
-4. Change `open: false` to `open: true` and commit. The site updates in a
+3. Change `open: false` to `open: true` and commit. The site updates in a
    minute or two.
 
-**Changing the price or the shipping fee** means changing it in Square too,
+**Changing the price, the shipping fee or the free-shipping point** means changing it in Square too,
 because Square is what actually charges. The number in `shop.yml` is only what
 the site shows. Ask Claude with Square connected to do both together.
 
@@ -175,8 +174,9 @@ we'll get in touch first: they either pay the shipping or get a full refund.
 **Posting parcels.** Join Canada Post's free *Solutions for Small Business*
 programme and buy labels online. Expedited Parcel (tracked) for a parcel under
 0.5 kg costs about $9.70–$15.30 from Saskatoon to most of Canada, plus a fuel
-surcharge, so $12.99 roughly covers it. Remote and northern addresses cost
-more. Each pouch is 125 g, so up to three pouches stay under 0.5 kg in a
+surcharge. The $9.99 fee covers the nearer provinces; farther addresses cost
+you a few dollars more, and orders of 5 or more pouches you post for free.
+Remote and northern addresses cost more again. Each pouch is 125 g, so up to three pouches stay under 0.5 kg in a
 padded mailer. A full six-pouch order goes in the 1 kg band, which costs only a
 dollar or two more.
 

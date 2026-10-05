@@ -18,7 +18,7 @@ og_image: "uploads/og-image.jpg"
       <ul style="list-style:none;margin:24px 0 0;padding:0;display:flex;flex-direction:column;gap:10px;font-size:15px;color:#C7B29E">
         <li><span style="color:#F2A93C">✶</span>&nbsp; ${% include money.html v=site.data.shop.price %} a pouch — no tax added</li>
         <li><span style="color:#F2A93C">✶</span>&nbsp; Free delivery anywhere in Saskatoon</li>
-        <li><span style="color:#F2A93C">✶</span>&nbsp; ${% include money.html v=site.data.shop.zones.canada.fee %} tracked shipping to the rest of Canada</li>
+        <li><span style="color:#F2A93C">✶</span>&nbsp; ${% include money.html v=site.data.shop.zones.canada.fee %} tracked shipping to the rest of Canada — free on {{ site.data.shop.zones.canada.free_from }}+ pouches</li>
         <li><span style="color:#F2A93C">✶</span>&nbsp; <a href="{{ '/refunds/' | relative_url }}" style="color:#C7B29E">Refunds even on opened pouches</a>, if something's wrong</li>
       </ul>
     </div>
