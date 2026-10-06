@@ -55,12 +55,23 @@
     var n = count(), z = state.z;
     var freeAt = z ? data.free[z] : 0;
     var fee = z && !(freeAt && n >= freeAt) ? data.fees[z] : 0;
-    // Tax per blend, in cents, rounded, on pouches only (never shipping).
-    var rate = z ? data.tax[z] : 0, tax = 0;
-    if (rate) for (var k in state.q) tax += Math.round(state.q[k] * Math.round(data.price * 100) * rate);
+    var priceC = Math.round(data.price * 100);
+    // "Try both": every Original + Rose pair costs pair_price instead of 2 × price.
+    var pairs = data.pair ? Math.min.apply(null, data.blends.map(function (k) { return state.q[k]; })) : 0;
+    var disc = pairs * data.pair;
+    // Worked out the way Square does it, in cents: the saving comes off first,
+    // then the tax is worked out once on what's left (rounded half-to-even, as
+    // Square does). Never on shipping.
+    var rate = z ? data.tax[z] : 0;
+    var tax = rate ? halfEven((n * priceC - disc) * rate) : 0;
+    var sub = n * data.price, saving = disc / 100;
     tax /= 100;
-    var sub = n * data.price;
-    return { n: n, sub: sub, fee: fee, tax: tax, total: sub + tax + fee };
+    return { n: n, sub: sub, saving: saving, fee: fee, tax: tax, total: sub - saving + tax + fee };
+  }
+  function halfEven(x) {
+    var f = Math.floor(x), d = x - f;
+    if (Math.abs(d - 0.5) < 1e-9) return f % 2 === 0 ? f : f + 1;
+    return Math.round(x);
   }
 
   // ---- render ---------------------------------------------------------
@@ -117,6 +128,9 @@
 
     root.querySelector('[data-gc-count]').textContent = n === 1 ? '1 pouch' : n + ' pouches';
     root.querySelector('[data-gc-sub]').textContent = money(t.sub);
+    var discRow = root.querySelector('[data-gc-discrow]');
+    discRow.hidden = !t.saving;
+    if (t.saving) root.querySelector('[data-gc-disc]').textContent = '−' + money(t.saving);
     root.querySelector('[data-gc-taxrow]').hidden = !t.tax;
     root.querySelector('[data-gc-tax]').textContent = money(t.tax);
     root.querySelector('[data-gc-fee]').textContent = !z ? '—' : t.fee ? money(t.fee) : 'Free';

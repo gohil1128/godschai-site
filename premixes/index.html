@@ -19,7 +19,7 @@ og_image: "uploads/og-image.jpg"
     {% include product-card.html p=p %}
     {%- endfor %}
   </div>
-  <p style="font-size:13.5px;color:#AB9280;margin:16px 0 0">${% include money.html v=site.data.shop.price %} a pouch, plus {{ site.data.shop.zones.saskatoon.tax | times: 100 | round }}% {{ site.data.shop.zones.saskatoon.tax_name }} on Saskatoon orders. {% if site.data.shop.checkout_api == "" %}Up to {{ site.data.shop.max_each }} of each blend per online order.{% endif %}</p>
+  <p style="font-size:13.5px;color:#AB9280;margin:16px 0 0">${% include money.html v=site.data.shop.price %} a pouch{% if site.data.shop.pair_price %}, or <strong style="color:#F2A93C">one of each for ${% include money.html v=site.data.shop.pair_price %}</strong>{% endif %}, plus {{ site.data.shop.zones.saskatoon.tax | times: 100 | round }}% {{ site.data.shop.zones.saskatoon.tax_name }} on Saskatoon orders. {% if site.data.shop.checkout_api == "" %}Up to {{ site.data.shop.max_each }} of each blend per online order.{% endif %}</p>
   <div style="margin:clamp(22px,3vw,32px) 0 0">{% include trust-strip.html %}</div>
   <noscript>
     <div style="margin-top:22px;font-size:15px;line-height:1.6;color:#C7B29E">

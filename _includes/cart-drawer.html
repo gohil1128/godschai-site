@@ -91,6 +91,7 @@
   .gc-sum div{display:flex;justify-content:space-between;gap:12px;padding:2px 0}
   .gc-sum div[hidden]{display:none}
   .gc-sum span:last-child{font-family:'DM Mono',monospace;color:#F3E8D3}
+  .gc-sum .gc-sum-save span{color:#FF8A78!important}
   .gc-sum .gc-sum-total{margin-top:6px;font-size:17px;color:#F3E8D3;font-weight:600}
   .gc-go{width:100%;border:0;cursor:pointer;background:#F2A93C;color:#2B1B12;font:700 16px 'Hanken Grotesk',sans-serif;padding:15px 24px;border-radius:999px}
   .gc-go:disabled{background:#F2A93C!important;opacity:0.42;cursor:not-allowed;transform:none!important}
@@ -183,8 +184,9 @@
         {%- for p in site.data.premixes %}
         <div class="gc-cart-up-item" data-gc-up-item="{{ p.key }}" hidden>
           {% include img.html base=p.img ext="jpg" widths="250" sizes="40px" w="544" h="952" alt="" %}
-          <div><b>{{ p.name }}</b><small>{{ p.tagline }}</small></div>
-          <button type="button" data-gc-add="{{ p.key }}" aria-label="Add {{ p.name }}, ${% include money.html v=shop.price %}">+ ${% include money.html v=shop.price %}</button>
+          {%- if shop.pair_price %}{% assign up_price = shop.pair_price | minus: shop.price %}{% else %}{% assign up_price = shop.price %}{% endif %}
+          <div><b>{{ p.name }}</b><small>{% if shop.pair_price %}Make it a pair: both for ${% include money.html v=shop.pair_price %}{% else %}{{ p.tagline }}{% endif %}</small></div>
+          <button type="button" data-gc-add="{{ p.key }}" aria-label="Add {{ p.name }}, ${% include money.html v=up_price %} more">+ ${% include money.html v=up_price %}</button>
         </div>
         {%- endfor %}
       </section>
@@ -206,6 +208,7 @@
     <div class="gc-cart-foot" data-gc-foot hidden>
       <div class="gc-sum" aria-live="polite">
         <div><span data-gc-count>Pouches</span><span data-gc-sub>$0.00</span></div>
+        <div data-gc-discrow hidden class="gc-sum-save"><span>Try-both pair price</span><span data-gc-disc></span></div>
         <div data-gc-taxrow hidden><span>{{ shop.zones.saskatoon.tax_name | default: "Tax" }}</span><span data-gc-tax></span></div>
         <div><span>Delivery</span><span data-gc-fee>—</span></div>
         <div class="gc-sum-total"><span>Total</span><span data-gc-total>$0.00</span></div>
@@ -220,5 +223,5 @@
     </div>
   </div>
 </div>
-<script type="application/json" data-gc-cart-data>{"price":{{ shop.price }},"max":{{ shop_max }},"api":{{ shop.checkout_api | jsonify }},"blends":[{% for p in site.data.premixes %}{{ p.key | jsonify }}{% unless forloop.last %},{% endunless %}{% endfor %}],"fees":{ {%- for z in shop.zones -%}{{ z[0] | jsonify }}:{{ z[1].fee }}{% unless forloop.last %},{% endunless %}{%- endfor -%} },"tax":{ {%- for z in shop.zones -%}{{ z[0] | jsonify }}:{{ z[1].tax | default: 0 }}{% unless forloop.last %},{% endunless %}{%- endfor -%} },"free":{ {%- for z in shop.zones -%}{{ z[0] | jsonify }}:{{ z[1].free_from | default: 0 }}{% unless forloop.last %},{% endunless %}{%- endfor -%} },"links":{{ shop.links | jsonify }},"instagram":{{ site.social.instagram | jsonify }}}</script>
+<script type="application/json" data-gc-cart-data>{"price":{{ shop.price }},"max":{{ shop_max }},"pair":{% if shop.pair_price %}{{ shop.price | times: 2 | minus: shop.pair_price | times: 100 | round }}{% else %}0{% endif %},"api":{{ shop.checkout_api | jsonify }},"blends":[{% for p in site.data.premixes %}{{ p.key | jsonify }}{% unless forloop.last %},{% endunless %}{% endfor %}],"fees":{ {%- for z in shop.zones -%}{{ z[0] | jsonify }}:{{ z[1].fee }}{% unless forloop.last %},{% endunless %}{%- endfor -%} },"tax":{ {%- for z in shop.zones -%}{{ z[0] | jsonify }}:{{ z[1].tax | default: 0 }}{% unless forloop.last %},{% endunless %}{%- endfor -%} },"free":{ {%- for z in shop.zones -%}{{ z[0] | jsonify }}:{{ z[1].free_from | default: 0 }}{% unless forloop.last %},{% endunless %}{%- endfor -%} },"links":{{ shop.links | jsonify }},"instagram":{{ site.social.instagram | jsonify }}}</script>
 <script src="{{ '/assets/js/cart.js' | relative_url }}" defer></script>

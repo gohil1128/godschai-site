@@ -117,10 +117,14 @@ layout: default
     <div class="gc-pcard gc-card" style="justify-content:center">
       <div class="gc-pcard-notes">One of each</div>
       <h3 style="margin-top:12px">{{ site.data.premixes[0].name }} + {{ site.data.premixes[1].name }}</h3>
-      <p>Two pouches, fifty cups. The bold one for mornings, the floral one for later.</p>
+      <p>Two pouches, fifty cups — the bold one for mornings, the floral one for later.{% if shop.pair_price %} Every pair is ${% include money.html v=shop.pair_price %}.{% endif %}</p>
       <div class="gc-pcard-buy">
         {%- assign two = shop.price | times: 2 %}
+        {%- if shop.pair_price %}
+        <span class="gc-price">${% include money.html v=shop.pair_price %} <s style="color:#AB9280;font-size:14px">${% include money.html v=two %}</s></span>
+        {%- else %}
         <span class="gc-price">${% include money.html v=two %}</span>
+        {%- endif %}
         {%- assign both = site.data.premixes | map: "key" | join: "," %}
         <button type="button" class="gc-add gc-pill" data-gc-add="{{ both }}" hidden>Add both</button>
       </div>
