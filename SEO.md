@@ -202,6 +202,7 @@ so it's a job to hand to Claude with Square connected. The box's heading is
 | --- | --- |
 | `open` | The launch switch. `false` shows "launching this fall" and the email signups; `true` turns every premix box on the site into "order now". |
 | `price` | $14.99 a pouch, before tax. |
+| `pair_price` | "Try both": one Original Masala + one Rose & Cardamom for $24.99, for every pair in the order. The saving comes off before PST. The Square links for orders with both blends include it, as does `checkout/api/checkout.js`. |
 | `max_each` | Most pouches of one blend in an order (3). |
 | `email` | Your contact for orders and refunds (sip@godschai.com). Blank means the pages say "message us on Instagram" instead. |
 | `zones` | Saskatoon (free delivery, 6% PST) and the rest of Canada ($9.99, free from 5 pouches, no PST): the fee, the tax (`tax`, `tax_name`), the free-shipping point (`free_from`), and the delivery wording shown on the order box, `/shipping/` and `/order-confirmed/`. |

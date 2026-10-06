@@ -13,6 +13,12 @@ open: true
 # charged is set in Square, so change both together.
 price: 14.99
 
+# "Try both": one Original Masala + one Rose & Cardamom together cost this
+# instead of 2 × price, for every pair in the order (2 of each = 2 pairs). The
+# saving comes off before PST. The checkout links for orders with both blends
+# carry the matching discount, so change it in Square too.
+pair_price: 24.99
+
 # Most pouches of one blend in a single order. Each extra step means more
 # checkout links below, so raise it with care.
 max_each: 3
@@ -73,30 +79,30 @@ links:
   o0r2-saskatoon: "https://square.link/u/aH5HhtL9"
   o0r3-saskatoon: "https://square.link/u/g19j46Od"
   o1r0-saskatoon: "https://square.link/u/8CIlgTBY"
-  o1r1-saskatoon: "https://square.link/u/rjeHFPGn"
-  o1r2-saskatoon: "https://square.link/u/CNtSiA9c"
-  o1r3-saskatoon: "https://square.link/u/riwpkA0P"
+  o1r1-saskatoon: "https://square.link/u/95htwYv6"
+  o1r2-saskatoon: "https://square.link/u/rbdrM0cx"
+  o1r3-saskatoon: "https://square.link/u/YnpapLH0"
   o2r0-saskatoon: "https://square.link/u/HEVMYFRX"
-  o2r1-saskatoon: "https://square.link/u/RYgbLdjs"
-  o2r2-saskatoon: "https://square.link/u/gxnRe8nY"
-  o2r3-saskatoon: "https://square.link/u/2cLvnGCC"
+  o2r1-saskatoon: "https://square.link/u/23RSMio1"
+  o2r2-saskatoon: "https://square.link/u/WTFAcKcP"
+  o2r3-saskatoon: "https://square.link/u/gi3QvSbH"
   o3r0-saskatoon: "https://square.link/u/u4ynuLNA"
-  o3r1-saskatoon: "https://square.link/u/GoLAycZn"
-  o3r2-saskatoon: "https://square.link/u/m2TbtsOB"
-  o3r3-saskatoon: "https://square.link/u/aGFdnnKr"
+  o3r1-saskatoon: "https://square.link/u/nXp01qGG"
+  o3r2-saskatoon: "https://square.link/u/qdW74Y8z"
+  o3r3-saskatoon: "https://square.link/u/I2lhybVR"
 
   o0r1-canada: "https://square.link/u/JnBDH2I2"
   o0r2-canada: "https://square.link/u/AUDpQjUP"
   o0r3-canada: "https://square.link/u/gjjSUrv6"
   o1r0-canada: "https://square.link/u/Yb4JT7Ee"
-  o1r1-canada: "https://square.link/u/MntoUuC8"
-  o1r2-canada: "https://square.link/u/XN4mklVk"
-  o1r3-canada: "https://square.link/u/KG0wYBk2"
+  o1r1-canada: "https://square.link/u/HGZAyeDq"
+  o1r2-canada: "https://square.link/u/chZ9uFig"
+  o1r3-canada: "https://square.link/u/6MjrRMup"
   o2r0-canada: "https://square.link/u/KiBW3i08"
-  o2r1-canada: "https://square.link/u/KMPjJmUj"
-  o2r2-canada: "https://square.link/u/jL0x4NnI"
-  o2r3-canada: "https://square.link/u/zHQK7NZA"
+  o2r1-canada: "https://square.link/u/gQu1VNwc"
+  o2r2-canada: "https://square.link/u/0vFseMax"
+  o2r3-canada: "https://square.link/u/Zvc6CKVg"
   o3r0-canada: "https://square.link/u/PJQAd1RN"
-  o3r1-canada: "https://square.link/u/dZNl0OzX"
-  o3r2-canada: "https://square.link/u/r5tKw5Nn"
-  o3r3-canada: "https://square.link/u/dJbH31et"
+  o3r1-canada: "https://square.link/u/bEtH5LlQ"
+  o3r2-canada: "https://square.link/u/XaDXmHZ4"
+  o3r3-canada: "https://square.link/u/MGIPdaKY"

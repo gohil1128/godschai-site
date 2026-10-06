@@ -22,6 +22,9 @@ const ZONES = {
   saskatoon: { tax: true, fee: 0, note: 'Saskatoon delivery (free)', label: 'Saskatoon delivery' },
   canada: { tax: false, fee: 999, freeFrom: 5, note: 'Canada Post shipping', label: 'shipped in Canada' },
 };
+// "Try both": each Original + Rose pair costs $24.99 instead of $29.98.
+// Matches pair_price in _data/shop.yml. Comes off before PST.
+const PAIR_SAVING = 499;
 const MAX_EACH = 99;
 const ORIGINS = ['https://godschai.com', 'https://www.godschai.com'];
 const SQUARE = 'https://connect.squareup.com/v2/online-checkout/payment-links';
@@ -71,6 +74,11 @@ export default async function handler(req, res) {
 
   const shipFree = zone.freeFrom && count >= zone.freeFrom;
   const order = { location_id: LOCATION_ID, line_items: lines };
+  const pairs = Math.min(body.items.o || 0, body.items.r || 0);
+  if (pairs > 0) {
+    order.discounts = [{ uid: 'pair', name: 'Try both: pair price', amount_money: { amount: pairs * PAIR_SAVING, currency: 'CAD' }, scope: 'ORDER' }];
+    parts.push('(pair price)');
+  }
   if (zone.tax) order.taxes = [{ uid: 'pst', catalog_object_id: PST_TAX_ID, scope: 'ORDER' }];
   const checkout_options = {
     ask_for_shipping_address: true,
