@@ -4,42 +4,16 @@
 // back a Square checkout URL for exactly that order. The buyer then pays on
 // Square's own page; no card details ever come near this code.
 //
-// Everything that decides what someone pays lives here, not in the browser:
-// the Square item IDs (so Square's own catalog price is charged), the PST, and
-// the shipping rule. The browser only says how many of what, and where to.
+// What someone pays is worked out in lib/order.js (Square's catalog prices,
+// the PST, the pair price and the shipping rule); the browser only says how
+// many of what, and where to.
 //
 // Needs one secret, set in Vercel → Project → Settings → Environment
 // Variables: SQUARE_ACCESS_TOKEN (a Square production access token).
 
-const LOCATION_ID = 'LGQPHWFXHFPD7';
-// Blend letter (as on the website) → Square item variation
-const ITEMS = {
-  o: { id: 'LT5NXWGSCUK4L3U6UDQNR4A4', name: 'Original Masala' },
-  r: { id: 'ERNSJN2KJTUS2XYR7JGDPKX3', name: 'Rose & Cardamom' },
-};
-const PST_TAX_ID = 'WBQJUT2CSG7LAGAFLXDS3AOO'; // Square's 6% PST
-const ZONES = {
-  saskatoon: { tax: true, fee: 0, note: 'Saskatoon delivery (free)', label: 'Saskatoon delivery' },
-  canada: { tax: false, fee: 999, freeFrom: 5, note: 'Canada Post shipping', label: 'shipped in Canada' },
-};
-// "Try both": each Original + Rose pair costs $24.99 instead of $29.98.
-// Matches pair_price in _data/shop.yml. Comes off before PST.
-const PAIR_SAVING = 499;
-const MAX_EACH = 99;
-const ORIGINS = ['https://godschai.com', 'https://www.godschai.com'];
-const SQUARE = 'https://connect.squareup.com/v2/online-checkout/payment-links';
+import { cors, jsonBody, readOrder, squareOrder, SHIPPING_NAME } from '../lib/order.js';
 
-function cors(req, res) {
-  const origin = req.headers.origin || '';
-  if (ORIGINS.includes(origin)) {
-    res.setHeader('Access-Control-Allow-Origin', origin);
-    res.setHeader('Vary', 'Origin');
-    res.setHeader('Access-Control-Allow-Methods', 'POST, GET, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-    res.setHeader('Access-Control-Max-Age', '86400');
-  }
-  return ORIGINS.includes(origin);
-}
+const SQUARE = 'https://connect.squareup.com/v2/online-checkout/payment-links';
 
 export default async function handler(req, res) {
   res.setHeader('Cache-Control', 'no-store');
@@ -54,32 +28,11 @@ export default async function handler(req, res) {
   const token = process.env.SQUARE_ACCESS_TOKEN;
   if (!token) return res.status(503).json({ error: 'not_configured' });
 
-  let body = req.body;
-  if (typeof body === 'string') { try { body = JSON.parse(body); } catch (e) { body = null; } }
-  const zone = body && ZONES[body.zone];
-  if (!zone || !body.items || typeof body.items !== 'object') return res.status(400).json({ error: 'bad_request' });
+  const o = readOrder(jsonBody(req));
+  if (o.error) return res.status(400).json({ error: o.error });
 
-  const lines = [], parts = [];
-  let count = 0;
-  for (const key of Object.keys(ITEMS)) {
-    const q = body.items[key];
-    if (q === undefined || q === 0) continue;
-    if (!Number.isInteger(q) || q < 0 || q > MAX_EACH) return res.status(400).json({ error: 'bad_quantity' });
-    lines.push({ catalog_object_id: ITEMS[key].id, quantity: String(q) });
-    parts.push(q + ' ' + ITEMS[key].name);
-    count += q;
-  }
-  for (const key of Object.keys(body.items)) if (!ITEMS[key]) return res.status(400).json({ error: 'bad_item' });
-  if (!count) return res.status(400).json({ error: 'empty' });
-
-  const shipFree = zone.freeFrom && count >= zone.freeFrom;
-  const order = { location_id: LOCATION_ID, line_items: lines };
-  const pairs = Math.min(body.items.o || 0, body.items.r || 0);
-  if (pairs > 0) {
-    order.discounts = [{ uid: 'pair', name: 'Try both: pair price', amount_money: { amount: pairs * PAIR_SAVING, currency: 'CAD' }, scope: 'ORDER' }];
-    parts.push('(pair price)');
-  }
-  if (zone.tax) order.taxes = [{ uid: 'pst', catalog_object_id: PST_TAX_ID, scope: 'ORDER' }];
+  const order = squareOrder(o);
+  const parts = o.pairs > 0 ? o.parts.concat('(pair price)') : o.parts;
   const checkout_options = {
     ask_for_shipping_address: true,
     redirect_url: 'https://godschai.com/order-confirmed/',
@@ -88,9 +41,7 @@ export default async function handler(req, res) {
     enable_coupon: false,
     accepted_payment_methods: { apple_pay: true, google_pay: true },
   };
-  if (zone.fee && !shipFree) {
-    checkout_options.shipping_fee = { name: 'Canada Post Expedited (tracked)', charge: { amount: zone.fee, currency: 'CAD' } };
-  }
+  if (o.fee) checkout_options.shipping_fee = { name: SHIPPING_NAME, charge: { amount: o.fee, currency: 'CAD' } };
 
   const r = await fetch(SQUARE, {
     method: 'POST',
@@ -101,10 +52,10 @@ export default async function handler(req, res) {
     },
     body: JSON.stringify({
       idempotency_key: crypto.randomUUID(),
-      description: parts.join(' + ') + ', ' + zone.label + (shipFree ? ' (free shipping)' : ''),
+      description: parts.join(' + ') + ', ' + o.zone.label + (o.shipFree ? ' (free shipping)' : ''),
       order,
       checkout_options,
-      payment_note: zone.note + (shipFree ? ' (free, ' + zone.freeFrom + '+ pouches)' : ''),
+      payment_note: o.note,
     }),
   }).catch(() => null);
 

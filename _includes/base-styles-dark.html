@@ -17,16 +17,17 @@
      static logo inside it is what shows, and it keeps showing if the script
      never arrives; once :defined matches, the component's own layers take over. */
   gods-chai-logo:defined > picture{display:none!important}  /* beats the include's inline display:block */
-  /* The component tints all eleven strokes with one colour, but the lockup is
-     two-tone: "God's" and the brush stroke under it in brand orange, "CHAI" and
-     the tagline in the cream set by the tint attribute. tools/optimize-logo-sting.py
-     stamps data-layer on each stroke so these can be picked out by name.
+  /* The component tints all eleven strokes with one colour, but the lockup wears
+     the pouch's colours: "God's" in rust, the brush stroke under it in gold, and
+     "CHAI" and the tagline in the cream set by the tint attribute.
+     tools/optimize-logo-sting.py stamps data-layer on each stroke so these can be
+     picked out by name; tools/build-logo.py uses the same colours for the stills.
      Overriding an inline background-color needs !important. */
   gods-chai-logo [data-layer="G"],
   gods-chai-logo [data-layer="od"],
   gods-chai-logo [data-layer="apos"],
-  gods-chai-logo [data-layer="s"],
-  gods-chai-logo [data-layer="swash"]{background-color:#F2A93C!important}
+  gods-chai-logo [data-layer="s"]{background-color:#B6502B!important}
+  gods-chai-logo [data-layer="swash"]{background-color:#D3A849!important}
   /* The fixed nav is 100px tall with the 76px lockup, so anchored sections need
      to clear more than the 84px they carry inline. */
   section[id]{scroll-margin-top:108px!important}

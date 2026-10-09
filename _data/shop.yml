@@ -1,9 +1,11 @@
 # The premix shop. Everything about selling lives here; SEO.md ("The shop")
 # walks through it in plain English.
 #
-# Payment happens on Square's own checkout page, never on this site: the
-# buttons on /premixes/ just send people to one of the Square checkout links
-# below. Card numbers and addresses go straight to Square.
+# Payment goes through Square either way. Until pay_on_site is on, the cart
+# sends people to Square's own checkout page (one of the links at the bottom,
+# or one made by the checkout service). With it on, they pay on our own page,
+# /checkout/, where the card goes into Square's secure fields. Card numbers
+# never reach this site or our checkout service.
 
 # The switch. false: the site shows "launching this fall" and the email
 # signups, exactly as before. true: every premix box turns into "order now".
@@ -29,6 +31,13 @@ max_each: 3
 # applies. Once it's set, people can order up to max_each_api of each blend.
 checkout_api: ""
 max_each_api: 99
+
+# Our own payment page (/checkout/, shop-checkout.html): the site's design,
+# Square's card fields, and the brewing screen while the card goes through.
+# Needs checkout_api and the settings in checkout/README.md; until those are
+# all in, it hands people to Square's checkout page instead. Before switching
+# it on, try a real order at godschai.com/checkout/?try=1 (and refund it).
+pay_on_site: false
 
 # Contact for orders and refunds. Shown on the shipping, refund, privacy and
 # thank-you pages, and set as the support email on every Square checkout.

@@ -9,9 +9,9 @@ literally the logo's own letterform, drip and all, not a look-alike.
 
 Writes favicon.ico (16/32/48), favicon-32.png and apple-touch-icon.png.
 
-Dark G on a marigold tile, the same pairing as the @godschai pill. A bare
-letterform was tried and is too faint on a white tab strip at 16px; the filled
-tile keeps its silhouette at every size, light background or dark.
+Cream G on a rust tile, like the back of the pouch. A bare letterform was
+tried and is too faint on a white tab strip at 16px; the filled tile keeps its
+silhouette at every size, light background or dark.
 
 Re-run after changing BRAND or dropping in a new logo-sting export.
 
@@ -32,8 +32,8 @@ except ImportError:
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SRC = os.path.join(ROOT, "assets", "_src", "logo-sting-original.js")
 
-BRAND = (242, 169, 60, 255)   # #F2A93C marigold tile
-INK = (43, 27, 18, 255)       # #2B1B12 the on-accent dark used across the site
+BRAND = (182, 80, 43, 255)    # #B6502B rust tile, the pouch's colour
+INK = (243, 232, 211, 255)    # #F3E8D3 cream G
 
 PAD = 0.15                    # breathing room around the G inside the tile
 RADIUS = 0.22                 # corner radius as a fraction of the tile

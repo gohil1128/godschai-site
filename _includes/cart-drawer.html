@@ -2,9 +2,10 @@
   The cart. On every page while the shop is open (_data/shop.yml), from the
   default layout. assets/js/cart.js runs it: "Add to cart" buttons anywhere
   ([data-gc-add]) put pouches in, the bag in the nav opens it, and checkout
-  sends people to the matching Square checkout link. The cart itself lives
-  in the visitor's own browser; nothing about it is sent anywhere until they
-  press checkout.
+  sends people to checkout: our own payment page (/checkout/) once pay_on_site
+  is on, otherwise Square's checkout page for that exact order. The cart
+  itself lives in the visitor's own browser; nothing about it is sent anywhere
+  until they press checkout.
 
   Also holds the styles for the shop pieces that appear on several pages:
   product cards (product-card.html), the trust strip (trust-strip.html) and
@@ -176,7 +177,7 @@
       {%- comment -%}
         "Add to your order": every product from _data/premixes.yml that isn't in
         the cart yet, so a new product shows up here by itself once it's added
-        there (with its Square links). Hidden while the cart is empty, which has
+        there (with its checkout links). Hidden while the cart is empty, which has
         its own picks, and once everything's in.
       {%- endcomment %}
       <section class="gc-cart-up" data-gc-up hidden aria-labelledby="gc-up-h">
@@ -213,15 +214,16 @@
         <div><span>Delivery</span><span data-gc-fee>—</span></div>
         <div class="gc-sum-total"><span>Total</span><span data-gc-total>$0.00</span></div>
       </div>
-      <button type="button" class="gc-go gc-pill" data-gc-go disabled>Checkout securely with Square</button>
+      <button type="button" class="gc-go gc-pill" data-gc-go disabled>Checkout</button>
       <p class="gc-hint" data-gc-hint aria-live="polite"></p>
-      <p class="gc-cart-tip">On Square's page, tap your address when it pops up in the list — that's what unlocks the Pay button.</p>
+      <p class="gc-cart-tip" data-gc-tip>Next page tip: tap your address when it pops up in the list. The Pay button's shy until you do.</p>
       <p class="gc-safe">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false"><rect x="4" y="10.5" width="16" height="10.5" rx="2.5"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg>
-        Card and address go straight to Square, never through this site.
+        Your card details are locked up tighter than our spice recipe. We never see them.
       </p>
     </div>
   </div>
 </div>
-<script type="application/json" data-gc-cart-data>{"price":{{ shop.price }},"max":{{ shop_max }},"pair":{% if shop.pair_price %}{{ shop.price | times: 2 | minus: shop.pair_price | times: 100 | round }}{% else %}0{% endif %},"api":{{ shop.checkout_api | jsonify }},"blends":[{% for p in site.data.premixes %}{{ p.key | jsonify }}{% unless forloop.last %},{% endunless %}{% endfor %}],"fees":{ {%- for z in shop.zones -%}{{ z[0] | jsonify }}:{{ z[1].fee }}{% unless forloop.last %},{% endunless %}{%- endfor -%} },"tax":{ {%- for z in shop.zones -%}{{ z[0] | jsonify }}:{{ z[1].tax | default: 0 }}{% unless forloop.last %},{% endunless %}{%- endfor -%} },"free":{ {%- for z in shop.zones -%}{{ z[0] | jsonify }}:{{ z[1].free_from | default: 0 }}{% unless forloop.last %},{% endunless %}{%- endfor -%} },"links":{{ shop.links | jsonify }},"instagram":{{ site.social.instagram | jsonify }}}</script>
+{% include brew-loader.html %}
+<script type="application/json" data-gc-cart-data>{"price":{{ shop.price }},"payPage":{% if shop.pay_on_site and shop.checkout_api != "" %}{{ '/checkout/' | relative_url | jsonify }}{% else %}""{% endif %},"max":{{ shop_max }},"pair":{% if shop.pair_price %}{{ shop.price | times: 2 | minus: shop.pair_price | times: 100 | round }}{% else %}0{% endif %},"api":{{ shop.checkout_api | jsonify }},"blends":[{% for p in site.data.premixes %}{{ p.key | jsonify }}{% unless forloop.last %},{% endunless %}{% endfor %}],"fees":{ {%- for z in shop.zones -%}{{ z[0] | jsonify }}:{{ z[1].fee }}{% unless forloop.last %},{% endunless %}{%- endfor -%} },"tax":{ {%- for z in shop.zones -%}{{ z[0] | jsonify }}:{{ z[1].tax | default: 0 }}{% unless forloop.last %},{% endunless %}{%- endfor -%} },"free":{ {%- for z in shop.zones -%}{{ z[0] | jsonify }}:{{ z[1].free_from | default: 0 }}{% unless forloop.last %},{% endunless %}{%- endfor -%} },"links":{{ shop.links | jsonify }},"instagram":{{ site.social.instagram | jsonify }}}</script>
 <script src="{{ '/assets/js/cart.js' | relative_url }}" defer></script>

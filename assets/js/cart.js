@@ -2,14 +2,20 @@
  *
  * The cart is two counts and a delivery zone, kept in this browser's
  * localStorage so it follows the visitor from page to page. Nothing is sent
- * anywhere: checkout just navigates to the Square checkout link for that
- * exact order (_data/shop.yml), and Square's page takes the card and address.
+ * anywhere until checkout, which goes to our own payment page (/checkout/,
+ * assets/js/pay.js) once pay_on_site is on in _data/shop.yml, and otherwise
+ * to Square's checkout page for that exact order.
  *
  *   [data-gc-add="o"]        add one Original Masala (or the qty picked in the
  *                            nearest [data-gc-pick]) and open the cart
  *   [data-gc-add="o,r"]      add one of each
  *   [data-gc-cart-open]      open the cart
  *   [data-gc-clear-cart]     on the page: empty the cart (the thank-you page)
+ *   [data-gc-last-order]     on the page: filled with the order number and
+ *                            receipt link our payment page just took
+ *
+ * Also runs the "brewing" screen (_includes/brew-loader.html) as
+ * window.GCBrew, and gives the payment page the cart as window.GCCart.
  */
 (function () {
   'use strict';
@@ -47,7 +53,10 @@
   } catch (e) {}
   if (d.querySelector('[data-gc-clear-cart]')) { data.blends.forEach(function (k) { state.q[k] = 0; }); }
 
-  function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
+  function save() {
+    try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {}
+    try { d.dispatchEvent(new CustomEvent('gc:cart')); } catch (e) {}
+  }
   function count() { var n = 0; for (var k in state.q) n += state.q[k]; return n; }
 
   // ---- totals, exactly as Square works them out ------------------------
@@ -219,20 +228,59 @@
     if (e.shiftKey && (d.activeElement === f[0] || d.activeElement === panel)) { e.preventDefault(); f[f.length - 1].focus(); }
     else if (!e.shiftKey && d.activeElement === f[f.length - 1]) { e.preventDefault(); f[0].focus(); }
   });
-  go.addEventListener('click', function () {
-    if (!url) return;
-    go.disabled = true;
-    go.textContent = 'Opening Square checkout…';
-    if (!data.api) { location.href = url; return; }
-    // Ask the checkout service for a Square checkout for this exact order.
-    var fallback = url === 'api' ? '' : url;
+  // ---- the brewing screen ---------------------------------------------
+  var brew = (function () {
+    var el = d.querySelector('[data-gc-brew]');
+    if (!el) return { show: function () {}, done: function () {}, hide: function () {} };
+    var box = el.firstElementChild, line = el.querySelector('[data-gc-brew-line]'), note = el.querySelector('[data-gc-brew-note]');
+    var timer = 0, noteText = note.textContent, overflow = '';
+    function say(t) { line.classList.remove('is-in'); void line.offsetWidth; line.textContent = t; line.classList.add('is-in'); }
+    function trap(e) { if (e.key === 'Tab' || e.key === 'Escape') e.preventDefault(); }
+    return {
+      // lines: what to say, in turn, every couple of seconds
+      show: function (lines, n) {
+        clearInterval(timer);
+        var i = 0;
+        el.classList.remove('is-done');
+        note.textContent = n || noteText;
+        say(lines[0]);
+        if (lines.length > 1) timer = setInterval(function () { i = (i + 1) % lines.length; say(lines[i]); }, 2300);
+        if (el.hidden) {
+          el.hidden = false;
+          overflow = d.documentElement.style.overflow;
+          d.documentElement.style.overflow = 'hidden';
+          d.addEventListener('keydown', trap, true);
+          box.focus({ preventScroll: true });
+        }
+      },
+      done: function (t, n) { clearInterval(timer); el.classList.add('is-done'); say(t); if (n) note.textContent = n; },
+      hide: function () {
+        clearInterval(timer);
+        el.classList.remove('is-done');
+        if (el.hidden) return;
+        el.hidden = true;
+        d.documentElement.style.overflow = overflow;
+        d.removeEventListener('keydown', trap, true);
+      }
+    };
+  })();
+  W.GCBrew = brew;
+  var TO_PAY_PAGE = ['Warming up the kettle…', 'Taking you to the payment page…'];
+
+  // ---- checkout ---------------------------------------------------------
+  // Square's checkout page for this exact order: from the checkout service
+  // when there is one (any quantity), else the pre-made link. fail(message)
+  // runs if neither works.
+  function hosted(fail) {
+    var link = data.links[data.blends.map(function (k) { return k + state.q[k]; }).join('') + '-' + state.z] || '';
+    var fallback = SQUARE.test(link) ? link : '';
+    brew.show(TO_PAY_PAGE);
     var done = function (to) {
       if (to && SQUARE.test(to)) { location.href = to; return; }
-      go.textContent = 'Checkout securely with Square';
-      render();
-      hint.textContent = 'Couldn’t open checkout just now — please try again in a moment, or ' +
-        'message us and we’ll sort it.';
+      brew.hide();
+      fail('Couldn’t open checkout just now — please try again in a moment, or message us and we’ll sort it.');
     };
+    if (!data.api) { done(fallback); return; }
     fetch(data.api, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -240,17 +288,30 @@
     }).then(function (r) { return r.ok ? r.json() : null; })
       .then(function (j) { done(j && j.url ? j.url : fallback); },
             function () { done(fallback); });
+  }
+  function onPayPage() { return data.payPage && location.pathname === data.payPage; }
+  go.addEventListener('click', function () {
+    if (!url) return;
+    if (data.payPage) {
+      if (onPayPage()) { close(); return; }
+      go.disabled = true;
+      brew.show(['Warming up the kettle…']);
+      location.href = data.payPage;
+      return;
+    }
+    go.disabled = true;
+    hosted(function (msg) { render(); hint.textContent = msg; });
   });
-  // Back from Square: the page comes back exactly as it was. Reset the button.
+  // Back from the payment page: the page comes back exactly as it was. Reset.
   W.addEventListener('pageshow', function (e) {
     if (!e.persisted) return;
-    go.textContent = 'Checkout securely with Square';
+    brew.hide();
     render();
   });
   // Another tab changed the cart.
   W.addEventListener('storage', function (e) {
     if (e.key !== KEY) return;
-    try { var s = JSON.parse(e.newValue || 'null'); if (s && s.q) { state = s; render(); } } catch (x) {}
+    try { var s = JSON.parse(e.newValue || 'null'); if (s && s.q) { state = s; render(); d.dispatchEvent(new CustomEvent('gc:cart')); } } catch (x) {}
   });
 
   // ---- product page quantity pickers + sticky bar ----------------------
@@ -271,6 +332,33 @@
     new IntersectionObserver(function (es) {
       sticky.classList.toggle('is-on', !es[0].isIntersecting && es[0].boundingClientRect.top < 0);
     }).observe(mainBuy);
+  }
+
+  // ---- for the payment page (assets/js/pay.js) -------------------------
+  W.GCCart = {
+    data: data,
+    state: function () { return { q: JSON.parse(JSON.stringify(state.q)), z: state.z }; },
+    totals: totals,
+    setZone: function (z) { if (data.fees.hasOwnProperty(z) && z !== state.z) { state.z = z; save(); render(); } },
+    clear: function () { data.blends.forEach(function (k) { state.q[k] = 0; }); save(); render(); },
+    open: function () { render(); open(); },
+    hosted: hosted
+  };
+  // Our own payment page has no address quirk to warn about.
+  var tip = root.querySelector('[data-gc-tip]');
+  if (tip && data.payPage) tip.hidden = true;
+  // The thank-you page: the order number and receipt our payment page just took.
+  var last = d.querySelector('[data-gc-last-order]');
+  if (last) {
+    try {
+      var lo = JSON.parse(sessionStorage.getItem('gc_last_order') || 'null');
+      if (lo && lo.receipt) {
+        last.querySelector('[data-gc-last-num]').textContent = '#' + lo.receipt;
+        var ra = last.querySelector('[data-gc-last-receipt]');
+        if (lo.receiptUrl && /^https:\/\/squareup\.com\//.test(lo.receiptUrl)) { ra.href = lo.receiptUrl; ra.hidden = false; }
+        last.hidden = false;
+      }
+    } catch (e) {}
   }
 
   $$('[data-gc-cart-open]').forEach(function (b) { b.hidden = false; });

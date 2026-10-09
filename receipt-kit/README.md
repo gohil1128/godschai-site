@@ -15,14 +15,14 @@ Two kinds of email reach a customer after they order on godschai.com:
 In **Square Dashboard → Settings → Account & Settings → Receipts** (on some
 accounts it's under **Business → Receipts**):
 
-- **Logo:** upload `square-logo-dark.png`. `square-logo-amber.png` is an
-  alternative.
+- **Logo:** upload `square-logo-cream.png` (the front of the pouch).
+  `square-logo-rust.png` (the back of the pouch) is an alternative.
 - **Custom message** (shown on every receipt):
   > Thank you for choosing God's Chai — masala chai made the real way in
   > Saskatoon. Brewing tips: godschai.com/how-to-make-masala-chai
 - **Return policy:**
-  > Something not right — even after you've opened it? Email sip@godschai.com
-  > within 30 days and we'll refund it. godschai.com/refunds
+  > Love it or your money back — even on opened pouches. Email
+  > sip@godschai.com within 30 days. godschai.com/refunds
 - **Social:** add Instagram `godschai`, and website `godschai.com`.
 - **Customer feedback** (the two smiley faces): keep it on to hear from
   customers, or switch it off for a cleaner receipt.

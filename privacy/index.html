@@ -13,8 +13,8 @@ breadcrumb: "Privacy"
 <section style="max-width:1240px;margin:0 auto;padding:clamp(20px,3vw,40px) clamp(18px,4vw,40px) clamp(50px,7vw,90px)">
   <div style="max-width:66ch" class="gc-prose">
     <h2>When you order</h2>
-    <p>Checkout runs on Square, not on this site. You type your card details and address on Square's own secure page, so your card number never passes through godschai.com, and we never see or store it.</p>
-    <p>Square passes us what we need to fill the order: your name, email, phone number if you give one, delivery address and what you bought. We use it to deliver your order, to contact you about it, and to handle any refund. It stays in our Square account, which is also where we keep the sales records the tax rules require. Square's own <a href="https://squareup.com/ca/en/legal/general/privacy" target="_blank" rel="noopener">privacy notice</a> covers how they handle payments.</p>
+    <p>Payments are processed by Square, our payment provider. Your card number goes straight into Square's secure payment fields, so it never passes through our servers, and we never see or store it.</p>
+    <p>To fill your order we need your name, email, phone number if you give one, delivery address and what you bought. Depending on how you check out, you type these on Square's checkout page or on ours; from ours they go through our small checkout service (run on Vercel) on their way to Square. We use them to deliver your order, to contact you about it, and to handle any refund. They stay in our Square account, which is also where we keep the sales records the tax rules require. Order emails go out through Resend. Square's own <a href="https://squareup.com/ca/en/legal/general/privacy" target="_blank" rel="noopener">privacy notice</a> covers how they handle payments.</p>
 
     <h2>When you join the email list</h2>
     <p>Signing up gives your email address to Mailchimp, which sends our emails, along with which form you used — so we know whether you wanted premix news, event news or everything. Every email has an unsubscribe link at the bottom. Mailchimp is part of Intuit; here is <a href="https://www.intuit.com/privacy/statement/" target="_blank" rel="noopener">their privacy statement</a>.</p>
@@ -24,7 +24,7 @@ breadcrumb: "Privacy"
     <p>Your browser also remembers, on your own device, whether you've closed the email signup box, so it stays away for 30 days. That never leaves your browser.</p>
 
     <h2>Who else sees it</h2>
-    <p>Only us, and Square, Mailchimp and Google doing the jobs described above. We don't sell, rent or trade anyone's personal information.</p>
+    <p>Only us, and Square, Vercel, Resend, Mailchimp and Google doing the jobs described above. We don't sell, rent or trade anyone's personal information.</p>
 
     <h2>Seeing, fixing or deleting what we hold</h2>
     <p>To see what we have about you, correct it or have it deleted, just {% include shop-contact.html %}. The one exception is order records, which we have to keep for tax purposes for six years.</p>

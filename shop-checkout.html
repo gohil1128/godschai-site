@@ -1,0 +1,211 @@
+---
+layout: default
+title: "Checkout | God's Chai Saskatoon"
+description: "Check out your God's Chai masala chai premix order: free delivery in Saskatoon, tracked Canada Post shipping across Canada."
+permalink: /checkout/
+sitemap: false
+head_extra: '<meta name="robots" content="noindex, nofollow">'
+# Square's card fields (and Google Pay) load from these. Only this page needs
+# them, so the rest of the site keeps its tighter policy (_includes/head.html).
+csp:
+  script: "https://web.squarecdn.com https://pay.google.com"
+  style: "https://web.squarecdn.com"
+  font: "https://square-fonts-production-f.squarecdn.com https://d1g145x70srn7h.cloudfront.net"
+  img: "https://*.squarecdn.com https://www.gstatic.com"
+  connect: "https://web.squarecdn.com https://pci-connect.squareup.com https://o160250.ingest.sentry.io https://pay.google.com"
+  frame: "https://web.squarecdn.com https://pay.google.com"
+---
+{%- comment -%}
+  Our own payment page, in the site's design. assets/js/pay.js runs it: the
+  order comes from the cart, the card goes into Square's secure fields, and
+  checkout/api/pay.js charges exactly the order's total. Switched on by
+  pay_on_site in _data/shop.yml (or for a test, by visiting /checkout/?try=1).
+  Until then, or if anything it needs is missing, it hands people over to
+  Square's checkout page instead.
+{%- endcomment -%}
+{%- assign shop = site.data.shop -%}
+{%- assign pay_api = "" -%}
+{%- if shop.checkout_api != "" -%}{%- assign pay_api = shop.checkout_api | replace: "/api/checkout", "/api/pay" -%}{%- endif -%}
+<style>
+  .gc-co{max-width:1120px;margin:0 auto;padding:clamp(108px,13vh,150px) clamp(16px,4vw,40px) clamp(40px,6vw,70px)}
+  .gc-co-kicker{font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.2em;text-transform:uppercase;color:#F2A93C;margin-bottom:12px}
+  .gc-co h1{font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(2.3rem,6vw,3.6rem);line-height:1;margin:0}
+  .gc-co h1 em{color:#FF6F61}
+  .gc-co-empty{margin-top:28px;padding:28px;border-radius:22px;background:rgba(28,17,10,0.8);border:1px solid rgba(242,169,60,0.16);color:#D6C7B4}
+  .gc-co-empty[hidden],.gc-co-grid[hidden]{display:none}
+  .gc-co-grid{display:grid;gap:clamp(18px,3vw,32px);margin-top:clamp(22px,3vw,34px);align-items:start}
+  @media (min-width:900px){
+    .gc-co-grid{grid-template-columns:minmax(0,1fr) 370px}
+    .gc-co-sum{grid-column:2;grid-row:1;position:sticky;top:112px}
+    .gc-co-form{grid-column:1;grid-row:1}
+  }
+
+  /* Your order */
+  .gc-co-sum{border-radius:22px;background:rgba(28,17,10,0.85);border:1px solid rgba(242,169,60,0.18);overflow:hidden}
+  .gc-co-toggle{display:flex;width:100%;align-items:center;justify-content:space-between;gap:12px;padding:16px 20px;border:0;background:none;
+    color:#F3E8D3;font:600 15px 'Hanken Grotesk',sans-serif;cursor:pointer;text-align:left}
+  .gc-co-toggle b{font-family:'DM Mono',monospace;font-weight:500}
+  .gc-co-toggle i{display:inline-block;margin-left:8px;transition:transform .25s ease;font-style:normal;color:#F2A93C}
+  .gc-co-sum.is-open .gc-co-toggle i{transform:rotate(180deg)}
+  .gc-co-sumbody{padding:0 20px 20px}
+  @media (max-width:899px){.gc-co-sum:not(.is-open) .gc-co-sumbody{display:none}}
+  @media (min-width:900px){.gc-co-toggle{pointer-events:none}.gc-co-toggle i,.gc-co-toggle b{display:none}}
+  .gc-co-row{display:flex;gap:14px;align-items:center;padding:12px 0;border-bottom:1px solid rgba(243,232,211,0.08)}
+  .gc-co-row[hidden]{display:none}
+  .gc-co-row img{width:46px;height:auto;border-radius:6px 6px 8px 8px;display:block}
+  .gc-co-row div{flex:1 1 auto;min-width:0}
+  .gc-co-row b{display:block;font-family:'Instrument Serif',serif;font-weight:400;font-size:1.15rem;color:#F3E8D3;line-height:1.15}
+  .gc-co-row small{display:block;font-family:'DM Mono',monospace;font-size:11.5px;color:#AB9280;margin-top:3px}
+  .gc-co-row span{font-family:'DM Mono',monospace;font-size:14px;color:#F3E8D3;white-space:nowrap}
+  .gc-co-edit{margin:10px 0 4px;padding:0;border:0;background:none;color:#F2A93C;font:600 13.5px 'Hanken Grotesk',sans-serif;text-decoration:underline;cursor:pointer}
+  .gc-co-edit[hidden]{display:none}
+  .gc-co .gc-sum{margin:12px 0 0}
+
+  /* The form */
+  .gc-co-form fieldset{margin:0 0 18px;padding:clamp(18px,2.6vw,26px);border-radius:22px;border:1px solid rgba(242,169,60,0.16);background:rgba(28,17,10,0.8);min-width:0}
+  .gc-co-form legend{float:left;width:100%;padding:0;margin:0 0 16px;display:flex;align-items:center;gap:12px;
+    font-family:'Instrument Serif',serif;font-size:1.55rem;color:#F3E8D3;line-height:1.1}
+  .gc-co-form legend + *{clear:both}
+  .gc-co-form legend span{flex:0 0 auto;width:30px;height:30px;border-radius:999px;background:#F2A93C;color:#2B1B12;
+    font:700 14px/30px 'Hanken Grotesk',sans-serif;text-align:center}
+  .gc-co-f{display:block;margin:0 0 14px}
+  .gc-co-f > span{display:block;font-size:13.5px;color:#D6C7B4;margin:0 0 6px}
+  .gc-co-f > span small{color:#AB9280;font-size:12.5px}
+  .gc-co-f input,.gc-co-f select{display:block;width:100%;box-sizing:border-box;margin:0;padding:13px 14px;border-radius:12px;
+    border:1px solid rgba(243,232,211,0.18);background:rgba(243,232,211,0.05);color:#F3E8D3;font:400 16px 'Hanken Grotesk',sans-serif;
+    transition:border-color .2s ease,background-color .2s ease}
+  .gc-co-f select{appearance:none;-webkit-appearance:none;background-image:linear-gradient(45deg,transparent 50%,#F2A93C 50%),linear-gradient(135deg,#F2A93C 50%,transparent 50%);
+    background-position:calc(100% - 18px) 55%,calc(100% - 13px) 55%;background-size:5px 5px;background-repeat:no-repeat;padding-right:34px}
+  .gc-co-f select option{background:#1A100A;color:#F3E8D3}
+  .gc-co-f input:hover,.gc-co-f select:hover{border-color:rgba(243,232,211,0.32)}
+  .gc-co-f input:focus,.gc-co-f select:focus{outline:none;border-color:#F2A93C;background:rgba(243,232,211,0.08)}
+  .gc-co-f input:focus-visible,.gc-co-f select:focus-visible{outline:2px solid #F2A93C;outline-offset:2px}
+  .gc-co-f input[readonly],.gc-co-f select:disabled{opacity:.7;cursor:default}
+  .gc-co-f input[aria-invalid="true"],.gc-co-f select[aria-invalid="true"]{border-color:#FF6F61}
+  .gc-co-msg{display:block;min-height:0;margin:6px 0 0;font-size:13px;color:#FF8A78}
+  .gc-co-msg:empty{display:none}
+  .gc-co-msg button{margin-left:6px;padding:0;border:0;background:none;color:#F2A93C;font:600 13px 'Hanken Grotesk',sans-serif;text-decoration:underline;cursor:pointer}
+  .gc-co-2,.gc-co-3{display:grid;gap:0 12px}
+  @media (min-width:520px){.gc-co-2{grid-template-columns:1fr 1fr}.gc-co-3{grid-template-columns:1.3fr 1fr 1fr}}
+  .gc-co-zones{display:grid;gap:0 10px;margin:0 0 8px}
+  @media (min-width:620px){.gc-co-zones{grid-template-columns:1fr 1fr}}
+  .gc-co .gc-zone{margin-bottom:10px}
+
+  /* Paying */
+  .gc-co-wallets{display:grid;gap:10px;margin:0 0 6px}
+  .gc-co-wallets[hidden],.gc-co-wallets [hidden]{display:none}
+  .gc-co-apple{display:block;width:100%;height:48px;border-radius:999px;cursor:pointer;
+    -webkit-appearance:-apple-pay-button;-apple-pay-button-type:plain;-apple-pay-button-style:white}
+  #gc-googlepay{min-height:48px}
+  .gc-co-or{display:flex;align-items:center;gap:12px;margin:8px 0 14px;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:#AB9280}
+  .gc-co-or::before,.gc-co-or::after{content:"";flex:1 1 auto;height:1px;background:rgba(243,232,211,0.12)}
+  .gc-co-card{min-height:92px;margin:0 0 8px}
+  .gc-co-wait{display:flex;align-items:center;justify-content:center;min-height:56px;border-radius:12px;border:1px dashed rgba(243,232,211,0.18);
+    font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:#AB9280}
+  .gc-co .gc-go{display:flex;align-items:center;justify-content:center;gap:10px;font-size:17px;padding:16px 24px}
+  .gc-co-err{margin:12px 0 0;padding:12px 14px;border-radius:12px;background:rgba(255,111,97,0.09);border:1px solid rgba(255,111,97,0.32);
+    color:#FFD2CB;font-size:14px;line-height:1.45}
+  .gc-co-err:empty{display:none}
+  .gc-co .gc-safe{margin-top:14px;text-align:center}
+  .gc-co-foot{margin-top:clamp(24px,4vw,40px)}
+  @media (prefers-reduced-motion:reduce){.gc-co-toggle i,.gc-co-f input,.gc-co-f select{transition:none}}
+</style>
+
+<section class="gc-co" data-gc-co data-pay-api="{{ pay_api }}" data-on-site="{% if shop.pay_on_site %}true{% else %}false{% endif %}" data-thanks="{{ '/order-confirmed/' | relative_url }}" aria-labelledby="page-h1">
+  <div class="gc-co-kicker">Almost chai time</div>
+  <h1 id="page-h1">Checkout<em>.</em></h1>
+
+  <noscript><div class="gc-co-empty">Checkout needs JavaScript switched on. Or skip the tech: message us on <a href="{{ site.social.instagram }}" style="color:#F2A93C">Instagram</a> and we'll sort your order.</div></noscript>
+  <div class="gc-co-empty" data-gc-co-empty hidden>
+    <p style="margin:0 0 16px;font-size:1.05rem">Your cart's empty — and so is your mug. Let's fix both.</p>
+    <a href="{{ '/premixes/' | relative_url }}" class="gc-pill" style="display:inline-block;text-decoration:none;background:#F2A93C;color:#2B1B12;font-weight:700;padding:13px 22px;border-radius:999px">Shop premixes</a>
+  </div>
+
+  <div class="gc-co-grid" data-gc-co-main hidden>
+    <aside class="gc-co-sum" data-gc-co-sum aria-label="Your order">
+      <button type="button" class="gc-co-toggle" data-gc-co-toggle aria-expanded="false" aria-controls="gc-co-sumbody">
+        <span>Your order <i aria-hidden="true">▾</i></span><b data-gc-co-total-top>$0.00</b>
+      </button>
+      <div class="gc-co-sumbody" id="gc-co-sumbody">
+        {%- for p in site.data.premixes %}
+        <div class="gc-co-row" data-gc-co-row="{{ p.key }}" hidden>
+          {% include img.html base=p.img ext="jpg" widths="250" sizes="46px" w="544" h="952" alt="" %}
+          <div><b>{{ p.name }}</b><small data-gc-co-q="{{ p.key }}">× 1</small></div>
+          <span data-gc-co-line="{{ p.key }}">$0.00</span>
+        </div>
+        {%- endfor %}
+        <button type="button" class="gc-co-edit" data-gc-cart-open hidden>Change the order</button>
+        <div class="gc-sum" aria-live="polite">
+          <div><span data-gc-co-count>Pouches</span><span data-gc-co-sub>$0.00</span></div>
+          <div data-gc-co-discrow hidden class="gc-sum-save"><span>Try-both pair price</span><span data-gc-co-disc></span></div>
+          <div data-gc-co-taxrow hidden><span>{{ shop.zones.saskatoon.tax_name | default: "Tax" }}</span><span data-gc-co-tax></span></div>
+          <div><span>Delivery</span><span data-gc-co-ship>—</span></div>
+          <div class="gc-sum-total"><span>Total</span><span data-gc-co-total>$0.00</span></div>
+        </div>
+      </div>
+    </aside>
+
+    <form class="gc-co-form" data-gc-co-form novalidate>
+      <fieldset>
+        <legend><span>1</span>You</legend>
+        <label class="gc-co-f"><span>Email <small>— for your receipt and updates</small></span>
+          <input type="email" name="email" autocomplete="email" inputmode="email" required aria-describedby="gc-m-email"><small class="gc-co-msg" id="gc-m-email" data-gc-msg="email"></small></label>
+        <label class="gc-co-f"><span>Phone <small>(optional, for the drop-off)</small></span>
+          <input type="tel" name="phone" autocomplete="tel" inputmode="tel" aria-describedby="gc-m-phone"><small class="gc-co-msg" id="gc-m-phone" data-gc-msg="phone"></small></label>
+      </fieldset>
+
+      <fieldset>
+        <legend><span>2</span>Where's it going?</legend>
+        <div class="gc-co-zones" role="radiogroup" aria-label="Delivery">
+          {%- for z in shop.zones %}
+          {%- assign zfee = z[1].fee %}
+          <label class="gc-zone gc-card">
+            <input type="radio" name="gc-co-zone" value="{{ z[0] }}">
+            <span><b>{{ z[1].label }}</b><small>{{ z[1].short }} · {{ z[1].when }}</small></span>
+            <em>{% if zfee == 0 %}Free{% else %}${% include money.html v=zfee %}{% if z[1].free_from %}<span>free on {{ z[1].free_from }}+</span>{% endif %}{% endif %}</em>
+          </label>
+          {%- endfor %}
+        </div>
+        <small class="gc-co-msg" data-gc-msg="zone" style="margin:-4px 0 12px"></small>
+        <div class="gc-co-2">
+          <label class="gc-co-f"><span>First name</span><input name="first" autocomplete="given-name" required aria-describedby="gc-m-first"><small class="gc-co-msg" id="gc-m-first" data-gc-msg="first"></small></label>
+          <label class="gc-co-f"><span>Last name</span><input name="last" autocomplete="family-name" required aria-describedby="gc-m-last"><small class="gc-co-msg" id="gc-m-last" data-gc-msg="last"></small></label>
+        </div>
+        <label class="gc-co-f"><span>Street address</span><input name="line1" autocomplete="address-line1" required aria-describedby="gc-m-line1"><small class="gc-co-msg" id="gc-m-line1" data-gc-msg="line1"></small></label>
+        <label class="gc-co-f"><span>Apartment, suite, buzzer <small>(optional)</small></span><input name="line2" autocomplete="address-line2"></label>
+        <div class="gc-co-3">
+          <label class="gc-co-f"><span>City</span><input name="city" autocomplete="address-level2" required aria-describedby="gc-m-city"><small class="gc-co-msg" id="gc-m-city" data-gc-msg="city"></small></label>
+          <label class="gc-co-f"><span>Province</span><select name="province" autocomplete="address-level1" aria-describedby="gc-m-province">
+            {%- assign provinces = "AB:Alberta,BC:British Columbia,MB:Manitoba,NB:New Brunswick,NL:Newfoundland and Labrador,NS:Nova Scotia,NT:Northwest Territories,NU:Nunavut,ON:Ontario,PE:Prince Edward Island,QC:Quebec,SK:Saskatchewan,YT:Yukon" | split: "," %}
+            {%- for pv in provinces %}{% assign pvp = pv | split: ":" %}
+            <option value="{{ pvp[0] }}"{% if pvp[0] == "SK" %} selected{% endif %}>{{ pvp[1] }}</option>
+            {%- endfor %}
+          </select><small class="gc-co-msg" id="gc-m-province" data-gc-msg="province"></small></label>
+          <label class="gc-co-f"><span>Postal code</span><input name="postal" autocomplete="postal-code" autocapitalize="characters" maxlength="7" required aria-describedby="gc-m-postal"><small class="gc-co-msg" id="gc-m-postal" data-gc-msg="postal"></small></label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend><span>3</span>Pay</legend>
+        <div class="gc-co-wallets" data-gc-wallets hidden>
+          <div class="gc-co-apple" data-gc-applepay role="button" tabindex="0" aria-label="Pay with Apple Pay" hidden></div>
+          <div id="gc-googlepay" hidden></div>
+          <p class="gc-co-or"><span>or pay by card</span></p>
+        </div>
+        <div id="gc-card" class="gc-co-card" data-gc-card><div class="gc-co-wait">Warming up the card machine…</div></div>
+        <button type="submit" class="gc-go gc-pill" data-gc-pay disabled>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true" focusable="false"><rect x="4" y="10.5" width="16" height="10.5" rx="2.5"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg>
+          <span data-gc-pay-label>Getting the kettle on…</span>
+        </button>
+        <p class="gc-co-err" data-gc-co-err role="alert"></p>
+        <p class="gc-safe">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false"><rect x="4" y="10.5" width="16" height="10.5" rx="2.5"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg>
+          Your card details are locked up tighter than our spice recipe. We never see them.
+        </p>
+      </fieldset>
+    </form>
+  </div>
+
+  <div class="gc-co-foot">{% include trust-strip.html %}</div>
+</section>
+<script src="{{ '/assets/js/pay.js' | relative_url }}" defer></script>
