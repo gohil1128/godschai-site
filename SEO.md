@@ -129,10 +129,12 @@ A third blend also needs its own Square item and a new set of checkout links
 ## The shop
 
 The premixes sell straight from `/premixes/`. People choose their pouches and
-where it's going, and the button sends them to **Square's own checkout page**
-for exactly that order. That's where they type their card and address — never
-on godschai.com. The site has no server and no database and keeps nothing, so
-there is nothing on it for anyone to steal.
+where it's going, and checkout takes them to **Square's own checkout page** for
+exactly that order, where they type their card and address. Once our own
+payment page is switched on (below), they pay on godschai.com instead, in the
+site's own design. Either way the card number goes only to Square. The site has
+no server and no database and keeps nothing, so there is nothing on it for
+anyone to steal.
 
 When they've paid, Square emails their receipt and sends them back to
 `/order-confirmed/`. The order turns up in **Square Dashboard → Orders** (and
@@ -174,7 +176,43 @@ switch it on:
 4. Put that address in `checkout_api:` in `_data/shop.yml`.
 
 If the service is ever down, small orders fall back to the pre-made links and
-bigger ones ask people to try again. Prices, PST and the shipping rule are
+bigger ones ask people to try again.
+
+**Our own payment page: `/checkout/`.** Instead of Square's white checkout
+page, people can pay on a page in the site's own design (`shop-checkout.html`,
+run by `assets/js/pay.js`). They fill in their email, address and card
+without leaving godschai.com. The card fields are Square's own secure frames
+(Square's Web Payments SDK), so the card number still goes only to Square, and
+`checkout/api/pay.js` on the checkout service charges exactly the order's total.
+While the card goes through, the "brewing" screen (`_includes/brew-loader.html`)
+shows a glass of chai rising, with a new line every couple of seconds. The same
+screen shows while the cart hands someone over to Square's page.
+
+It's switched off until `pay_on_site: true` in `_data/shop.yml`. Before that it
+needs:
+
+1. The checkout service running (above), plus the new-order emails set up
+   **including the customer emails** (`checkout/README.md`). Square doesn't
+   email a receipt for payments taken this way, so the page stays off until ours
+   can go out.
+2. In Vercel, `SQUARE_APPLICATION_ID`: the app's Application ID, from the
+   Credentials page at developer.squareup.com (Production). It isn't a secret.
+3. A test: open `godschai.com/checkout/?try=1`, which uses the page even while
+   `pay_on_site` is off. Place a real one-pouch order with your own card, check
+   the emails, then refund it.
+4. Then `pay_on_site: true`.
+
+If anything the page needs is missing or down (the service, its settings,
+Square's script), it quietly hands people to Square's checkout page instead, so
+nobody is ever stuck. It also checks that Saskatoon orders have a Saskatoon
+postal code (they all start S7), and offers Canada Post shipping if not.
+
+**Apple Pay** shows on the page once the domain is registered with Square:
+Developer Console → your app → Apple Pay → **Add domain** (`godschai.com`), and
+the file it gives you saved in this repo as
+`.well-known/apple-developer-merchantid-domain-association` (ask Claude to add
+it, along with the `_config.yml` line that publishes that folder). Google Pay
+shows wherever the visitor's browser supports it. Prices, PST and the shipping rule are
 written in `checkout/api/checkout.js` as well as in `shop.yml`, so change them
 in both places.
 
@@ -209,6 +247,8 @@ so it's a job to hand to Claude with Square connected. The box's heading is
 | `price` | $14.99 a pouch, before tax. |
 | `pair_price` | "Try both": one Original Masala + one Rose & Cardamom for $24.99, for every pair in the order. The saving comes off before PST. The Square links for orders with both blends include it, as does `checkout/api/checkout.js`. |
 | `max_each` | Most pouches of one blend in an order (3). |
+| `checkout_api` | The checkout service's address. Blank until it's set up; then any quantity can be ordered (up to `max_each_api`). |
+| `pay_on_site` | `true` sends checkout to our own payment page, `/checkout/`. Needs the steps above. |
 | `email` | Your contact for orders and refunds (sip@godschai.com). Blank means the pages say "message us on Instagram" instead. |
 | `zones` | Saskatoon (free delivery, 6% PST) and the rest of Canada ($9.99, free from 5 pouches, no PST): the fee, the tax (`tax`, `tax_name`), the free-shipping point (`free_from`), and the delivery wording shown on the order box, `/shipping/` and `/order-confirmed/`. |
 | `refund_days` | How long people have to ask for a refund (30). |
@@ -230,9 +270,10 @@ says "message us on Instagram", so nobody is ever sent to a dead page.
 because Square is what actually charges. The number in `shop.yml` is only what
 the site shows. Ask Claude with Square connected to do both together.
 
-**Someone picks Saskatoon but gives an address elsewhere.** The site can't
-tell, so check the address on each Saskatoon order. `/shipping/` already says
-we'll get in touch first: they either pay the shipping or get a full refund.
+**Someone picks Saskatoon but gives an address elsewhere.** On Square's
+checkout page the site can't tell, so check the address on each Saskatoon
+order. `/shipping/` already says we'll get in touch first: they either pay the
+shipping or get a full refund. Our own payment page catches it before they pay.
 
 **Posting parcels.** Join Canada Post's free *Solutions for Small Business*
 programme and buy labels online. Expedited Parcel (tracked) for a parcel under
@@ -299,26 +340,31 @@ animations turned off in their device settings.
 
 ### Its colours
 
-The lockup is two-tone: **"God's" and the brush stroke under it in brand orange
-(`#F2A93C`)**, "CHAI" and the tagline in cream.
+The logo wears the pouch's colours: **"God's" in rust (`#B6502B`), the brush
+stroke under it in gold (`#D3A849`)**, and "CHAI" and the tagline in cream on
+the dark site. On light backgrounds (search results, Square receipts) "CHAI" is
+the pouch's dark brown (`#4A2A1F`) instead.
 
-The component itself can only paint the whole mark one colour, so the cream
+The animated component can only paint the whole mark one colour, so the cream
 comes from the `tint` on the `<gods-chai-logo>` tag in `_includes/nav-dark.html`
-and the orange is painted over the five orange pieces by a rule in
+and the rust and gold are painted over their pieces by two rules in
 `_includes/base-styles-dark.html`.
 
-The ordinary logo pictures — the header's fallback and the footer —
-have been recoloured to match, so every God's Chai mark on the site is the same
-two-tone. The originals are kept at `uploads/_src/*-source.png`.
+The still logos (the header's fallback, the footer, the emails, the Square
+receipt logos in `receipt-kit/`) are drawn by `tools/build-logo.py` from the
+animation's own strokes, so they are exactly the same artwork. The originals
+are kept at `uploads/_src/*-source.png`.
 
-**To change the orange**, three things have to move together:
+**To change a colour**, these have to move together:
 
 ```bash
-# 1. edit BRAND at the top of tools/recolour-logo.py, then
-python3 tools/recolour-logo.py
+# 1. edit the colours at the top of tools/build-logo.py, then
+python3 tools/build-logo.py
 python3 tools/optimize-images.py
-# 2. change the matching #F2A93C in _includes/base-styles-dark.html
-#    (the rule just under "gods-chai-logo:defined")
+# 2. change the matching colours in _includes/base-styles-dark.html
+#    (the two rules just under "gods-chai-logo:defined")
+# 3. the browser-tab icon: edit BRAND/INK in tools/make-favicon.py, then
+python3 tools/make-favicon.py
 ```
 
 Change one without the others and the animated logo and the still ones stop
@@ -358,8 +404,8 @@ That still is what people see for the moment before the video arrives.
 ## The browser-tab icon
 
 The little icon on the browser tab is the **G from the logo** — the actual
-letterform, taken out of the animated logo's own artwork, dark on a marigold
-tile (the same pairing as the @godschai button).
+letterform, taken out of the animated logo's own artwork, cream on a rust tile
+like the back of the pouch.
 
 `tools/make-favicon.py` builds `favicon.ico`, `favicon-32.png` and
 `apple-touch-icon.png`. Re-run it if the logo artwork ever changes:
@@ -368,8 +414,8 @@ tile (the same pairing as the @godschai button).
 python3 tools/make-favicon.py
 ```
 
-A plain orange G with no tile was tried first — it disappears against a white
-tab strip at small sizes, which is why it sits on a tile.
+A plain G with no tile was tried first — it disappears against a white tab
+strip at small sizes, which is why it sits on a tile.
 
 ---
 

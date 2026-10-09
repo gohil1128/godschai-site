@@ -1,0 +1,74 @@
+{%- comment -%}
+  The "brewing" screen: shown while a card is being charged on our own payment
+  page (/checkout/), and while the cart hands someone over to the payment page.
+  A glass of chai rises two or three times, like the brew step on the pouch,
+  while a line under it changes every couple of seconds. Driven by
+  window.GCBrew in assets/js/cart.js: show(lines), done(line), hide().
+{%- endcomment -%}
+<style>
+  .gc-brew{position:fixed;inset:0;z-index:10002;display:flex;align-items:center;justify-content:center;padding:24px;
+    background:radial-gradient(closest-side at 50% 42%,rgba(242,169,60,0.13),transparent 70%),rgba(16,10,5,0.93);
+    -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);animation:gc-brew-in .3s ease both}
+  .gc-brew[hidden]{display:none}
+  @keyframes gc-brew-in{from{opacity:0}to{opacity:1}}
+  .gc-brew-box{text-align:center;max-width:420px;outline:none}
+  .gc-brew svg{display:block;width:150px;height:auto;margin:0 auto 22px;overflow:visible}
+  .gc-brew-steam path{fill:none;stroke:#F3E8D3;stroke-width:3.2;stroke-linecap:round;opacity:0;
+    animation:gc-steam 2.6s ease-in-out infinite}
+  .gc-brew-steam path:nth-child(2){animation-delay:.6s}
+  .gc-brew-steam path:nth-child(3){animation-delay:1.2s}
+  @keyframes gc-steam{0%{opacity:0;transform:translateY(10px)}35%{opacity:.55}100%{opacity:0;transform:translateY(-14px)}}
+  .gc-brew-level{transform:translateY(112px);animation:gc-rise 4.2s cubic-bezier(.45,.05,.35,1) infinite}
+  @keyframes gc-rise{0%{transform:translateY(112px)}22%{transform:translateY(74px)}40%{transform:translateY(98px)}
+    60%{transform:translateY(70px)}80%{transform:translateY(96px)}100%{transform:translateY(112px)}}
+  .gc-brew-wave{animation:gc-slosh 1.6s linear infinite}
+  @keyframes gc-slosh{to{transform:translateX(-40px)}}
+  .gc-brew.is-done .gc-brew-level{animation:none;transform:translateY(66px);transition:transform .9s cubic-bezier(.2,.8,.2,1)}
+  .gc-brew-tick{opacity:0;transform:scale(.4);transform-origin:122px 140px;transition:opacity .3s ease,transform .45s cubic-bezier(.2,1.4,.4,1)}
+  .gc-brew-tick path{stroke-dasharray:40;stroke-dashoffset:40;transition:stroke-dashoffset .5s .25s ease}
+  .gc-brew.is-done .gc-brew-tick{opacity:1;transform:none}
+  .gc-brew.is-done .gc-brew-tick path{stroke-dashoffset:0}
+  .gc-brew-line{margin:0;min-height:1.15em;font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(1.65rem,5vw,2.1rem);
+    line-height:1.12;color:#F3E8D3}
+  .gc-brew-line.is-in{animation:gc-line .45s ease both}
+  @keyframes gc-line{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+  .gc-brew.is-done .gc-brew-line{color:#FF6F61;font-style:italic}
+  .gc-brew-note{margin:14px 0 0;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#AB9280}
+  @media (prefers-reduced-motion:reduce){
+    .gc-brew{animation:none}
+    .gc-brew-steam path,.gc-brew-level,.gc-brew-wave,.gc-brew-line.is-in{animation:none}
+    .gc-brew-steam path{opacity:.45}
+    .gc-brew-level{transform:translateY(80px)}
+    .gc-brew-tick,.gc-brew-tick path,.gc-brew.is-done .gc-brew-level{transition:none}
+  }
+</style>
+<div class="gc-brew" data-gc-brew hidden>
+  <div class="gc-brew-box" role="dialog" aria-modal="true" aria-labelledby="gc-brew-line" aria-describedby="gc-brew-note" tabindex="-1">
+    <svg viewBox="0 0 160 170" aria-hidden="true" focusable="false">
+      <defs>
+        <clipPath id="gc-brew-glass"><path d="M41.5 60.5h77l-9.6 88.6q-.8 6.4-6.9 6.4H58q-6.1 0-6.9-6.4z"/></clipPath>
+        <linearGradient id="gc-brew-chai" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#D9A464"/><stop offset=".55" stop-color="#B9773F"/><stop offset="1" stop-color="#8E4E27"/>
+        </linearGradient>
+      </defs>
+      <g class="gc-brew-steam">
+        <path d="M62 46c-8-9 7-16-1-28"/><path d="M80 44c-8-10 9-18 0-31"/><path d="M98 46c-8-9 7-16-1-28"/>
+      </g>
+      <g clip-path="url(#gc-brew-glass)">
+        <g class="gc-brew-level">
+          <g class="gc-brew-wave">
+            <path d="M-40 0q10-6 20 0t20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0V130H-40z" fill="url(#gc-brew-chai)"/>
+            <path d="M-40 0q10-6 20 0t20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0 20 0" fill="none" stroke="#F3DDB8" stroke-width="5" opacity=".9"/>
+          </g>
+        </g>
+      </g>
+      <path d="M38 57h84l-10.2 92.4q-1 9.6-10.4 9.6H60.6q-9.4 0-10.4-9.6z" fill="rgba(243,232,211,0.05)" stroke="#F3E8D3" stroke-width="3.5" stroke-linejoin="round"/>
+      <g class="gc-brew-tick">
+        <circle cx="122" cy="140" r="17" fill="#F2A93C"/>
+        <path d="M114 140.5l5.5 5.5 10.5-11" fill="none" stroke="#2B1B12" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/>
+      </g>
+    </svg>
+    <p class="gc-brew-line" id="gc-brew-line" data-gc-brew-line aria-live="polite">Brewing…</p>
+    <p class="gc-brew-note" id="gc-brew-note" data-gc-brew-note>Hang tight — don't close this page</p>
+  </div>
+</div>

@@ -112,7 +112,7 @@ export function customerEmail(o) {
       <table role="presentation" cellpadding="0" cellspacing="0" style="margin-top:14px"><tr><td style="background:#F2A93C;border-radius:999px"><a href="${SITE}/how-to-make-masala-chai/" style="display:inline-block;padding:13px 24px;font:700 15px ${sans};color:#2B1B12;text-decoration:none">The full brew guide →</a></td></tr></table>
     </td></tr>
     <tr><td style="padding:26px 32px 30px">
-      <div style="font:400 14px/1.6 ${sans};color:#5A4535">Something not right — even after you've opened it? Just reply to this email or write to <a href="mailto:sip@godschai.com" style="color:#C2410C">sip@godschai.com</a> and we'll refund it. <a href="${SITE}/refunds/" style="color:#C2410C">Our refund policy</a>.${o.receiptUrl ? ` Your card receipt from Square is <a href="${esc(o.receiptUrl)}" style="color:#C2410C">here</a>.` : ''}</div>
+      <div style="font:400 14px/1.6 ${sans};color:#5A4535">Questions, cravings or a brewing emergency? Just hit reply — a real human (usually mid-chai) will answer.${o.receiptUrl ? ` Your card receipt is <a href="${esc(o.receiptUrl)}" style="color:#C2410C">right here</a>.` : ''}</div>
     </td></tr>
     <tr><td align="center" style="background:#1D120B;padding:22px 24px">
       <div style="font:400 20px ${serif};color:#F3E8D3">Not your average chai.</div>
@@ -133,7 +133,8 @@ export function customerEmail(o) {
     o.address.length ? `Delivering to: ${[o.name].concat(o.address).join(', ')}` : null, '',
     'Brew it: 1 heaped tsp (5 g) per cup in ½ cup boiling water, add ½ cup milk, boil, simmer 2–3 min, strain, sweeten to taste.',
     `Full guide: ${SITE}/how-to-make-masala-chai/`, '',
-    'Something not right? Reply to this email or write to sip@godschai.com — we refund even opened pouches.',
+    'Questions, cravings or a brewing emergency? Just hit reply — a real human (usually mid-chai) will answer.',
+    o.receiptUrl ? `Card receipt: ${o.receiptUrl}` : null,
     '— God\'s Chai, Saskatoon',
   ].filter((l) => l !== null).join('\n');
 

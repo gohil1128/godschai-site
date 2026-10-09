@@ -4,6 +4,9 @@
     description  — 140-160 chars (description_open replaces it once the shop opens)
     og_image     — optional, defaults to the site OG image
     theme_color  — optional, defaults to the dark palette
+    csp          — optional extra sources for the Content-Security-Policy, per
+                   directive (script, style, font, img, connect, frame). Only
+                   the payment page uses it, for Square's card fields.
 {%- endcomment -%}
 {%- assign og_img = page.og_image | default: "uploads/og-image.jpg" -%}
 {%- assign theme = page.theme_color | default: "#100A05" -%}
@@ -18,7 +21,8 @@
 <!-- Content-Security-Policy. GitHub Pages can't send response headers, so it ships as a
      meta tag. 'unsafe-inline' covers the inline styles the design relies on; there is no
      'unsafe-eval' because the site no longer evaluates JS at runtime. -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://*.list-manage.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https://*.google-analytics.com https://*.googletagmanager.com; media-src 'self'; connect-src 'self'{{ api_origin }} https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://stats.g.doubleclick.net; object-src 'none'; base-uri 'self'; form-action 'self'; frame-src 'none'">
+{%- assign csp = page.csp -%}
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://*.list-manage.com{% if csp.script %} {{ csp.script }}{% endif %}; style-src 'self' 'unsafe-inline'{% if csp.style %} {{ csp.style }}{% endif %}; font-src 'self'{% if csp.font %} {{ csp.font }}{% endif %}; img-src 'self' data: https://*.google-analytics.com https://*.googletagmanager.com{% if csp.img %} {{ csp.img }}{% endif %}; media-src 'self'; connect-src 'self'{{ api_origin }} https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://stats.g.doubleclick.net{% if csp.connect %} {{ csp.connect }}{% endif %}; object-src 'none'; base-uri 'self'; form-action 'self'; frame-src {% if csp.frame %}{{ csp.frame }}{% else %}'none'{% endif %}">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 
 <title>{{ page.title }}</title>
