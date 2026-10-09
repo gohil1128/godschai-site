@@ -27,30 +27,34 @@ const ZONE_TEXT = {
 const money = (cents) => '$' + (cents / 100).toFixed(2);
 const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
-// Square order + payment → just what the emails need.
+// Square order + payment → just what the emails need. `order` can be null
+// (Square didn't hand it over); the alert then makes do with the payment.
 export function orderSummary(order, payment) {
+  order = order || {};
+  payment = payment || {};
   const f = (order.fulfillments || [])[0] || {};
   const rec = (f.shipment_details && f.shipment_details.recipient) || {};
-  const a = rec.address || {};
-  const note = (payment && payment.note) || '';
-  const zone = /saskatoon/i.test(note) ? 'saskatoon' : 'canada';
+  const a = rec.address || payment.shipping_address || {};
+  const zone = /saskatoon/i.test(payment.note || '') ? 'saskatoon' : 'canada';
   const ship = (order.service_charges || []).reduce((s, c) => s + ((c.total_money || {}).amount || 0), 0);
   return {
-    receipt: (payment && payment.receipt_number) || order.id.slice(0, 4),
-    receiptUrl: (payment && payment.receipt_url) || '',
-    placedAt: (payment && payment.created_at) || order.created_at,
+    receipt: payment.receipt_number || (order.id || '').slice(0, 4),
+    receiptUrl: payment.receipt_url || '',
+    placedAt: payment.created_at || order.created_at,
     zone,
     firstName: a.first_name || (rec.display_name || '').split(' ')[0] || '',
     name: rec.display_name || [a.first_name, a.last_name].filter(Boolean).join(' '),
-    email: rec.email_address || (payment && payment.buyer_email_address) || '',
+    email: rec.email_address || payment.buyer_email_address || '',
     phone: rec.phone_number || '',
     address: [a.address_line_1, a.address_line_2, [a.locality, a.administrative_district_level_1].filter(Boolean).join(', ') + (a.postal_code ? '  ' + a.postal_code : '')].filter(Boolean),
     items: (order.line_items || []).map((l) => ({ name: l.name, qty: Number(l.quantity), total: (l.gross_sales_money || {}).amount || 0 })),
     subtotal: (order.line_items || []).reduce((s, l) => s + ((l.gross_sales_money || {}).amount || 0), 0),
+    discount: (order.total_discount_money || {}).amount || 0,
+    discountName: ((order.discounts || [])[0] || {}).name || 'Discount',
     tax: (order.total_tax_money || {}).amount || 0,
     taxName: ((order.taxes || [])[0] || {}).name || 'Tax',
     shipping: ship,
-    total: (order.total_money || {}).amount || 0,
+    total: (order.total_money || payment.total_money || {}).amount || 0,
   };
 }
 
@@ -86,6 +90,7 @@ export function customerEmail(o) {
       </table>
       <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-top:10px">
         ${row(pouches + ' pouch' + (pouches === 1 ? '' : 'es'), money(o.subtotal))}
+        ${o.discount ? row(esc(o.discountName), '−' + money(o.discount)) : ''}
         ${o.tax ? row(esc(o.taxName), money(o.tax)) : ''}
         ${row('Delivery', o.shipping ? money(o.shipping) : 'Free')}
         <tr><td colspan="2" style="border-top:1px solid #EADFCB;padding-top:4px"></td></tr>
@@ -120,6 +125,7 @@ export function customerEmail(o) {
   const text = [
     `Thank you${o.firstName ? ', ' + o.firstName : ''} — that's ordered. (Order #${o.receipt})`, '',
     ...o.items.map((i) => `${i.qty} × ${i.name} — ${money(i.total)}`),
+    o.discount ? `${o.discountName}: −${money(o.discount)}` : null,
     o.tax ? `${o.taxName}: ${money(o.tax)}` : null,
     `Delivery: ${o.shipping ? money(o.shipping) : 'Free'}`,
     `Total paid: ${money(o.total)}`, '',
@@ -136,17 +142,22 @@ export function customerEmail(o) {
 
 export function ownerEmail(o) {
   const items = o.items.map((i) => `${i.qty}× ${i.name}`).join(', ');
-  const subject = `New order #${o.receipt}: ${items}, ${money(o.total)} (${o.zone === 'saskatoon' ? 'Saskatoon' : 'ship'})`;
+  const where = o.zone === 'saskatoon' ? 'Saskatoon delivery' : 'Canada Post';
+  const subject = `New order #${o.receipt}: ${items ? items + ', ' : ''}${money(o.total)} (${where})`;
   const text = [
     `New website order #${o.receipt}`, '',
-    ...o.items.map((i) => `${i.qty} × ${i.name} — ${money(i.total)}`),
+    ...(o.items.length
+      ? o.items.map((i) => `${i.qty} × ${i.name} — ${money(i.total)}`)
+      : ['(Square didn’t send the items just now. They’re on the receipt below and in Square Dashboard → Orders.)']),
+    o.discount ? `${o.discountName}: −${money(o.discount)}` : null,
     o.tax ? `${o.taxName}: ${money(o.tax)}` : null,
-    `Delivery: ${o.shipping ? money(o.shipping) : 'Free'} (${ZONE_TEXT[o.zone].label})`,
+    `Delivery: ${where}${o.items.length ? ' — ' + (o.shipping ? money(o.shipping) : 'free') : ''}`,
     `Total: ${money(o.total)}`, '',
-    `Customer: ${o.name}`, `Email: ${o.email}`, o.phone ? `Phone: ${o.phone}` : null,
-    `Address: ${o.address.join(', ')}`, '',
+    o.name ? `Customer: ${o.name}` : null, o.email ? `Email: ${o.email}` : null, o.phone ? `Phone: ${o.phone}` : null,
+    o.address.length ? `Address: ${o.address.join(', ')}` : null, '',
     o.receiptUrl ? `Receipt: ${o.receiptUrl}` : null,
     'Fulfil it in Square Dashboard → Orders. Canada Post orders: add the tracking number there.',
+    o.email ? 'Reply to this email to write to the customer.' : null,
   ].filter((l) => l !== null).join('\n');
   return { subject, text };
 }
