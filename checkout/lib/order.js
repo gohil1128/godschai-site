@@ -25,6 +25,12 @@ export const SHIPPING_NAME = 'Canada Post Expedited (tracked)';
 // "Try both": each Original + Rose pair costs $24.99 instead of $29.98.
 // Matches pair_price in _data/shop.yml. Comes off before PST.
 export const PAIR_SAVING = 499;
+// Discount codes. Each must also exist in Square (Customers → Marketing →
+// Coupons), which checks it on Square's own checkout page, and match
+// welcome_code in _data/shop.yml.
+export const CODES = {
+  CHAI10: { percent: '10', name: 'CHAI10 · 10% off' },
+};
 export const MAX_EACH = 99;
 export const ORIGINS = ['https://godschai.com', 'https://www.godschai.com'];
 
@@ -65,7 +71,12 @@ export function readOrder(body) {
   if (!count) return { error: 'empty' };
   const pairs = Math.min(body.items.o || 0, body.items.r || 0);
   const shipFree = !!(zone.freeFrom && count >= zone.freeFrom);
+  // A code that isn't ours is reported, not silently ignored: the caller
+  // decides (our page says so; Square's page just goes without it).
+  const codeKey = typeof body.code === 'string' ? body.code.trim().toUpperCase().slice(0, 20) : '';
+  const code = codeKey && CODES[codeKey] ? { key: codeKey, ...CODES[codeKey] } : null;
   return {
+    badCode: !!codeKey && !code, code,
     zoneKey: body.zone, zone, lines, parts, count, pairs, shipFree,
     fee: zone.fee && !shipFree ? zone.fee : 0,
     note: zone.note + (shipFree ? ' (free, ' + zone.freeFrom + '+ pouches)' : ''),
@@ -77,9 +88,12 @@ export function readOrder(body) {
 // on ours).
 export function squareOrder(o) {
   const order = { location_id: LOCATION_ID, line_items: o.lines.map((l) => ({ ...l })) };
+  const discounts = [];
   if (o.pairs > 0) {
-    order.discounts = [{ uid: 'pair', name: 'Try both: pair price', amount_money: { amount: o.pairs * PAIR_SAVING, currency: 'CAD' }, scope: 'ORDER' }];
+    discounts.push({ uid: 'pair', name: 'Try both: pair price', amount_money: { amount: o.pairs * PAIR_SAVING, currency: 'CAD' }, scope: 'ORDER' });
   }
+  if (o.code) discounts.push({ uid: 'code', name: o.code.name, percentage: o.code.percent, scope: 'ORDER' });
+  if (discounts.length) order.discounts = discounts;
   if (o.zone.tax) order.taxes = [{ uid: 'pst', catalog_object_id: PST_TAX_ID, scope: 'ORDER' }];
   return order;
 }

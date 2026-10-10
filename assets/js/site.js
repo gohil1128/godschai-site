@@ -270,6 +270,35 @@ layout: null
     d.body.appendChild(s);
     setTimeout(function () { settle(false); if (s.parentNode) s.parentNode.removeChild(s); }, 8000);
   }
+  /* The welcome offer (welcome_offer in _data/shop.yml): whoever signs up gets
+     the code on the spot, and it's kept in this browser so the cart can remind
+     them of it. */
+  var WELCOME = {% if site.data.shop.open and site.data.shop.welcome_offer %}{ code: {{ site.data.shop.welcome_code | jsonify }}, percent: {{ site.data.shop.welcome_percent | jsonify }} }{% else %}null{% endif %};
+  function showCode(msg, already) {
+    msg.textContent = (already ? 'You’re already on the list, so here’s ' : 'You’re in! Here’s ') + WELCOME.percent + '% off your first order: ';
+    var b = d.createElement('button');
+    b.type = 'button'; b.className = 'gc-code'; b.textContent = WELCOME.code;
+    b.setAttribute('data-gc-copy', WELCOME.code);
+    b.setAttribute('aria-label', 'Copy the code ' + WELCOME.code);
+    msg.appendChild(b);
+    msg.appendChild(d.createTextNode(' Pop it in at checkout.'));
+    try { localStorage.setItem('gc_welcome', WELCOME.code); } catch (e) {}
+    try { d.dispatchEvent(new CustomEvent('gc:welcome', { detail: WELCOME.code })); } catch (e) {}
+  }
+  // Any [data-gc-copy] button copies its code, and says so for a moment.
+  d.addEventListener('click', function (ev) {
+    var b = ev.target.closest && ev.target.closest('[data-gc-copy]');
+    if (!b) return;
+    var code = b.getAttribute('data-gc-copy');
+    var said = function () {
+      if (b.dataset.copied) return;
+      b.dataset.copied = '1';
+      var was = b.textContent; b.textContent = 'Copied!';
+      setTimeout(function () { b.textContent = was; delete b.dataset.copied; }, 1400);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(code).then(said, function () {});
+  });
+
   d.addEventListener('submit', function (ev) {
     var form = ev.target;
     if (!form || !form.hasAttribute || !form.hasAttribute('data-gc-signup')) return;
@@ -289,13 +318,15 @@ layout: null
       if (!msg) return;
       msg.style.display = 'block';
       msg.style.color = ok ? '#F2A93C' : '#FF7A66';
-      msg.textContent = ok ? (custom || "Thanks — you're subscribed. ✶")
-                           : "That didn't go through — check your email and try again.";
+      if (ok && WELCOME) showCode(msg, !!custom);
+      else msg.textContent = ok ? (custom || "Thanks — you're subscribed. ✶")
+                                : "That didn't go through — check your email and try again.";
       tell(ok ? 'done' : 'error');
       if (ok) {
         input.value = '';
         try { localStorage.setItem('gc_subscribed', '1'); } catch (e) {}
-        if (form.id === 'gc-popup-form') setTimeout(closePopup, 2800);
+        // With a code to copy, the box stays open until they close it.
+        if (form.id === 'gc-popup-form' && !WELCOME) setTimeout(closePopup, 2800);
       }
     });
   });

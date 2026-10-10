@@ -43,6 +43,7 @@ export function orderSummary(order, payment) {
     placedAt: payment.created_at || order.created_at,
     zone,
     firstName: a.first_name || (rec.display_name || '').split(' ')[0] || '',
+    lastName: a.last_name || (rec.display_name || '').split(' ').slice(1).join(' ') || '',
     name: rec.display_name || [a.first_name, a.last_name].filter(Boolean).join(' '),
     email: rec.email_address || payment.buyer_email_address || '',
     phone: rec.phone_number || '',
@@ -50,7 +51,8 @@ export function orderSummary(order, payment) {
     items: (order.line_items || []).map((l) => ({ name: l.name, qty: Number(l.quantity), total: (l.gross_sales_money || {}).amount || 0 })),
     subtotal: (order.line_items || []).reduce((s, l) => s + ((l.gross_sales_money || {}).amount || 0), 0),
     discount: (order.total_discount_money || {}).amount || 0,
-    discountName: ((order.discounts || [])[0] || {}).name || 'Discount',
+    // Each discount on its own line: the pair price, a code, a Square coupon.
+    discounts: (order.discounts || []).map((x) => ({ name: x.name || 'Discount', amount: (x.applied_money || {}).amount || 0 })).filter((x) => x.amount),
     tax: (order.total_tax_money || {}).amount || 0,
     taxName: ((order.taxes || [])[0] || {}).name || 'Tax',
     shipping: ship,
@@ -90,7 +92,7 @@ export function customerEmail(o) {
       </table>
       <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-top:10px">
         ${row(pouches + ' pouch' + (pouches === 1 ? '' : 'es'), money(o.subtotal))}
-        ${o.discount ? row(esc(o.discountName), '−' + money(o.discount)) : ''}
+        ${o.discounts.map((x) => row(esc(x.name), '−' + money(x.amount))).join('')}
         ${o.tax ? row(esc(o.taxName), money(o.tax)) : ''}
         ${row('Delivery', o.shipping ? money(o.shipping) : 'Free')}
         <tr><td colspan="2" style="border-top:1px solid #EADFCB;padding-top:4px"></td></tr>
@@ -125,7 +127,7 @@ export function customerEmail(o) {
   const text = [
     `Thank you${o.firstName ? ', ' + o.firstName : ''} — that's ordered. (Order #${o.receipt})`, '',
     ...o.items.map((i) => `${i.qty} × ${i.name} — ${money(i.total)}`),
-    o.discount ? `${o.discountName}: −${money(o.discount)}` : null,
+    ...o.discounts.map((x) => `${x.name}: −${money(x.amount)}`),
     o.tax ? `${o.taxName}: ${money(o.tax)}` : null,
     `Delivery: ${o.shipping ? money(o.shipping) : 'Free'}`,
     `Total paid: ${money(o.total)}`, '',
@@ -150,7 +152,7 @@ export function ownerEmail(o) {
     ...(o.items.length
       ? o.items.map((i) => `${i.qty} × ${i.name} — ${money(i.total)}`)
       : ['(Square didn’t send the items just now. They’re on the receipt below and in Square Dashboard → Orders.)']),
-    o.discount ? `${o.discountName}: −${money(o.discount)}` : null,
+    ...o.discounts.map((x) => `${x.name}: −${money(x.amount)}`),
     o.tax ? `${o.taxName}: ${money(o.tax)}` : null,
     `Delivery: ${where}${o.items.length ? ' — ' + (o.shipping ? money(o.shipping) : 'free') : ''}`,
     `Total: ${money(o.total)}`, '',

@@ -200,6 +200,11 @@
   [data-gc-pcard]{cursor:pointer}
   .gc-card.is-on{border-color:var(--gc-bh,rgba(242,169,60,0.5))!important;
     box-shadow:0 0 0 1px var(--gc-bh,rgba(242,169,60,0.5)),0 18px 40px -24px var(--gc-bh,rgba(242,169,60,0.5))}
+  /* The welcome code, shown after a signup and in the cart: tap to copy. */
+  .gc-code{display:inline-block;margin:3px 2px;padding:3px 10px;border:1.5px dashed #F2A93C;border-radius:8px;
+    background:rgba(242,169,60,0.1);color:#F3E8D3;font:500 14px 'DM Mono',monospace;letter-spacing:0.08em;cursor:pointer;
+    vertical-align:baseline;transition:background-color .2s ease}
+  .gc-code:hover,.gc-code:focus-visible{background:rgba(242,169,60,0.22)}
   /* The signup box's light: idle, sending, done. */
   .gc-status{display:block;width:124px;height:124px;margin:-16px auto 6px}
   .gc-status[hidden]{display:none}
