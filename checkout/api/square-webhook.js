@@ -79,6 +79,40 @@ async function send(mail, idempotencyKey) {
   if (!r.ok && r.status !== 409) throw new Error('resend ' + r.status);
 }
 
+// Mailchimp: every online buyer joins the email list, tagged "customer", with
+// the date of their latest order in LASTORDER. Canada's anti-spam law lets you
+// email a customer for two years after their last purchase, so that date is
+// what to go by (SEO.md, "Your email list"). Ticking "send me new blends and
+// deals" on our own payment page adds the "opted-in" tag, which doesn't expire.
+// Someone who unsubscribed stays unsubscribed: an existing contact keeps their
+// status. Off until MAILCHIMP_API_KEY is set; a hiccup here never holds up
+// the order emails.
+const LIST_ID = '963c7fe1aa'; // the audience the site's signup forms use (_config.yml)
+export async function addToList(o, order, env, now = new Date()) {
+  const key = env.MAILCHIMP_API_KEY;
+  if (!key || !o.email) return false;
+  const dc = key.split('-').pop();
+  const member = 'https://' + dc + '.api.mailchimp.com/3.0/lists/' + (env.MAILCHIMP_LIST_ID || LIST_ID) +
+    '/members/' + crypto.createHash('md5').update(o.email.toLowerCase()).digest('hex');
+  const headers = { Authorization: 'Basic ' + Buffer.from('godschai:' + key).toString('base64'), 'Content-Type': 'application/json' };
+  const fields = { LASTORDER: now.toISOString().slice(0, 10) };
+  if (o.firstName) fields.FNAME = o.firstName;
+  if (o.lastName) fields.LNAME = o.lastName;
+  const put = (f) => fetch(member, { method: 'PUT', headers, body: JSON.stringify({ email_address: o.email, status_if_new: 'subscribed', merge_fields: f }) });
+  let r = await put(fields);
+  if (r.status === 400) {
+    // Most likely the audience has no "Last order" field yet: keep the contact anyway.
+    delete fields.LASTORDER;
+    r = await put(fields);
+  }
+  if (!r.ok) throw new Error('mailchimp ' + r.status);
+  const tags = [{ name: 'customer', status: 'active' }];
+  if (((order && order.metadata) || {}).marketing === 'yes') tags.push({ name: 'opted-in', status: 'active' });
+  const t = await fetch(member + '/tags', { method: 'POST', headers, body: JSON.stringify({ tags }) });
+  if (!t.ok) throw new Error('mailchimp tags ' + t.status);
+  return true;
+}
+
 async function loadOrder(id, token) {
   try {
     const r = await fetch(SQ + '/orders/' + encodeURIComponent(id), {
@@ -101,7 +135,7 @@ export default async function handler(req, res) {
       signatureKey: !!env.SQUARE_WEBHOOK_SIGNATURE_KEY,
       resendKey: !!env.RESEND_API_KEY,
     };
-    return res.status(200).json({ ok: true, ready: Object.values(ready).every(Boolean), ...ready, customerEmails: !!env.EMAIL_FROM });
+    return res.status(200).json({ ok: true, ready: Object.values(ready).every(Boolean), ...ready, customerEmails: !!env.EMAIL_FROM, mailchimp: !!env.MAILCHIMP_API_KEY });
   }
   if (req.method !== 'POST') return res.status(405).end();
 
@@ -134,6 +168,8 @@ export default async function handler(req, res) {
     const c = customerEmail(o);
     await attempt({ from: env.EMAIL_FROM, to: [o.email], reply_to: SHOP_EMAIL, subject: c.subject, html: c.html, text: c.text }, 'customer-' + payment.id);
   }
+  // And onto the email list.
+  await addToList(o, order, env).catch((e) => console.error('mailchimp_failed', payment.id, e.message));
 
   if (failed.length || (customerDue && !order)) {
     // Square retries; anything already sent is skipped thanks to the keys.

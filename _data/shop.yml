@@ -39,6 +39,16 @@ max_each_api: 99
 # it on, try a real order at godschai.com/checkout/?try=1 (and refund it).
 pay_on_site: false
 
+# The welcome offer: join the email list, get money off your first order.
+# Whoever signs up sees the code straight away, and their cart reminds them of
+# it. The code is checked by Square on its checkout page, so it must exist
+# there too (Square Dashboard → Customers → Marketing → Coupons), and in
+# checkout/lib/order.js (CODES) for our own payment page. Keep the three
+# matching. welcome_offer: false hides every mention of it.
+welcome_offer: false
+welcome_code: "CHAI10"
+welcome_percent: 10
+
 # Contact for orders and refunds. Shown on the shipping, refund, privacy and
 # thank-you pages, and set as the support email on every Square checkout.
 # Leave it blank and those pages point people at Instagram instead.

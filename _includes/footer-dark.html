@@ -30,6 +30,9 @@
     <div style="flex:1 1 300px;min-width:260px">
       <div style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#AB9280;margin-bottom:14px">Stay in the loop</div>
       {% include signup-form.html id="footer" button="Sign up" max="360px" %}
+      {%- if site.data.shop.open and site.data.shop.welcome_offer %}
+      <p style="margin:10px 0 0;font-size:13px;color:#AB9280">Join and get {{ site.data.shop.welcome_percent }}% off your first order.</p>
+      {%- endif %}
     </div>
   </div>
   <div style="border-top:1px solid rgba(243,232,211,0.12)">
