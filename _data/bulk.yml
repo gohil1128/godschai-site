@@ -1,0 +1,47 @@
+# Bulk orders (/bulk-orders/): hot chai and samosas for a crowd.
+#
+# People pick what they want, the day and time, and pickup or delivery. The
+# page then opens an email to the shop's address (email in _data/shop.yml)
+# with the whole order filled in. Nothing is paid on the site: you check
+# you're free, reply with a quote, and send a Square payment link.
+
+# The earliest someone can ask for, counted from the moment they fill it in.
+notice_hours: 48
+
+# What can be ordered. For each one:
+#   unit / unit_one  how it's counted ("cups" / "cup", "dozen" / "dozen")
+#   min              the smallest order (the + button jumps straight to it)
+#   step             what + and - add or take away after that
+#   max              the most the form allows in one request
+#   each             pieces in one unit, if it's more than one (12 in a dozen),
+#                    so the request says "3 dozen (36)"
+#   price            shown under the name, e.g. "$4.50 a cup". Leave it blank
+#                    and it says "Price on request".
+items:
+  - key: chai
+    name: "Hot masala chai"
+    desc: "Our Classic Hot Chai: slow-simmered with whole spices from Kerala, single-origin Assam tea and real milk."
+    unit: "cups"
+    unit_one: "cup"
+    min: 10
+    step: 5
+    max: 500
+    price: ""
+  - key: samosa
+    name: "Samosas"
+    desc: "Crisp, golden pastry with a warm spiced filling."
+    unit: "dozen"
+    unit_one: "dozen"
+    each: 12
+    min: 1
+    step: 1
+    max: 50
+    price: ""
+
+# The two ways to get it.
+pickup:
+  label: "Pickup"
+  note: "We'll tell you where to pick up when we confirm."
+delivery:
+  label: "Delivery"
+  note: "Anywhere in Saskatoon."

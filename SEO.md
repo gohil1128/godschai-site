@@ -315,6 +315,34 @@ Claude with Square connected.
 
 ---
 
+## Bulk orders
+
+`/bulk-orders/` takes orders for hot chai by the cup and samosas by the dozen,
+for offices, parties and get-togethers. It's linked from the footer, the
+catering page and the homepage's catering section.
+
+**How it works.** People choose how much chai and how many samosas, the day
+and time, and pickup or delivery, then press *Send my request*. Their own email
+app opens with everything filled in, addressed to the shop email (`email` in
+`_data/shop.yml`), and they send it. Nothing is paid on the site: reply to say
+you're free and what it costs, then send a Square payment link or invoice (or
+ask Claude to make the link). If no email app opens, the page shows the same
+request for them to copy and send by email or Instagram.
+
+**Changing it.** Everything is in `_data/bulk.yml`:
+
+- `notice_hours`: how far ahead people have to order (48). The form won't let
+  anyone pick a time sooner than that.
+- `items`: what can be ordered, each with a name, description, unit (cups,
+  dozen), minimum, step and maximum. `price` is blank, so the page says
+  *Price on request*. Put text like `"$4.50 a cup"` there to show a price.
+- `pickup` and `delivery`: the wording under each choice.
+
+Another item (chai concentrate by the litre, say) is just one more entry under
+`items` with its own `key`.
+
+---
+
 ## Change the brew guide
 
 **`_data/brew.yml`** holds the four steps, the ingredient list and the timings.
