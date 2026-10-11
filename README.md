@@ -21,12 +21,13 @@ structured data and sitemap stay in sync automatically.
 | `/events/` | `events/index.html` |
 | `/premixes/` | `premixes/index.html` |
 | `/catering/` | `catering/index.html` |
+| `/bulk-orders/` | `bulk-orders/index.html` |
 | `/404.html` | `404.html` |
 
 ## Where things live
 
 ```
-_data/          menu.yml, events.yml, brew.yml  ← the content you edit
+_data/          menu.yml, events.yml, brew.yml, bulk.yml  ← the content you edit
 _includes/      head, nav, footer, signup form, popup, schema, image helper
 _layouts/       default.html (dark pages), light.html (the menu page)
 assets/js/      site.js — all interaction, plain JavaScript, no framework

@@ -1,0 +1,224 @@
+---
+layout: default
+title: "Bulk Chai & Samosa Orders in Saskatoon | God's Chai"
+description: "Hot masala chai by the cup and samosas by the dozen for the office, a party or a get-together. Pickup or delivery anywhere in Saskatoon with 48 hours' notice."
+breadcrumb: "Bulk orders"
+og_image: "uploads/og-image.jpg"
+---
+{%- comment -%}
+  Bulk orders: hot chai and samosas for a crowd. What's on offer, the notice
+  and the pickup/delivery wording all come from _data/bulk.yml.
+  assets/js/bulk.js runs the form: it checks the request, then opens an email
+  to the shop (email in _data/shop.yml) with everything filled in. Nothing is
+  paid here; the shop replies with a quote and a payment link.
+{%- endcomment -%}
+{%- assign bulk = site.data.bulk -%}
+{%- assign to = site.data.shop.email -%}
+<style>
+  .gc-bk{max-width:1120px;margin:0 auto;padding:clamp(108px,13vh,150px) clamp(16px,4vw,40px) clamp(30px,5vw,56px)}
+  .gc-bk-kicker{font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.2em;text-transform:uppercase;color:#FF7A66;margin-bottom:14px}
+  .gc-bk h1{font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(2.3rem,6vw,4rem);line-height:0.98;margin:0;max-width:20ch}
+  .gc-bk h1 em{color:#FF6F61}
+  .gc-bk-lede{font-size:clamp(1.05rem,1.5vw,1.2rem);line-height:1.6;color:#E7D6C4;max-width:56ch;margin:20px 0 0}
+  .gc-bk-grid{display:grid;gap:clamp(18px,3vw,32px);margin-top:clamp(26px,4vw,40px);align-items:start}
+  @media (min-width:900px){
+    .gc-bk-grid{grid-template-columns:minmax(0,1fr) 350px}
+    .gc-bk-sum{position:sticky;top:112px}
+  }
+
+  /* The form */
+  .gc-bk fieldset{margin:0 0 18px;padding:clamp(18px,2.6vw,26px);border-radius:22px;border:1px solid rgba(242,169,60,0.16);background:rgba(28,17,10,0.8);min-width:0}
+  .gc-bk legend{float:left;width:100%;padding:0;margin:0 0 16px;display:flex;align-items:center;gap:12px;
+    font-family:'Instrument Serif',serif;font-size:1.55rem;color:#F3E8D3;line-height:1.1}
+  .gc-bk legend + *{clear:both}
+  .gc-bk legend span{flex:0 0 auto;width:30px;height:30px;border-radius:999px;background:#F2A93C;color:#2B1B12;
+    font:700 14px/30px 'Hanken Grotesk',sans-serif;text-align:center}
+  .gc-bk-item{display:flex;align-items:center;gap:14px 18px;flex-wrap:wrap;padding:14px 0;border-top:1px solid rgba(243,232,211,0.08)}
+  .gc-bk-item:first-of-type{border-top:0;padding-top:0}
+  .gc-bk-item > div:first-child{flex:1 1 260px;min-width:0}
+  .gc-bk-item b{display:block;font-family:'Instrument Serif',serif;font-weight:400;font-size:1.35rem;color:#F3E8D3;line-height:1.15}
+  .gc-bk-item small{display:block;font-family:'DM Mono',monospace;font-size:11.5px;letter-spacing:0.06em;color:#F2A93C;margin-top:4px}
+  .gc-bk-item p{margin:6px 0 0;font-size:14.5px;line-height:1.5;color:#C7B29E}
+  .gc-bk-qty{display:flex;align-items:center;gap:10px;flex:0 0 auto}
+  .gc-bk-step{display:flex;align-items:center;gap:6px}
+  .gc-bk-step button{width:40px;height:40px;border-radius:999px;border:1px solid rgba(243,232,211,0.22);background:transparent;
+    color:#F3E8D3;font:500 20px/1 'Hanken Grotesk',sans-serif;cursor:pointer;transition:border-color .2s ease,color .2s ease}
+  .gc-bk-step button:hover:not(:disabled){border-color:#F2A93C;color:#F2A93C}
+  .gc-bk-step button:disabled{opacity:0.3;cursor:default}
+  .gc-bk-step input{width:64px;box-sizing:border-box;padding:9px 4px;border-radius:12px;border:1px solid rgba(243,232,211,0.18);
+    background:rgba(243,232,211,0.05);color:#F3E8D3;font:500 16px 'DM Mono',monospace;text-align:center;-moz-appearance:textfield;appearance:textfield}
+  .gc-bk-step input::-webkit-outer-spin-button,.gc-bk-step input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+  .gc-bk-step input:focus{outline:none;border-color:#F2A93C}
+  .gc-bk-qty > span{min-width:42px;font-family:'DM Mono',monospace;font-size:12px;color:#AB9280}
+  .gc-bk-f{display:block;margin:0 0 14px}
+  .gc-bk-f > span{display:block;font-size:13.5px;color:#D6C7B4;margin:0 0 6px}
+  .gc-bk-f > span small{color:#AB9280;font-size:12.5px}
+  .gc-bk-f input,.gc-bk-f textarea{display:block;width:100%;box-sizing:border-box;margin:0;padding:13px 14px;border-radius:12px;
+    border:1px solid rgba(243,232,211,0.18);background:rgba(243,232,211,0.05);color:#F3E8D3;font:400 16px 'Hanken Grotesk',sans-serif;
+    color-scheme:dark;transition:border-color .2s ease,background-color .2s ease}
+  .gc-bk-f textarea{min-height:92px;resize:vertical;line-height:1.45}
+  .gc-bk-f input:hover,.gc-bk-f textarea:hover{border-color:rgba(243,232,211,0.32)}
+  .gc-bk-f input:focus,.gc-bk-f textarea:focus{outline:none;border-color:#F2A93C;background:rgba(243,232,211,0.08)}
+  .gc-bk-f input:focus-visible,.gc-bk-f textarea:focus-visible{outline:2px solid #F2A93C;outline-offset:2px}
+  .gc-bk-f input[aria-invalid="true"],.gc-bk-step input[aria-invalid="true"]{border-color:#FF6F61}
+  .gc-bk-f[hidden]{display:none}
+  .gc-bk-2{display:grid;gap:0 12px}
+  @media (min-width:520px){.gc-bk-2{grid-template-columns:1fr 1fr}}
+  .gc-bk-ways{display:grid;gap:0 10px;margin:4px 0 6px}
+  @media (min-width:620px){.gc-bk-ways{grid-template-columns:1fr 1fr}}
+  .gc-bk-way{display:flex;align-items:center;gap:12px;padding:13px 14px;margin:0 0 10px;border:1px solid rgba(243,232,211,0.14);
+    border-radius:14px;cursor:pointer;background:rgba(243,232,211,0.03)}
+  .gc-bk-way input{accent-color:#F2A93C;width:18px;height:18px;margin:0;flex:0 0 auto}
+  .gc-bk-way b{display:block;color:#F3E8D3;font-weight:600;font-size:14.5px}
+  .gc-bk-way small{display:block;color:#AB9280;font-size:12.5px;margin-top:2px}
+  .gc-bk-way.is-on{background:rgba(242,169,60,0.07)}
+  .gc-bk-msg{display:block;margin:6px 0 0;font-size:13px;color:#FF8A78}
+  .gc-bk-msg:empty{display:none}
+
+  /* Your request */
+  .gc-bk-sum{border-radius:22px;background:rgba(28,17,10,0.85);border:1px solid rgba(242,169,60,0.18);padding:clamp(18px,2.6vw,24px)}
+  .gc-bk-sum h2{font-family:'Instrument Serif',serif;font-weight:400;font-size:1.55rem;margin:0 0 12px;color:#F3E8D3}
+  .gc-bk-rows{margin:0;font-size:14.5px;color:#C7B29E}
+  .gc-bk-rows div{display:flex;justify-content:space-between;gap:14px;padding:9px 0;border-bottom:1px solid rgba(243,232,211,0.08)}
+  .gc-bk-rows dt{margin:0}
+  .gc-bk-rows dd{margin:0;text-align:right;color:#F3E8D3;font-family:'DM Mono',monospace;font-size:13.5px}
+  .gc-bk-rows dd.is-empty{color:#8A7869}
+  .gc-bk-send{display:block;width:100%;margin:18px 0 0;padding:16px 22px;border:0;border-radius:999px;background:#F2A93C;color:#2B1B12;
+    font:700 16.5px 'Hanken Grotesk',sans-serif;cursor:pointer}
+  .gc-bk-small{margin:12px 0 0;font-size:13px;line-height:1.5;color:#AB9280;text-align:center}
+  .gc-bk-err{margin:12px 0 0;padding:12px 14px;border-radius:12px;background:rgba(255,111,97,0.09);border:1px solid rgba(255,111,97,0.32);
+    color:#FFD2CB;font-size:14px;line-height:1.45}
+  .gc-bk-err:empty{display:none}
+  .gc-bk-done{margin:16px 0 0;padding:16px;border-radius:16px;background:rgba(242,169,60,0.08);border:1px solid rgba(242,169,60,0.35);font-size:14.5px;line-height:1.5;color:#E7D6C4}
+  .gc-bk-done[hidden]{display:none}
+  .gc-bk-done b{color:#F3E8D3}
+  .gc-bk-done p{margin:0 0 10px}
+  .gc-bk-done a{color:#F2A93C}
+  .gc-bk-text{margin:10px 0 0;padding:12px;max-height:220px;overflow:auto;border-radius:12px;background:rgba(16,10,5,0.6);border:1px solid rgba(243,232,211,0.1);
+    font:400 12.5px/1.5 'DM Mono',monospace;color:#D6C7B4;white-space:pre-wrap;word-break:break-word}
+  .gc-bk-copy{margin:10px 0 0;padding:9px 16px;border-radius:999px;border:1px solid rgba(242,169,60,0.6);background:transparent;color:#F2A93C;
+    font:700 13.5px 'Hanken Grotesk',sans-serif;cursor:pointer}
+
+  /* How it works */
+  .gc-bk-how{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:clamp(14px,1.8vw,20px)}
+  .gc-bk-how > div{padding:24px 22px 26px;background:rgba(28,17,10,0.8);border:1px solid rgba(242,169,60,0.16);border-radius:22px}
+  .gc-bk-how span{font-family:'Instrument Serif',serif;font-size:40px;line-height:0.8;color:#F2A93C}
+  .gc-bk-how h3{font-family:'Instrument Serif',serif;font-weight:400;font-size:1.3rem;margin:16px 0 0;color:#F3E8D3}
+  .gc-bk-how p{color:#C7B29E;line-height:1.55;margin:8px 0 0;font-size:0.97rem}
+  @media (prefers-reduced-motion:reduce){.gc-bk-step button,.gc-bk-f input,.gc-bk-f textarea{transition:none}}
+</style>
+
+<section class="gc-bk" aria-labelledby="page-h1">
+  <div class="gc-bk-kicker">Offices · parties · get-togethers</div>
+  <h1 id="page-h1">Bulk chai &amp; samosas <em>for a crowd</em></h1>
+  <p class="gc-bk-lede">Hot masala chai by the cup and samosas by the dozen, for the office, the family or the whole group chat. Pickup or delivery anywhere in Saskatoon. Just give us {{ bulk.notice_hours }} hours' notice.</p>
+
+  <form class="gc-bk-grid" data-gc-bulk data-to="{{ to }}" data-notice="{{ bulk.notice_hours }}" novalidate>
+    <div>
+      <fieldset>
+        <legend><span>1</span>What you'd like</legend>
+        {%- for it in bulk.items %}
+        <div class="gc-bk-item">
+          <div>
+            <b id="gc-bk-{{ it.key }}-name">{{ it.name }}</b>
+            <small>{% if it.price != "" %}{{ it.price }}{% else %}Price on request{% endif %} · {% if it.min > 1 %}from {{ it.min }} {{ it.unit }}{% else %}by the {{ it.unit_one }}{% endif %}</small>
+            <p>{{ it.desc }}</p>
+          </div>
+          <div class="gc-bk-qty">
+            <div class="gc-bk-step" role="group" aria-labelledby="gc-bk-{{ it.key }}-name">
+              <button type="button" data-gc-bulk-dec aria-label="Fewer {{ it.name | downcase }}">−</button>
+              <input type="number" inputmode="numeric" name="{{ it.key }}" value="0" min="0" max="{{ it.max }}"
+                data-min="{{ it.min }}" data-step="{{ it.step }}" data-each="{{ it.each | default: 1 }}" data-unit="{{ it.unit }}" data-one="{{ it.unit_one }}" data-name="{{ it.name }}"
+                aria-label="{{ it.name }}, in {{ it.unit }}">
+              <button type="button" data-gc-bulk-inc aria-label="More {{ it.name | downcase }}">+</button>
+            </div>
+            <span>{{ it.unit }}</span>
+          </div>
+        </div>
+        {%- endfor %}
+        <p class="gc-bk-msg" data-gc-bulk-msg="items" role="alert"></p>
+      </fieldset>
+
+      <fieldset>
+        <legend><span>2</span>When and where</legend>
+        <div class="gc-bk-2">
+          <label class="gc-bk-f"><span>Day</span><input type="date" name="date" required aria-describedby="gc-bk-when"></label>
+          <label class="gc-bk-f"><span>Time</span><input type="time" name="time" required aria-describedby="gc-bk-when"></label>
+        </div>
+        <p class="gc-bk-msg" id="gc-bk-when" data-gc-bulk-msg="when" role="alert"></p>
+        <div class="gc-bk-ways" role="radiogroup" aria-label="Pickup or delivery">
+          <label class="gc-bk-way gc-card"><input type="radio" name="how" value="delivery" checked><span><b>{{ bulk.delivery.label }}</b><small>{{ bulk.delivery.note }}</small></span></label>
+          <label class="gc-bk-way gc-card"><input type="radio" name="how" value="pickup"><span><b>{{ bulk.pickup.label }}</b><small>{{ bulk.pickup.note }}</small></span></label>
+        </div>
+        <label class="gc-bk-f" data-gc-bulk-address><span>Delivery address</span><input type="text" name="address" autocomplete="street-address" placeholder="Street address, Saskatoon" aria-describedby="gc-bk-address-msg"></label>
+        <p class="gc-bk-msg" id="gc-bk-address-msg" data-gc-bulk-msg="address" role="alert"></p>
+      </fieldset>
+
+      <fieldset>
+        <legend><span>3</span>Your details</legend>
+        <div class="gc-bk-2">
+          <label class="gc-bk-f"><span>Name</span><input type="text" name="name" autocomplete="name" required aria-describedby="gc-bk-name-msg"></label>
+          <label class="gc-bk-f"><span>Phone <small>(for the day itself)</small></span><input type="tel" name="phone" autocomplete="tel"></label>
+        </div>
+        <p class="gc-bk-msg" id="gc-bk-name-msg" data-gc-bulk-msg="name" role="alert"></p>
+        <label class="gc-bk-f"><span>Email <small>(we'll reply here)</small></span><input type="email" name="email" autocomplete="email" required aria-describedby="gc-bk-email-msg"></label>
+        <p class="gc-bk-msg" id="gc-bk-email-msg" data-gc-bulk-msg="email" role="alert"></p>
+        <label class="gc-bk-f" style="margin-bottom:0"><span>Anything else? <small>(optional)</small></span><textarea name="notes" placeholder="Sweetness, allergies, the occasion…"></textarea></label>
+      </fieldset>
+    </div>
+
+    <aside class="gc-bk-sum" aria-labelledby="gc-bk-sum-h">
+      <h2 id="gc-bk-sum-h">Your request</h2>
+      <dl class="gc-bk-rows" data-gc-bulk-rows>
+        {%- for it in bulk.items %}
+        <div><dt>{{ it.name }}</dt><dd class="is-empty" data-gc-bulk-row="{{ it.key }}">—</dd></div>
+        {%- endfor %}
+        <div><dt>When</dt><dd class="is-empty" data-gc-bulk-row="when">—</dd></div>
+        <div><dt>How</dt><dd data-gc-bulk-row="how">{{ bulk.delivery.label }}</dd></div>
+        <div><dt>Price</dt><dd>We'll send a quote</dd></div>
+      </dl>
+      <noscript><p class="gc-bk-err">This form needs JavaScript. Or just email {% if to != "" %}<a href="mailto:{{ to }}" style="color:#F2A93C">{{ to }}</a>{% else %}us{% endif %} with what you'd like, the day and pickup or delivery.</p></noscript>
+      <button type="submit" class="gc-bk-send gc-pill">Send my request</button>
+      <p class="gc-bk-err" data-gc-bulk-err role="alert"></p>
+      <p class="gc-bk-small">Nothing to pay yet. We'll check we're free, then reply with a quote and a payment link.</p>
+      <div class="gc-bk-done" data-gc-bulk-done role="status" tabindex="-1" hidden>
+        <p><b>Almost there!</b> {% if to != "" %}Your email app should have opened with everything filled in. Just hit send.{% else %}Copy your request below and send it to us on Instagram.{% endif %}</p>
+        <p style="margin:0">Nothing opened? Copy your request and send it to {% if to != "" %}<a href="mailto:{{ to }}" data-gc-bulk-mailto>{{ to }}</a> or {% endif %}DM us on <a href="{{ site.social.instagram }}" target="_blank" rel="noopener">Instagram</a>.</p>
+        <pre class="gc-bk-text" data-gc-bulk-text></pre>
+        <button type="button" class="gc-bk-copy" data-gc-bulk-copy>Copy my request</button>
+      </div>
+    </aside>
+  </form>
+</section>
+
+<section aria-labelledby="how-h2" style="background:rgba(29,18,11,0.6);border-top:1px solid rgba(243,232,211,0.08);border-bottom:1px solid rgba(243,232,211,0.08)">
+  <div style="max-width:1120px;margin:0 auto;padding:clamp(46px,6vw,80px) clamp(16px,4vw,40px)">
+    <h2 id="how-h2" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(1.9rem,4.4vw,3rem);letter-spacing:0;margin:0 0 26px;color:#F3E8D3">How it works</h2>
+    <div class="gc-bk-how" data-gc-stagger>
+      <div class="gc-card"><span>01</span><h3>Send your request</h3><p>Pick how much chai and how many samosas, the day, and pickup or delivery. It lands in our inbox.</p></div>
+      <div class="gc-card"><span>02</span><h3>We confirm and quote</h3><p>We check we're free and reply with the price and a payment link. No packages to decode.</p></div>
+      <div class="gc-card"><span>03</span><h3>Chai time</h3><p>Pay when you're happy with it, then pick it up or we bring it to you. Everyone gets a proper cup.</p></div>
+    </div>
+    <p style="margin:28px 0 0;font-size:1.02rem;line-height:1.6;color:#D6C7B4;max-width:60ch">Want the cart pouring at your event instead? <a href="{{ '/catering/' | relative_url }}" style="color:#F2A93C;font-weight:600">Book chai catering →</a></p>
+  </div>
+</section>
+
+<script src="{{ '/assets/js/bulk.js' | relative_url }}" defer></script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "@id": "{{ page.url | absolute_url }}#service",
+  "name": "Bulk chai and samosa orders",
+  "serviceType": "Bulk food and drink orders",
+  "description": {{ page.description | jsonify }},
+  "url": "{{ page.url | absolute_url }}",
+  "provider": { "@id": "{{ '/' | absolute_url }}#organization" },
+  "areaServed": {
+    "@type": "City",
+    "name": "Saskatoon",
+    "containedInPlace": { "@type": "AdministrativeArea", "name": "Saskatchewan, Canada" }
+  }
+}
+</script>
