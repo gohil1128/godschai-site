@@ -391,8 +391,8 @@ layout: null
     var popupForm = d.getElementById('gc-popup-form');
     if (popupForm) popupForm.addEventListener('gc:signup', function (e) {
       if (!light) return;
-      light.show(e.detail, true);
-      if (e.detail === 'error') setTimeout(function () { if (light) light.show('idle', true); }, 2200);
+      light.show(e.detail);
+      if (e.detail === 'error') setTimeout(function () { if (light) light.show('idle'); }, 2200);
     });
     function hideNudge() {
       if (!nudge) return;

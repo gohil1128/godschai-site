@@ -465,37 +465,20 @@ switch is the `prefers-reduced-motion` block at the foot of each stylesheet.
 
 ---
 
-## The particle animation
+## The particle light
 
-Above the four brew steps (on the homepage and the brew guide) and the four
-iced-chai steps, a cloud of up to 12,000 glowing specks flies apart and
-re-forms into a new shape for each step:
+The signup box has a small cloud of glowing specks at the top: a slow sphere
+while it waits, a swirl while the signup is sending, and a tick once it has
+gone through. The order-confirmed page shows the same tick.
 
-| Step | Shape |
-| --- | --- |
-| Boil | a slowly breathing sphere |
-| Blend | a swirling ribbon — the spice going in |
-| Rise | four rings in the outline of a pot, climbing |
-| Strain | a cutting-chai glass with steam coming off it |
-| Concentrate | a dense, packed core |
-| Sweeten | a falling stream of sugar |
-| Chill | ice cubes |
-| Pour | a tall glass with cubes floating in it |
+(The big version that used to sit above the brew and iced-chai steps — Boil,
+Blend, Rise, Strain — has been taken out. The step cards are unchanged.)
 
-It moves on to the next step by itself every few seconds; tapping a step (or
-its card) jumps to it and stops the auto-play. The step on show lights up.
-
-The signup box has a small one too: a slow sphere while it waits, a swirl
-while the signup is sending, and a tick once it has gone through.
-
-It's all one file, `assets/js/particles.js` — no outside library. It only runs
+It's all one file, `assets/js/particles.js` — no outside library, and it's only
+downloaded when the signup box opens or an order is confirmed. It only runs
 while it's on screen; with "reduce motion" switched on it changes shape
-instantly and holds still; and with JavaScript off it simply isn't there.
-
-**The shape follows the step's name**, not its position. Rename a step in
-`_data/brew.yml` or `_data/iced.yml` and it falls back to the sphere unless you
-also add the new name to `PRESETS` near the top of `particles.js` — that's also
-where each step's colour lives.
+instantly and holds still; and with JavaScript off it simply isn't there. Each
+state's shape and colour live in `PRESETS` near the top of the file.
 
 ---
 
