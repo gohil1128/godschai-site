@@ -74,8 +74,10 @@ export function readBuyer(body, zoneKey) {
   return { email, phone, first, last, line1, line2, city, province, postal };
 }
 
-function orderWithDelivery(o, buyer) {
+function orderWithDelivery(o, buyer, optIn) {
   const order = squareOrder(o);
+  // Ticked "send me new blends and deals": the order emails pass it to Mailchimp.
+  if (optIn) order.metadata = { marketing: 'yes' };
   if (o.fee) {
     order.service_charges = [{ uid: 'ship', name: SHIPPING_NAME, amount_money: { amount: o.fee, currency: 'CAD' }, calculation_phase: 'TOTAL_PHASE', taxable: false }];
   }
@@ -107,9 +109,12 @@ function squareAddress(b) {
 
 function totals(order) {
   const amt = (m) => (m && m.amount) || 0;
+  const off = (uid) => amt(((order.discounts || []).find((x) => x.uid === uid) || {}).applied_money);
   return {
     subtotal: (order.line_items || []).reduce((s, l) => s + amt(l.gross_sales_money), 0),
     discount: amt(order.total_discount_money),
+    pairDiscount: off('pair'),
+    codeDiscount: off('code'),
     tax: amt(order.total_tax_money),
     shipping: amt(order.total_service_charge_money),
     total: amt(order.total_money),
@@ -136,6 +141,7 @@ export default async function handler(req, res) {
   const body = jsonBody(req);
   const o = readOrder(body);
   if (o.error) return res.status(400).json({ error: o.error });
+  if (o.badCode) return res.status(400).json({ error: 'bad_code' });
   const token = env.SQUARE_ACCESS_TOKEN;
 
   // The totals before paying, from Square itself, so the page shows exactly
@@ -159,7 +165,7 @@ export default async function handler(req, res) {
 
   // 1. The order. The same attempt always gets the same order back, so a
   //    retry after a dropped connection can't make a second one.
-  const made = await square('/orders', token, { idempotency_key: 'o-' + attempt, order: orderWithDelivery(o, buyer) }).catch(() => null);
+  const made = await square('/orders', token, { idempotency_key: 'o-' + attempt, order: orderWithDelivery(o, buyer, body.optIn === true) }).catch(() => null);
   const order = made && made.ok && made.data.order;
   if (!order) {
     console.error('order_failed', made && made.status, made && made.data.errors && made.data.errors[0] && made.data.errors[0].code);

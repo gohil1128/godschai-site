@@ -91,10 +91,12 @@
 
     var quote = null, quoteSeq = 0, quoteTimer = 0, card = null, payments = null, payReq = null;
     var ready = false, busy = false, started = false;
+    // The discount code: the one they got for signing up, if any (cart.js).
+    var code = (cart.code && cart.code()) || '';
 
     function s() { return cart.state(); }
     function count(st) { var n = 0; for (var k in st.q) n += st.q[k]; return n; }
-    function key(st) { return JSON.stringify(st); }
+    function key(st) { return JSON.stringify(st) + '|' + code; }
 
     // ---- the order summary ---------------------------------------------
     function render() {
@@ -113,8 +115,11 @@
       var t = quote && quote.key === key(st) ? quote : local(st);
       root.querySelector('[data-gc-co-count]').textContent = n === 1 ? '1 pouch' : n + ' pouches';
       root.querySelector('[data-gc-co-sub]').textContent = money(t.subtotal);
-      root.querySelector('[data-gc-co-discrow]').hidden = !t.discount;
-      root.querySelector('[data-gc-co-disc]').textContent = '−' + money(t.discount);
+      root.querySelector('[data-gc-co-discrow]').hidden = !t.pairDiscount;
+      root.querySelector('[data-gc-co-disc]').textContent = '−' + money(t.pairDiscount);
+      root.querySelector('[data-gc-co-coderow]').hidden = !t.codeDiscount;
+      root.querySelector('[data-gc-co-codename]').textContent = code + ' · code';
+      root.querySelector('[data-gc-co-codeoff]').textContent = '−' + money(t.codeDiscount);
       root.querySelector('[data-gc-co-taxrow]').hidden = !t.tax;
       root.querySelector('[data-gc-co-tax]').textContent = money(t.tax);
       root.querySelector('[data-gc-co-ship]').textContent = !st.z ? '—' : t.shipping ? money(t.shipping) : 'Free';
@@ -127,7 +132,7 @@
     function local(st) {
       var t = cart.totals();
       var c = function (x) { return Math.round(x * 100); };
-      return { subtotal: c(t.sub), discount: c(t.saving), tax: c(t.tax), shipping: st.z ? c(t.fee) : 0, total: c(t.total) };
+      return { subtotal: c(t.sub), pairDiscount: c(t.saving), codeDiscount: 0, tax: c(t.tax), shipping: st.z ? c(t.fee) : 0, total: c(t.total) };
     }
     function button() {
       var st = s();
@@ -174,11 +179,14 @@
       if (!count(st) || !st.z) { render(); return Promise.resolve(); }
       var seq = ++quoteSeq;
       render();
-      return post(JSON.stringify({ action: 'quote', items: st.q, zone: st.z }), 1).then(function (r) {
+      return post(JSON.stringify({ action: 'quote', items: st.q, zone: st.z, code: code || undefined }), 1).then(function (r) {
         if (seq !== quoteSeq) return;
+        // A code that doesn't work: say so, and carry on without it.
+        if (r.status === 400 && r.body && r.body.error === 'bad_code') { badCode(); return requote(); }
         if (r.status !== 200 || typeof r.body.total !== 'number') throw new Error('quote');
         quote = r.body; quote.key = key(st);
         if (quoteErr) { quoteErr = false; error(''); }
+        if (code && quote.codeDiscount) codeSays(code + ' applied: ' + money(quote.codeDiscount) + ' off.', true);
         render();
         if (ready && !payReq) wallets(); else walletTotal();
       });
@@ -273,7 +281,7 @@
       brew.show(PAYING);
       var body = JSON.stringify({
         action: 'pay', attempt: uuid(), token: token, items: st.q, zone: st.z, expectTotal: quote.total,
-        contact: { email: b.email, phone: b.phone },
+        contact: { email: b.email, phone: b.phone }, code: code || undefined, optIn: !!form.elements.optin.checked,
         address: { first: b.first, last: b.last, line1: b.line1, line2: b.line2, city: b.city, province: b.province, postal: b.postal }
       });
       post(body, 2).then(function (r) {
@@ -285,6 +293,7 @@
           quote = r.body; quote.key = key(st); render(); walletTotal();
           error('Heads up: your total just changed to ' + money(r.body.total) + '. Tap Pay to go ahead.');
         } else if (r.status === 400 && e === 'not_saskatoon') notSaskatoon();
+        else if (r.status === 400 && e === 'bad_code') { badCode(); requoteSoon(); error('That code doesn’t work any more, so it’s off your total. Check it, then tap Pay.'); }
         else if (r.status === 400 && MSG[e]) { var el = fieldError(e, MSG[e]); if (el && el.focus) el.focus(); }
         else if (r.status === 429) error('Whoa, that’s a lot of tries. Take a breather and try again in a few minutes.');
         else if (r.status >= 500) error('We couldn’t confirm the payment. Before trying again, check your inbox for a receipt: no receipt means nothing was charged.');
@@ -368,6 +377,36 @@
         .then(function () { ready = true; render(); if (quote) wallets(); })
         .catch(handOver);
     }
+
+    // ---- the discount code box -----------------------------------------------
+    var codeBox = root.querySelector('[data-gc-co-codebox]'), codeIn = root.querySelector('[data-gc-co-codein]');
+    var codeOpen = root.querySelector('[data-gc-co-code-open]'), codeMsg = root.querySelector('[data-gc-co-codemsg]');
+    function codeSays(text, removable) {
+      codeMsg.textContent = text;
+      if (removable) {
+        var x = d.createElement('button');
+        x.type = 'button'; x.textContent = 'Remove';
+        x.addEventListener('click', function () { setCode(''); codeSays('', false); requoteSoon(); });
+        codeMsg.appendChild(x);
+      }
+    }
+    function setCode(c) { code = c; codeIn.value = c; codeBox.hidden = true; codeOpen.hidden = !!c; }
+    function badCode() {
+      codeIn.value = code; code = '';
+      codeBox.hidden = false; codeOpen.hidden = true;
+      codeSays('That code doesn’t work.', false);
+    }
+    function applyCode() {
+      var c = codeIn.value.trim().toUpperCase();
+      if (!c || busy) return;
+      setCode(c);
+      codeSays('Checking ' + c + '…', false);
+      requoteSoon();
+    }
+    codeOpen.addEventListener('click', function () { codeOpen.hidden = true; codeBox.hidden = false; codeIn.focus(); });
+    root.querySelector('[data-gc-co-code-apply]').addEventListener('click', applyCode);
+    codeIn.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); applyCode(); } });
+    if (code) { codeOpen.hidden = true; codeSays('Checking ' + code + '…', false); }
 
     // ---- wiring -----------------------------------------------------------
     form.addEventListener('submit', function (e) { e.preventDefault(); payWith(card, true); });

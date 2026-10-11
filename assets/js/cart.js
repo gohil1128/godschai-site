@@ -281,10 +281,12 @@
       fail('Couldn’t open checkout just now — please try again in a moment, or message us and we’ll sort it.');
     };
     if (!data.api) { done(fallback); return; }
+    var body = { items: state.q, zone: state.z };
+    if (welcomeCode()) body.code = welcomeCode();
     fetch(data.api, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ items: state.q, zone: state.z })
+      body: JSON.stringify(body)
     }).then(function (r) { return r.ok ? r.json() : null; })
       .then(function (j) { done(j && j.url ? j.url : fallback); },
             function () { done(fallback); });
@@ -334,6 +336,33 @@
     }).observe(mainBuy);
   }
 
+  // ---- the welcome offer (_data/shop.yml) -------------------------------
+  // One small line that opens into an email box; once they've signed up
+  // (anywhere on the site, see site.js) it shows their code instead.
+  function welcomeCode() { try { return localStorage.getItem('gc_welcome') || ''; } catch (e) { return ''; } }
+  var deal = root.querySelector('[data-gc-deal]');
+  if (deal) {
+    var dealOpen = deal.querySelector('[data-gc-deal-open]');
+    var dealForm = deal.querySelector('[data-gc-deal-form]');
+    var dealCode = deal.querySelector('[data-gc-deal-code]');
+    // With the checkout service, the code is added to the order for them.
+    deal.querySelector('[data-gc-deal-where]').textContent = data.api ? 'it comes off at checkout.' : 'pop it in on the payment page.';
+    var showDeal = function () {
+      var have = !!welcomeCode();
+      dealOpen.hidden = have || dealOpen.getAttribute('aria-expanded') === 'true';
+      dealForm.hidden = have || dealOpen.getAttribute('aria-expanded') !== 'true';
+      dealCode.hidden = !have;
+    };
+    dealOpen.addEventListener('click', function () {
+      dealOpen.setAttribute('aria-expanded', 'true');
+      showDeal();
+      var inp = dealForm.querySelector('input[type="email"]');
+      if (inp) inp.focus();
+    });
+    d.addEventListener('gc:welcome', showDeal);
+    showDeal();
+  }
+
   // ---- for the payment page (assets/js/pay.js) -------------------------
   W.GCCart = {
     data: data,
@@ -342,7 +371,8 @@
     setZone: function (z) { if (data.fees.hasOwnProperty(z) && z !== state.z) { state.z = z; save(); render(); } },
     clear: function () { data.blends.forEach(function (k) { state.q[k] = 0; }); save(); render(); },
     open: function () { render(); open(); },
-    hosted: hosted
+    hosted: hosted,
+    code: welcomeCode
   };
   // Our own payment page has no address quirk to warn about.
   var tip = root.querySelector('[data-gc-tip]');

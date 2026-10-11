@@ -31,14 +31,17 @@ export default async function handler(req, res) {
   const o = readOrder(jsonBody(req));
   if (o.error) return res.status(400).json({ error: o.error });
 
+  // A welcome code from the cart is applied to the order itself; an unknown one
+  // is just left off (they can still type a code on Square's page).
   const order = squareOrder(o);
-  const parts = o.pairs > 0 ? o.parts.concat('(pair price)') : o.parts;
+  const parts = o.parts.concat(o.pairs > 0 ? ['(pair price)'] : [], o.code ? ['(' + o.code.key + ')'] : []);
   const checkout_options = {
     ask_for_shipping_address: true,
     redirect_url: 'https://godschai.com/order-confirmed/',
     merchant_support_email: 'sip@godschai.com',
     allow_tipping: false,
-    enable_coupon: false,
+    // Square's own code box, unless our code is already on the order.
+    enable_coupon: !o.code,
     accepted_payment_methods: { apple_pay: true, google_pay: true },
   };
   if (o.fee) checkout_options.shipping_fee = { name: SHIPPING_NAME, charge: { amount: o.fee, currency: 'CAD' } };

@@ -227,6 +227,22 @@ login address after each payment-link sale (Square Dashboard → Payment links �
 Settings → General → Email notifications), but it can't send those anywhere
 else.
 
+**The 10% welcome offer.** Join the email list, get 10% off. It's offered in
+three small places: a "Get 10% off" line in the cart that opens into an email
+box, the side tab and its signup box, and a line under the footer signup.
+Whoever signs up, on any form, sees the code straight away with a button to
+copy it, and from then on their cart shows it too. On Square's checkout page
+they type it into the **Add coupon** box; on our own payment page, or when the
+checkout service makes the link, it's applied for them.
+
+The code is checked by Square, so it has to exist there: **Square Dashboard →
+Customers → Marketing → Coupons → Create coupon**, code `CHAI10`, 10% off. The
+*Add coupon* box is switched on for every checkout link. The same code is in
+`checkout/lib/order.js` (`CODES`) for our own payment page. To change the code
+or the amount, change it in all three places: Square, `CODES`, and
+`welcome_code`/`welcome_percent` in `_data/shop.yml`. To pause the offer, set
+`welcome_offer: false` (and end the coupon in Square).
+
 **"Add to your order"** is the small box inside the cart. It suggests
 every product from `_data/premixes.yml` that isn't in the cart yet, so a new
 product appears there on its own. A new product also needs its own Square item
@@ -249,6 +265,7 @@ so it's a job to hand to Claude with Square connected. The box's heading is
 | `max_each` | Most pouches of one blend in an order (3). |
 | `checkout_api` | The checkout service's address. Blank until it's set up; then any quantity can be ordered (up to `max_each_api`). |
 | `pay_on_site` | `true` sends checkout to our own payment page, `/checkout/`. Needs the steps above. |
+| `welcome_offer`, `welcome_code`, `welcome_percent` | The email-signup discount (below). `welcome_offer: false` hides it everywhere. |
 | `email` | Your contact for orders and refunds (sip@godschai.com). Blank means the pages say "message us on Instagram" instead. |
 | `zones` | Saskatoon (free delivery, 6% PST) and the rest of Canada ($9.99, free from 5 pouches, no PST): the fee, the tax (`tax`, `tax_name`), the free-shipping point (`free_from`), and the delivery wording shown on the order box, `/shipping/` and `/order-confirmed/`. |
 | `refund_days` | How long people have to ask for a refund (30). |
@@ -448,37 +465,20 @@ switch is the `prefers-reduced-motion` block at the foot of each stylesheet.
 
 ---
 
-## The particle animation
+## The particle light
 
-Above the four brew steps (on the homepage and the brew guide) and the four
-iced-chai steps, a cloud of up to 12,000 glowing specks flies apart and
-re-forms into a new shape for each step:
+The signup box has a small cloud of glowing specks at the top: a slow sphere
+while it waits, a swirl while the signup is sending, and a tick once it has
+gone through. The order-confirmed page shows the same tick.
 
-| Step | Shape |
-| --- | --- |
-| Boil | a slowly breathing sphere |
-| Blend | a swirling ribbon — the spice going in |
-| Rise | four rings in the outline of a pot, climbing |
-| Strain | a cutting-chai glass with steam coming off it |
-| Concentrate | a dense, packed core |
-| Sweeten | a falling stream of sugar |
-| Chill | ice cubes |
-| Pour | a tall glass with cubes floating in it |
+(The big version that used to sit above the brew and iced-chai steps — Boil,
+Blend, Rise, Strain — has been taken out. The step cards are unchanged.)
 
-It moves on to the next step by itself every few seconds; tapping a step (or
-its card) jumps to it and stops the auto-play. The step on show lights up.
-
-The signup box has a small one too: a slow sphere while it waits, a swirl
-while the signup is sending, and a tick once it has gone through.
-
-It's all one file, `assets/js/particles.js` — no outside library. It only runs
+It's all one file, `assets/js/particles.js` — no outside library, and it's only
+downloaded when the signup box opens or an order is confirmed. It only runs
 while it's on screen; with "reduce motion" switched on it changes shape
-instantly and holds still; and with JavaScript off it simply isn't there.
-
-**The shape follows the step's name**, not its position. Rename a step in
-`_data/brew.yml` or `_data/iced.yml` and it falls back to the sphere unless you
-also add the new name to `PRESETS` near the top of `particles.js` — that's also
-where each step's colour lives.
+instantly and holds still; and with JavaScript off it simply isn't there. Each
+state's shape and colour live in `PRESETS` near the top of the file.
 
 ---
 
@@ -526,7 +526,8 @@ email one group without the others:
 | `premix-launch` | homepage premix box, both forms on `/premixes/`, the end of all four guide pages | one email when the premixes launch |
 | `premix-news` | the form at the bottom of `/premixes/`, once the shop is open | new blends and restocks |
 | `events` | `/events/` | the pop-up schedule |
-| `newsletter` | the footer, and the side tab | general news |
+| `newsletter` | the footer, and the side tab | general news (plus the 10% code while the welcome offer is on) |
+| `welcome` | the "Get 10% off" line in the cart | the 10% code, and the odd email |
 
 **One-time setup in Mailchimp** — without this, Mailchimp quietly throws the
 label away:
@@ -551,6 +552,36 @@ Two things to know:
 To change which label a form uses, it's the `list="..."` on that form's line in
 the page (for the guide pages, in `_includes/cta-premix.html`). A new label
 needs no setup in Mailchimp — it lands in the same field.
+
+### Customers on the list
+
+Once the checkout service is running and has a Mailchimp key, **everyone who
+orders online is added to the list automatically**, tagged `customer`, with the
+date of their latest order in a *Last order* field. If they ticked "send me
+new blends and deals" on our own payment page, they're also tagged
+`opted-in`. Anyone who has unsubscribed stays unsubscribed. Every buyer's
+details are in Square too (**Customers → Directory**, with an export button),
+including from before this was switched on.
+
+**The rule to email them by (Canada's anti-spam law, CASL):** a purchase lets
+you send someone marketing emails for **two years after their latest order**.
+People who signed up themselves, or are tagged `opted-in`, have no time limit
+until they unsubscribe. Every email must say who it's from, give your mailing
+address and have an unsubscribe link; Mailchimp's footer does all three.
+
+So for a promotion, send it to a saved segment with **any** of these:
+*Signed up for* is not blank · tag is `opted-in` · *Last order* is after
+(today's date two years ago).
+
+**One-time setup:**
+
+1. Mailchimp: **Audience → Settings → Audience fields and \*|MERGE|\* tags →
+   Add a field → Date.** Call it **Last order**, merge tag **`LASTORDER`**,
+   untick *Visible*. Save. (Without it, buyers are still added, just without the
+   date.)
+2. Mailchimp: **Profile → Extras → API keys → Create a key.** Copy it.
+3. Vercel → godschai-checkout → Settings → Environment Variables:
+   `MAILCHIMP_API_KEY` = that key. Redeploy.
 
 ---
 

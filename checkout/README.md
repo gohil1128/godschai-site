@@ -8,8 +8,9 @@ Small Vercel functions, deployed together as the Vercel project
 - `api/pay.js`: the back end of our own payment page, godschai.com/checkout/.
 - `api/square-webhook.js`: the new-order emails.
 
-What an order costs (Square item IDs, PST, the pair price, shipping) is in
-`lib/order.js`, shared by the first two.
+What an order costs (Square item IDs, PST, the pair price, shipping, discount
+codes) is in `lib/order.js`, shared by the first two. A welcome code sent by
+the cart is put on the order itself, so nobody has to type it.
 
 - Needs `SQUARE_ACCESS_TOKEN` set in Vercel (Settings → Environment Variables).
 - `GET https://godschai-checkout.vercel.app/api/checkout` says whether it's set.
@@ -94,6 +95,8 @@ get no email from Square), set these up:
 | --- | --- |
 | `SQUARE_ACCESS_TOKEN` | Needed. Also used by the checkout. |
 | `SQUARE_APPLICATION_ID` | For our own payment page. Not a secret. |
+| `MAILCHIMP_API_KEY` | Optional. Adds every online buyer to the email list (tag `customer`, *Last order* date). See SEO.md, "Customers on the list". |
+| `MAILCHIMP_LIST_ID` | Optional. Which Mailchimp audience; defaults to the one the site's signup forms use. |
 | `SQUARE_WEBHOOK_SIGNATURE_KEY` | Needed. From the Square webhook subscription. |
 | `RESEND_API_KEY` | Needed. From Resend. |
 | `ORDER_ALERT_TO` | Optional. Where alerts go, comma-separated. Default `sip@godschai.com`. |

@@ -3,10 +3,15 @@
   at the edge of the screen and the modal below only opens if the visitor taps
   it. Rules live in assets/js/site.js — the tab appears after 5s, and once
   dismissed (or once they subscribe) it stays away for 30 days.
+
+  With the welcome offer on (_data/shop.yml), the tab and the box lead with it
+  and the box shows the code once they've signed up.
 {%- endcomment -%}
+{%- assign deal = false -%}
+{%- if site.data.shop.open and site.data.shop.welcome_offer -%}{%- assign deal = true -%}{%- endif -%}
 <div id="gc-nudge" hidden>
   <button id="gc-nudge-open" type="button">
-    <span>spiced, never spammy</span>
+    <span>{% if deal %}{{ site.data.shop.welcome_percent }}% off · join us{% else %}spiced, never spammy{% endif %}</span>
   </button>
   <button id="gc-nudge-close" type="button" aria-label="Dismiss">&times;</button>
 </div>
@@ -19,8 +24,8 @@
       by site.js only when the box is opened). {%- endcomment %}
     <canvas class="gc-status" data-gc-status aria-hidden="true" hidden></canvas>
     <p style="font-family:'DM Mono',monospace;color:#F2A93C;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;margin-bottom:14px;">Welcome to God's Chai</p>
-    <h2 id="gc-popup-title" style="font-family:'Instrument Serif',serif;color:#F3E8D3;font-size:1.65rem;font-weight:400;letter-spacing:0;margin:0 0 12px;line-height:1.15;">Sip the sacred, stay inspired.</h2>
-    <p style="font-family:'Hanken Grotesk',sans-serif;color:#C7B29E;font-size:14px;margin-bottom:26px;line-height:1.55;">New blends, events &amp; exclusive offers — straight to your inbox.</p>
+    <h2 id="gc-popup-title" style="font-family:'Instrument Serif',serif;color:#F3E8D3;font-size:1.65rem;font-weight:400;letter-spacing:0;margin:0 0 12px;line-height:1.15;">{% if deal %}{{ site.data.shop.welcome_percent }}% off your first order.{% else %}Sip the sacred, stay inspired.{% endif %}</h2>
+    <p style="font-family:'Hanken Grotesk',sans-serif;color:#C7B29E;font-size:14px;margin-bottom:26px;line-height:1.55;">{% if deal %}Join the list for new blends, pop-ups and the odd deal. Your code shows up right here.{% else %}New blends, events &amp; exclusive offers — straight to your inbox.{% endif %}</p>
     <form id="gc-popup-form" data-gc-signup
           action="https://{{ site.mailchimp.host }}/subscribe/post?u={{ site.mailchimp.u }}&amp;id={{ site.mailchimp.id }}&amp;f_id={{ site.mailchimp.f_id }}"
           method="post" target="_blank"
@@ -28,7 +33,7 @@
       <input type="hidden" name="SOURCE" value="newsletter">
       <label for="gc-email-popup" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap">Email address</label>
       <input id="gc-email-popup" type="email" name="EMAIL" required autocomplete="email" placeholder="you@email.com" style="width:100%;box-sizing:border-box;padding:14px 18px;background:rgba(243,232,211,0.05);border:1px solid rgba(243,232,211,0.18);border-radius:999px;color:#F3E8D3;font-family:'Hanken Grotesk',sans-serif;font-size:15px;outline:none;">
-      <button type="submit" style="width:100%;padding:14px;background:#F2A93C;color:#2B1B12;font-weight:700;font-size:14px;font-family:'Hanken Grotesk',sans-serif;border:none;border-radius:999px;cursor:pointer;" class="gc-pill">Join the journey</button>
+      <button type="submit" style="width:100%;padding:14px;background:#F2A93C;color:#2B1B12;font-weight:700;font-size:14px;font-family:'Hanken Grotesk',sans-serif;border:none;border-radius:999px;cursor:pointer;" class="gc-pill">{% if deal %}Get my {{ site.data.shop.welcome_percent }}%{% else %}Join the journey{% endif %}</button>
       <p data-gc-signup-msg role="status" aria-live="polite" style="display:none;margin:0;font-size:13px;font-weight:600;"></p>
     </form>
     <button id="gc-popup-no-thanks" type="button" style="background:none;border:none;color:#8A7869;font-size:12px;margin-top:16px;cursor:pointer;text-decoration:underline;text-underline-offset:3px;font-family:'Hanken Grotesk',sans-serif;padding:8px 12px;">No thanks</button>

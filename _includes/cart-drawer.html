@@ -100,6 +100,15 @@
   .gc-hint a,.gc-cart a{color:#F2A93C}
   .gc-safe{display:flex;gap:8px;align-items:center;justify-content:center;margin:10px 0 0;font-size:12px;color:#AB9280}
 
+  /* The welcome offer: one small line that opens into an email box */
+  .gc-deal{margin:0 0 12px}
+  .gc-deal-open{display:block;width:100%;border:1px dashed rgba(242,169,60,0.45);background:rgba(242,169,60,0.06);color:#F3E8D3;
+    border-radius:12px;padding:10px 13px;font:600 13.5px 'Hanken Grotesk',sans-serif;cursor:pointer;text-align:left}
+  .gc-deal-open b{color:#F2A93C;font-weight:700}
+  .gc-deal-open[hidden],.gc-deal-form[hidden],.gc-deal-code[hidden]{display:none}
+  .gc-deal-form p{margin:0 0 8px;font-size:12.5px;color:#AB9280}
+  .gc-deal-code{margin:0;font-size:13.5px;line-height:1.5;color:#D6C7B4}
+
   /* Product cards */
   .gc-pcard{display:flex;flex-direction:column;align-items:center;text-align:center;padding:26px 24px 26px;
     background:rgba(28,17,10,0.8);border:1px solid rgba(242,169,60,0.16);border-radius:22px}
@@ -207,6 +216,17 @@
     </div>
 
     <div class="gc-cart-foot" data-gc-foot hidden>
+      {%- if shop.welcome_offer %}
+      {%- capture deal_btn %}Get my {{ shop.welcome_percent }}%{% endcapture %}
+      <div class="gc-deal" data-gc-deal>
+        <button type="button" class="gc-deal-open" data-gc-deal-open aria-expanded="false" aria-controls="gc-deal-form"><b>✶ Get {{ shop.welcome_percent }}% off</b> — join our email list</button>
+        <div id="gc-deal-form" class="gc-deal-form" data-gc-deal-form hidden>
+          <p>New blends, pop-ups and the odd deal. Unsubscribe any time.</p>
+          {% include signup-form.html id="cart" button=deal_btn list="welcome" max="100%" %}
+        </div>
+        <p class="gc-deal-code" data-gc-deal-code hidden>Your {{ shop.welcome_percent }}% code <button type="button" class="gc-code" data-gc-copy="{{ shop.welcome_code }}" aria-label="Copy the code {{ shop.welcome_code }}">{{ shop.welcome_code }}</button> <span data-gc-deal-where>pop it in on the payment page.</span></p>
+      </div>
+      {%- endif %}
       <div class="gc-sum" aria-live="polite">
         <div><span data-gc-count>Pouches</span><span data-gc-sub>$0.00</span></div>
         <div data-gc-discrow hidden class="gc-sum-save"><span>Try-both pair price</span><span data-gc-disc></span></div>

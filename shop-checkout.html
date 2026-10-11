@@ -60,6 +60,19 @@ csp:
   .gc-co-edit{margin:10px 0 4px;padding:0;border:0;background:none;color:#F2A93C;font:600 13.5px 'Hanken Grotesk',sans-serif;text-decoration:underline;cursor:pointer}
   .gc-co-edit[hidden]{display:none}
   .gc-co .gc-sum{margin:12px 0 0}
+  .gc-co-code{margin:14px 0 0;padding-top:12px;border-top:1px solid rgba(243,232,211,0.08)}
+  .gc-co-code form,.gc-co-codebox{display:flex;gap:8px}
+  .gc-co-codebox[hidden],.gc-co-code [hidden]{display:none}
+  .gc-co-codebox input{flex:1 1 auto;min-width:0;padding:10px 12px;border-radius:10px;border:1px solid rgba(243,232,211,0.18);
+    background:rgba(243,232,211,0.05);color:#F3E8D3;font:500 15px 'DM Mono',monospace;text-transform:uppercase;letter-spacing:0.06em}
+  .gc-co-codebox input:focus{outline:none;border-color:#F2A93C}
+  .gc-co-codebox button{flex:0 0 auto;padding:10px 16px;border-radius:999px;border:1px solid rgba(242,169,60,0.6);background:transparent;
+    color:#F2A93C;font:700 13.5px 'Hanken Grotesk',sans-serif;cursor:pointer}
+  .gc-co-codemsg{margin:8px 0 0;font-size:13px;color:#D6C7B4}
+  .gc-co-codemsg:empty{display:none}
+  .gc-co-codemsg button{margin-left:6px;padding:0;border:0;background:none;color:#AB9280;font:500 13px 'Hanken Grotesk',sans-serif;text-decoration:underline;cursor:pointer}
+  .gc-co-check{display:flex;gap:10px;align-items:flex-start;margin:4px 0 0;font-size:14px;line-height:1.45;color:#D6C7B4;cursor:pointer}
+  .gc-co-check input{accent-color:#F2A93C;width:18px;height:18px;margin:1px 0 0;flex:0 0 auto}
 
   /* The form */
   .gc-co-form fieldset{margin:0 0 18px;padding:clamp(18px,2.6vw,26px);border-radius:22px;border:1px solid rgba(242,169,60,0.16);background:rgba(28,17,10,0.8);min-width:0}
@@ -138,9 +151,19 @@ csp:
         <div class="gc-sum" aria-live="polite">
           <div><span data-gc-co-count>Pouches</span><span data-gc-co-sub>$0.00</span></div>
           <div data-gc-co-discrow hidden class="gc-sum-save"><span>Try-both pair price</span><span data-gc-co-disc></span></div>
+          <div data-gc-co-coderow hidden class="gc-sum-save"><span data-gc-co-codename>Code</span><span data-gc-co-codeoff></span></div>
           <div data-gc-co-taxrow hidden><span>{{ shop.zones.saskatoon.tax_name | default: "Tax" }}</span><span data-gc-co-tax></span></div>
           <div><span>Delivery</span><span data-gc-co-ship>—</span></div>
           <div class="gc-sum-total"><span>Total</span><span data-gc-co-total>$0.00</span></div>
+        </div>
+        <div class="gc-co-code" data-gc-co-code>
+          <button type="button" class="gc-co-edit" data-gc-co-code-open>Have a code?</button>
+          <div class="gc-co-codebox" data-gc-co-codebox hidden>
+            <label for="gc-co-codein" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Discount code</label>
+            <input id="gc-co-codein" data-gc-co-codein autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="20" placeholder="Code">
+            <button type="button" data-gc-co-code-apply>Apply</button>
+          </div>
+          <p class="gc-co-codemsg" data-gc-co-codemsg aria-live="polite"></p>
         </div>
       </div>
     </aside>
@@ -152,6 +175,7 @@ csp:
           <input type="email" name="email" autocomplete="email" inputmode="email" required aria-describedby="gc-m-email"><small class="gc-co-msg" id="gc-m-email" data-gc-msg="email"></small></label>
         <label class="gc-co-f"><span>Phone <small>(optional, for the drop-off)</small></span>
           <input type="tel" name="phone" autocomplete="tel" inputmode="tel" aria-describedby="gc-m-phone"><small class="gc-co-msg" id="gc-m-phone" data-gc-msg="phone"></small></label>
+        <label class="gc-co-check"><input type="checkbox" name="optin"> <span>Send me new blends, pop-ups and the odd deal. Unsubscribe any time.</span></label>
       </fieldset>
 
       <fieldset>
