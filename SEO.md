@@ -168,10 +168,10 @@ switch it on:
    Switch to **Production** and copy the **Production Access token**. Treat
    it like a password: never put it in this repo or in a chat.
 2. **Vercel:** choose Add New → Project, import `gohil1128/godschai-site`, and
-   name the project `godschai-checkout`. Set **Root Directory** to `checkout`,
+   name the project `godschai-site-checkout`. Set **Root Directory** to `checkout`,
    and the Framework Preset to **Other**. Under Environment Variables, add
    `SQUARE_ACCESS_TOKEN` with the token as its value. Deploy.
-3. Open `https://godschai-checkout.vercel.app/api/checkout`. It should say
+3. Open `https://godschai-site-checkout.vercel.app/api/checkout`. It should say
    `"configured":true`.
 4. Put that address in `checkout_api:` in `_data/shop.yml`.
 
@@ -608,7 +608,7 @@ So for a promotion, send it to a saved segment with **any** of these:
    untick *Visible*. Save. (Without it, buyers are still added, just without the
    date.)
 2. Mailchimp: **Profile → Extras → API keys → Create a key.** Copy it.
-3. Vercel → godschai-checkout → Settings → Environment Variables:
+3. Vercel → godschai-site-checkout → Settings → Environment Variables:
    `MAILCHIMP_API_KEY` = that key. Redeploy.
 
 ---

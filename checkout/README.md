@@ -1,7 +1,7 @@
 # God's Chai checkout service
 
 Small Vercel functions, deployed together as the Vercel project
-**godschai-checkout**:
+**godschai-site-checkout**:
 
 - `api/checkout.js`: the cart posts the order and gets back a Square checkout
   link for exactly that order, at any quantity.
@@ -13,7 +13,7 @@ codes) is in `lib/order.js`, shared by the first two. A welcome code sent by
 the cart is put on the order itself, so nobody has to type it.
 
 - Needs `SQUARE_ACCESS_TOKEN` set in Vercel (Settings → Environment Variables).
-- `GET https://godschai-checkout.vercel.app/api/checkout` says whether it's set.
+- `GET https://godschai-site-checkout.vercel.app/api/checkout` says whether it's set.
 - Prices come from Square's catalog; PST, the pair price and the shipping rule
   are in `lib/order.js`. Change them there and in `_data/shop.yml` together.
 - Only answers requests from godschai.com.
@@ -27,7 +27,7 @@ address on it) and charges exactly its total. Each try carries an ID, so a
 retry after a dropped connection can never charge twice, and it never charges
 a different amount from the one the page showed.
 
-- `GET https://godschai-checkout.vercel.app/api/pay` says `"ready":true` once
+- `GET https://godschai-site-checkout.vercel.app/api/pay` says `"ready":true` once
   everything below is set, or names what's missing (never the values).
 - Needs `SQUARE_APPLICATION_ID` (the app's Application ID from its Credentials
   page, Production; not a secret) as well as `SQUARE_ACCESS_TOKEN`.
@@ -56,15 +56,15 @@ Once the checkout service is on Vercel (above), alerts take about ten minutes:
 2. **Square webhook** (tells us about the order): at developer.squareup.com,
    open the app your access token came from, switch to **Production**, then
    **Webhooks → Subscriptions → Add subscription**:
-   - URL: `https://godschai-checkout.vercel.app/api/square-webhook`. Use the
+   - URL: `https://godschai-site-checkout.vercel.app/api/square-webhook`. Use the
      project's own address from its Domains list, not a long per-deployment
      one; those need a Vercel login, so Square can't reach them.
    - Events: `payment.created` and `payment.updated`.
    - Save, then copy the subscription's **Signature key**.
-3. **Vercel → godschai-checkout → Settings → Environment Variables:** add
+3. **Vercel → godschai-site-checkout → Settings → Environment Variables:** add
    `RESEND_API_KEY` and `SQUARE_WEBHOOK_SIGNATURE_KEY`, then redeploy
    (**Deployments → ⋯ → Redeploy**).
-4. **Check:** open `https://godschai-checkout.vercel.app/api/square-webhook`.
+4. **Check:** open `https://godschai-site-checkout.vercel.app/api/square-webhook`.
    It should say `"ready":true`. On Square's webhook page, **Send test event**
    should come back `200`. The next order emails sip@godschai.com within
    seconds.
