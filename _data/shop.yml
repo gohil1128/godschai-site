@@ -29,7 +29,7 @@ max_each: 3
 # Square checkout for any quantity on the spot. While checkout_api is blank,
 # the cart uses the pre-made links at the bottom of this file, and max_each
 # applies. Once it's set, people can order up to max_each_api of each blend.
-checkout_api: ""
+checkout_api: "https://godschai-site-checkout.vercel.app/api/checkout"
 max_each_api: 99
 
 # Our own payment page (/checkout/, shop-checkout.html): the site's design,
