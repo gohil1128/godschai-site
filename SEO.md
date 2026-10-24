@@ -260,8 +260,8 @@ so it's a job to hand to Claude with Square connected. The box's heading is
 | Setting | What it does |
 | --- | --- |
 | `open` | The launch switch. `false` shows "launching this fall" and the email signups; `true` turns every premix box on the site into "order now". |
-| `price` | $14.99 a pouch, before tax. |
-| `pair_price` | "Try both": one Original Masala + one Rose & Cardamom for $24.99, for every pair in the order. The saving comes off before PST. The Square links for orders with both blends include it, as does `checkout/api/checkout.js`. |
+| `price` | $15.99 a pouch, before tax. |
+| `pair_price` | "Try both": one Original Masala + one Rose & Cardamom for $26.99, for every pair in the order. The saving comes off before PST. The Square links for orders with both blends include it, as does `checkout/api/checkout.js`. |
 | `max_each` | Most pouches of one blend in an order (3). |
 | `checkout_api` | The checkout service's address. Blank until it's set up; then any quantity can be ordered (up to `max_each_api`). |
 | `pay_on_site` | `true` sends checkout to our own payment page, `/checkout/`. Needs the steps above. |
