@@ -22,7 +22,7 @@ export const ZONES = {
   canada: { tax: false, fee: 999, freeFrom: 5, note: 'Canada Post shipping', label: 'shipped in Canada' },
 };
 export const SHIPPING_NAME = 'Canada Post Expedited (tracked)';
-// "Try both": each Original + Rose pair costs $24.99 instead of $29.98.
+// "Try both": each Original + Rose pair costs $26.99 instead of $31.98.
 // Matches pair_price in _data/shop.yml. Comes off before PST.
 export const PAIR_SAVING = 499;
 // Discount codes. Each must also exist in Square (Customers → Marketing →
