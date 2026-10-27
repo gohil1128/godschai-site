@@ -43,6 +43,7 @@ export function clubWelcomeEmail() {
       <div style="font:400 12px ${mono};letter-spacing:.18em;text-transform:uppercase;color:#C58A2E">Your members' code</div>
       <div style="display:inline-block;margin-top:12px;padding:14px 28px;border:2px dashed #3B1F12;border-radius:14px;background:#F6C31C;font:700 30px ${mono};letter-spacing:.12em;color:#3B1F12">${code}</div>
       <div style="font:400 16px/1.55 ${sans};color:#3A2A1E;margin-top:14px">${percent}% off your first order of chai mixes.<br>Type it in the <strong>coupon box</strong> at checkout.</div>
+      <div style="font:400 13px/1.5 ${sans};color:#8A7360;margin-top:6px">One use per customer. Can't be combined with the pair price.</div>
       <table role="presentation" cellpadding="0" cellspacing="0" style="margin:20px auto 0"><tr><td style="background:#3B1F12;border-radius:999px"><a href="${SITE}/premixes/" style="display:inline-block;padding:14px 26px;font:700 15px ${sans};color:#FCE4CC;text-decoration:none">Shop the chai mixes →</a></td></tr></table>
     </td></tr>
     <tr><td style="padding:28px 32px 6px">
@@ -65,6 +66,7 @@ export function clubWelcomeEmail() {
     "Welcome to the Chai Club — you're in.", '',
     `Your members' code: ${code}`,
     `${percent}% off your first order of chai mixes. Type it in the coupon box at checkout.`,
+    "One use per customer. Can't be combined with the pair price.",
     `Shop: ${SITE}/premixes/`, '',
     'What members get:',
     ...PERKS.map((p) => '* ' + p), '',

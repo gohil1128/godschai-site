@@ -139,6 +139,8 @@
     root.querySelector('[data-gc-sub]').textContent = money(t.sub);
     var discRow = root.querySelector('[data-gc-discrow]');
     discRow.hidden = !t.saving;
+    var discNote = root.querySelector('[data-gc-discnote]');
+    if (discNote) discNote.hidden = !t.saving;
     if (t.saving) root.querySelector('[data-gc-disc]').textContent = '−' + money(t.saving);
     root.querySelector('[data-gc-taxrow]').hidden = !t.tax;
     root.querySelector('[data-gc-tax]').textContent = money(t.tax);
