@@ -12,7 +12,7 @@
 {{ content }}
 </main>
 {% include footer-dark.html %}
-{% include popup.html %}
+{% unless page.no_club %}{% include popup.html %}{% endunless %}
 {% if site.data.shop.open %}{% include cart-drawer.html %}{% endif %}
 <script src="{{ '/assets/js/logo-sting.js' | relative_url }}" defer></script>
 <script src="{{ '/assets/js/site.js' | relative_url }}" defer></script>

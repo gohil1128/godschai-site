@@ -13,6 +13,8 @@
 {%- comment -%} The checkout service's address has to be allowed for the cart to reach it. {%- endcomment -%}
 {%- assign api_origin = "" -%}
 {%- if site.data.shop.open and site.data.shop.checkout_api != "" -%}{%- assign api_parts = site.data.shop.checkout_api | split: "/" -%}{%- capture api_origin %} {{ api_parts[0] }}//{{ api_parts[2] }}{% endcapture -%}{%- endif -%}
+{%- comment -%} And the Chai Club card's join address (_data/club.yml). {%- endcomment -%}
+{%- if site.data.club.api != "" -%}{%- assign club_parts = site.data.club.api | split: "/" -%}{%- capture club_origin %}{{ club_parts[0] }}//{{ club_parts[2] }}{% endcapture -%}{%- unless api_origin contains club_origin -%}{%- assign api_origin = api_origin | append: " " | append: club_origin -%}{%- endunless -%}{%- endif -%}
 {%- comment -%} description_open: an alternative description for once the shop is open (_data/shop.yml). {%- endcomment -%}
 {%- assign desc = page.description -%}
 {%- if site.data.shop.open and page.description_open -%}{%- assign desc = page.description_open -%}{%- endif -%}

@@ -53,34 +53,6 @@
     /* the wrapped nav is taller again, so the anchor offset has to clear that */
     section[id]{scroll-margin-top:124px!important}
   }
-  /* Newsletter tab. Replaces the modal that used to open by itself: it sits at
-     the left edge just below the middle, covers almost nothing, and only opens
-     the signup if it is actually tapped. Slides in from off-screen so it is
-     noticed. Kept deliberately narrow — this page's copy is left-aligned with
-     only 18px of padding on a phone, so every pixel of width here is a pixel
-     off the front of someone's sentence. */
-  #gc-nudge{position:fixed;left:0;top:56%;z-index:9998;transform:translate(-110%,-50%);
-    transition:transform .55s cubic-bezier(.2,.7,.2,1)}
-  #gc-nudge.is-in{transform:translate(0,-50%)}
-  #gc-nudge-open{display:block;background:#F2A93C;color:#2B1B12;border:0;
-    border-radius:0 14px 14px 0;padding:16px 9px;cursor:pointer;
-    font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.08em;line-height:1;
-    box-shadow:0 10px 30px rgba(0,0,0,0.45);transition:background .25s ease}
-  #gc-nudge-open:hover{background:#FFBA55}
-  /* Bottom-to-top, like a shop-front tab. */
-  #gc-nudge-open span{writing-mode:vertical-rl;transform:rotate(180deg);display:block}
-  #gc-nudge-close{position:absolute;top:-13px;right:-13px;width:30px;height:30px;
-    display:flex;align-items:center;justify-content:center;padding:0;
-    background:#2B1B12;color:#F3E8D3;border:1px solid rgba(242,169,60,0.45);
-    border-radius:999px;font-size:15px;line-height:1;cursor:pointer;
-    font-family:'Hanken Grotesk',sans-serif}
-  #gc-nudge-close:hover{background:#3D2A1B}
-  /* On a laptop the hero copy starts ~120px in, so the tab clears it at any
-     height. A phone only has 18px of padding, so mid-screen the tab cuts into
-     the first letters of the intro line — sit it higher, in the empty band
-     between the header and the eyebrow. */
-  @media (max-width:560px){#gc-nudge{top:34%}}
-  @media (prefers-reduced-motion:reduce){#gc-nudge{transition:none}}
 
   /* Tap targets: the nav and footer links are only 14-18px tall on their own.
      Vertical padding grows the hit area without moving anything visually. */
@@ -154,18 +126,6 @@
     transition:transform .34s cubic-bezier(.2,.7,.2,1)}
   header nav > div > a:hover::after,header nav > div > a:focus-visible::after{transform:scaleX(1)}
 
-  /* The signup box. It used to appear on its own, fully formed, the instant
-     the page loaded. Now it only opens when someone taps the tab, so it can
-     afford to arrive rather than just be there. The animation restarts by
-     itself every time the overlay goes from display:none to display:flex. */
-  @keyframes gc-fade{from{opacity:0}to{opacity:1}}
-  @keyframes gc-pop{from{opacity:0;transform:translateY(16px) scale(.975)}to{opacity:1;transform:none}}
-  #gc-popup-overlay{animation:gc-fade .3s ease both}
-  #gc-popup-overlay > div{animation:gc-pop .42s cubic-bezier(.2,.8,.2,1) both}
-  #gc-popup-close,#gc-popup-no-thanks{transition:color .22s ease}
-  #gc-popup-close:hover,#gc-popup-close:focus-visible,
-  #gc-popup-no-thanks:hover,#gc-popup-no-thanks:focus-visible{color:#F3E8D3}
-
   /* Email fields. Their only feedback was the focus ring the browser draws
      around them; the field itself never acknowledged the cursor. */
   input[type="email"]{transition:border-color .22s ease,background-color .22s ease}
@@ -199,7 +159,6 @@
     html{scroll-behavior:auto}
     /* The ticker looped forever with nothing to stop it. */
     [data-gc-marquee-track]{animation:none!important}
-    #gc-popup-overlay,#gc-popup-overlay > div{animation:none}
     input[type="email"]{transition:none}
     .gc-pill,.gc-pill-coral,.gc-pill-ghost,.gc-ico,.gc-iconbtn,.gc-pill-dark,.gc-pill-cream,
     .gc-card,.gc-lift,.gc-zoom,a,header nav > div > a::after{transition:none}

@@ -510,33 +510,63 @@ state's shape and colour live in `PRESETS` near the top of the file.
 
 ---
 
-## The email signup tab
+## The Chai Club
 
-Nothing pops open on its own any more. About five seconds in, a small amber tab
-slides in at the left edge of the screen reading **"spiced, never spammy"** — a
-nod to "spiced, never syruped" on the ticker. Tapping it opens the signup box;
-tapping the little × puts it away. Either way it stays gone for 30 days, and it
-never appears again for someone who has already subscribed.
+The Chai Club card is the site's email signup. It's styled like the club poster:
+cream, "JOIN the *Chai* club", and a yellow 10% badge. Nothing covers the page
+and nothing takes focus:
 
-It sits lower on a laptop than on a phone. A laptop has room to the left of the
-headline; a phone doesn't, so there it moves up into the gap between the header
-and the first line of text.
+- **When it appears:** about six seconds in, it slides up in the **bottom-right
+  corner**. On a **phone** it runs along the bottom, but only once someone has
+  scrolled past the first screen (or after 15 seconds), so it never sits on
+  the hero's buttons. On product pages it sits above the phone buy bar.
+- **What's on it:** one line, a "See the perks" link that opens the four perks,
+  and an email box with a **Join** button.
+- **Closing it:** the × (or Escape) hides it for 30 days.
+- **After joining:** it says *"You're in the Chai Club! ✶ Check your inbox…"*,
+  then tidies itself away. Members never see it again.
+- **Where it never shows:** the checkout page and the order-confirmed page.
 
-It covers half a percent of the screen on a laptop and about 1.6% on a phone — the old
-version covered the whole page — so people can read without dismissing anything
-first. That is also better for Google, which marks sites down for covering the
-page with something the visitor didn't ask for.
+**What happens when someone joins (all automatic):**
+
+1. The card sends their email to the checkout service (`checkout/api/club.js`).
+2. The service adds them to Mailchimp (label `chai-club`) and tags them
+   **`chai-club`** and **`opted-in`**. They asked to join, so under Canada's
+   anti-spam law you can keep emailing them until they unsubscribe.
+3. The service emails them the **welcome note with the code CHAI10**: 10% off
+   their first order of chai mixes. It's sent from `orders@godschai.com`, and
+   replies go to sip@godschai.com. Then they're tagged **`club-welcome-sent`**,
+   so nobody gets it twice.
+4. At checkout they type CHAI10 into Square's coupon box. **Square makes sure
+   it only works once per customer**, as long as the coupon is set up as below.
+
+If the service can't be reached, or Mailchimp isn't connected to it yet, the
+card signs them up straight to Mailchimp (label `chai-club`). Nobody is lost;
+they just don't get the welcome email until they join again or you email them.
+
+**One-time setup:**
+
+- **In Square:** Dashboard → Customers → Marketing → **Coupons → Create
+  coupon.** Code `CHAI10`, 10% off, the whole order (or just the two chai
+  mixes), usable online, **limited to once per customer**. Activate it.
+- **In Vercel** (godschai-site-checkout → Settings → Environment Variables):
+  `MAILCHIMP_API_KEY` (Mailchimp → Profile → Extras → API keys). The welcome
+  email also needs `EMAIL_FROM`, which the order emails already use. Redeploy.
+- **Check:** `https://godschai-site-checkout.vercel.app/api/club` should say
+  `"mailchimp":true,"welcomeEmails":true`.
+
+**Emailing members:** in Mailchimp, make a segment with the tag `chai-club`.
+That's who to invite to tasting nights and flavour votes. Tagged `chai-club` but
+not `club-welcome-sent` means they joined before the welcome email was switched
+on: send them the code once by hand (or as a one-off campaign to that segment).
 
 | What to change | Where |
 | --- | --- |
-| The wording on the tab | `_includes/popup.html` — the text inside `gc-nudge-open` |
-| The five-second delay | `assets/js/site.js`, section 7 — the `5000` |
-| The 30-day gap before it returns | same section — the `30 * 24 * 60 * 60 * 1000` |
-| Where it sits, and its colours | `_includes/base-styles-dark.html` — the `#gc-nudge` rules |
-| The wording inside the signup box | `_includes/popup.html` |
-
-Keep the tab short. It's rotated on its side, so long wording makes it tall
-enough to start covering things.
+| The line, the perks, the delay, the 30 days | `_data/club.yml` |
+| The perks in the welcome email (keep them matching) | `checkout/lib/club.js` |
+| The welcome email itself | `checkout/lib/club.js` |
+| How the card looks | `_includes/popup.html` |
+| When it shows | `assets/js/site.js`, section 7 |
 
 ---
 
@@ -554,7 +584,8 @@ email one group without the others:
 | `premix-launch` | homepage premix box, both forms on `/premixes/`, the end of all four guide pages | one email when the premixes launch |
 | `premix-news` | the form at the bottom of `/premixes/`, once the shop is open | new blends and restocks |
 | `events` | `/events/` | the pop-up schedule |
-| `newsletter` | the footer, and the side tab | general news (plus the 10% code while the welcome offer is on) |
+| `newsletter` | the footer | general news (plus the 10% code while the welcome offer is on) |
+| `chai-club` | the Chai Club card | the club's perks; their welcome email carries 10% off their first order |
 | `welcome` | the "Get 10% off" line in the cart | the 10% code, and the odd email |
 
 **One-time setup in Mailchimp** — without this, Mailchimp quietly throws the
