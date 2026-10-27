@@ -539,6 +539,10 @@ and nothing takes focus:
    so nobody gets it twice.
 4. At checkout they type CHAI10 into Square's coupon box. **Square makes sure
    it only works once per customer**, as long as the coupon is set up as below.
+   It **can't be combined with the "Try both" pair price**: Square greys out
+   the coupon box on an order that already has a discount. The welcome email
+   says so, and the cart shows "Coupon codes can't be added to the pair price"
+   whenever the pair saving is in the basket.
 
 If the service can't be reached, or Mailchimp isn't connected to it yet, the
 card signs them up straight to Mailchimp (label `chai-club`). Nobody is lost;

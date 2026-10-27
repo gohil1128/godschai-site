@@ -93,6 +93,8 @@
   .gc-sum div[hidden]{display:none}
   .gc-sum span:last-child{font-family:'DM Mono',monospace;color:#F3E8D3}
   .gc-sum .gc-sum-save span{color:#FF8A78!important}
+  .gc-sum-note{margin:0 0 4px;font-size:12px;color:#AB9280}
+  .gc-sum-note[hidden]{display:none}
   .gc-sum .gc-sum-total{margin-top:6px;font-size:17px;color:#F3E8D3;font-weight:600}
   .gc-go{width:100%;border:0;cursor:pointer;background:#F2A93C;color:#2B1B12;font:700 16px 'Hanken Grotesk',sans-serif;padding:15px 24px;border-radius:999px}
   .gc-go:disabled{background:#F2A93C!important;opacity:0.42;cursor:not-allowed;transform:none!important}
@@ -230,6 +232,8 @@
       <div class="gc-sum" aria-live="polite">
         <div><span data-gc-count>Pouches</span><span data-gc-sub>$0.00</span></div>
         <div data-gc-discrow hidden class="gc-sum-save"><span>Try-both pair price</span><span data-gc-disc></span></div>
+        {%- comment -%} Square won't add a coupon (like the Chai Club's CHAI10) on top of another discount. {%- endcomment %}
+        <p data-gc-discnote hidden class="gc-sum-note">Coupon codes can't be added to the pair price.</p>
         <div data-gc-taxrow hidden><span>{{ shop.zones.saskatoon.tax_name | default: "Tax" }}</span><span data-gc-tax></span></div>
         <div><span>Delivery</span><span data-gc-fee>—</span></div>
         <div class="gc-sum-total"><span>Total</span><span data-gc-total>$0.00</span></div>
