@@ -270,6 +270,37 @@ layout: null
     d.body.appendChild(s);
     setTimeout(function () { settle(false); if (s.parentNode) s.parentNode.removeChild(s); }, 8000);
   }
+  /* The Chai Club card (_includes/popup.html) joins through the checkout
+     service, which adds them to Mailchimp tagged "chai-club" and emails the
+     welcome note with the members' code. If the service can't be reached, or
+     couldn't put them on the list itself, they're signed up straight to
+     Mailchimp as above, so nobody is lost. */
+  var CLUB_IN = 'You’re in the Chai Club! ✶ ';
+  function join(form, done) {
+    var api = form.getAttribute('data-gc-club-api');
+    var email = (form.querySelector('input[name="EMAIL"]') || {}).value || '';
+    var direct = function (note) {
+      subscribe(form, function (ok, custom) {
+        done(ok, ok ? (custom ? 'You’re already on our list, so you’re in the club. ✶' : CLUB_IN + (note || 'Watch your inbox for your member perks.')) : null);
+      });
+    };
+    if (!api || !window.fetch) return direct();
+    var timer, finished = false;
+    var fallback = function () { if (finished) return; finished = true; clearTimeout(timer); direct(); };
+    timer = setTimeout(fallback, 9000);
+    fetch(api, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: email, source: (form.elements.SOURCE || {}).value || '' }) })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (data) {
+        if (finished) return;
+        if (!data || !data.ok) return fallback();
+        finished = true; clearTimeout(timer);
+        var note = data.already ? 'You’re already a member. Your code is in your welcome email.'
+          : data.emailed ? 'Check your inbox for your welcome note and your 10% code.' : 'Watch your inbox for your member perks.';
+        if (data.listed) done(true, (data.already ? 'Welcome back! ✶ ' : CLUB_IN) + note);
+        else direct(note);
+      }, fallback);
+  }
+
   /* The welcome offer (welcome_offer in _data/shop.yml): whoever signs up gets
      the code on the spot, and it's kept in this browser so the cart can remind
      them of it. */
@@ -313,134 +344,80 @@ layout: null
     tell('sending');
     if (btn) { btn.disabled = true; btn.dataset.label = btn.textContent; btn.textContent = 'Sending…'; }
     if (msg) { msg.style.display = 'none'; msg.textContent = ''; }
-    subscribe(form, function (ok, custom) {
+    var club = form.hasAttribute('data-gc-club');
+    (club ? join : subscribe)(form, function (ok, custom) {
       if (btn) { btn.disabled = false; btn.textContent = btn.dataset.label || 'Sign up'; }
       if (!msg) return;
       msg.style.display = 'block';
       msg.style.color = ok ? '#F2A93C' : '#FF7A66';
-      if (ok && WELCOME) showCode(msg, !!custom);
+      if (ok && WELCOME && !club) showCode(msg, !!custom);
       else msg.textContent = ok ? (custom || "Thanks — you're subscribed. ✶")
                                 : "That didn't go through — check your email and try again.";
       tell(ok ? 'done' : 'error');
       if (ok) {
         input.value = '';
         try { localStorage.setItem('gc_subscribed', '1'); } catch (e) {}
-        // With a code to copy, the box stays open until they close it.
-        if (form.id === 'gc-popup-form' && !WELCOME) setTimeout(closePopup, 2800);
       }
     });
   });
 
-  /* ---------- 7. Newsletter: an edge tab, not an interruption ----------
-     Nothing opens on its own. A small tab slides in at the side of the screen
-     after a few seconds and the modal only opens if the visitor taps it, so the
-     page is never covered by something they did not ask for. Dismissing the tab
-     — or closing the modal, or subscribing — puts it away for 30 days. */
-  var overlay = d.getElementById('gc-popup-overlay');
-  var nudge = d.getElementById('gc-nudge');
-  if (overlay) {
-    // Its own key, deliberately not the one the old auto-opening modal used.
-    // Sharing that one meant anyone who had closed the old popup in the last
-    // 30 days never saw the tab at all — and the tab is a different, far
-    // smaller thing to have turned down.
-    var DISMISS_KEY = 'gc_nudge_dismissed_until';
-    var lastFocus = null;
-    var shown = false;
-
-    var suppressed = function () {
+  /* ---------- 7. The Chai Club card ----------
+     A small card in the bottom-right corner (_includes/popup.html; along the
+     bottom on a phone, once they've scrolled). It slides up a few seconds in, never covers the page or takes focus, and goes away
+     for good once someone joins. Closing it hides it for dismiss_days. */
+  var clubCard = d.getElementById('gc-club');
+  if (clubCard) {
+    var CLUB_KEY = 'gc_club_dismissed_until';
+    var days = Number(clubCard.getAttribute('data-days')) || 30;
+    var clubSuppressed = function () {
       try {
         if (localStorage.getItem('gc_subscribed')) return true;
-        var until = parseInt(localStorage.getItem(DISMISS_KEY) || '0', 10);
+        var until = parseInt(localStorage.getItem(CLUB_KEY) || '0', 10);
         if (until && Date.now() < until) return true;
       } catch (e) {}
       return false;
     };
-
-    function openPopup() {
-      if (shown || suppressed()) return;
-      shown = true;
-      hideNudge();
-      lastFocus = d.activeElement;
-      overlay.hidden = false;
-      overlay.style.display = 'flex';
-      loadLight();
-      var first = overlay.querySelector('input, button');
-      if (first) first.focus();
-      d.addEventListener('keydown', onKeydown, true);
-    }
-    window.closePopup = closePopup;
-
-    /* The particle light at the top of the box. particles.js is only fetched
-       once somebody actually opens the box, so nobody else pays for it. */
-    var light = null, lightCanvas = overlay.querySelector('[data-gc-status]');
-    function loadLight() {
-      if (!lightCanvas || light || loadLight.busy) return;
-      var go = function () {
-        if (!window.GCParticles) return;
-        lightCanvas.hidden = false;
-        light = window.GCParticles.status(lightCanvas);
-        if (!light) lightCanvas.hidden = true;
-      };
-      if (window.GCParticles) return go();
-      loadLight.busy = true;
-      var sc = d.createElement('script');
-      sc.src = '{{ "/assets/js/particles.js" | relative_url }}';
-      sc.onload = go;
-      d.head.appendChild(sc);
-    }
-    var popupForm = d.getElementById('gc-popup-form');
-    if (popupForm) popupForm.addEventListener('gc:signup', function (e) {
-      if (!light) return;
-      light.show(e.detail);
-      if (e.detail === 'error') setTimeout(function () { if (light) light.show('idle'); }, 2200);
+    var hideClub = function () {
+      clubCard.classList.remove('is-in');
+      setTimeout(function () { clubCard.hidden = true; }, 600);
+    };
+    clubCard.querySelector('[data-gc-club-close]').addEventListener('click', function () {
+      try { localStorage.setItem(CLUB_KEY, String(Date.now() + days * 864e5)); } catch (e) {}
+      hideClub();
     });
-    function hideNudge() {
-      if (!nudge) return;
-      nudge.classList.remove('is-in');
-      nudge.hidden = true;
-    }
-    function closePopup() {
-      overlay.style.display = 'none';
-      overlay.hidden = true;
-      try { localStorage.setItem(DISMISS_KEY, String(Date.now() + 30 * 24 * 60 * 60 * 1000)); } catch (e) {}
-      d.removeEventListener('keydown', onKeydown, true);
-      if (lastFocus && lastFocus.focus) lastFocus.focus();
-    }
-    function onKeydown(e) {
-      if (e.key === 'Escape') { e.preventDefault(); closePopup(); return; }
-      if (e.key !== 'Tab') return;
-      // focus trap
-      var f = [].slice.call(overlay.querySelectorAll('a[href], button:not([disabled]), input, [tabindex]:not([tabindex="-1"])'))
-                .filter(function (el) { return el.offsetParent !== null; });
-      if (!f.length) return;
-      var first = f[0], last = f[f.length - 1];
-      if (e.shiftKey && d.activeElement === first) { e.preventDefault(); last.focus(); }
-      else if (!e.shiftKey && d.activeElement === last) { e.preventDefault(); first.focus(); }
-    }
-
-    var closeBtn = d.getElementById('gc-popup-close');
-    var noThanks = d.getElementById('gc-popup-no-thanks');
-    if (closeBtn) closeBtn.addEventListener('click', closePopup);
-    if (noThanks) noThanks.addEventListener('click', closePopup);
-    overlay.addEventListener('click', function (e) { if (e.target === overlay) closePopup(); });
-
-    if (nudge) {
-      var nudgeOpen = d.getElementById('gc-nudge-open');
-      var nudgeClose = d.getElementById('gc-nudge-close');
-      if (nudgeOpen) nudgeOpen.addEventListener('click', openPopup);
-      if (nudgeClose) nudgeClose.addEventListener('click', function () {
-        hideNudge();
-        try { localStorage.setItem(DISMISS_KEY, String(Date.now() + 30 * 24 * 60 * 60 * 1000)); } catch (e) {}
+    // Escape closes it, but only while someone is actually in it.
+    clubCard.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') clubCard.querySelector('[data-gc-club-close]').click();
+    });
+    var clubForm = clubCard.querySelector('form');
+    clubForm.addEventListener('gc:signup', function (e) {
+      if (e.detail !== 'done') return;
+      clubCard.classList.add('is-done');
+      setTimeout(hideClub, 9000);
+    });
+    var showClub = function () {
+      if (clubCard.classList.contains('is-in') || !clubCard.hidden || clubSuppressed()) return;
+      clubCard.hidden = false;
+      // lay it out off-screen first, then slide it up
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () { clubCard.classList.add('is-in'); });
       });
-      if (!suppressed()) {
-        setTimeout(function () {
-          if (suppressed() || shown) return;
-          nudge.hidden = false;
-          // let the browser lay it out off-screen before sliding it in
-          requestAnimationFrame(function () {
-            requestAnimationFrame(function () { nudge.classList.add('is-in'); });
-          });
-        }, 5000);
+    };
+    if (!clubSuppressed()) {
+      // On a phone the card spans the bottom of the screen, which on the
+      // homepage is where the hero's buttons are. So there it waits until
+      // they've scrolled past the first screen (or 15 seconds, if they don't).
+      var phone = window.matchMedia && window.matchMedia('(max-width:560px)').matches;
+      var waited = false, scrolled = !phone;
+      var tryShow = function () { if (waited && scrolled) showClub(); };
+      setTimeout(function () { waited = true; tryShow(); }, (Number(clubCard.getAttribute('data-delay')) || 6) * 1000);
+      if (phone) {
+        var onScroll = function () {
+          if (window.scrollY < window.innerHeight * 0.6) return;
+          scrolled = true; window.removeEventListener('scroll', onScroll); tryShow();
+        };
+        window.addEventListener('scroll', onScroll, { passive: true });
+        setTimeout(function () { scrolled = true; tryShow(); }, 15000);
       }
     }
   }

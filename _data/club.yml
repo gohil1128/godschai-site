@@ -1,0 +1,29 @@
+# The Chai Club: the small card in the bottom-right corner (along the bottom on
+# a phone) that asks visitors to join with their email (_includes/popup.html).
+#
+# Joining sends their email to the checkout service (api below), which adds
+# them to the Mailchimp list tagged "chai-club" and emails them a welcome note
+# with the members' code. If the service can't be reached, the card signs them
+# up straight to Mailchimp instead, so nobody is lost. See SEO.md, "The Chai Club".
+
+# The card shows this many seconds after someone arrives (on a phone, once they've
+# also scrolled past the first screen, or after 15 seconds), and only to people
+# who haven't joined or closed it. Closing it hides it for dismiss_days.
+delay_seconds: 6
+dismiss_days: 30
+
+# Mailchimp's SOURCE field for these signups.
+source: "chai-club"
+
+# The checkout service's join address. Blank: signups go straight to Mailchimp
+# and no welcome email is sent.
+api: "https://godschai-site-checkout.vercel.app/api/club"
+
+# The one line under the heading, and the perks behind "See the perks".
+# The welcome email lists the same perks (checkout/lib/club.js): keep them matching.
+line: "10% off your first chai mix order, plus members-only perks."
+perks:
+  - "10% off your first order of chai mixes"
+  - "Vote on our next flavour"
+  - "Free samples and first access to new blends"
+  - "Members-only tasting nights"
