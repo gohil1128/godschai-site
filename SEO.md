@@ -516,7 +516,7 @@ The Chai Club card is the site's email signup. It's styled like the club poster:
 cream, "JOIN the *Chai* club", and a yellow 10% badge. Nothing covers the page
 and nothing takes focus:
 
-- **When it appears:** about six seconds in, it slides up in the **bottom-right
+- **When it appears:** about 10 seconds in, it slides up in the **bottom-right
   corner**. On a **phone** it runs along the bottom, but only once someone has
   scrolled past the first screen (or after 15 seconds), so it never sits on
   the hero's buttons. On product pages it sits above the phone buy bar.

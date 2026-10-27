@@ -410,7 +410,7 @@ layout: null
       var phone = window.matchMedia && window.matchMedia('(max-width:560px)').matches;
       var waited = false, scrolled = !phone;
       var tryShow = function () { if (waited && scrolled) showClub(); };
-      setTimeout(function () { waited = true; tryShow(); }, (Number(clubCard.getAttribute('data-delay')) || 6) * 1000);
+      setTimeout(function () { waited = true; tryShow(); }, (Number(clubCard.getAttribute('data-delay')) || 10) * 1000);
       if (phone) {
         var onScroll = function () {
           if (window.scrollY < window.innerHeight * 0.6) return;

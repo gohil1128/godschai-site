@@ -9,7 +9,7 @@
 # The card shows this many seconds after someone arrives (on a phone, once they've
 # also scrolled past the first screen, or after 15 seconds), and only to people
 # who haven't joined or closed it. Closing it hides it for dismiss_days.
-delay_seconds: 6
+delay_seconds: 10
 dismiss_days: 30
 
 # Mailchimp's SOURCE field for these signups.
