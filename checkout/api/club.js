@@ -63,7 +63,12 @@ async function sendWelcome(env, email) {
     body: JSON.stringify({ from: env.EMAIL_FROM, to: [email], reply_to: SHOP_EMAIL, subject: mail.subject, html: mail.html, text: mail.text }),
   });
   // 409: this key was used already, so the email has gone out.
-  if (!r.ok && r.status !== 409) throw new Error('resend ' + r.status);
+  if (!r.ok && r.status !== 409) {
+    // Resend says why (e.g. "The godschai.com domain is not verified"): keep it,
+    // so the join's reply and the logs show what to fix. Never includes keys.
+    const why = await r.json().then((d) => d && (d.message || d.name), () => '');
+    throw new Error('resend ' + r.status + (why ? ': ' + String(why).slice(0, 160) : ''));
+  }
 }
 
 export default async function handler(req, res) {
@@ -93,13 +98,13 @@ export default async function handler(req, res) {
   }
   // Someone who unsubscribed (or whose address bounced) isn't emailed from here.
   const canEmail = !!(env.RESEND_API_KEY && env.EMAIL_FROM) && !welcomed && (listed || !env.MAILCHIMP_API_KEY);
-  let emailed = false;
+  let emailed = false, emailError;
   if (canEmail) {
-    try { await sendWelcome(env, email); emailed = true; } catch (e) { console.error('club_email_failed', e.message); }
+    try { await sendWelcome(env, email); emailed = true; } catch (e) { emailError = e.message; console.error('club_email_failed', e.message); }
   }
   if (listed) {
     const names = (already ? [] : ['chai-club', 'opted-in']).concat(emailed ? ['club-welcome-sent'] : []);
     if (names.length) try { await tagMember(env, email, names); } catch (e) { console.error('club_tag_failed', e.message); }
   }
-  return res.status(200).json({ ok: true, listed, already: listed && already, emailed });
+  return res.status(200).json({ ok: true, listed, already: listed && already, emailed, ...(emailError ? { emailError } : {}) });
 }
