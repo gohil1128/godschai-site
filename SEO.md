@@ -146,8 +146,9 @@ button. The bag in the top bar opens the cart, which slides in from the
 right. It shows the pouches, the delivery choice, PST and a "free shipping"
 progress bar, then the Square checkout button. The cart is remembered in the
 visitor's own browser as they move around the site. It empties itself once
-they reach `/order-confirmed/`. The code is in `assets/js/cart.js` and
-`_includes/cart-drawer.html`.
+they reach `/order-confirmed/`. On a phone, swiping a pouch row to the left
+takes that blend out of the cart (the *Remove* link does the same). The code
+is in `assets/js/cart.js` and `_includes/cart-drawer.html`.
 
 **Each pre-made link works for one sale only.** Square closes a checkout
 link once it has been paid. Anyone who opens a used link lands straight on

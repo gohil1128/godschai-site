@@ -215,6 +215,44 @@
     else if (el.hasAttribute('data-gc-more')) set(el.getAttribute('data-gc-more'), state.q[el.getAttribute('data-gc-more')] + 1);
     else if (el.hasAttribute('data-gc-remove')) set(el.getAttribute('data-gc-remove'), 0);
   });
+  // Swipe a pouch row left to take that blend out of the cart. Only a mostly
+  // horizontal drag counts, so scrolling the cart still works; letting go short
+  // of the threshold slides the row back. The Remove link stays for everyone else.
+  (function () {
+    var drag = null;
+    function end(commit) {
+      if (!drag) return;
+      var s = drag; drag = null;
+      s.row.classList.remove('is-swiping');
+      s.slide.classList.add('is-back');
+      if (commit) {
+        s.slide.classList.add('is-away');
+        setTimeout(function () { s.slide.classList.remove('is-back', 'is-away'); s.slide.style.transform = ''; set(s.key, 0); }, 230);
+      } else s.slide.style.transform = '';
+      setTimeout(function () { s.slide.classList.remove('is-back'); }, 260);
+    }
+    panel.addEventListener('touchstart', function (e) {
+      var row = e.target.closest && e.target.closest('[data-gc-row]');
+      if (!row || e.touches.length !== 1 || e.target.closest('.gc-step')) return;
+      var t = e.touches[0];
+      drag = { row: row, slide: row.querySelector('.gc-cart-slide'), key: row.getAttribute('data-gc-row'), x: t.clientX, y: t.clientY, dx: 0, on: false };
+      drag.slide.classList.remove('is-back');
+    }, { passive: true });
+    panel.addEventListener('touchmove', function (e) {
+      if (!drag) return;
+      var t = e.touches[0], dx = t.clientX - drag.x, dy = t.clientY - drag.y;
+      if (!drag.on) {
+        if (Math.abs(dy) > 10 && Math.abs(dy) > Math.abs(dx)) { drag = null; return; }   // it's a scroll
+        if (dx > -8) return;
+        drag.on = true; drag.row.classList.add('is-swiping');
+      }
+      drag.dx = Math.min(0, dx);
+      drag.slide.style.transform = 'translateX(' + drag.dx + 'px)';
+      if (e.cancelable) e.preventDefault();
+    }, { passive: false });
+    panel.addEventListener('touchend', function () { if (drag) end(drag.on && drag.dx < -Math.min(110, drag.row.offsetWidth * 0.35)); });
+    panel.addEventListener('touchcancel', function () { end(false); });
+  })();
   zones.forEach(function (z) {
     z.addEventListener('change', function () { state.z = z.value; save(); render(); });
   });
