@@ -76,9 +76,8 @@
   .gc-cart-zones{border:0;margin:18px 0 0;padding:0;min-width:0}
   .gc-cart-zones[hidden]{display:none}
   .gc-cart-zones legend{padding:0;margin:0 0 10px;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#F2A93C}
-  .gc-cart-foot{padding:14px 20px 18px;border-top:1px solid rgba(243,232,211,0.12);background:#170E08}
+  .gc-cart-foot{padding:12px 20px 14px;border-top:1px solid rgba(243,232,211,0.12);background:#170E08}
   .gc-cart-foot[hidden]{display:none}
-  .gc-cart-tip{margin:10px 0 0;font-size:12.5px;line-height:1.45;color:#AB9280;text-align:center}
 
   /* Shared bits: steppers, zone cards, totals, checkout button */
   .gc-step{display:flex;align-items:center;gap:6px;flex:0 0 auto}
@@ -96,6 +95,16 @@
   .gc-zone em span{display:block;font-size:10.5px;color:#AB9280;margin-top:3px}
   .gc-zone.is-on{background:rgba(242,169,60,0.07)}
   .gc-sum{font-size:14.5px;color:#C7B29E;margin:0 0 14px}
+  .gc-cart-foot .gc-sum{font-size:13.5px;margin:0 0 10px}
+  .gc-sum summary{display:flex;justify-content:space-between;align-items:baseline;gap:12px;list-style:none;cursor:pointer;
+    font-size:17px;font-weight:600;color:#F3E8D3;padding:2px 0}
+  .gc-sum summary::-webkit-details-marker{display:none}
+  .gc-sum summary span:last-child{font-size:19px}
+  .gc-sum summary i{display:inline-block;width:7px;height:7px;margin:0 0 3px 6px;border-right:1.5px solid #AB9280;border-bottom:1.5px solid #AB9280;
+    transform:rotate(45deg);transition:transform .2s}
+  .gc-sum[open] summary i{transform:rotate(-135deg);margin-bottom:-1px}
+  .gc-sum summary:focus-visible{outline:2px solid #F2A93C;outline-offset:3px;border-radius:6px}
+  .gc-sum[open] summary{margin-bottom:6px}
   .gc-sum div{display:flex;justify-content:space-between;gap:12px;padding:2px 0}
   .gc-sum div[hidden]{display:none}
   .gc-sum span:last-child{font-family:'DM Mono',monospace;color:#F3E8D3}
@@ -105,9 +114,11 @@
   .gc-sum .gc-sum-total{margin-top:6px;font-size:17px;color:#F3E8D3;font-weight:600}
   .gc-go{width:100%;border:0;cursor:pointer;background:#F2A93C;color:#2B1B12;font:700 16px 'Hanken Grotesk',sans-serif;padding:15px 24px;border-radius:999px}
   .gc-go:disabled{background:#F2A93C!important;opacity:0.42;cursor:not-allowed;transform:none!important}
-  .gc-hint{min-height:1.3em;margin:8px 0 0;text-align:center;font-size:13.5px;color:#E7D6C4}
+  .gc-hint{min-height:0;margin:0;text-align:center;font-size:13.5px;color:#E7D6C4}
+  .gc-hint:not(:empty){margin:8px 0 0}
   .gc-hint a,.gc-cart a{color:#F2A93C}
-  .gc-safe{display:flex;gap:8px;align-items:center;justify-content:center;margin:10px 0 0;font-size:12px;color:#AB9280}
+  .gc-safe{display:flex;gap:7px;align-items:center;justify-content:center;margin:9px 0 0;font-size:11.5px;line-height:1.4;color:#AB9280;text-align:left}
+  .gc-safe svg{flex:0 0 auto}
 
   /* The welcome offer: one small line that opens into an email box */
   .gc-deal{margin:0 0 12px}
@@ -239,21 +250,24 @@
         <p class="gc-deal-code" data-gc-deal-code hidden>Your {{ shop.welcome_percent }}% code <button type="button" class="gc-code" data-gc-copy="{{ shop.welcome_code }}" aria-label="Copy the code {{ shop.welcome_code }}">{{ shop.welcome_code }}</button> <span data-gc-deal-where>pop it in on the payment page.</span></p>
       </div>
       {%- endif %}
-      <div class="gc-sum" aria-live="polite">
+      {%- comment -%}
+        Kept small on purpose: the total, a button, one quiet line. The breakdown
+        (pouches, pair price, tax, delivery) opens from the total.
+      {%- endcomment %}
+      <details class="gc-sum" aria-live="polite">
+        <summary><span>Total <i aria-hidden="true"></i></span><span data-gc-total>$0.00</span></summary>
         <div><span data-gc-count>Pouches</span><span data-gc-sub>$0.00</span></div>
         <div data-gc-discrow hidden class="gc-sum-save"><span>Try-both pair price</span><span data-gc-disc></span></div>
         {%- comment -%} Square won't add a coupon (like the Chai Club's CHAI10) on top of another discount. {%- endcomment %}
         <p data-gc-discnote hidden class="gc-sum-note">Coupon codes can't be added to the pair price.</p>
         <div data-gc-taxrow hidden><span>{{ shop.zones.saskatoon.tax_name | default: "Tax" }}</span><span data-gc-tax></span></div>
         <div><span>Delivery</span><span data-gc-fee>—</span></div>
-        <div class="gc-sum-total"><span>Total</span><span data-gc-total>$0.00</span></div>
-      </div>
+      </details>
       <button type="button" class="gc-go gc-pill" data-gc-go disabled>Checkout</button>
       <p class="gc-hint" data-gc-hint aria-live="polite"></p>
-      <p class="gc-cart-tip" data-gc-tip>Next page tip: tap your address when it pops up in the list. The Pay button's shy until you do.</p>
       <p class="gc-safe">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false"><rect x="4" y="10.5" width="16" height="10.5" rx="2.5"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg>
-        Your card details are locked up tighter than our spice recipe. We never see them.
+        <span>Secure checkout with Square.<span data-gc-tip> Tap your address when it pops up.</span></span>
       </p>
     </div>
   </div>
