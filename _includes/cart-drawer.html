@@ -41,8 +41,15 @@
   .gc-cart-bar{height:6px;border-radius:999px;background:rgba(243,232,211,0.1);margin-top:9px;overflow:hidden}
   .gc-cart-bar i{display:block;height:100%;width:0;border-radius:999px;background:linear-gradient(90deg,#F2A93C,#FF6F61);transition:width .45s cubic-bezier(.2,.8,.2,1)}
   .gc-cart-body{flex:1 1 auto;overflow-y:auto;padding:6px 20px 16px;overscroll-behavior:contain}
-  .gc-cart-row{display:flex;gap:14px;align-items:center;padding:14px 0;border-bottom:1px solid rgba(243,232,211,0.08)}
+  .gc-cart-row{position:relative;overflow:hidden;border-bottom:1px solid rgba(243,232,211,0.08)}
   .gc-cart-row[hidden]{display:none}
+  .gc-cart-slide{display:flex;gap:14px;align-items:center;padding:14px 0;background:#1A100A;touch-action:pan-y;position:relative}
+  .gc-cart-slide.is-back{transition:transform .25s cubic-bezier(.2,.8,.2,1)}
+  .gc-cart-slide.is-away{transition:transform .22s ease-in;transform:translateX(-110%)}
+  /* Revealed behind the row as it's dragged left. */
+  .gc-cart-swipe{position:absolute;inset:0;display:flex;align-items:center;justify-content:flex-end;padding-right:22px;
+    background:#B8412F;color:#FFF3E6;font:600 13px 'Hanken Grotesk',sans-serif;letter-spacing:0.04em;opacity:0;transition:opacity .15s}
+  .gc-cart-row.is-swiping .gc-cart-swipe{opacity:1}
   .gc-cart-row img{width:48px;height:auto;border-radius:6px 6px 8px 8px;display:block}
   .gc-cart-row .gc-cart-name{flex:1 1 auto;min-width:0}
   .gc-cart-name a{display:block;font-family:'Instrument Serif',serif;font-size:1.18rem;color:#F3E8D3;text-decoration:none;line-height:1.15}
@@ -170,6 +177,8 @@
 
       {%- for p in site.data.premixes %}
       <div class="gc-cart-row" data-gc-row="{{ p.key }}" hidden>
+        <div class="gc-cart-swipe" aria-hidden="true">Remove</div>
+        <div class="gc-cart-slide">
         <a href="{{ '/premixes/' | relative_url }}{{ p.slug }}/" tabindex="-1" aria-hidden="true">{% include img.html base=p.img ext="jpg" widths="250" sizes="48px" w="544" h="952" alt="" %}</a>
         <div class="gc-cart-name">
           <a href="{{ '/premixes/' | relative_url }}{{ p.slug }}/">{{ p.name }}</a>
@@ -180,6 +189,7 @@
           <button type="button" class="gc-ico" data-gc-less="{{ p.key }}" aria-label="One fewer {{ p.name }}">&minus;</button>
           <output data-gc-q="{{ p.key }}">0</output>
           <button type="button" class="gc-ico" data-gc-more="{{ p.key }}" aria-label="One more {{ p.name }}">+</button>
+        </div>
         </div>
       </div>
       {%- endfor %}
