@@ -12,17 +12,17 @@ og_image: "uploads/og-image.jpg"
   {%- comment -%} The shop is open (_data/shop.yml): the two blends as cards with
     "Add to cart" (assets/js/cart.js), each linking to its own page. {%- endcomment %}
   <div style="display:inline-block;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.16em;text-transform:uppercase;color:#2B1B12;background:#F2A93C;padding:7px 13px;border-radius:999px;font-weight:500">Now delivering</div>
-  <h1 id="page-h1" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(2.3rem,6vw,4.2rem);line-height:0.98;letter-spacing:0;margin:18px 0 0;max-width:26ch">Masala Chai Premix, <span style="color:#FF6F61;font-style:italic">made in Saskatoon</span></h1>
-  <p style="font-size:clamp(1.05rem,1.5vw,1.25rem);line-height:1.6;color:#E7D6C4;max-width:52ch;margin:22px 0 0">We're bagging what we pour. Two blends, hand crafted here in Saskatoon, stove-top ready in minutes — and each 125g pouch makes 25 cups. Unsweetened, so you choose how sweet.</p>
+  <h1 id="page-h1" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(2.3rem,6vw,4.2rem);line-height:0.98;letter-spacing:0;margin:18px 0 0;max-width:26ch">Masala Chai Premix, <span style="color:var(--gc-coral-t);font-style:italic">made in Saskatoon</span></h1>
+  <p style="font-size:clamp(1.05rem,1.5vw,1.25rem);line-height:1.6;color:var(--gc-fg2);max-width:52ch;margin:22px 0 0">We're bagging what we pour. Two blends, hand crafted here in Saskatoon, stove-top ready in minutes — and each 125g pouch makes 25 cups. Unsweetened, so you choose how sweet.</p>
   <div id="shop" data-gc-stagger style="display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:clamp(16px,2vw,24px);margin:clamp(28px,4vw,44px) 0 0;scroll-margin-top:110px">
     {%- for p in site.data.premixes %}
     {% include product-card.html p=p %}
     {%- endfor %}
   </div>
-  <p style="font-size:13.5px;color:#AB9280;margin:16px 0 0">${% include money.html v=site.data.shop.price %} a pouch{% if site.data.shop.pair_price %}, or <strong style="color:#F2A93C">one of each for ${% include money.html v=site.data.shop.pair_price %}</strong>{% endif %}, plus {{ site.data.shop.zones.saskatoon.tax | times: 100 | round }}% {{ site.data.shop.zones.saskatoon.tax_name }} on Saskatoon orders. {% if site.data.shop.checkout_api == "" %}Up to {{ site.data.shop.max_each }} of each blend per online order.{% endif %}</p>
+  <p style="font-size:13.5px;color:var(--gc-muted);margin:16px 0 0">${% include money.html v=site.data.shop.price %} a pouch{% if site.data.shop.pair_price %}, or <strong style="color:var(--gc-gold-t)">one of each for ${% include money.html v=site.data.shop.pair_price %}</strong>{% endif %}, plus {{ site.data.shop.zones.saskatoon.tax | times: 100 | round }}% {{ site.data.shop.zones.saskatoon.tax_name }} on Saskatoon orders. {% if site.data.shop.checkout_api == "" %}Up to {{ site.data.shop.max_each }} of each blend per online order.{% endif %}</p>
   <div style="margin:clamp(22px,3vw,32px) 0 0">{% include trust-strip.html %}</div>
   <noscript>
-    <div style="margin-top:22px;font-size:15px;line-height:1.6;color:#C7B29E">
+    <div style="margin-top:22px;font-size:15px;line-height:1.6;color:var(--gc-fg4)">
       <p style="margin:0 0 10px">Ordering one pouch without JavaScript? Pick it here, or {% include shop-contact.html %}.</p>
       <ul style="margin:0;padding-left:20px">
         {%- for p in site.data.premixes %}{% for z in site.data.shop.zones %}
@@ -36,8 +36,8 @@ og_image: "uploads/og-image.jpg"
   </noscript>
   {%- else %}
   <div style="display:inline-block;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.16em;text-transform:uppercase;color:#2B1B12;background:#F2A93C;padding:7px 13px;border-radius:999px;font-weight:500">Launching this fall</div>
-  <h1 id="page-h1" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(2.3rem,6vw,4.2rem);line-height:0.98;letter-spacing:0;margin:18px 0 0;max-width:26ch">Masala Chai Premix, <span style="color:#FF6F61;font-style:italic">made in Saskatoon</span></h1>
-  <p style="font-size:clamp(1.05rem,1.5vw,1.25rem);line-height:1.6;color:#E7D6C4;max-width:54ch;margin:22px 0 28px">We're bagging what we pour. Two blends, hand crafted here in Saskatoon, stove-top ready in minutes — and each 125g pouch makes 25 cups. Be first to know when they drop.</p>
+  <h1 id="page-h1" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(2.3rem,6vw,4.2rem);line-height:0.98;letter-spacing:0;margin:18px 0 0;max-width:26ch">Masala Chai Premix, <span style="color:var(--gc-coral-t);font-style:italic">made in Saskatoon</span></h1>
+  <p style="font-size:clamp(1.05rem,1.5vw,1.25rem);line-height:1.6;color:var(--gc-fg2);max-width:54ch;margin:22px 0 28px">We're bagging what we pour. Two blends, hand crafted here in Saskatoon, stove-top ready in minutes — and each 125g pouch makes 25 cups. Be first to know when they drop.</p>
   {% include signup-form.html id="premixhero" button="Get launch updates" big=true list="premix-launch" note="No spam. One note when the premixes are ready." %}
   {%- endif %}
 </section>
@@ -46,24 +46,24 @@ og_image: "uploads/og-image.jpg"
 
 {%- unless site.data.shop.open %}
 <section aria-labelledby="what-h2" style="max-width:1240px;margin:0 auto;padding:clamp(30px,4vw,60px) clamp(18px,4vw,40px)">
-  <h2 id="what-h2" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(1.9rem,4.4vw,3rem);letter-spacing:0;margin:0 0 28px;color:#F3E8D3">The two blends</h2>
+  <h2 id="what-h2" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(1.9rem,4.4vw,3rem);letter-spacing:0;margin:0 0 28px;color:var(--gc-fg)">The two blends</h2>
   <div data-gc-stagger style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:clamp(16px,2vw,24px)">
     {% for pouch in site.data.premixes %}
-    <div style="padding:28px 28px 32px;background:rgba(28,17,10,0.8);border:1px solid rgba(242,169,60,0.16);border-radius:22px;display:flex;flex-direction:column;align-items:center;text-align:center" class="gc-card">
+    <div style="padding:28px 28px 32px;background:rgba(var(--gc-surf-rgb),0.8);border:1px solid rgba(var(--gc-gold-rgb),0.16);border-radius:22px;display:flex;flex-direction:column;align-items:center;text-align:center" class="gc-card">
       {% include img.html base=pouch.img ext="jpg" widths="250,500" sizes="(max-width:700px) 60vw, 250px" w="544" h="952" alt=pouch.alt wrap="display:block;width:min(72%,230px)" style="width:100%;height:auto;display:block;border-radius:10px 10px 14px 14px;box-shadow:0 24px 44px -20px rgba(0,0,0,0.7)" %}
-      <h3 style="font-family:'Instrument Serif',serif;font-weight:400;font-size:1.5rem;margin:22px 0 0;color:#F3E8D3">{{ pouch.name }}</h3>
-      <div style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:#F2A93C;margin-top:7px">{{ pouch.notes }}</div>
-      <p style="color:#C7B29E;line-height:1.6;margin:14px 0 0;max-width:38ch">{{ pouch.blurb }}</p>
+      <h3 style="font-family:'Instrument Serif',serif;font-weight:400;font-size:1.5rem;margin:22px 0 0;color:var(--gc-fg)">{{ pouch.name }}</h3>
+      <div style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--gc-gold-t);margin-top:7px">{{ pouch.notes }}</div>
+      <p style="color:var(--gc-fg4);line-height:1.6;margin:14px 0 0;max-width:38ch">{{ pouch.blurb }}</p>
     </div>
     {% endfor %}
   </div>
-  <p style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:#C58A2E;text-align:center;margin:26px 0 0">125 g a pouch · 25 cups · hand crafted in Saskatoon</p>
+  <p style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--gc-gold-d);text-align:center;margin:26px 0 0">125 g a pouch · 25 cups · hand crafted in Saskatoon</p>
 </section>
 {%- endunless %}
 
-<section aria-labelledby="why-h2" style="background:rgba(29,18,11,0.6);border-top:1px solid rgba(243,232,211,0.08);border-bottom:1px solid rgba(243,232,211,0.08)">
+<section aria-labelledby="why-h2" style="background:rgba(var(--gc-surf-rgb),0.6);border-top:1px solid rgba(var(--gc-ink-rgb),0.08);border-bottom:1px solid rgba(var(--gc-ink-rgb),0.08)">
   <div style="max-width:1240px;margin:0 auto;padding:clamp(46px,6vw,84px) clamp(18px,4vw,40px)">
-    <h2 id="why-h2" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(1.9rem,4.4vw,3rem);letter-spacing:0;margin:0 0 18px;color:#F3E8D3">Why bother with ours</h2>
+    <h2 id="why-h2" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(1.9rem,4.4vw,3rem);letter-spacing:0;margin:0 0 18px;color:var(--gc-fg)">Why bother with ours</h2>
     <div class="gc-prose" style="max-width:64ch">
       <p>Most chai premixes on a Canadian shelf are sugar and powdered flavour with a bit of tea dust in it. You can taste the shortcut immediately — it's sweet, it's flat, and it doesn't smell like anything.</p>
       <p>Ours is the recipe we've been pouring at pop-ups across Saskatoon: whole cardamom, ginger, cassia, clove and pepper from Kerala, ground in small batches, with single-origin Assam that's malty enough to stand up to milk. Nothing added to make it cheaper.</p>
@@ -74,12 +74,12 @@ og_image: "uploads/og-image.jpg"
 
 <section aria-labelledby="list-h2" style="max-width:1240px;margin:0 auto;padding:clamp(46px,6vw,84px) clamp(18px,4vw,40px)">
   {%- if site.data.shop.open %}
-  <h2 id="list-h2" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(1.9rem,4.4vw,2.8rem);letter-spacing:0;margin:0 0 14px;color:#F3E8D3">New blends, first</h2>
-  <p style="font-size:1.05rem;line-height:1.6;color:#D6C7B4;max-width:46ch;margin:0 0 24px">An email when there's a new blend or a restock. That's it.</p>
+  <h2 id="list-h2" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(1.9rem,4.4vw,2.8rem);letter-spacing:0;margin:0 0 14px;color:var(--gc-fg)">New blends, first</h2>
+  <p style="font-size:1.05rem;line-height:1.6;color:var(--gc-fg3);max-width:46ch;margin:0 0 24px">An email when there's a new blend or a restock. That's it.</p>
   {% include signup-form.html id="premixfoot" button="Join the list" big=true list="premix-news" %}
   {%- else %}
-  <h2 id="list-h2" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(1.9rem,4.4vw,2.8rem);letter-spacing:0;margin:0 0 14px;color:#F3E8D3">Get the launch note</h2>
-  <p style="font-size:1.05rem;line-height:1.6;color:#D6C7B4;max-width:46ch;margin:0 0 24px">One email when the premixes go on sale. That's it.</p>
+  <h2 id="list-h2" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(1.9rem,4.4vw,2.8rem);letter-spacing:0;margin:0 0 14px;color:var(--gc-fg)">Get the launch note</h2>
+  <p style="font-size:1.05rem;line-height:1.6;color:var(--gc-fg3);max-width:46ch;margin:0 0 24px">One email when the premixes go on sale. That's it.</p>
   {% include signup-form.html id="premixfoot" button="Join the list" big=true list="premix-launch" %}
   {%- endif %}
 </section>

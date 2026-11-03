@@ -48,16 +48,16 @@
   // Square's card fields, in the site's colours. Its frames can't load our
   // fonts, so they use a plain system face at the same size.
   var STYLE = {
-    '.input-container': { borderColor: '#4A3A2E', borderRadius: '12px' },
-    '.input-container.is-focus': { borderColor: '#F2A93C' },
-    '.input-container.is-error': { borderColor: '#FF6F61' },
-    '.message-text': { color: '#AB9280' },
-    '.message-icon': { color: '#AB9280' },
-    '.message-text.is-error': { color: '#FF8A78' },
-    '.message-icon.is-error': { color: '#FF8A78' },
-    input: { backgroundColor: '#22160E', color: '#F3E8D3', fontFamily: 'helvetica neue, sans-serif', fontSize: '16px' },
-    'input::placeholder': { color: '#8A7360' },
-    'input.is-error': { color: '#FF8A78' }
+    '.input-container': { borderColor: '#D9CBB3', borderRadius: '12px' },
+    '.input-container.is-focus': { borderColor: '#A35D0A' },
+    '.input-container.is-error': { borderColor: '#C23B26' },
+    '.message-text': { color: '#7C6757' },
+    '.message-icon': { color: '#7C6757' },
+    '.message-text.is-error': { color: '#C23B26' },
+    '.message-icon.is-error': { color: '#C23B26' },
+    input: { backgroundColor: '#FFFCF5', color: '#2B1B12', fontFamily: 'helvetica neue, sans-serif', fontSize: '16px' },
+    'input::placeholder': { color: '#8A7869' },
+    'input.is-error': { color: '#C23B26' }
   };
 
   function money(c) { return '$' + (c / 100).toFixed(2); }

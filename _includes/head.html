@@ -9,7 +9,7 @@
                    the payment page uses it, for Square's card fields.
 {%- endcomment -%}
 {%- assign og_img = page.og_image | default: "uploads/og-image.jpg" -%}
-{%- assign theme = page.theme_color | default: "#100A05" -%}
+{%- assign theme = page.theme_color | default: "#FDF8EE" -%}
 {%- comment -%} The checkout service's address has to be allowed for the cart to reach it. {%- endcomment -%}
 {%- assign api_origin = "" -%}
 {%- if site.data.shop.open and site.data.shop.checkout_api != "" -%}{%- assign api_parts = site.data.shop.checkout_api | split: "/" -%}{%- capture api_origin %} {{ api_parts[0] }}//{{ api_parts[2] }}{% endcapture -%}{%- endif -%}

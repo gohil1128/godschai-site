@@ -150,8 +150,10 @@ layout: null
     }
     if (nav) {
       var solid = y > vh * 0.72;
-      nav.style.background = solid ? 'rgba(24,15,9,0.92)' : 'transparent';
-      nav.style.borderBottomColor = solid ? 'rgba(243,232,211,0.10)' : 'transparent';
+      // Over the hero photo the header wears the dark colours; solid, it's daylight.
+      nav.classList.toggle('gc-dark', !solid);
+      nav.style.background = solid ? 'rgba(var(--gc-bg-rgb),0.92)' : 'transparent';
+      nav.style.borderBottomColor = solid ? 'rgba(var(--gc-ink-rgb),0.10)' : 'transparent';
       nav.style.backdropFilter = solid ? 'blur(12px)' : 'none';
       nav.style.webkitBackdropFilter = solid ? 'blur(12px)' : 'none';
     }
@@ -349,7 +351,7 @@ layout: null
       if (btn) { btn.disabled = false; btn.textContent = btn.dataset.label || 'Sign up'; }
       if (!msg) return;
       msg.style.display = 'block';
-      msg.style.color = ok ? '#F2A93C' : '#FF7A66';
+      msg.style.color = ok ? 'var(--gc-gold-t)' : 'var(--gc-coral-t)';
       if (ok && WELCOME && !club) showCode(msg, !!custom);
       else msg.textContent = ok ? (custom || "Thanks — you're subscribed. ✶")
                                 : "That didn't go through — check your email and try again.";

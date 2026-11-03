@@ -355,6 +355,33 @@ The longer written guide on that page is normal text in
 
 ---
 
+## Colours: the daylight theme
+
+The site is a light, daylight theme. Every colour is one of the named colours at
+the top of `_includes/base-styles-dark.html` (the file keeps its old name), so
+changing the look means changing a few values there, not hunting through pages:
+
+| Name | Used for |
+| --- | --- |
+| `--gc-bg`, `--gc-bg2`, `--gc-card` | page, alternate sections, cards |
+| `--gc-fg`, `--gc-fg2` … `--gc-fg4`, `--gc-muted` | text, from headline to quiet |
+| `--gc-gold-t`, `--gc-coral-t` | gold and coral **text** and thin lines, darkened to read on cream |
+| `--gc-ink-rgb`, `--gc-gold-rgb` … | the same colours as numbers, for borders and tints with some see-through (`rgba(var(--gc-ink-rgb),0.12)`) |
+
+Buttons keep the bright gold (`#F2A93C`) and coral with dark text, as on the pouch.
+
+**Anything on a photo stays dark.** Put `class="gc-dark"` on an element and the
+original dark colours come back for everything inside it. That is how the home
+page's hero, the "Kadak" banner and the two video tiles keep light text over
+their photos, and how the header stays light-on-photo until you scroll past the
+hero (then `assets/js/site.js` takes the class off and the header turns daylight).
+New photo sections: add `gc-dark` to the section and nothing else.
+
+Not changed: the emails (order confirmation, the Chai Club welcome, the Square
+receipt kit). They have their own colours in `checkout/lib/`.
+
+---
+
 ## The animated logo in the header
 
 The logo in the top bar draws itself on, over and over, cycling through three
@@ -388,11 +415,12 @@ animations turned off in their device settings.
 
 The logo wears the pouch's colours: **"God's" in rust (`#B6502B`), the brush
 stroke under it in gold (`#D3A849`)**, and "CHAI" and the tagline in cream on
-the dark site. On light backgrounds (search results, Square receipts) "CHAI" is
-the pouch's dark brown (`#4A2A1F`) instead.
+dark backgrounds. On light ones (the daylight site, search results, Square
+receipts) "CHAI" is the pouch's dark brown (`#4A2A1F`) instead.
 
-The animated component can only paint the whole mark one colour, so the cream
+The animated component can only paint the whole mark one colour, so that colour
 comes from the `tint` on the `<gods-chai-logo>` tag in `_includes/nav-dark.html`
+(it reads the `--gc-logo` colour, cream in the dark scope and brown on daylight)
 and the rust and gold are painted over their pieces by two rules in
 `_includes/base-styles-dark.html`.
 
