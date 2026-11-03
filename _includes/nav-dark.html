@@ -1,16 +1,16 @@
 {%- comment -%}
-  Fixed dark nav. On the homepage it starts transparent and solidifies on scroll
-  (assets/js/site.js); on inner pages it is solid from the top so the links stay
+  Fixed nav. On the homepage it starts transparent over the hero photo, in the
+  dark colours (.gc-dark), and turns solid daylight on scroll (assets/js/site.js); on inner pages it is solid from the top so the links stay
   readable against page content.
 {%- endcomment -%}
 {%- if page.transparent_nav -%}
   {%- assign nav_bg = "transparent" -%}
   {%- assign nav_border = "transparent" -%}
 {%- else -%}
-  {%- assign nav_bg = "rgba(24,15,9,0.92)" -%}
-  {%- assign nav_border = "rgba(243,232,211,0.10)" -%}
+  {%- assign nav_bg = "rgba(var(--gc-bg-rgb),0.92)" -%}
+  {%- assign nav_border = "rgba(var(--gc-ink-rgb),0.10)" -%}
 {%- endif -%}
-<header data-gc-nav{% if page.transparent_nav %} data-gc-nav-transparent="true"{% endif %} style="position:fixed;top:0;left:0;right:0;z-index:80;background:{{ nav_bg }};border-bottom:1px solid {{ nav_border }};transition:background .5s ease,border-color .5s ease{% unless page.transparent_nav %};backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px){% endunless %}">
+<header data-gc-nav{% if page.transparent_nav %} class="gc-dark" data-gc-nav-transparent="true"{% endif %} style="position:fixed;top:0;left:0;right:0;z-index:80;background:{{ nav_bg }};border-bottom:1px solid {{ nav_border }};transition:background .5s ease,border-color .5s ease{% unless page.transparent_nav %};backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px){% endunless %}">
   <nav aria-label="Primary" style="max-width:1320px;margin:0 auto;padding:12px clamp(16px,4vw,40px);display:flex;align-items:center;justify-content:space-between;gap:16px">
     {%- comment -%}
       The animated lockup (assets/js/logo-sting.js). The static logo inside it is
@@ -19,15 +19,16 @@
       Both are the same artwork on the same 2048 canvas, so nothing shifts.
     {%- endcomment -%}
     <a href="{{ '/' | relative_url }}" style="text-decoration:none;display:flex;align-items:center;line-height:1" aria-label="God's Chai — home">
-      <gods-chai-logo tint="#F3E8D3" aria-hidden="true" style="height:76px;width:76px;display:block;filter:drop-shadow(0 2px 8px rgba(0,0,0,0.5))">
-        {% include img.html base="logo-cream" ext="png" widths="128,256" sizes="76px" w="256" h="256" alt="" priority=true wrap="display:block" style="height:76px;width:76px;display:block" %}
+      <gods-chai-logo tint="var(--gc-logo)" aria-hidden="true" style="height:76px;width:76px;display:block;filter:drop-shadow(0 2px 8px rgba(var(--gc-shadow-rgb),0.3))">
+        <span class="gc-logo-l">{% include img.html base="artboard" ext="png" widths="128,256" sizes="76px" w="256" h="256" alt="" priority=true wrap="display:block" style="height:76px;width:76px;display:block" %}</span>
+        <span class="gc-logo-d">{% include img.html base="logo-cream" ext="png" widths="128,256" sizes="76px" w="256" h="256" alt="" priority=true wrap="display:block" style="height:76px;width:76px;display:block" %}</span>
       </gods-chai-logo>
     </a>
     <div style="display:flex;align-items:center;gap:clamp(12px,2vw,28px);font-weight:500;font-size:14.5px">
-      <a href="{{ '/' | relative_url }}#menu" style="text-decoration:none;color:#EFE0CF">Menu</a>
-      <a href="{{ '/how-to-make-masala-chai/' | relative_url }}" style="text-decoration:none;color:#EFE0CF">Brew Guide</a>
-      <a href="{{ '/premixes/' | relative_url }}" style="text-decoration:none;color:#EFE0CF">{% if site.data.shop.open %}Shop{% else %}Premixes{% endif %}</a>
-      <a href="{{ '/events/' | relative_url }}" style="text-decoration:none;color:#EFE0CF">Events</a>
+      <a href="{{ '/' | relative_url }}#menu" style="text-decoration:none;color:var(--gc-fg2)">Menu</a>
+      <a href="{{ '/how-to-make-masala-chai/' | relative_url }}" style="text-decoration:none;color:var(--gc-fg2)">Brew Guide</a>
+      <a href="{{ '/premixes/' | relative_url }}" style="text-decoration:none;color:var(--gc-fg2)">{% if site.data.shop.open %}Shop{% else %}Premixes{% endif %}</a>
+      <a href="{{ '/events/' | relative_url }}" style="text-decoration:none;color:var(--gc-fg2)">Events</a>
     </div>
     {%- comment -%} The bag opens the cart (_includes/cart-drawer.html); it only exists while the shop is open, and stays hidden until cart.js runs. {%- endcomment %}
     <span class="gc-navend" style="display:flex;align-items:center;gap:10px">

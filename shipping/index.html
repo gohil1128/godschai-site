@@ -7,11 +7,11 @@ breadcrumb: "Shipping & Delivery"
 {%- assign shop = site.data.shop -%}
 {%- assign yxe = shop.zones.saskatoon -%}{%- assign ca = shop.zones.canada -%}
 <section aria-labelledby="page-h1" style="max-width:1240px;margin:0 auto;padding:clamp(110px,14vh,170px) clamp(18px,4vw,40px) clamp(20px,3vw,30px)">
-  <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.2em;text-transform:uppercase;color:#F2A93C;margin-bottom:14px">Getting it to you</div>
-  <h1 id="page-h1" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(2.3rem,6vw,4.2rem);line-height:0.98;letter-spacing:0;margin:0;max-width:22ch">Shipping &amp; <span style="color:#FF6F61;font-style:italic">delivery</span></h1>
-  <p style="font-size:clamp(1.05rem,1.5vw,1.25rem);line-height:1.6;color:#E7D6C4;max-width:56ch;margin:22px 0 0">Every premix order comes to you — we don't do pickups. In Saskatoon, delivery is free. Anywhere else in Canada, it's a flat ${% include money.html v=ca.fee %} by Canada Post, with tracking — and free when you order {{ ca.free_from }} pouches or more.</p>
+  <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gc-gold-t);margin-bottom:14px">Getting it to you</div>
+  <h1 id="page-h1" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(2.3rem,6vw,4.2rem);line-height:0.98;letter-spacing:0;margin:0;max-width:22ch">Shipping &amp; <span style="color:var(--gc-coral-t);font-style:italic">delivery</span></h1>
+  <p style="font-size:clamp(1.05rem,1.5vw,1.25rem);line-height:1.6;color:var(--gc-fg2);max-width:56ch;margin:22px 0 0">Every premix order comes to you — we don't do pickups. In Saskatoon, delivery is free. Anywhere else in Canada, it's a flat ${% include money.html v=ca.fee %} by Canada Post, with tracking — and free when you order {{ ca.free_from }} pouches or more.</p>
   {%- unless shop.open %}
-  <p style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.08em;color:#C58A2E;margin:18px 0 0">The shop opens soon — this is how delivery will work.</p>
+  <p style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.08em;color:var(--gc-gold-d);margin:18px 0 0">The shop opens soon — this is how delivery will work.</p>
   {%- endunless %}
 </section>
 

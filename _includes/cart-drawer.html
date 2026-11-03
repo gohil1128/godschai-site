@@ -16,7 +16,7 @@
 <style>
   /* Bag in the nav */
   .gc-cartbtn{position:relative;display:flex;align-items:center;justify-content:center;width:42px;height:42px;
-    border-radius:999px;border:1px solid rgba(243,232,211,0.24);background:rgba(16,10,5,0.35);color:#F3E8D3;cursor:pointer;padding:0}
+    border-radius:999px;border:1px solid rgba(var(--gc-ink-rgb),0.24);background:rgba(var(--gc-bg-rgb),0.35);color:var(--gc-fg);cursor:pointer;padding:0}
   .gc-cartbtn[hidden]{display:none}
   .gc-cartbtn b{position:absolute;top:-5px;right:-5px;min-width:19px;height:19px;padding:0 5px;box-sizing:border-box;border-radius:999px;
     background:#FF6F61;color:#1D120B;font:700 11px/19px 'Hanken Grotesk',sans-serif;text-align:center}
@@ -30,20 +30,20 @@
   .gc-cart[hidden]{display:none}
   .gc-cart-scrim{position:absolute;inset:0;background:rgba(10,6,3,0.62);opacity:0;transition:opacity .3s ease}
   .gc-cart-panel{position:absolute;top:0;right:0;bottom:0;width:min(440px,100%);display:flex;flex-direction:column;
-    background:#1A100A;border-left:1px solid rgba(242,169,60,0.22);box-shadow:-30px 0 60px -30px rgba(0,0,0,0.8);
+    background:var(--gc-bg2);border-left:1px solid rgba(var(--gc-gold-rgb),0.22);box-shadow:-30px 0 60px -30px rgba(var(--gc-shadow-rgb),0.35);
     transform:translateX(100%);transition:transform .38s cubic-bezier(.2,.8,.2,1);outline:none}
   .gc-cart.is-open .gc-cart-scrim{opacity:1}
   .gc-cart.is-open .gc-cart-panel{transform:none}
-  .gc-cart-head{display:flex;align-items:center;justify-content:space-between;padding:18px 20px 14px;border-bottom:1px solid rgba(243,232,211,0.1)}
-  .gc-cart-head h2{margin:0;font-family:'Instrument Serif',serif;font-weight:400;font-size:1.6rem;color:#F3E8D3}
-  .gc-cart-x{width:40px;height:40px;border-radius:999px;border:1px solid rgba(243,232,211,0.2);background:none;color:#F3E8D3;font-size:22px;line-height:1;cursor:pointer}
-  .gc-cart-ship{padding:12px 20px 14px;border-bottom:1px solid rgba(243,232,211,0.08);font-size:13.5px;color:#E7D6C4}
-  .gc-cart-bar{height:6px;border-radius:999px;background:rgba(243,232,211,0.1);margin-top:9px;overflow:hidden}
+  .gc-cart-head{display:flex;align-items:center;justify-content:space-between;padding:18px 20px 14px;border-bottom:1px solid rgba(var(--gc-ink-rgb),0.1)}
+  .gc-cart-head h2{margin:0;font-family:'Instrument Serif',serif;font-weight:400;font-size:1.6rem;color:var(--gc-fg)}
+  .gc-cart-x{width:40px;height:40px;border-radius:999px;border:1px solid rgba(var(--gc-ink-rgb),0.2);background:none;color:var(--gc-fg);font-size:22px;line-height:1;cursor:pointer}
+  .gc-cart-ship{padding:12px 20px 14px;border-bottom:1px solid rgba(var(--gc-ink-rgb),0.08);font-size:13.5px;color:var(--gc-fg2)}
+  .gc-cart-bar{height:6px;border-radius:999px;background:rgba(var(--gc-ink-rgb),0.1);margin-top:9px;overflow:hidden}
   .gc-cart-bar i{display:block;height:100%;width:0;border-radius:999px;background:linear-gradient(90deg,#F2A93C,#FF6F61);transition:width .45s cubic-bezier(.2,.8,.2,1)}
   .gc-cart-body{flex:1 1 auto;overflow-y:auto;padding:6px 20px 16px;overscroll-behavior:contain}
-  .gc-cart-row{position:relative;overflow:hidden;border-bottom:1px solid rgba(243,232,211,0.08)}
+  .gc-cart-row{position:relative;overflow:hidden;border-bottom:1px solid rgba(var(--gc-ink-rgb),0.08)}
   .gc-cart-row[hidden]{display:none}
-  .gc-cart-slide{display:flex;gap:14px;align-items:center;padding:14px 0;background:#1A100A;touch-action:pan-y;position:relative}
+  .gc-cart-slide{display:flex;gap:14px;align-items:center;padding:14px 0;background:var(--gc-bg2);touch-action:pan-y;position:relative}
   .gc-cart-slide.is-back{transition:transform .25s cubic-bezier(.2,.8,.2,1)}
   .gc-cart-slide.is-away{transition:transform .22s ease-in;transform:translateX(-110%)}
   /* Revealed behind the row as it's dragged left. */
@@ -52,101 +52,101 @@
   .gc-cart-row.is-swiping .gc-cart-swipe{opacity:1}
   .gc-cart-row img{width:48px;height:auto;border-radius:6px 6px 8px 8px;display:block}
   .gc-cart-row .gc-cart-name{flex:1 1 auto;min-width:0}
-  .gc-cart-name a{display:block;font-family:'Instrument Serif',serif;font-size:1.18rem;color:#F3E8D3;text-decoration:none;line-height:1.15}
-  .gc-cart-name span{display:block;font-family:'DM Mono',monospace;font-size:11.5px;color:#AB9280;margin-top:4px}
-  .gc-cart-rm{background:none;border:0;padding:4px 0 0;color:#AB9280;font-size:12px;text-decoration:underline;cursor:pointer}
-  .gc-cart-empty{padding:26px 0 8px;text-align:center;color:#C7B29E}
+  .gc-cart-name a{display:block;font-family:'Instrument Serif',serif;font-size:1.18rem;color:var(--gc-fg);text-decoration:none;line-height:1.15}
+  .gc-cart-name span{display:block;font-family:'DM Mono',monospace;font-size:11.5px;color:var(--gc-muted);margin-top:4px}
+  .gc-cart-rm{background:none;border:0;padding:4px 0 0;color:var(--gc-muted);font-size:12px;text-decoration:underline;cursor:pointer}
+  .gc-cart-empty{padding:26px 0 8px;text-align:center;color:var(--gc-fg4)}
   .gc-cart-empty[hidden]{display:none}
   .gc-cart-empty p{margin:0 0 18px}
   .gc-cart-quick{display:grid;grid-template-columns:1fr 1fr;gap:12px}
   .gc-cart-quick button{display:flex;flex-direction:column;align-items:center;gap:10px;padding:14px 10px;border-radius:16px;
-    border:1px solid rgba(242,169,60,0.2);background:rgba(243,232,211,0.03);color:#F3E8D3;cursor:pointer;font:600 13.5px 'Hanken Grotesk',sans-serif}
+    border:1px solid rgba(var(--gc-gold-rgb),0.2);background:rgba(var(--gc-ink-rgb),0.03);color:var(--gc-fg);cursor:pointer;font:600 13.5px 'Hanken Grotesk',sans-serif}
   .gc-cart-quick img{width:56px;height:auto;border-radius:6px}
-  .gc-cart-up{margin:18px 0 0;padding:14px;border-radius:16px;background:rgba(242,169,60,0.06);border:1px dashed rgba(242,169,60,0.3)}
+  .gc-cart-up{margin:18px 0 0;padding:14px;border-radius:16px;background:rgba(var(--gc-gold-rgb),0.06);border:1px dashed rgba(var(--gc-gold-rgb),0.3)}
   .gc-cart-up[hidden],.gc-cart-up-item[hidden]{display:none}
-  .gc-cart-up h3{margin:0 0 10px;font-family:'DM Mono',monospace;font-weight:400;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#F2A93C}
+  .gc-cart-up h3{margin:0 0 10px;font-family:'DM Mono',monospace;font-weight:400;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--gc-gold-t)}
   .gc-cart-up-item{display:flex;gap:12px;align-items:center}
-  .gc-cart-up-item + .gc-cart-up-item{margin-top:12px;padding-top:12px;border-top:1px solid rgba(243,232,211,0.08)}
+  .gc-cart-up-item + .gc-cart-up-item{margin-top:12px;padding-top:12px;border-top:1px solid rgba(var(--gc-ink-rgb),0.08)}
   .gc-cart-up-item img{width:40px;height:auto;border-radius:5px 5px 7px 7px;display:block}
   .gc-cart-up-item div{flex:1 1 auto;min-width:0}
-  .gc-cart-up-item b{display:block;font-family:'Instrument Serif',serif;font-weight:400;font-size:1.08rem;color:#F3E8D3;line-height:1.15}
-  .gc-cart-up-item small{display:block;font-size:12.5px;line-height:1.35;color:#AB9280;margin-top:2px}
-  .gc-cart-up-item button{flex:0 0 auto;border:1px solid rgba(242,169,60,0.6);background:transparent;color:#F2A93C;cursor:pointer;
+  .gc-cart-up-item b{display:block;font-family:'Instrument Serif',serif;font-weight:400;font-size:1.08rem;color:var(--gc-fg);line-height:1.15}
+  .gc-cart-up-item small{display:block;font-size:12.5px;line-height:1.35;color:var(--gc-muted);margin-top:2px}
+  .gc-cart-up-item button{flex:0 0 auto;border:1px solid rgba(var(--gc-gold-rgb),0.6);background:transparent;color:var(--gc-gold-t);cursor:pointer;
     font:700 13px 'Hanken Grotesk',sans-serif;padding:9px 14px;border-radius:999px;white-space:nowrap}
   .gc-cart-zones{border:0;margin:18px 0 0;padding:0;min-width:0}
   .gc-cart-zones[hidden]{display:none}
-  .gc-cart-zones legend{padding:0;margin:0 0 10px;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#F2A93C}
-  .gc-cart-foot{padding:12px 20px 14px;border-top:1px solid rgba(243,232,211,0.12);background:#170E08}
+  .gc-cart-zones legend{padding:0;margin:0 0 10px;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--gc-gold-t)}
+  .gc-cart-foot{padding:12px 20px 14px;border-top:1px solid rgba(var(--gc-ink-rgb),0.12);background:var(--gc-bg2)}
   .gc-cart-foot[hidden]{display:none}
 
   /* Shared bits: steppers, zone cards, totals, checkout button */
   .gc-step{display:flex;align-items:center;gap:6px;flex:0 0 auto}
-  .gc-step button{width:34px;height:34px;border-radius:999px;border:1px solid rgba(243,232,211,0.22);background:transparent;
-    color:#F3E8D3;font-size:18px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}
-  .gc-step button:disabled{opacity:0.3;cursor:default;border-color:rgba(243,232,211,0.22)!important;color:#F3E8D3!important}
-  .gc-step output{min-width:22px;text-align:center;font-family:'DM Mono',monospace;font-size:15px;color:#F3E8D3}
-  .gc-zone{display:flex;align-items:center;gap:12px;padding:12px 14px;margin:0 0 9px;border:1px solid rgba(243,232,211,0.14);
-    border-radius:14px;cursor:pointer;background:rgba(243,232,211,0.03)}
-  .gc-zone input{accent-color:#F2A93C;width:18px;height:18px;margin:0;flex:0 0 auto}
+  .gc-step button{width:34px;height:34px;border-radius:999px;border:1px solid rgba(var(--gc-ink-rgb),0.22);background:transparent;
+    color:var(--gc-fg);font-size:18px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}
+  .gc-step button:disabled{opacity:0.3;cursor:default;border-color:rgba(var(--gc-ink-rgb),0.22)!important;color:var(--gc-fg)!important}
+  .gc-step output{min-width:22px;text-align:center;font-family:'DM Mono',monospace;font-size:15px;color:var(--gc-fg)}
+  .gc-zone{display:flex;align-items:center;gap:12px;padding:12px 14px;margin:0 0 9px;border:1px solid rgba(var(--gc-ink-rgb),0.14);
+    border-radius:14px;cursor:pointer;background:rgba(var(--gc-ink-rgb),0.03)}
+  .gc-zone input{accent-color:var(--gc-gold-t);width:18px;height:18px;margin:0;flex:0 0 auto}
   .gc-zone > span{flex:1 1 auto;min-width:0}
-  .gc-zone b{display:block;color:#F3E8D3;font-weight:600;font-size:14.5px}
-  .gc-zone small{display:block;color:#AB9280;font-size:12.5px;margin-top:2px}
-  .gc-zone em{font-style:normal;font-family:'DM Mono',monospace;font-size:13px;color:#F2A93C;white-space:nowrap;text-align:right}
-  .gc-zone em span{display:block;font-size:10.5px;color:#AB9280;margin-top:3px}
-  .gc-zone.is-on{background:rgba(242,169,60,0.07)}
-  .gc-sum{font-size:14.5px;color:#C7B29E;margin:0 0 14px}
+  .gc-zone b{display:block;color:var(--gc-fg);font-weight:600;font-size:14.5px}
+  .gc-zone small{display:block;color:var(--gc-muted);font-size:12.5px;margin-top:2px}
+  .gc-zone em{font-style:normal;font-family:'DM Mono',monospace;font-size:13px;color:var(--gc-gold-t);white-space:nowrap;text-align:right}
+  .gc-zone em span{display:block;font-size:10.5px;color:var(--gc-muted);margin-top:3px}
+  .gc-zone.is-on{background:rgba(var(--gc-gold-rgb),0.07)}
+  .gc-sum{font-size:14.5px;color:var(--gc-fg4);margin:0 0 14px}
   .gc-cart-foot .gc-sum{font-size:13.5px;margin:0 0 10px}
   .gc-sum summary{display:flex;justify-content:space-between;align-items:baseline;gap:12px;list-style:none;cursor:pointer;
-    font-size:17px;font-weight:600;color:#F3E8D3;padding:2px 0}
+    font-size:17px;font-weight:600;color:var(--gc-fg);padding:2px 0}
   .gc-sum summary::-webkit-details-marker{display:none}
   .gc-sum summary span:last-child{font-size:19px}
-  .gc-sum summary i{display:inline-block;width:7px;height:7px;margin:0 0 3px 6px;border-right:1.5px solid #AB9280;border-bottom:1.5px solid #AB9280;
+  .gc-sum summary i{display:inline-block;width:7px;height:7px;margin:0 0 3px 6px;border-right:1.5px solid var(--gc-muted);border-bottom:1.5px solid var(--gc-muted);
     transform:rotate(45deg);transition:transform .2s}
   .gc-sum[open] summary i{transform:rotate(-135deg);margin-bottom:-1px}
-  .gc-sum summary:focus-visible{outline:2px solid #F2A93C;outline-offset:3px;border-radius:6px}
+  .gc-sum summary:focus-visible{outline:2px solid var(--gc-gold-t);outline-offset:3px;border-radius:6px}
   .gc-sum[open] summary{margin-bottom:6px}
   .gc-sum div{display:flex;justify-content:space-between;gap:12px;padding:2px 0}
   .gc-sum div[hidden]{display:none}
-  .gc-sum span:last-child{font-family:'DM Mono',monospace;color:#F3E8D3}
-  .gc-sum .gc-sum-save span{color:#FF8A78!important}
-  .gc-sum-note{margin:0 0 4px;font-size:12px;color:#AB9280}
+  .gc-sum span:last-child{font-family:'DM Mono',monospace;color:var(--gc-fg)}
+  .gc-sum .gc-sum-save span{color:var(--gc-coral-t)!important}
+  .gc-sum-note{margin:0 0 4px;font-size:12px;color:var(--gc-muted)}
   .gc-sum-note[hidden]{display:none}
-  .gc-sum .gc-sum-total{margin-top:6px;font-size:17px;color:#F3E8D3;font-weight:600}
+  .gc-sum .gc-sum-total{margin-top:6px;font-size:17px;color:var(--gc-fg);font-weight:600}
   .gc-go{width:100%;border:0;cursor:pointer;background:#F2A93C;color:#2B1B12;font:700 16px 'Hanken Grotesk',sans-serif;padding:15px 24px;border-radius:999px}
   .gc-go:disabled{background:#F2A93C!important;opacity:0.42;cursor:not-allowed;transform:none!important}
-  .gc-hint{min-height:0;margin:0;text-align:center;font-size:13.5px;color:#E7D6C4}
+  .gc-hint{min-height:0;margin:0;text-align:center;font-size:13.5px;color:var(--gc-fg2)}
   .gc-hint:not(:empty){margin:8px 0 0}
-  .gc-hint a,.gc-cart a{color:#F2A93C}
-  .gc-safe{display:flex;gap:7px;align-items:center;justify-content:center;margin:9px 0 0;font-size:11.5px;line-height:1.4;color:#AB9280;text-align:left}
+  .gc-hint a,.gc-cart a{color:var(--gc-gold-t)}
+  .gc-safe{display:flex;gap:7px;align-items:center;justify-content:center;margin:9px 0 0;font-size:11.5px;line-height:1.4;color:var(--gc-muted);text-align:left}
   .gc-safe svg{flex:0 0 auto}
 
   /* The welcome offer: one small line that opens into an email box */
   .gc-deal{margin:0 0 12px}
-  .gc-deal-open{display:block;width:100%;border:1px dashed rgba(242,169,60,0.45);background:rgba(242,169,60,0.06);color:#F3E8D3;
+  .gc-deal-open{display:block;width:100%;border:1px dashed rgba(var(--gc-gold-rgb),0.45);background:rgba(var(--gc-gold-rgb),0.06);color:var(--gc-fg);
     border-radius:12px;padding:10px 13px;font:600 13.5px 'Hanken Grotesk',sans-serif;cursor:pointer;text-align:left}
-  .gc-deal-open b{color:#F2A93C;font-weight:700}
+  .gc-deal-open b{color:var(--gc-gold-t);font-weight:700}
   .gc-deal-open[hidden],.gc-deal-form[hidden],.gc-deal-code[hidden]{display:none}
-  .gc-deal-form p{margin:0 0 8px;font-size:12.5px;color:#AB9280}
-  .gc-deal-code{margin:0;font-size:13.5px;line-height:1.5;color:#D6C7B4}
+  .gc-deal-form p{margin:0 0 8px;font-size:12.5px;color:var(--gc-muted)}
+  .gc-deal-code{margin:0;font-size:13.5px;line-height:1.5;color:var(--gc-fg3)}
 
   /* Product cards */
   .gc-pcard{display:flex;flex-direction:column;align-items:center;text-align:center;padding:26px 24px 26px;
-    background:rgba(28,17,10,0.8);border:1px solid rgba(242,169,60,0.16);border-radius:22px}
+    background:rgba(var(--gc-surf-rgb),0.8);border:1px solid rgba(var(--gc-gold-rgb),0.16);border-radius:22px}
   .gc-pcard > a{display:block;width:min(52%,170px)}
   .gc-pcard h3{font-family:'Instrument Serif',serif;font-weight:400;font-size:1.55rem;margin:20px 0 0;line-height:1.1}
-  .gc-pcard h3 a{color:#F3E8D3;text-decoration:none}
-  .gc-pcard-notes{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:#F2A93C;margin-top:7px}
-  .gc-pcard p{color:#C7B29E;line-height:1.55;margin:12px 0 0;max-width:34ch;font-size:0.97rem}
+  .gc-pcard h3 a{color:var(--gc-fg);text-decoration:none}
+  .gc-pcard-notes{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--gc-gold-t);margin-top:7px}
+  .gc-pcard p{color:var(--gc-fg4);line-height:1.55;margin:12px 0 0;max-width:34ch;font-size:0.97rem}
   .gc-pcard-buy{display:flex;align-items:center;gap:14px;margin-top:20px;flex-wrap:wrap;justify-content:center}
-  .gc-price{font-family:'DM Mono',monospace;font-size:17px;color:#F3E8D3}
+  .gc-price{font-family:'DM Mono',monospace;font-size:17px;color:var(--gc-fg)}
   .gc-add{border:0;cursor:pointer;background:#F2A93C;color:#2B1B12;font:700 15px 'Hanken Grotesk',sans-serif;padding:12px 22px;border-radius:999px}
-  .gc-more{margin-top:14px;font-size:14px;color:#F2A93C;text-decoration:none;border-bottom:1px solid rgba(242,169,60,0.45)}
+  .gc-more{margin-top:14px;font-size:14px;color:var(--gc-gold-t);text-decoration:none;border-bottom:1px solid rgba(var(--gc-gold-rgb),0.45)}
 
   /* Trust strip */
   .gc-trust{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px}
-  .gc-trust li{display:flex;gap:11px;align-items:center;padding:13px 15px;border-radius:14px;background:rgba(243,232,211,0.04);
-    border:1px solid rgba(243,232,211,0.08);font-size:13.5px;line-height:1.35;color:#D6C7B4}
-  .gc-trust svg{flex:0 0 auto;color:#F2A93C}
+  .gc-trust li{display:flex;gap:11px;align-items:center;padding:13px 15px;border-radius:14px;background:rgba(var(--gc-ink-rgb),0.04);
+    border:1px solid rgba(var(--gc-ink-rgb),0.08);font-size:13.5px;line-height:1.35;color:var(--gc-fg3)}
+  .gc-trust svg{flex:0 0 auto;color:var(--gc-gold-t)}
   .gc-trust a{color:inherit}
 
   @media (max-width:560px){
@@ -180,7 +180,7 @@
           <button type="button" data-gc-add="{{ p.key }}">
             {% include img.html base=p.img ext="jpg" widths="250" sizes="56px" w="544" h="952" alt="" %}
             <span>{{ p.name }}</span>
-            <span style="font-family:'DM Mono',monospace;font-weight:400;color:#F2A93C">+ ${% include money.html v=shop.price %}</span>
+            <span style="font-family:'DM Mono',monospace;font-weight:400;color:var(--gc-gold-t)">+ ${% include money.html v=shop.price %}</span>
           </button>
           {%- endfor %}
         </div>
@@ -204,7 +204,7 @@
         </div>
       </div>
       {%- endfor %}
-      <p data-gc-limit hidden style="margin:10px 0 0;font-size:13px;color:#AB9280">Up to {{ shop_max }} of each blend online. Want more? {% include shop-contact.html %}.</p>
+      <p data-gc-limit hidden style="margin:10px 0 0;font-size:13px;color:var(--gc-muted)">Up to {{ shop_max }} of each blend online. Want more? {% include shop-contact.html %}.</p>
 
       {%- comment -%}
         "Add to your order": every product from _data/premixes.yml that isn't in
@@ -234,7 +234,7 @@
           <em>{% if zfee == 0 %}Free{% else %}${% include money.html v=zfee %}{% if z[1].free_from %}<span>free on {{ z[1].free_from }}+</span>{% endif %}{% endif %}</em>
         </label>
         {%- endfor %}
-        <p style="margin:2px 2px 0;font-size:12.5px;color:#AB9280">No pickups — every order comes to you. <a href="{{ '/shipping/' | relative_url }}">How delivery works</a></p>
+        <p style="margin:2px 2px 0;font-size:12.5px;color:var(--gc-muted)">No pickups — every order comes to you. <a href="{{ '/shipping/' | relative_url }}">How delivery works</a></p>
       </fieldset>
     </div>
 
@@ -267,7 +267,7 @@
       <p class="gc-hint" data-gc-hint aria-live="polite"></p>
       <p class="gc-safe">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true" focusable="false"><rect x="4" y="10.5" width="16" height="10.5" rx="2.5"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg>
-        <span>Secure checkout with Square.<span data-gc-tip> Tap your address when it pops up.</span></span>
+        <span>Secure Square checkout.<span data-gc-tip> Tap your address when it pops up.</span></span>
       </p>
     </div>
   </div>

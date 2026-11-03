@@ -1,18 +1,48 @@
 <style>
+  /* ================= Daylight palette =================
+     Every colour on the site is one of these. The page is the daylight set;
+     anything marked .gc-dark (the photo sections, and the header while it
+     floats over the hero photo) puts the original dark set back for its
+     children, so text over a photo stays readable. To retune the site, change
+     the values here. Gold and coral stay as they are for buttons; the -t
+     versions are the same hues, darkened, for text and thin lines on cream. */
+  :root{
+    color-scheme:light;
+    --gc-bg:#FDF8EE;--gc-bg-rgb:253,248,238;--gc-bg2:#F7EEDC;--gc-card:#FFFCF5;--gc-surf-rgb:255,252,245;
+    --gc-fg:#2B1B12;--gc-fg2:#4A3223;--gc-fg3:#5C4434;--gc-fg4:#6E5646;--gc-muted:#765F4F;--gc-ink-rgb:43,27,18;
+    --gc-gold-t:#955209;--gc-gold-h:#7C4506;--gc-gold-d:#855010;--gc-gold-rgb:180,106,16;
+    --gc-coral-t:#C23B26;--gc-coral-rgb:214,72,52;--gc-shadow-rgb:59,31,18;
+    --gc-logo:#4A2A1F;
+  }
+  .gc-dark{
+    color-scheme:dark;
+    --gc-bg:#100A05;--gc-bg-rgb:16,10,5;--gc-bg2:#1A100A;--gc-card:#2E1D13;--gc-surf-rgb:28,17,10;
+    --gc-fg:#F3E8D3;--gc-fg2:#E7D6C4;--gc-fg3:#D6C7B4;--gc-fg4:#C7B29E;--gc-muted:#AB9280;--gc-ink-rgb:243,232,211;
+    --gc-gold-t:#F2A93C;--gc-gold-h:#FFBA55;--gc-gold-d:#C58A2E;--gc-gold-rgb:242,169,60;
+    --gc-coral-t:#FF7A66;--gc-coral-rgb:255,122,102;--gc-shadow-rgb:0,0,0;
+    --gc-logo:#F3E8D3;
+    color:var(--gc-fg);
+  }
+  /* The header's logo: the cream lockup on dark, the brown one on daylight. */
+  gods-chai-logo .gc-logo-d{display:none!important}
+  .gc-dark gods-chai-logo .gc-logo-d{display:block!important}
+  .gc-dark gods-chai-logo .gc-logo-l{display:none!important}
+</style>
+<style>
   *{box-sizing:border-box}
   html,body{margin:0;padding:0}
   html{overflow-x:clip;scroll-behavior:smooth}
-  body{overflow-x:clip;background:#100A05}
-  ::selection{background:#F2A93C;color:#100A05}
-  a{color:#F2A93C}
-  a:hover{color:#FFBA55}
+  body{overflow-x:clip;background:var(--gc-bg)}
+  ::selection{background:#F2A93C;color:#2B1B12}
+  a{color:var(--gc-gold-t)}
+  a:hover{color:var(--gc-gold-h)}
   @keyframes gc-marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
   @keyframes gc-kb{from{transform:scale(1.03)}to{transform:scale(1.13)}}
   @keyframes gc-cuedot{0%{transform:translateY(0);opacity:0.2}50%{transform:translateY(8px);opacity:1}100%{transform:translateY(0);opacity:0.2}}
   /* Skip link — visible only when focused. */
   .gc-skip{position:absolute;left:-9999px;top:0;z-index:200;background:#F2A93C;color:#2B1B12;font-family:'Hanken Grotesk',sans-serif;font-weight:700;font-size:14px;padding:12px 18px;border-radius:0 0 10px 0;text-decoration:none}
   .gc-skip:focus{left:0}
-  :focus-visible{outline:2px solid #F2A93C;outline-offset:3px}
+  :focus-visible{outline:2px solid var(--gc-gold-t);outline-offset:3px}
   /* Animated logo in the header. Until the script registers the element the
      static logo inside it is what shows, and it keeps showing if the script
      never arrives; once :defined matches, the component's own layers take over. */
@@ -76,13 +106,13 @@
     #spice-grid{grid-template-columns:repeat(3,1fr)!important}
   }
   /* Long-form article copy (brew guide, catering). Matches the site voice/palette. */
-  .gc-prose{color:#D6C7B4;font-size:1.05rem;line-height:1.65}
+  .gc-prose{color:var(--gc-fg3);font-size:1.05rem;line-height:1.65}
   .gc-prose p{margin:0 0 18px}
-  .gc-prose h2{font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(1.6rem,3.4vw,2.3rem);letter-spacing:0;color:#F3E8D3;margin:38px 0 12px}
-  .gc-prose h3{font-family:'Instrument Serif',serif;font-weight:400;font-size:1.28rem;color:#F3E8D3;margin:26px 0 8px}
+  .gc-prose h2{font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(1.6rem,3.4vw,2.3rem);letter-spacing:0;color:var(--gc-fg);margin:38px 0 12px}
+  .gc-prose h3{font-family:'Instrument Serif',serif;font-weight:400;font-size:1.28rem;color:var(--gc-fg);margin:26px 0 8px}
   .gc-prose ul,.gc-prose ol{margin:0 0 18px;padding-left:22px}
   .gc-prose li{margin:0 0 9px}
-  .gc-prose strong{color:#F3E8D3;font-weight:600}
+  .gc-prose strong{color:var(--gc-fg);font-weight:600}
 
   /* ================= Interactive states =================
      Every hover on this site used to be a style-hover="..." attribute — a
@@ -102,16 +132,16 @@
                box-shadow .26s ease,transform .16s cubic-bezier(.2,.7,.2,1)}
   .gc-pill:hover,.gc-pill:focus-visible{background:#FFBA55!important}
   .gc-pill-coral:hover,.gc-pill-coral:focus-visible{background:#FF9C8A!important}
-  .gc-pill-ghost:hover,.gc-pill-ghost:focus-visible{border-color:#F2A93C!important;background:rgba(242,169,60,0.12)!important}
-  .gc-ico:hover,.gc-ico:focus-visible{border-color:#F2A93C!important;color:#F2A93C!important}
-  .gc-iconbtn:hover,.gc-iconbtn:focus-visible{background:rgba(18,11,6,0.8)!important}
+  .gc-pill-ghost:hover,.gc-pill-ghost:focus-visible{border-color:var(--gc-gold-t)!important;background:rgba(var(--gc-gold-rgb),0.12)!important}
+  .gc-ico:hover,.gc-ico:focus-visible{border-color:var(--gc-gold-t)!important;color:var(--gc-gold-t)!important}
+  .gc-iconbtn:hover,.gc-iconbtn:focus-visible{background:rgba(var(--gc-bg-rgb),0.8)!important}
   .gc-pill:active,.gc-pill-coral:active,.gc-pill-ghost:active,
   .gc-ico:active,.gc-iconbtn:active{transform:scale(0.955)}
 
   /* Cards. --gc-bh lets a card name its own hover edge (the coral brew step)
      without needing a class of its own. */
   .gc-card{transition:border-color .32s ease}
-  .gc-card:hover,.gc-card:focus-within{border-color:var(--gc-bh,rgba(242,169,60,0.45))!important}
+  .gc-card:hover,.gc-card:focus-within{border-color:var(--gc-bh,rgba(var(--gc-gold-rgb),0.45))!important}
   .gc-lift{transition:transform .35s cubic-bezier(.2,.7,.2,1),border-color .35s ease,box-shadow .35s ease}
   .gc-lift:hover,.gc-lift:focus-within{transform:translateY(-4px)}
   .gc-zoom{transition:transform .45s cubic-bezier(.2,.7,.2,1)}
@@ -129,11 +159,11 @@
   /* Email fields. Their only feedback was the focus ring the browser draws
      around them; the field itself never acknowledged the cursor. */
   input[type="email"]{transition:border-color .22s ease,background-color .22s ease}
-  input[type="email"]:hover{border-color:rgba(243,232,211,0.34)!important}
-  input[type="email"]:focus{border-color:rgba(242,169,60,0.55)!important;background:rgba(243,232,211,0.09)!important}
+  input[type="email"]:hover{border-color:rgba(var(--gc-ink-rgb),0.34)!important}
+  input[type="email"]:focus{border-color:rgba(var(--gc-gold-rgb),0.55)!important;background:rgba(var(--gc-ink-rgb),0.09)!important}
   /* Both email fields carry outline:none inline, which also deleted the focus
      ring for anyone moving through the form on a keyboard. Put it back. */
-  input[type="email"]:focus-visible{outline:2px solid #F2A93C!important;outline-offset:2px}
+  input[type="email"]:focus-visible{outline:2px solid var(--gc-gold-t)!important;outline-offset:2px}
 
   /* The ticker runs on a loop; stop it while someone is reading it. */
   /* !important: the track sets animation as an inline shorthand, which carries
@@ -142,13 +172,13 @@
   [data-gc-marquee]:focus-within [data-gc-marquee-track]{animation-play-state:paused!important}
 
   /* A chosen card lights up (the delivery choice in the cart and on /checkout/). */
-  .gc-card.is-on{border-color:var(--gc-bh,rgba(242,169,60,0.5))!important;
-    box-shadow:0 0 0 1px var(--gc-bh,rgba(242,169,60,0.5)),0 18px 40px -24px var(--gc-bh,rgba(242,169,60,0.5))}
+  .gc-card.is-on{border-color:var(--gc-bh,rgba(var(--gc-gold-rgb),0.5))!important;
+    box-shadow:0 0 0 1px var(--gc-bh,rgba(var(--gc-gold-rgb),0.5)),0 18px 40px -24px var(--gc-bh,rgba(var(--gc-gold-rgb),0.5))}
   /* The welcome code, shown after a signup and in the cart: tap to copy. */
-  .gc-code{display:inline-block;margin:3px 2px;padding:3px 10px;border:1.5px dashed #F2A93C;border-radius:8px;
-    background:rgba(242,169,60,0.1);color:#F3E8D3;font:500 14px 'DM Mono',monospace;letter-spacing:0.08em;cursor:pointer;
+  .gc-code{display:inline-block;margin:3px 2px;padding:3px 10px;border:1.5px dashed var(--gc-gold-t);border-radius:8px;
+    background:rgba(var(--gc-gold-rgb),0.1);color:var(--gc-fg);font:500 14px 'DM Mono',monospace;letter-spacing:0.08em;cursor:pointer;
     vertical-align:baseline;transition:background-color .2s ease}
-  .gc-code:hover,.gc-code:focus-visible{background:rgba(242,169,60,0.22)}
+  .gc-code:hover,.gc-code:focus-visible{background:rgba(var(--gc-gold-rgb),0.22)}
   /* The signup box's light: idle, sending, done. */
   .gc-status{display:block;width:124px;height:124px;margin:-16px auto 6px}
   .gc-status[hidden]{display:none}

@@ -117,10 +117,11 @@
 
   /* ---------- what each state looks like ---------- */
   var PRESETS = {
-    idle:    { shape: 'sphere', color: '#F2A93C', spin: 0.25, wobble: 0.02 },
-    sending: { shape: 'knot',   color: '#FFBA55', spin: 1.5 },
-    done:    { shape: 'check',  color: '#F2A93C', flat: true, wobble: 0.005 },
-    error:   { shape: 'sphere', color: '#FF7A66', spin: 0.25, wobble: 0.03 }
+    // Deeper than the gold of the buttons: these are dots on cream, not light on dark.
+    idle:    { shape: 'sphere', color: '#D9830B', spin: 0.25, wobble: 0.02 },
+    sending: { shape: 'knot',   color: '#C26E00', spin: 1.5 },
+    done:    { shape: 'check',  color: '#D9830B', flat: true, wobble: 0.005 },
+    error:   { shape: 'sphere', color: '#D6452F', spin: 0.25, wobble: 0.03 }
   };
   var DEF = { spin: 0.35, wobble: 0.012, flat: false, scatter: 0.55 };
   function preset(name) {

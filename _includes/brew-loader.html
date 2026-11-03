@@ -7,13 +7,13 @@
 {%- endcomment -%}
 <style>
   .gc-brew{position:fixed;inset:0;z-index:10002;display:flex;align-items:center;justify-content:center;padding:24px;
-    background:radial-gradient(closest-side at 50% 42%,rgba(242,169,60,0.13),transparent 70%),rgba(16,10,5,0.93);
+    background:radial-gradient(closest-side at 50% 42%,rgba(var(--gc-gold-rgb),0.13),transparent 70%),rgba(var(--gc-bg-rgb),0.93);
     -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);animation:gc-brew-in .3s ease both}
   .gc-brew[hidden]{display:none}
   @keyframes gc-brew-in{from{opacity:0}to{opacity:1}}
   .gc-brew-box{text-align:center;max-width:420px;outline:none}
   .gc-brew svg{display:block;width:150px;height:auto;margin:0 auto 22px;overflow:visible}
-  .gc-brew-steam path{fill:none;stroke:#F3E8D3;stroke-width:3.2;stroke-linecap:round;opacity:0;
+  .gc-brew-steam path{fill:none;stroke:var(--gc-fg);stroke-width:3.2;stroke-linecap:round;opacity:0;
     animation:gc-steam 2.6s ease-in-out infinite}
   .gc-brew-steam path:nth-child(2){animation-delay:.6s}
   .gc-brew-steam path:nth-child(3){animation-delay:1.2s}
@@ -29,11 +29,11 @@
   .gc-brew.is-done .gc-brew-tick{opacity:1;transform:none}
   .gc-brew.is-done .gc-brew-tick path{stroke-dashoffset:0}
   .gc-brew-line{margin:0;min-height:1.15em;font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(1.65rem,5vw,2.1rem);
-    line-height:1.12;color:#F3E8D3}
+    line-height:1.12;color:var(--gc-fg)}
   .gc-brew-line.is-in{animation:gc-line .45s ease both}
   @keyframes gc-line{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
-  .gc-brew.is-done .gc-brew-line{color:#FF6F61;font-style:italic}
-  .gc-brew-note{margin:14px 0 0;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#AB9280}
+  .gc-brew.is-done .gc-brew-line{color:var(--gc-coral-t);font-style:italic}
+  .gc-brew-note{margin:14px 0 0;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--gc-muted)}
   @media (prefers-reduced-motion:reduce){
     .gc-brew{animation:none}
     .gc-brew-steam path,.gc-brew-level,.gc-brew-wave,.gc-brew-line.is-in{animation:none}
@@ -62,7 +62,7 @@
           </g>
         </g>
       </g>
-      <path d="M38 57h84l-10.2 92.4q-1 9.6-10.4 9.6H60.6q-9.4 0-10.4-9.6z" fill="rgba(243,232,211,0.05)" stroke="#F3E8D3" stroke-width="3.5" stroke-linejoin="round"/>
+      <path d="M38 57h84l-10.2 92.4q-1 9.6-10.4 9.6H60.6q-9.4 0-10.4-9.6z" style="fill:rgba(var(--gc-ink-rgb),0.05);stroke:var(--gc-fg)" stroke-width="3.5" stroke-linejoin="round"/>
       <g class="gc-brew-tick">
         <circle cx="122" cy="140" r="17" fill="#F2A93C"/>
         <path d="M114 140.5l5.5 5.5 10.5-11" fill="none" stroke="#2B1B12" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/>

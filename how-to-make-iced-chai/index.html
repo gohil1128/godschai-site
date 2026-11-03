@@ -7,9 +7,9 @@ og_image: "uploads/opt/pour-cup-640.jpg"
 ---
 
 <section aria-labelledby="page-h1" style="max-width:1240px;margin:0 auto;padding:clamp(110px,14vh,170px) clamp(18px,4vw,40px) clamp(20px,3vw,30px)">
-  <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.2em;text-transform:uppercase;color:#F2A93C;margin-bottom:14px">Cold, done right</div>
-  <h1 id="page-h1" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(2.3rem,6vw,4.2rem);line-height:0.98;letter-spacing:0;margin:0;max-width:22ch">How to make iced chai that <span style="color:#FF6F61;font-style:italic">isn't watery</span></h1>
-  <p style="font-size:clamp(1.05rem,1.5vw,1.25rem);line-height:1.6;color:#E7D6C4;max-width:56ch;margin:22px 0 0">Almost every weak iced chai has the same cause, and it isn't the recipe. It's what happens between the pot and the glass.</p>
+  <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gc-gold-t);margin-bottom:14px">Cold, done right</div>
+  <h1 id="page-h1" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(2.3rem,6vw,4.2rem);line-height:0.98;letter-spacing:0;margin:0;max-width:22ch">How to make iced chai that <span style="color:var(--gc-coral-t);font-style:italic">isn't watery</span></h1>
+  <p style="font-size:clamp(1.05rem,1.5vw,1.25rem);line-height:1.6;color:var(--gc-fg2);max-width:56ch;margin:22px 0 0">Almost every weak iced chai has the same cause, and it isn't the recipe. It's what happens between the pot and the glass.</p>
 </section>
 
 <div data-gc-reveal>
@@ -22,21 +22,21 @@ og_image: "uploads/opt/pour-cup-640.jpg"
   </div>
 </section>
 
-<section aria-labelledby="steps-h2" style="background:rgba(29,18,11,0.6);border-top:1px solid rgba(243,232,211,0.08);border-bottom:1px solid rgba(243,232,211,0.08)">
+<section aria-labelledby="steps-h2" style="background:rgba(var(--gc-surf-rgb),0.6);border-top:1px solid rgba(var(--gc-ink-rgb),0.08);border-bottom:1px solid rgba(var(--gc-ink-rgb),0.08)">
   <div style="max-width:1240px;margin:0 auto;padding:clamp(46px,6vw,88px) clamp(18px,4vw,40px)">
-    <h2 id="steps-h2" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(2rem,4.6vw,3.3rem);line-height:1;letter-spacing:0;margin:0 0 clamp(28px,4vw,40px);color:#F3E8D3">Four steps, one cold cup</h2>
+    <h2 id="steps-h2" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(2rem,4.6vw,3.3rem);line-height:1;letter-spacing:0;margin:0 0 clamp(28px,4vw,40px);color:var(--gc-fg)">Four steps, one cold cup</h2>
     <div data-gc-stagger style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:clamp(14px,1.8vw,20px)">
       {% assign steps = site.data.iced.steps %}
       {% for s in steps %}
-      {% if s.accent %}{% assign bc = "rgba(255,122,102,0.3)" %}{% assign bh = "rgba(255,122,102,0.65)" %}{% assign nc = "#FF7A66" %}{% assign lc = "#FF7A66" %}
-      {% else %}{% assign bc = "rgba(242,169,60,0.16)" %}{% assign bh = "rgba(242,169,60,0.5)" %}{% assign nc = "#F2A93C" %}{% assign lc = "#C58A2E" %}{% endif %}
-      <div style="padding:26px 24px 28px;background:rgba(46,29,19,0.72);border:1px solid {{ bc }};border-radius:22px;--gc-bh:{{ bh }}" class="gc-card gc-lift">
-        <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding-bottom:16px;border-bottom:1px solid rgba(243,232,211,0.10)">
+      {% if s.accent %}{% assign bc = "rgba(var(--gc-coral-rgb),0.3)" %}{% assign bh = "rgba(var(--gc-coral-rgb),0.65)" %}{% assign nc = "var(--gc-coral-t)" %}{% assign lc = "var(--gc-coral-t)" %}
+      {% else %}{% assign bc = "rgba(var(--gc-gold-rgb),0.16)" %}{% assign bh = "rgba(var(--gc-gold-rgb),0.5)" %}{% assign nc = "var(--gc-gold-t)" %}{% assign lc = "var(--gc-gold-d)" %}{% endif %}
+      <div style="padding:26px 24px 28px;background:rgba(var(--gc-surf-rgb),0.72);border:1px solid {{ bc }};border-radius:22px;--gc-bh:{{ bh }}" class="gc-card gc-lift">
+        <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding-bottom:16px;border-bottom:1px solid rgba(var(--gc-ink-rgb),0.10)">
           <span style="font-family:'Instrument Serif',serif;font-size:44px;line-height:0.8;color:{{ nc }}">0{{ forloop.index }}</span>
           <span style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:{{ lc }}">{{ s.label }}</span>
         </div>
-        <h3 style="font-family:'Instrument Serif',serif;font-weight:400;font-size:1.32rem;margin:20px 0 0;color:#F3E8D3">{{ s.title }}</h3>
-        <p style="color:#C7B29E;line-height:1.55;margin:9px 0 0;font-size:0.95rem">{{ s.desc }}</p>
+        <h3 style="font-family:'Instrument Serif',serif;font-weight:400;font-size:1.32rem;margin:20px 0 0;color:var(--gc-fg)">{{ s.title }}</h3>
+        <p style="color:var(--gc-fg4);line-height:1.55;margin:9px 0 0;font-size:0.95rem">{{ s.desc }}</p>
       </div>
       {% endfor %}
     </div>
