@@ -4,22 +4,25 @@
 //   ownerEmail(o)    → the plain new-order alert for us
 //
 // `o` comes from orderSummary() below. Email HTML is old-fashioned on
-// purpose: tables, inline styles, web-safe font fallbacks and images hosted on
-// godschai.com, because that's what Gmail, Outlook and Apple Mail all render.
+// purpose: tables, inline styles and web-safe fonts, because that's what
+// Gmail, Outlook and Apple Mail all render. The customer email follows the
+// "Thank You Email" design; its numbers, names and addresses all come from
+// the order, never from the design's sample text.
 
 const SITE = 'https://godschai.com';
-const IMG = {
-  logo: SITE + '/uploads/opt/logo-cream-256.png',
-  'Original Masala': SITE + '/uploads/opt/pouch-masala-front-250.jpg',
-  'Rose & Cardamom': SITE + '/uploads/opt/pouch-rose-front-250.jpg',
-};
+const INSTAGRAM = 'https://www.instagram.com/godschai';
+const TIKTOK = 'https://www.tiktok.com/@godschaii';
+// hero: the line under the heading. label/next: the plain-text version.
+// Keep the wording in step with `zones` in _data/shop.yml.
 const ZONE_TEXT = {
   saskatoon: {
     label: 'Free delivery in Saskatoon',
+    hero: 'Your premixes are being packed by hand in Saskatoon, and we’ll drop them at your door, free — usually within 3 days of your order.',
     next: 'We’ll drop it at your door, free — usually within 3 days. If we need to reach you about the drop-off, we’ll use the email or phone number you gave at checkout.',
   },
   canada: {
     label: 'Canada Post, tracked',
+    hero: 'Your premixes are being packed by hand in Saskatoon. We’ll email your tracking number as soon as they’re in the post — we pack within 2 business days, then it’s usually 2–7 business days to reach you.',
     next: 'We pack it within 2 business days and send it by Canada Post Expedited. We’ll email your tracking number as soon as it’s in the post — usually 2–7 business days to reach you.',
   },
 };
@@ -62,81 +65,171 @@ export function orderSummary(order, payment) {
 
 export function customerEmail(o) {
   const z = ZONE_TEXT[o.zone] || ZONE_TEXT.canada;
-  const pouches = o.items.reduce((s, i) => s + i.qty, 0);
+  const pouches = o.items.reduce((n, i) => n + i.qty, 0);
   const subject = `Your God's Chai order is confirmed (#${o.receipt})`;
-  const serif = "'Instrument Serif',Georgia,'Times New Roman',serif";
-  const sans = "'Hanken Grotesk',-apple-system,'Segoe UI',Helvetica,Arial,sans-serif";
-  const mono = "'DM Mono',Menlo,Consolas,monospace";
-  const row = (l, r, strong) => `<tr><td style="padding:6px 0;font:${strong ? '700 17px' : '400 15px'} ${sans};color:${strong ? '#1D120B' : '#5A4535'}">${l}</td><td align="right" style="padding:6px 0;font:${strong ? '700 17px' : '400 15px'} ${sans};color:${strong ? '#1D120B' : '#5A4535'}">${r}</td></tr>`;
-  const items = o.items.map((i) => `
-          <tr>
-            <td width="64" style="padding:12px 0;border-bottom:1px solid #EADFCB">${IMG[i.name] ? `<img src="${IMG[i.name]}" width="48" alt="" style="display:block;width:48px;height:auto;border-radius:6px">` : ''}</td>
-            <td style="padding:12px 0;border-bottom:1px solid #EADFCB;font:400 19px ${serif};color:#1D120B">${esc(i.name)}<div style="font:400 12px ${mono};color:#8A7360;letter-spacing:.04em;margin-top:3px">${i.qty} × 125 g pouch · ${i.qty * 25} cups</div></td>
-            <td align="right" style="padding:12px 0;border-bottom:1px solid #EADFCB;font:400 15px ${mono};color:#1D120B;white-space:nowrap">${money(i.total)}</td>
-          </tr>`).join('');
+  const serif = "Georgia,'Times New Roman',serif";
+  const sans = 'Arial,Helvetica,sans-serif';
+  const first = o.firstName ? ', ' + esc(o.firstName) : '';
+  const eyebrow = (color) => `font-family:${sans};font-size:12px;line-height:16px;mso-line-height-rule:exactly;color:${color};letter-spacing:2px;text-transform:uppercase;font-weight:bold`;
 
-  const html = `<!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light only"><title>${esc(subject)}</title></head>
-<body style="margin:0;padding:0;background:#F3E8D3">
-<div style="display:none;max-height:0;overflow:hidden;opacity:0">Thank you${o.firstName ? ', ' + esc(o.firstName) : ''} — ${pouches} pouch${pouches === 1 ? '' : 'es'} of proper masala chai, ${o.zone === 'saskatoon' ? 'coming to your door' : 'on its way soon'}.</div>
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#F3E8D3"><tr><td align="center" style="padding:24px 12px">
-  <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="width:100%;max-width:600px;background:#FFFBF4;border-radius:20px;overflow:hidden">
-    <tr><td align="center" style="background:#1D120B;padding:30px 24px 26px">
-      <a href="${SITE}"><img src="${IMG.logo}" width="96" height="96" alt="God's Chai" style="display:block;width:96px;height:96px"></a>
-      <div style="font:400 12px ${mono};letter-spacing:.2em;text-transform:uppercase;color:#F2A93C;margin-top:18px">Order confirmed · #${esc(o.receipt)}</div>
-      <div style="font:400 38px/1.05 ${serif};color:#F3E8D3;margin-top:10px">Thank you${o.firstName ? ', ' + esc(o.firstName) : ''}.<br><span style="color:#FF6F61;font-style:italic">That's ordered.</span></div>
-    </td></tr>
-    <tr><td style="padding:28px 32px 6px">
-      <div style="font:400 12px ${mono};letter-spacing:.16em;text-transform:uppercase;color:#C58A2E">Your order</div>
-      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-top:6px">${items}
+  const items = o.items.map((i) => `
+        <tr>
+          <td style="padding:14px 0;border-top:1px solid #E3CFB6;font-family:${serif};font-size:18px;line-height:22px;color:#4A2410">${esc(i.name)}<br><span style="font-family:${sans};font-size:13px;line-height:18px;color:#8A5A3E">125 g · 25 cups each · Qty ${i.qty}</span></td>
+          <td align="right" width="90" style="padding:14px 0;border-top:1px solid #E3CFB6;font-family:${sans};font-size:15px;line-height:20px;color:#4A2410;font-weight:bold">${money(i.total)}</td>
+        </tr>`).join('');
+
+  // Discounts, then delivery, then tax if there is any (Saskatoon orders carry PST).
+  const lines = o.discounts.map((x) => [esc(x.name), '−' + money(x.amount)])
+    .concat([[o.zone === 'saskatoon' ? 'Delivery' : 'Shipping', o.shipping ? money(o.shipping) : 'Free']])
+    .concat(o.tax ? [[esc(o.taxName), money(o.tax)]] : []);
+  const extras = lines.map(([l, r], i) => {
+    const pad = `padding:${i === 0 ? 12 : 4}px 0 ${i === lines.length - 1 ? 14 : 4}px`;
+    const top = i === 0 ? 'border-top:1px solid #E3CFB6;' : '';
+    const cell = `${pad};${top}font-family:${sans};font-size:14px;line-height:20px;color:#8A5A3E`;
+    return `
+        <tr>
+          <td style="${cell}">${l}</td>
+          <td align="right" style="${cell}">${r}</td>
+        </tr>`;
+  }).join('');
+
+  const address = o.address.length
+    ? `
+    <!-- shipping -->
+    <tr><td bgcolor="#F6EBDC" style="background-color:#F6EBDC;padding:20px 40px 36px" class="px">
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" bgcolor="#EEDDC6" style="background-color:#EEDDC6;border-radius:14px">
+        <tr><td style="padding:20px 22px;font-family:${sans};font-size:14px;line-height:21px;mso-line-height-rule:exactly;color:#4A2410">
+          <span style="font-size:11px;letter-spacing:2px;text-transform:uppercase;font-weight:bold;color:#9A5A34">${o.zone === 'saskatoon' ? 'Delivering to' : 'Shipping to'}</span><br>
+          ${(o.name ? esc(o.name) + '<br>' : '') + o.address.map(esc).join(', ')}
+        </td></tr>
       </table>
-      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-top:10px">
-        ${row(pouches + ' pouch' + (pouches === 1 ? '' : 'es'), money(o.subtotal))}
-        ${o.discounts.map((x) => row(esc(x.name), '−' + money(x.amount))).join('')}
-        ${o.tax ? row(esc(o.taxName), money(o.tax)) : ''}
-        ${row('Delivery', o.shipping ? money(o.shipping) : 'Free')}
-        <tr><td colspan="2" style="border-top:1px solid #EADFCB;padding-top:4px"></td></tr>
-        ${row('Total paid', money(o.total), true)}
+    </td></tr>
+`
+    : '';
+
+  // The same four steps as the brew guide on the site (_data/brew.yml).
+  const steps = [
+    ['Boil', ' 1 cup water and 1 cup milk together.'],
+    ['Blend', " in 2 tbsp God's Chai and sugar to taste."],
+    ['Let it rise', " 2–3 times. Don't skip this one."],
+    ['Strain', ' and enjoy. Kadak, every single cup.'],
+  ].map(([b, rest], i, all) => {
+    const pad = i === all.length - 1 ? '0' : '0 0 18px';
+    return `
+        <tr>
+          <td width="44" valign="top" style="padding:${pad};font-family:${serif};font-size:22px;line-height:24px;color:#E0A872">0${i + 1}</td>
+          <td valign="top" style="padding:${pad};font-family:${sans};font-size:15px;line-height:22px;color:#E6D2BC"><strong style="color:#F5E7D0">${b}</strong>${rest}</td>
+        </tr>`;
+  }).join('');
+
+  const pill = (href, label) => `<td style="border:1px solid #B88A66;border-radius:999px"><a href="${href}" style="display:block;padding:10px 20px;font-family:${sans};font-size:12px;line-height:14px;font-weight:bold;letter-spacing:1px;text-transform:uppercase;color:#F5E7D0;text-decoration:none">${label}</a></td>`;
+
+  const html = `<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="x-apple-disable-message-reformatting">
+<meta name="color-scheme" content="light dark">
+<meta name="supported-color-schemes" content="light dark">
+<title>${esc(subject)}</title>
+<!--[if mso]><xml><o:OfficeDocumentSettings><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml><![endif]-->
+<style>
+  body{margin:0;padding:0;width:100%!important;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%}
+  a{color:#B9562C}
+  @media screen and (max-width:620px){
+    .w100{width:100%!important}
+    .px{padding-left:24px!important;padding-right:24px!important}
+    .h1{font-size:34px!important;line-height:38px!important}
+    .stack{display:block!important;width:100%!important}
+  }
+</style>
+</head>
+<body style="margin:0;padding:0;background-color:#4A2410">
+<span style="display:none!important;visibility:hidden;opacity:0;color:transparent;height:0;width:0;max-height:0;max-width:0;overflow:hidden;mso-hide:all;font-size:1px;line-height:1px">Your chai is on its way. Here's your order summary and how to brew the perfect cup.&#8199;&#847;&#8199;&#847;&#8199;&#847;&#8199;&#847;</span>
+
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="background-color:#4A2410">
+<tr><td align="center" style="padding:32px 12px">
+
+  <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="600" class="w100" style="width:600px;max-width:600px">
+
+    <!-- header -->
+    <tr><td align="center" bgcolor="#5A2A0E" style="background-color:#5A2A0E;border-radius:20px 20px 0 0;padding:36px 40px 30px" class="px">
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
+        <td style="font-family:${serif};font-size:30px;line-height:34px;mso-line-height-rule:exactly;color:#F5E7D0;font-weight:bold;letter-spacing:-0.5px">God's Chai</td>
+      </tr></table>
+      <div style="font-family:${sans};font-size:11px;line-height:16px;mso-line-height-rule:exactly;color:#E0A872;letter-spacing:2px;text-transform:uppercase;padding-top:6px">Hand crafted in Saskatoon</div>
+    </td></tr>
+
+    <!-- hero -->
+    <tr><td bgcolor="#6A3314" style="background-color:#6A3314;padding:44px 40px 40px" class="px">
+      <div style="${eyebrow('#E0A872')}">Order confirmed · <span style="text-transform:none">#${esc(o.receipt)}</span></div>
+      <h1 class="h1" style="margin:14px 0 0;font-family:${serif};font-weight:normal;font-size:42px;line-height:46px;mso-line-height-rule:exactly;color:#F5E7D0">Thank you${first}.<br>The kettle's on.</h1>
+      <p style="margin:18px 0 0;font-family:${sans};font-size:16px;line-height:25px;mso-line-height-rule:exactly;color:#E6D2BC">${z.hero}</p>${o.receiptUrl ? `
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin-top:28px"><tr>
+        <td bgcolor="#E0A872" style="background-color:#E0A872;border-radius:999px">
+          <a href="${esc(o.receiptUrl)}" style="display:block;padding:14px 28px;font-family:${sans};font-size:13px;line-height:16px;font-weight:bold;letter-spacing:1px;text-transform:uppercase;color:#3B1F12;text-decoration:none;border-radius:999px">View your receipt</a>
+        </td>
+      </tr></table>` : ''}
+    </td></tr>
+
+    <!-- summary -->
+    <tr><td bgcolor="#F6EBDC" style="background-color:#F6EBDC;padding:36px 40px ${o.address.length ? 12 : 36}px" class="px">
+      <div style="${eyebrow('#9A5A34')};padding-bottom:14px">Your order</div>
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">${items}${extras}
+        <tr>
+          <td style="padding:14px 0 6px;border-top:2px solid #4A2410;font-family:${sans};font-size:13px;line-height:18px;color:#4A2410;font-weight:bold;letter-spacing:1px;text-transform:uppercase">Total</td>
+          <td align="right" style="padding:14px 0 6px;border-top:2px solid #4A2410;font-family:${serif};font-size:22px;line-height:26px;color:#4A2410;font-weight:bold">${money(o.total)}</td>
+        </tr>
       </table>
     </td></tr>
-    <tr><td style="padding:22px 32px 4px">
-      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#F7EEDD;border-radius:14px"><tr><td style="padding:18px 20px">
-        <div style="font:400 12px ${mono};letter-spacing:.16em;text-transform:uppercase;color:#C58A2E">What happens next · ${esc(z.label)}</div>
-        <div style="font:400 15px/1.55 ${sans};color:#3A2A1E;margin-top:8px">${z.next}</div>
-        ${o.address.length ? `<div style="font:400 14px/1.5 ${sans};color:#5A4535;margin-top:12px"><strong style="color:#1D120B">Delivering to</strong><br>${[esc(o.name)].concat(o.address.map(esc)).join('<br>')}</div>` : ''}
-      </td></tr></table>
-    </td></tr>
-    <tr><td style="padding:22px 32px 4px">
-      <div style="font:400 26px ${serif};color:#1D120B">Brew it the proper way</div>
-      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-top:8px">
-        ${['1 heaped teaspoon (5 g) per cup into ½ cup of boiling water.', 'Add ½ cup of milk and bring it back to a rolling boil.', 'Simmer 2–3 minutes, till it turns deep caramel.', 'Strain, sweeten to taste. That’s it.'].map((s, i) => `<tr><td width="34" valign="top" style="padding:6px 0;font:400 22px ${serif};color:#F2A93C">0${i + 1}</td><td style="padding:8px 0 6px;font:400 15px/1.45 ${sans};color:#3A2A1E">${s}</td></tr>`).join('')}
+${address}
+    <!-- brew guide -->
+    <tr><td bgcolor="#5A2A0E" style="background-color:#5A2A0E;padding:40px 40px 36px" class="px">
+      <div style="${eyebrow('#E0A872')}">While you wait</div>
+      <h2 style="margin:10px 0 22px;font-family:${serif};font-weight:normal;font-size:28px;line-height:32px;mso-line-height-rule:exactly;color:#F5E7D0">Four steps to a proper cup</h2>
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%">${steps}
       </table>
-      <table role="presentation" cellpadding="0" cellspacing="0" style="margin-top:14px"><tr><td style="background:#F2A93C;border-radius:999px"><a href="${SITE}/how-to-make-masala-chai/" style="display:inline-block;padding:13px 24px;font:700 15px ${sans};color:#2B1B12;text-decoration:none">The full brew guide →</a></td></tr></table>
     </td></tr>
-    <tr><td style="padding:26px 32px 30px">
-      <div style="font:400 14px/1.6 ${sans};color:#5A4535">Questions, cravings or a brewing emergency? Just hit reply — a real human (usually mid-chai) will answer.${o.receiptUrl ? ` Your card receipt is <a href="${esc(o.receiptUrl)}" style="color:#C2410C">right here</a>.` : ''}</div>
+
+    <!-- share -->
+    <tr><td bgcolor="#6A3314" align="center" style="background-color:#6A3314;padding:34px 40px;border-radius:0 0 20px 20px" class="px">
+      <p style="margin:0;font-family:${serif};font-size:20px;line-height:26px;color:#F5E7D0">Tag your first cup <a href="${INSTAGRAM}" style="color:#E0A872;text-decoration:none">@godschai</a></p>
+      <p style="margin:8px 0 0;font-family:${sans};font-size:14px;line-height:20px;color:#E6D2BC">We feature our favourites on the site.</p>
+      <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin-top:20px"><tr>
+        ${pill(INSTAGRAM, 'Instagram')}
+        <td width="10" style="font-size:0;line-height:0">&nbsp;</td>
+        ${pill(TIKTOK, 'TikTok')}
+      </tr></table>
     </td></tr>
-    <tr><td align="center" style="background:#1D120B;padding:22px 24px">
-      <div style="font:400 20px ${serif};color:#F3E8D3">Not your average chai.</div>
-      <div style="font:400 12px/1.7 ${sans};color:#AB9280;margin-top:6px"><a href="https://www.instagram.com/godschai" style="color:#F2A93C;text-decoration:none">Instagram @godschai</a> · <a href="${SITE}" style="color:#F2A93C;text-decoration:none">godschai.com</a><br>God's Chai · Saskatoon, SK, Canada<br>You're getting this because you ordered at godschai.com.</div>
+
+    <!-- footer -->
+    <tr><td align="center" style="padding:28px 30px 8px;font-family:${sans};font-size:12px;line-height:19px;mso-line-height-rule:exactly;color:#C9B19A">
+      Questions about your order? Just reply to this email.<br>
+      God's Chai · Saskatoon, SK, Canada<br>
+      You're receiving this because you placed an order at <a href="${SITE}" style="color:#E0A872">godschai.com</a>.
     </td></tr>
+
   </table>
-</td></tr></table>
-</body></html>`;
+</td></tr>
+</table>
+</body>
+</html>
+`;
 
   const text = [
-    `Thank you${o.firstName ? ', ' + o.firstName : ''} — that's ordered. (Order #${o.receipt})`, '',
+    `Thank you${o.firstName ? ', ' + o.firstName : ''}. The kettle's on. (Order #${o.receipt})`, '',
     ...o.items.map((i) => `${i.qty} × ${i.name} — ${money(i.total)}`),
     ...o.discounts.map((x) => `${x.name}: −${money(x.amount)}`),
+    `${o.zone === 'saskatoon' ? 'Delivery' : 'Shipping'}: ${o.shipping ? money(o.shipping) : 'Free'}`,
     o.tax ? `${o.taxName}: ${money(o.tax)}` : null,
-    `Delivery: ${o.shipping ? money(o.shipping) : 'Free'}`,
-    `Total paid: ${money(o.total)}`, '',
+    `Total: ${money(o.total)}`, '',
     `What happens next (${z.label}): ${z.next}`, '',
-    o.address.length ? `Delivering to: ${[o.name].concat(o.address).join(', ')}` : null, '',
-    'Brew it: 1 heaped tsp (5 g) per cup in ½ cup boiling water, add ½ cup milk, boil, simmer 2–3 min, strain, sweeten to taste.',
-    `Full guide: ${SITE}/how-to-make-masala-chai/`, '',
-    'Questions, cravings or a brewing emergency? Just hit reply — a real human (usually mid-chai) will answer.',
-    o.receiptUrl ? `Card receipt: ${o.receiptUrl}` : null,
+    o.address.length ? `${o.zone === 'saskatoon' ? 'Delivering' : 'Shipping'} to: ${[o.name].concat(o.address).filter(Boolean).join(', ')}` : null, '',
+    'Four steps to a proper cup: 1. Boil 1 cup water and 1 cup milk together. 2. Blend in 2 tbsp God\'s Chai and sugar to taste. 3. Let it rise 2–3 times. Don\'t skip this one. 4. Strain and enjoy. Kadak, every single cup.', '',
+    'Questions about your order? Just reply to this email.',
+    o.receiptUrl ? `Receipt: ${o.receiptUrl}` : null,
+    `Tag your first cup @godschai — ${INSTAGRAM}`,
     '— God\'s Chai, Saskatoon',
   ].filter((l) => l !== null).join('\n');
 
