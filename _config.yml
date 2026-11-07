@@ -34,6 +34,7 @@ sass:
 
 exclude:
   - README.md
+  - club_email_preview.html   # a preview of the Chai Club welcome email (it shows the members' code): not a page
   - SEO.md
   - Gemfile
   - Gemfile.lock
