@@ -11,8 +11,8 @@ og_image: "uploads/og-image.jpg"
   <h1 id="page-h1" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(2.3rem,6vw,4.2rem);line-height:0.98;letter-spacing:0;margin:0;max-width:24ch">Chai Catering in <span style="color:var(--gc-coral-t);font-style:italic">Saskatoon</span></h1>
   <p style="font-size:clamp(1.05rem,1.5vw,1.25rem);line-height:1.6;color:var(--gc-fg2);max-width:54ch;margin:22px 0 28px">Bring the cart. We pour fresh masala chai on site for weddings, office mornings, markets and private parties across Saskatoon and area — hot in winter, iced in summer, always kadak.</p>
   <div style="display:flex;gap:13px;flex-wrap:wrap">
-    <a href="{{ site.social.instagram }}" target="_blank" rel="noopener" style="text-decoration:none;background:#F2A93C;color:#2B1B12;font-weight:700;font-size:16px;padding:15px 26px;border-radius:999px" class="gc-pill">Message us on Instagram →</a>
-    <a href="#enquire" style="text-decoration:none;background:rgba(var(--gc-ink-rgb),0.10);color:var(--gc-fg);font-weight:600;font-size:16px;padding:15px 24px;border-radius:999px;border:1.5px solid rgba(var(--gc-ink-rgb),0.3)" class="gc-pill-ghost">How it works</a>
+    <a href="#book" style="text-decoration:none;background:#F2A93C;color:#2B1B12;font-weight:700;font-size:16px;padding:15px 26px;border-radius:999px" class="gc-pill">Check your date →</a>
+    <a href="{{ site.social.instagram }}" target="_blank" rel="noopener" style="text-decoration:none;background:rgba(var(--gc-ink-rgb),0.10);color:var(--gc-fg);font-weight:600;font-size:16px;padding:15px 24px;border-radius:999px;border:1.5px solid rgba(var(--gc-ink-rgb),0.3)" class="gc-pill-ghost">Message us on Instagram</a>
   </div>
 </section>
 
@@ -23,7 +23,7 @@ og_image: "uploads/og-image.jpg"
   <div data-gc-stagger style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:clamp(16px,2vw,24px)">
     <div style="padding:28px 26px 30px;background:rgba(var(--gc-surf-rgb),0.8);border:1px solid rgba(var(--gc-gold-rgb),0.16);border-radius:22px" class="gc-card">
       <div style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--gc-gold-d)">01 · Weddings</div>
-      <h3 style="font-family:'Instrument Serif',serif;font-weight:400;font-size:1.4rem;margin:12px 0 0;color:var(--gc-fg)">Weddings &amp; receptions</h3>
+      <h3 style="font-family:'Instrument Serif',serif;font-weight:400;font-size:1.4rem;margin:12px 0 0;color:var(--gc-fg)">A chai cart for your wedding</h3>
       <p style="color:var(--gc-fg4);line-height:1.6;margin:10px 0 0">A chai cart at the reception does what a coffee urn never will. Late-night service, mehndi mornings, or a station running all evening.</p>
     </div>
     <div style="padding:28px 26px 30px;background:rgba(var(--gc-surf-rgb),0.8);border:1px solid rgba(var(--gc-gold-rgb),0.16);border-radius:22px" class="gc-card">
@@ -43,17 +43,102 @@ og_image: "uploads/og-image.jpg"
   <div style="max-width:1240px;margin:0 auto;padding:clamp(46px,6vw,84px) clamp(18px,4vw,40px)">
     <h2 id="how-h2" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(1.9rem,4.4vw,3rem);letter-spacing:0;margin:0 0 18px;color:var(--gc-fg)">How it works</h2>
     <div class="gc-prose" style="max-width:64ch">
-      <p><strong>Tell us the basics.</strong> Date, rough headcount, where it is, and whether you want it hot or iced. Message us on Instagram — that's the fastest way to reach us.</p>
+      <p><strong>Tell us the basics.</strong> Date, rough headcount, where it is, and whether you want it hot or iced. Use the <a href="#book">form below</a>, or message us on Instagram.</p>
       <p><strong>We'll come back with a plan.</strong> How long we'll pour for, what we'll bring, and what it costs. No packages to decode.</p>
       <p><strong>We show up and pour.</strong> The cart brews on site, so guests get chai the way it's meant to be — fresh out of the pot, not out of a dispenser that's been sitting since breakfast.</p>
       <h3>What you can put on the menu</h3>
       <p>Anything from the <a href="{{ '/' | relative_url }}#menu">regular menu</a> works for events — the Classic Hot Chai, the Iced Chai, or the signature builds like Gulabo and YXE's Mont Blanc. Samosas pair well and travel well.</p>
       <h3>Where we go</h3>
-      <p>Saskatoon and the surrounding area. We're a mobile cart, so most indoor and outdoor venues work — we just need a bit of level ground and somewhere to set up.</p>
+      <p>Saskatoon and the surrounding area: halls, offices, backyards, parks, school gyms and market grounds. We're a mobile cart, so most indoor and outdoor venues work — we just need a bit of level ground and somewhere to set up. Outside the city? Ask; tell us where in the form.</p>
     </div>
-    <div style="margin-top:28px">
-      <a href="{{ site.social.instagram }}" target="_blank" rel="noopener" style="text-decoration:none;background:#F2A93C;color:#2B1B12;font-weight:700;font-size:16px;padding:15px 26px;border-radius:999px" class="gc-pill">Start a booking on Instagram →</a>
+  </div>
+</section>
+
+{%- assign to = site.data.shop.email -%}
+<style>
+  .gc-eq{max-width:1240px;margin:0 auto;padding:clamp(46px,6vw,84px) clamp(18px,4vw,40px) 0;scroll-margin-top:84px}
+  .gc-eq form{max-width:760px;padding:clamp(20px,3vw,30px);border-radius:22px;border:1px solid rgba(var(--gc-gold-rgb),0.16);background:rgba(var(--gc-surf-rgb),0.8)}
+  .gc-eq-2{display:grid;gap:0 12px}
+  @media (min-width:620px){.gc-eq-2{grid-template-columns:1fr 1fr}}
+  .gc-eq label{display:block;margin:0 0 14px}
+  .gc-eq label > span{display:block;font-size:13.5px;color:var(--gc-fg3);margin:0 0 6px}
+  .gc-eq label > span small{color:var(--gc-muted);font-size:12.5px}
+  .gc-eq input,.gc-eq select,.gc-eq textarea{display:block;width:100%;box-sizing:border-box;margin:0;padding:13px 14px;border-radius:12px;
+    border:1px solid rgba(var(--gc-ink-rgb),0.18);background:rgba(var(--gc-ink-rgb),0.05);color:var(--gc-fg);font:400 15px 'Hanken Grotesk',sans-serif}
+  .gc-eq textarea{min-height:92px;resize:vertical;line-height:1.45}
+  .gc-eq input:focus,.gc-eq select:focus,.gc-eq textarea:focus{outline:2px solid var(--gc-gold-t);outline-offset:1px;border-color:var(--gc-gold-t)}
+  .gc-eq [aria-invalid="true"]{border-color:var(--gc-coral-t)}
+  .gc-eq-err{min-height:1.2em;margin:4px 0 12px;font-size:14px;color:var(--gc-coral-t)}
+  .gc-eq-done{margin:16px 0 0;font-size:14.5px;line-height:1.55;color:var(--gc-fg3)}
+  .gc-eq-done[hidden]{display:none}
+</style>
+<section id="book" class="gc-eq" aria-labelledby="book-h2">
+  <h2 id="book-h2" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(1.9rem,4.4vw,2.8rem);letter-spacing:0;margin:0 0 12px;color:var(--gc-fg)">Check your date</h2>
+  <p style="font-size:1.05rem;line-height:1.6;color:var(--gc-fg3);max-width:56ch;margin:0 0 24px">Tell us about the event and we'll reply with whether we're free, a plan and a price. Nothing to pay to ask.</p>
+  <form data-gc-enquiry data-to="{{ to }}" novalidate>
+    <div class="gc-eq-2">
+      <label><span>Event date</span><input type="date" name="date" required></label>
+      <label><span>Rough headcount</span><input type="number" name="guests" min="1" max="5000" inputmode="numeric" placeholder="e.g. 120" required></label>
     </div>
+    <div class="gc-eq-2">
+      <label><span>Type of event</span>
+        <select name="type">
+          <option>Wedding or reception</option><option>Mehndi or sangeet</option><option>Office or corporate</option>
+          <option>Birthday or house party</option><option>Diwali or festival</option><option>Market or fundraiser</option><option>Something else</option>
+        </select></label>
+      <label><span>Hot, iced or both?</span>
+        <select name="temp"><option>Hot</option><option>Iced</option><option>Both</option><option>Not sure yet</option></select></label>
+    </div>
+    <label><span>Where is it? <small>(venue or area)</small></span><input type="text" name="where" placeholder="Venue, neighbourhood or town" required></label>
+    <div class="gc-eq-2">
+      <label><span>Your name</span><input type="text" name="name" autocomplete="name" required></label>
+      <label><span>Phone <small>(optional)</small></span><input type="tel" name="phone" autocomplete="tel"></label>
+    </div>
+    <label><span>Email <small>(we'll reply here)</small></span><input type="email" name="email" autocomplete="email" required></label>
+    <label><span>Anything else? <small>(optional)</small></span><textarea name="notes" placeholder="Start and finish times, drinks you'd like, samosas…"></textarea></label>
+    <p class="gc-eq-err" data-gc-enquiry-err role="alert"></p>
+    <button type="submit" class="gc-pill" style="border:0;cursor:pointer;background:#F2A93C;color:#2B1B12;font:700 16px 'Hanken Grotesk',sans-serif;padding:15px 26px;border-radius:999px">Send my enquiry</button>
+    <p class="gc-eq-done" data-gc-enquiry-done hidden tabindex="-1">Your email app should have opened with everything filled in: just press send. Nothing opened? Write to {% if to != "" %}<a href="mailto:{{ to }}" data-gc-enquiry-mailto>{{ to }}</a> or {% endif %}message us on <a href="{{ site.social.instagram }}" target="_blank" rel="noopener">Instagram</a>.</p>
+  </form>
+</section>
+
+
+<style>
+  .gc-faq{border-bottom:1px solid rgba(var(--gc-ink-rgb),0.12)}
+  .gc-faq summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:16px;padding:18px 0;
+    font-family:'Instrument Serif',serif;font-size:1.3rem;color:var(--gc-fg)}
+  .gc-faq summary::-webkit-details-marker{display:none}
+  .gc-faq summary::after{content:"+";font-family:'DM Mono',monospace;color:var(--gc-gold-t);flex:0 0 auto}
+  .gc-faq[open] summary::after{content:"\00d7"}
+  .gc-faq p{margin:0 0 18px;max-width:64ch;line-height:1.6;color:var(--gc-fg3)}
+</style>
+<section aria-labelledby="faq-h2" style="max-width:1240px;margin:0 auto;padding:clamp(46px,6vw,84px) clamp(18px,4vw,40px) 0">
+  <h2 id="faq-h2" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(1.9rem,4.4vw,2.8rem);letter-spacing:0;margin:0 0 8px;color:var(--gc-fg)">Chai catering questions</h2>
+  <div style="max-width:820px;border-top:1px solid rgba(var(--gc-ink-rgb),0.12)">
+    <details class="gc-faq">
+      <summary>Where do you cater?</summary>
+      <p>Saskatoon and the surrounding area. We bring a mobile cart, so most indoor and outdoor venues work: halls, offices, backyards, parks and market grounds. We just need a bit of level ground and somewhere to set up.</p>
+    </details>
+    <details class="gc-faq">
+      <summary>Can we have hot and iced chai?</summary>
+      <p>Yes. We pour hot masala chai, iced chai, or both: hot in winter, iced in summer, and whatever suits your crowd in between.</p>
+    </details>
+    <details class="gc-faq">
+      <summary>What drinks can we choose from?</summary>
+      <p>Anything on our regular menu: the Classic Hot Chai, Iced Chai, Gulabo Rose Refresher, Iced Chocolate Chai, YXE's Mont Blanc, Iced Banana Bread Chai and Lavender Cold Foam Chai. Samosas can come too.</p>
+    </details>
+    <details class="gc-faq">
+      <summary>How much does chai catering cost?</summary>
+      <p>It depends on how many guests, how long we pour and what's on the menu, so there are no fixed packages. Send us the details and we'll reply with a plan and a price.</p>
+    </details>
+    <details class="gc-faq">
+      <summary>Do you do weddings and cultural events?</summary>
+      <p>Yes: receptions, mehndi mornings, sangeets, Diwali parties and late-night service. A chai cart at the reception does what a coffee urn never will.</p>
+    </details>
+    <details class="gc-faq">
+      <summary>Can we just order chai without the cart?</summary>
+      <p>Yes. Hot chai by the cup and samosas by the dozen, picked up or delivered anywhere in Saskatoon, with 48 hours' notice. See <a href="{{ '/bulk-orders/' | relative_url }}">bulk orders</a>.</p>
+    </details>
   </div>
 </section>
 
@@ -87,5 +172,20 @@ og_image: "uploads/og-image.jpg"
     "containedInPlace": { "@type": "AdministrativeArea", "name": "Saskatchewan, Canada" }
   },
   "audience": { "@type": "Audience", "audienceType": "Weddings, corporate events, private parties" }
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    { "@type": "Question", "name": "Where do you cater?", "acceptedAnswer": { "@type": "Answer", "text": "Saskatoon and the surrounding area. We bring a mobile cart, so most indoor and outdoor venues work: halls, offices, backyards, parks and market grounds. We just need a bit of level ground and somewhere to set up." } },
+    { "@type": "Question", "name": "Can we have hot and iced chai?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. We pour hot masala chai, iced chai, or both: hot in winter, iced in summer, and whatever suits your crowd in between." } },
+    { "@type": "Question", "name": "What drinks can we choose from?", "acceptedAnswer": { "@type": "Answer", "text": "Anything on our regular menu: the Classic Hot Chai, Iced Chai, Gulabo Rose Refresher, Iced Chocolate Chai, YXE's Mont Blanc, Iced Banana Bread Chai and Lavender Cold Foam Chai. Samosas can come too." } },
+    { "@type": "Question", "name": "How much does chai catering cost?", "acceptedAnswer": { "@type": "Answer", "text": "It depends on how many guests, how long we pour and what's on the menu, so there are no fixed packages. Send us the details and we'll reply with a plan and a price." } },
+    { "@type": "Question", "name": "Do you do weddings and cultural events?", "acceptedAnswer": { "@type": "Answer", "text": "Yes: receptions, mehndi mornings, sangeets, Diwali parties and late-night service. A chai cart at the reception does what a coffee urn never will." } },
+    { "@type": "Question", "name": "Can we just order chai without the cart?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Hot chai by the cup and samosas by the dozen, picked up or delivered anywhere in Saskatoon, with 48 hours' notice. See bulk orders." } }
+  ]
 }
 </script>

@@ -3,8 +3,11 @@
 #
 # start / end are ISO dates (YYYY-MM-DD) and are what the structured data uses.
 # `mon` and `day` are the display strings on the date chip (e.g. Sep / 4–5).
-# Past events are hidden from visitors by assets/js/site.js but stay in the
-# HTML so search engines and AI crawlers can still read the full history.
+# Optional: `street` (the street address, for Google's event listing) and
+# `free: false` when the event charges admission.
+# Once an event's end date has passed it leaves the schedule and the homepage
+# and moves to "Past pop-ups" at the bottom of /events/ (the next time the site
+# is published; assets/js/site.js hides it from the schedule in the meantime).
 # See SEO.md for how to add an event.
 
 - mon: "Jul"
@@ -85,5 +88,7 @@
   end: 2026-11-15
   name: "Candy Cane Lane Market"
   where: "Prairieland Park · Hall B"
-  venue: "Prairieland Park, Hall B, 503 Ruth St W, Saskatoon"
+  venue: "Prairieland Park, Hall B"
+  street: "503 Ruth St W"
+  free: false
   desc: "A two-day holiday pop-up market full of local makers and gift ideas. Warm up with our chai while you shop. Adults $5, kids 15 and under free, free parking."
