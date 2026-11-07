@@ -79,13 +79,18 @@ Open **`_data/events.yml`** and copy a block:
   desc: "Two days of local makers and our chai cart by the north doors."
 ```
 
-**You never need to delete old events.** Once the `end` date has passed the event
-hides itself from visitors automatically, but stays in the page so Google and AI
-search tools can still see your history. Delete them only if you want to tidy up.
+**You never need to delete old events.** Once an event's `end` date has passed
+it leaves the schedule and the homepage and moves to a short **"Past pop-ups"**
+list at the bottom of `/events/`, marked as past. (That move happens the next
+time the site is published; in between, the page hides it from the schedule by
+itself.) Google's event listing only ever gets the upcoming ones.
+
+Two optional lines: `street: "503 Ruth St W"` gives Google the street address,
+and `free: false` tells it the event charges admission.
 
 Keep `start` and `end` accurate — those are what Google shows in event results.
 
-The homepage and the `/events/` page both show the whole list, so adding one
+The homepage and the `/events/` page both show the upcoming list, so adding one
 block puts it in both places. If the homepage says "No events on the calendar
 right now", it means every `end` date in the file has passed — add the next
 pop-up and it comes straight back.

@@ -14,7 +14,7 @@ og_image: "uploads/opt/pour-a-1280.jpg"
 
 <div data-gc-reveal>
 
-{% include events-grid.html heading="The schedule" heading_id="schedule-h2" %}
+{% include events-grid.html heading="The schedule" heading_id="schedule-h2" archive=true %}
 
 <section aria-labelledby="book-h2" style="background:rgba(var(--gc-surf-rgb),0.6);border-top:1px solid rgba(var(--gc-ink-rgb),0.08)">
   <div style="max-width:1240px;margin:0 auto;padding:clamp(46px,6vw,88px) clamp(18px,4vw,40px)">
@@ -35,13 +35,17 @@ og_image: "uploads/opt/pour-a-1280.jpg"
 
 </div>
 
-{% comment %} One Event block per pop-up. Only emitted when events actually exist. {% endcomment %}
-{%- if site.data.events and site.data.events.size > 0 %}
+{% comment %} One Event block per upcoming pop-up (past ones are left out, so search
+   results never show an event that's over). Only emitted when there is one. {% endcomment %}
+{%- assign today = site.time | date: '%Y-%m-%d' -%}
+{%- assign upcoming = "" | split: "" -%}
+{%- for e in site.data.events -%}{%- assign endd = e.end | date: '%Y-%m-%d' -%}{%- if endd >= today %}{% assign upcoming = upcoming | push: e %}{% endif -%}{%- endfor -%}
+{%- if upcoming.size > 0 %}
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@graph": [
-    {%- for e in site.data.events %}
+    {%- for e in upcoming %}
     {
       "@type": "Event",
       "name": {{ e.name | jsonify }},
@@ -57,6 +61,9 @@ og_image: "uploads/opt/pour-a-1280.jpg"
         "name": {{ e.venue | default: "Saskatoon" | jsonify }},
         "address": {
           "@type": "PostalAddress",
+          {%- if e.street %}
+          "streetAddress": {{ e.street | jsonify }},
+          {%- endif %}
           "addressLocality": "Saskatoon",
           "addressRegion": "SK",
           "addressCountry": "CA"
@@ -64,7 +71,7 @@ og_image: "uploads/opt/pour-a-1280.jpg"
       },
       "organizer": { "@id": "{{ '/' | absolute_url }}#organization" },
       "performer": { "@id": "{{ '/' | absolute_url }}#organization" },
-      "isAccessibleForFree": true
+      "isAccessibleForFree": {% if e.free == false %}false{% else %}true{% endif %}
     }{% unless forloop.last %},{% endunless %}
     {%- endfor %}
   ]

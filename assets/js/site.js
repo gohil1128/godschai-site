@@ -243,6 +243,43 @@ layout: null
     if (empty && remaining === 0) { empty.hidden = false; empty.style.display = 'flex'; }
   }
 
+  /* ---------- 5b. Catering enquiry (catering page) ----------
+     Checks the form, then opens an email to the shop with everything filled in.
+     The page also shows the address, in case no email app opens. */
+  var enq = d.querySelector('[data-gc-enquiry]');
+  if (enq) {
+    var enqErr = enq.querySelector('[data-gc-enquiry-err]');
+    var enqDone = enq.querySelector('[data-gc-enquiry-done]');
+    enq.addEventListener('submit', function (ev) {
+      ev.preventDefault();
+      var bad = [].filter.call(enq.querySelectorAll('[required]'), function (f) {
+        var wrong = !f.value.trim() || (f.type === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(f.value.trim()));
+        f.setAttribute('aria-invalid', wrong ? 'true' : 'false');
+        return wrong;
+      });
+      if (bad.length) { enqErr.textContent = 'Almost! Fill in the highlighted boxes.'; bad[0].focus(); return; }
+      enqErr.textContent = '';
+      var v = function (n) { var f = enq.elements[n]; return f ? f.value.trim() : ''; };
+      var when = v('date') ? new Date(v('date') + 'T12:00:00').toLocaleDateString('en-CA', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' }) : '';
+      var text = [
+        'Hi God\'s Chai, we\'d love the chai cart at our event.', '',
+        'Date: ' + when, 'Event: ' + v('type'), 'Guests: about ' + v('guests'),
+        'Chai: ' + v('temp'), 'Where: ' + v('where'), '',
+        'Name: ' + v('name'), 'Email: ' + v('email')
+      ].concat(v('phone') ? ['Phone: ' + v('phone')] : [])
+       .concat(v('notes') ? ['', v('notes')] : [])
+       .concat(['', 'Are you free, and what would it cost? Thanks!']).join('\r\n');
+      var to = enq.getAttribute('data-to') || '';
+      var href = 'mailto:' + to + '?subject=' + encodeURIComponent('Chai catering: ' + v('type') + ', ' + when) + '&body=' + encodeURIComponent(text);
+      var link = enq.querySelector('[data-gc-enquiry-mailto]');
+      if (link) link.href = href;
+      enqDone.hidden = false;
+      enqDone.focus({ preventScroll: true });
+      if (typeof gtag === 'function') gtag('event', 'generate_lead', { form: 'catering' });
+      if (to) window.location.href = href;
+    });
+  }
+
   /* ---------- 6. Mailchimp signup (JSONP) ---------- */
   var MC = 'https://{{ site.mailchimp.host }}/subscribe/post-json?u={{ site.mailchimp.u }}&id={{ site.mailchimp.id }}&f_id={{ site.mailchimp.f_id }}';
   /* Sends every named field in the form, not just EMAIL: the hidden SOURCE
