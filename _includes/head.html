@@ -24,7 +24,7 @@
      meta tag. 'unsafe-inline' covers the inline styles the design relies on; there is no
      'unsafe-eval' because the site no longer evaluates JS at runtime. -->
 {%- assign csp = page.csp -%}
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://*.list-manage.com{% if csp.script %} {{ csp.script }}{% endif %}; style-src 'self' 'unsafe-inline'{% if csp.style %} {{ csp.style }}{% endif %}; font-src 'self'{% if csp.font %} {{ csp.font }}{% endif %}; img-src 'self' data: https://*.google-analytics.com https://*.googletagmanager.com{% if csp.img %} {{ csp.img }}{% endif %}; media-src 'self'; connect-src 'self'{{ api_origin }} https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://stats.g.doubleclick.net{% if csp.connect %} {{ csp.connect }}{% endif %}; object-src 'none'; base-uri 'self'; form-action 'self'; frame-src {% if csp.frame %}{{ csp.frame }}{% else %}'none'{% endif %}">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://*.list-manage.com https://www.clarity.ms{% if csp.script %} {{ csp.script }}{% endif %}; style-src 'self' 'unsafe-inline'{% if csp.style %} {{ csp.style }}{% endif %}; font-src 'self'{% if csp.font %} {{ csp.font }}{% endif %}; img-src 'self' data: https://*.google-analytics.com https://*.googletagmanager.com https://*.clarity.ms https://c.bing.com{% if csp.img %} {{ csp.img }}{% endif %}; media-src 'self'; connect-src 'self'{{ api_origin }} https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://stats.g.doubleclick.net https://*.clarity.ms https://c.bing.com{% if csp.connect %} {{ csp.connect }}{% endif %}; object-src 'none'; base-uri 'self'; form-action 'self'; frame-src {% if csp.frame %}{{ csp.frame }}{% else %}'none'{% endif %}">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 
 <title>{{ page.title }}</title>
@@ -70,6 +70,16 @@
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
   gtag('config', '{{ site.ga_measurement_id }}');
+</script>
+
+
+<!-- Microsoft Clarity -->
+<script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "z9zkwhsjui");
 </script>
 
 {% include schema-organization.html %}
