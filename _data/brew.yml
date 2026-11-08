@@ -10,8 +10,8 @@ serves: 2
 amounts:
   water: { per_cup: 0.5, unit: "cup", text: "1 cup" }
   milk:  { per_cup: 0.5, unit: "cup", text: "1 cup" }
-  mix:   { per_cup: 1, unit: "tbsp", text: "2 tbsp" }
-mix_grams_per_cup: 5         # a 125 g pouch makes 25 cups
+  mix:   { per_cup: 1, unit: "heaped tbsp", text: "2 heaped tbsp" }
+mix_grams_per_cup: 5         # 1 heaped tbsp; a 125 g pouch makes 25 cups
 pouch_grams: 125
 max_cups: 30
 # From this many cups, the kit says to use a bigger pot (it rises).

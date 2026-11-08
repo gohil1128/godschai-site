@@ -307,10 +307,10 @@ layout: null
       var metric = ml < 1000 ? Math.round(ml / 5) * 5 + ' ml' : (Math.round(ml / 50) * 50 / 1000) + ' L';
       return quarters(x) + (q > 1 ? ' cups' : ' cup') + ' (' + metric + ')';
     };
-    // 16 tbsp to a cup: big batches also get it in cups, which is easier to measure.
-    var tbsp = function (x) {
-      var c = x / 16;
-      return quarters(x) + ' tbsp' + (x >= 8 ? ' (about ' + quarters(c) + (c > 1.125 ? ' cups)' : ' cup)') : '');
+    // The mix is measured in heaped tablespoons, 5 g each (the pouch's own
+    // measure); grams alongside, for anyone weighing a big batch.
+    var spoons = function (a, x) {
+      return quarters(x) + ' ' + a.unit + ' (' + Math.round(x / a.per_cup * gPerCup) + ' g)';
     };
     var n = base;
     var m = /[?&]cups=(\d+)/.exec(location.search);
@@ -322,7 +322,7 @@ layout: null
       [].forEach.call(d.querySelectorAll('[data-gc-amt]'), function (el) {
         var a = A[el.getAttribute('data-gc-amt')]; if (!a) return;
         var x = a.per_cup * n;
-        el.textContent = a.unit === 'tbsp' ? tbsp(x) : cups(x);
+        el.textContent = /tbsp/.test(a.unit) ? spoons(a, x) : cups(x);
         if (flash) { el.classList.remove('is-new'); void el.offsetWidth; el.classList.add('is-new'); setTimeout(function () { el.classList.remove('is-new'); }, 700); }
       });
       [].forEach.call(d.querySelectorAll('[data-gc-serves]'), function (el) { el.textContent = n; });
