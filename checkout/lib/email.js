@@ -109,7 +109,7 @@ export function customerEmail(o) {
     <tr><td style="padding:22px 32px 4px">
       <div style="font:400 26px ${serif};color:#1D120B">Brew it the proper way</div>
       <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-top:8px">
-        ${['1 heaped teaspoon (5 g) per cup into ½ cup of boiling water.', 'Add ½ cup of milk and bring it back to a rolling boil.', 'Simmer 2–3 minutes, till it turns deep caramel.', 'Strain, sweeten to taste. That’s it.'].map((s, i) => `<tr><td width="34" valign="top" style="padding:6px 0;font:400 22px ${serif};color:#F2A93C">0${i + 1}</td><td style="padding:8px 0 6px;font:400 15px/1.45 ${sans};color:#3A2A1E">${s}</td></tr>`).join('')}
+        ${['1 heaped tablespoon (5 g) per cup into ½ cup of boiling water.', 'Add ½ cup of milk and bring it back to a rolling boil.', 'Simmer 2–3 minutes, till it turns deep caramel.', 'Strain, sweeten to taste. That’s it.'].map((s, i) => `<tr><td width="34" valign="top" style="padding:6px 0;font:400 22px ${serif};color:#F2A93C">0${i + 1}</td><td style="padding:8px 0 6px;font:400 15px/1.45 ${sans};color:#3A2A1E">${s}</td></tr>`).join('')}
       </table>
       <table role="presentation" cellpadding="0" cellspacing="0" style="margin-top:14px"><tr><td style="background:#F2A93C;border-radius:999px"><a href="${SITE}/how-to-make-masala-chai/" style="display:inline-block;padding:13px 24px;font:700 15px ${sans};color:#2B1B12;text-decoration:none">The full brew guide →</a></td></tr></table>
     </td></tr>
@@ -133,7 +133,7 @@ export function customerEmail(o) {
     `Total paid: ${money(o.total)}`, '',
     `What happens next (${z.label}): ${z.next}`, '',
     o.address.length ? `Delivering to: ${[o.name].concat(o.address).join(', ')}` : null, '',
-    'Brew it: 1 heaped tsp (5 g) per cup in ½ cup boiling water, add ½ cup milk, boil, simmer 2–3 min, strain, sweeten to taste.',
+    'Brew it: 1 heaped tbsp (5 g) per cup in ½ cup boiling water, add ½ cup milk, boil, simmer 2–3 min, strain, sweeten to taste.',
     `Full guide: ${SITE}/how-to-make-masala-chai/`, '',
     'Questions, cravings or a brewing emergency? Just hit reply — a real human (usually mid-chai) will answer.',
     o.receiptUrl ? `Card receipt: ${o.receiptUrl}` : null,

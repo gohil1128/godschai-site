@@ -11,7 +11,7 @@ og_image: "uploads/opt/pour-a-1280.jpg"
   <h1 id="page-h1" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(2.3rem,6vw,4.2rem);line-height:0.98;letter-spacing:0;margin:0;max-width:24ch">How to Make Masala Chai <span style="color:var(--gc-coral-t);font-style:italic">(the proper way)</span></h1>
   <p style="font-size:clamp(1.05rem,1.5vw,1.25rem);line-height:1.6;color:var(--gc-fg2);max-width:56ch;margin:22px 0 0">Chai isn't a teabag in hot milk. It's whole spices, real tea and a pot that gets your full attention for about eight minutes. Here's exactly how we brew it in Saskatoon — and how to get the same cup at home.</p>
   <div style="display:flex;gap:24px;margin-top:28px;flex-wrap:wrap;font-family:'DM Mono',monospace;font-size:11.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--gc-fg4)">
-    <span>Serves {{ site.data.brew.serves }}</span>
+    <span>Serves <span data-gc-serves>{{ site.data.brew.serves }}</span></span>
     <span style="color:var(--gc-gold-t)">·</span>
     <span>About 10 minutes</span>
     <span style="color:var(--gc-gold-t)">·</span>
@@ -21,22 +21,46 @@ og_image: "uploads/opt/pour-a-1280.jpg"
 
 <div data-gc-reveal>
 
-<!-- WHAT YOU NEED -->
+<!-- WHAT YOU NEED (with the brew calculator: assets/js/site.js) -->
+<style>
+  .gc-bc{display:flex;align-items:center;gap:8px;font:400 12px 'DM Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:var(--gc-muted)}
+  .gc-bc[hidden]{display:none}
+  .gc-bc button{width:34px;height:34px;border-radius:999px;border:1px solid rgba(var(--gc-ink-rgb),0.22);background:transparent;color:var(--gc-fg);
+    font-size:18px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}
+  .gc-bc button:disabled{opacity:0.3;cursor:default}
+  .gc-bc output{min-width:2ch;text-align:center;font:400 22px 'Instrument Serif',serif;letter-spacing:0;text-transform:none;color:var(--gc-fg)}
+  [data-gc-amt]{transition:background-color .4s ease;border-radius:4px}
+  [data-gc-amt].is-new{background:rgba(var(--gc-gold-rgb),0.18)}
+</style>
 <section aria-labelledby="need-h2" style="max-width:1240px;margin:0 auto;padding:clamp(30px,4vw,50px) clamp(18px,4vw,40px)">
   <div data-gc-stagger style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:clamp(16px,2vw,24px)">
-    <div style="padding:28px 26px 30px;background:rgba(var(--gc-surf-rgb),0.8);border:1px solid rgba(var(--gc-gold-rgb),0.16);border-radius:22px">
-      <h2 id="need-h2" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:1.5rem;margin:0 0 14px;color:var(--gc-fg)">What you need</h2>
+    {%- assign brew = site.data.brew %}
+    <div style="padding:28px 26px 30px;background:rgba(var(--gc-surf-rgb),0.8);border:1px solid rgba(var(--gc-gold-rgb),0.16);border-radius:22px"
+         data-gc-brewcalc data-serves="{{ brew.serves }}" data-max="{{ brew.max_cups | default: 30 }}"
+         data-amounts='{{ brew.amounts | jsonify }}' data-g="{{ brew.mix_grams_per_cup }}" data-pouch="{{ brew.pouch_grams }}"
+         data-big="{{ brew.big_pot_from }}" data-big-text="{{ brew.big_pot | escape }}">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px 16px;flex-wrap:wrap;margin:0 0 14px">
+        <h2 id="need-h2" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:1.5rem;margin:0;color:var(--gc-fg)">What you need</h2>
+        <div class="gc-bc" role="group" aria-label="How many cups" hidden>
+          <span>For</span>
+          <button type="button" class="gc-ico" data-gc-bc-less aria-label="One cup fewer">&minus;</button>
+          <output data-gc-bc-n aria-live="polite">{{ brew.serves }}</output>
+          <button type="button" class="gc-ico" data-gc-bc-more aria-label="One cup more">+</button>
+          <span data-gc-bc-unit>cups</span>
+        </div>
+      </div>
       <ul style="margin:0;padding-left:20px;color:var(--gc-fg4);line-height:1.7">
-        {%- for s in site.data.brew.supplies %}
-        <li>{{ s }}</li>
+        {%- for s in brew.supplies %}
+        <li>{% include brew-text.html t=s %}</li>
         {%- endfor %}
       </ul>
+      <p data-gc-bc-note hidden style="margin:14px 0 0;font-size:0.92rem;line-height:1.55;color:var(--gc-muted)"></p>
     </div>
     <div style="padding:28px 26px 30px;background:rgba(var(--gc-surf-rgb),0.8);border:1px solid rgba(var(--gc-gold-rgb),0.16);border-radius:22px">
       <h2 style="font-family:'Instrument Serif',serif;font-weight:400;font-size:1.5rem;margin:0 0 14px;color:var(--gc-fg)">Kit</h2>
       <ul style="margin:0;padding-left:20px;color:var(--gc-fg4);line-height:1.7">
         {%- for t in site.data.brew.tools %}
-        <li>{{ t }}</li>
+        <li{% if forloop.first %} data-gc-bc-pot data-small="{{ t | escape }}"{% endif %}>{{ t }}</li>
         {%- endfor %}
       </ul>
       <p style="color:var(--gc-muted);font-size:0.92rem;line-height:1.55;margin:14px 0 0">No fancy equipment. A pot and a strainer are the whole setup.</p>
@@ -57,7 +81,7 @@ og_image: "uploads/opt/pour-a-1280.jpg"
           <span style="font-family:'Instrument Serif',serif;font-size:44px;line-height:0.8;color:{{ nc }}">0{{ forloop.index }}</span>
           <span style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:{{ lc }}">{{ s.label }}</span>
         </div>
-        <h3 style="font-family:'Instrument Serif',serif;font-weight:400;font-size:1.32rem;margin:20px 0 0;color:var(--gc-fg)">{{ s.title }}</h3>
+        <h3 style="font-family:'Instrument Serif',serif;font-weight:400;font-size:1.32rem;margin:20px 0 0;color:var(--gc-fg)">{% include brew-text.html t=s.title %}</h3>
         <p style="color:var(--gc-fg4);line-height:1.55;margin:9px 0 0;font-size:0.95rem">{{ s.desc }}</p>
       </div>
       {%- endfor %}
@@ -143,7 +167,8 @@ og_image: "uploads/opt/pour-a-1280.jpg"
   "inLanguage": "en-CA",
   "supply": [
     {%- for s in site.data.brew.supplies %}
-    { "@type": "HowToSupply", "name": {{ s | jsonify }} }{% unless forloop.last %},{% endunless %}
+    {%- capture st %}{% include brew-text.html t=s plain=true %}{% endcapture %}
+    { "@type": "HowToSupply", "name": {{ st | strip | jsonify }} }{% unless forloop.last %},{% endunless %}
     {%- endfor %}
   ],
   "tool": [
@@ -156,7 +181,8 @@ og_image: "uploads/opt/pour-a-1280.jpg"
     {
       "@type": "HowToStep",
       "position": {{ forloop.index }},
-      "name": {{ s.title | jsonify }},
+      {%- capture st %}{% include brew-text.html t=s.title plain=true %}{% endcapture %}
+      "name": {{ st | strip | jsonify }},
       "text": {{ s.desc | jsonify }},
       "url": "{{ page.url | absolute_url }}#steps-h2"
     }{% unless forloop.last %},{% endunless %}

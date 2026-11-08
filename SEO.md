@@ -355,6 +355,13 @@ Another item (chai concentrate by the litre, say) is just one more entry under
 Editing it updates the homepage teaser, the `/how-to-make-masala-chai/` page and
 the `HowTo` structured data (the one that can win a rich result in Google).
 
+**The brew calculator.** On the brew guide, "For − 2 + cups" scales the recipe
+from 1 to 30 cups, in the ingredient list and the step titles, with millilitres
+alongside cups and how much of a pouch it uses. The amounts come from `amounts`
+in `brew.yml` (per cup); in the text, `{water}`, `{milk}` and `{mix}` mark where
+they go. From `big_pot_from` cups the kit suggests a bigger pot. A link like
+`/how-to-make-masala-chai/?cups=12` opens it at 12 cups.
+
 The longer written guide on that page is normal text in
 `how-to-make-masala-chai/index.html` — edit it like a document.
 
@@ -559,7 +566,9 @@ and nothing takes focus:
   bottom, after the same delay. On product pages it sits above the phone buy bar.
 - **What's on it:** one line, a "See the perks" link that opens the four perks,
   and an email box with a **Join** button.
-- **Closing it:** the × (or Escape) hides it for 30 days.
+- **Closing it:** the × (or Escape) hides it for 30 days and leaves a small gold
+  **"10% off" dot** in the same corner, on every page, that opens it again. The
+  dot goes away for good once they join.
 - **After joining:** it says *"You're in the Chai Club! ✶ Check your inbox…"*,
   then tidies itself away. Members never see it again.
 - **Where it never shows:** the checkout page and the order-confirmed page.
