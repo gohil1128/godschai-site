@@ -1,0 +1,17 @@
+---
+layout: null
+sitemap: false
+---
+{
+  "name": "God's Chai",
+  "short_name": "God's Chai",
+  "description": "Masala chai brewed fresh in Saskatoon, and premixes shipped across Canada.",
+  "start_url": "{{ '/' | relative_url }}",
+  "display": "browser",
+  "background_color": "#FDF8EE",
+  "theme_color": "#FDF8EE",
+  "icons": [
+    { "src": "{{ '/favicon-192.png' | relative_url }}", "sizes": "192x192", "type": "image/png" },
+    { "src": "{{ '/uploads/opt/app-icon-512.png' | relative_url }}", "sizes": "512x512", "type": "image/png" }
+  ]
+}
