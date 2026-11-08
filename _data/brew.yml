@@ -2,14 +2,29 @@
 # and the HowTo JSON-LD (which is rich-result eligible in Google).
 
 serves: 2
+
+# The amounts, per cup of chai. The brew calculator on /how-to-make-masala-chai/
+# multiplies these by however many cups someone is making. In the text below,
+# {water}, {milk} and {mix} stand for the amount for `serves` cups (`text`),
+# and the calculator swaps in the scaled amount.
+amounts:
+  water: { per_cup: 0.5, unit: "cup", text: "1 cup" }
+  milk:  { per_cup: 0.5, unit: "cup", text: "1 cup" }
+  mix:   { per_cup: 1, unit: "tbsp", text: "2 tbsp" }
+mix_grams_per_cup: 5         # a 125 g pouch makes 25 cups
+pouch_grams: 125
+max_cups: 30
+# From this many cups, the kit says to use a bigger pot (it rises).
+big_pot_from: 5
+big_pot: "A large heavy-bottomed pot, no more than half full (it rises)"
 total_time: "PT10M"          # ISO 8601 duration for schema.org
 prep_time: "PT2M"
 cook_time: "PT8M"
 
 supplies:
-  - "1 cup water"
-  - "1 cup whole milk"
-  - "2 tbsp God's Chai masala blend"
+  - "{water} water"
+  - "{milk} whole milk"
+  - "{mix} God's Chai masala blend"
   - "Sugar to taste"
 
 tools:
@@ -18,11 +33,11 @@ tools:
 
 steps:
   - label: "Boil"
-    title: "1 cup water, 1 cup milk"
+    title: "{water} water, {milk} milk"
     desc: "Bring both to a boil together in a small pot. Equal parts, no measuring cup gymnastics."
     accent: false
   - label: "Blend"
-    title: "2 tbsp God's Chai"
+    title: "{mix} God's Chai"
     desc: "Stir in the mix and sugar to taste. Give the bag a shake first — the spices settle."
     accent: false
   - label: "Rise"

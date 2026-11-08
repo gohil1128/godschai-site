@@ -247,7 +247,7 @@ og_image: "uploads/og-image.jpg"
             <span style="font-family:'Instrument Serif',serif;font-size:44px;line-height:0.8;color:{{ nc }}">0{{ forloop.index }}</span>
             <span style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:{{ lc }}">{{ s.label }}</span>
           </div>
-          <h3 style="font-family:'Instrument Serif',serif;font-weight:400;font-size:1.32rem;margin:20px 0 0;color:var(--gc-fg)">{{ s.title }}</h3>
+          <h3 style="font-family:'Instrument Serif',serif;font-weight:400;font-size:1.32rem;margin:20px 0 0;color:var(--gc-fg)">{% include brew-text.html t=s.title plain=true %}</h3>
           <p style="color:var(--gc-fg4);line-height:1.55;margin:9px 0 0;font-size:0.95rem">{{ s.desc }}</p>
         </div>
         {%- endfor %}

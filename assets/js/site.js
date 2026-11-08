@@ -280,6 +280,68 @@ layout: null
     });
   }
 
+  /* ---------- 5c. Brew calculator (brew guide) ----------
+     "For [-] 2 [+] cups" on the brew guide: scales the recipe in
+     _data/brew.yml (amounts per cup) everywhere it appears on the page. Without
+     JavaScript the page shows the recipe for 2, as written. ?cups=6 opens it
+     at 6. */
+  var calc = d.querySelector('[data-gc-brewcalc]');
+  if (calc) {
+    var A = {}; try { A = JSON.parse(calc.getAttribute('data-amounts')); } catch (e) {}
+    var base = Number(calc.getAttribute('data-serves')) || 2;
+    var maxN = Number(calc.getAttribute('data-max')) || 30;
+    var gPerCup = Number(calc.getAttribute('data-g')) || 5;
+    var pouchG = Number(calc.getAttribute('data-pouch')) || 125;
+    var bigFrom = Number(calc.getAttribute('data-big')) || 0;
+    var ui = calc.querySelector('.gc-bc'), out = calc.querySelector('[data-gc-bc-n]');
+    var less = calc.querySelector('[data-gc-bc-less]'), more = calc.querySelector('[data-gc-bc-more]');
+    var unit = calc.querySelector('[data-gc-bc-unit]'), note = calc.querySelector('[data-gc-bc-note]');
+    var pot = d.querySelector('[data-gc-bc-pot]');
+    var FR = { 0: '', 0.25: '¼', 0.5: '½', 0.75: '¾' };
+    var quarters = function (x) {
+      var q = Math.round(x * 4) / 4, w = Math.floor(q), f = FR[q - w];
+      return (w ? String(w) : (f ? '' : '0')) + f;
+    };
+    var cups = function (x) {
+      var q = Math.round(x * 4) / 4, ml = x * 250;
+      var metric = ml < 1000 ? Math.round(ml / 5) * 5 + ' ml' : (Math.round(ml / 50) * 50 / 1000) + ' L';
+      return quarters(x) + (q > 1 ? ' cups' : ' cup') + ' (' + metric + ')';
+    };
+    // 16 tbsp to a cup: big batches also get it in cups, which is easier to measure.
+    var tbsp = function (x) {
+      var c = x / 16;
+      return quarters(x) + ' tbsp' + (x >= 8 ? ' (about ' + quarters(c) + (c > 1.125 ? ' cups)' : ' cup)') : '');
+    };
+    var n = base;
+    var m = /[?&]cups=(\d+)/.exec(location.search);
+    if (m) n = Math.min(maxN, Math.max(1, parseInt(m[1], 10)));
+    var draw = function (flash) {
+      out.textContent = n;
+      unit.textContent = n === 1 ? 'cup' : 'cups';
+      less.disabled = n <= 1; more.disabled = n >= maxN;
+      [].forEach.call(d.querySelectorAll('[data-gc-amt]'), function (el) {
+        var a = A[el.getAttribute('data-gc-amt')]; if (!a) return;
+        var x = a.per_cup * n;
+        el.textContent = a.unit === 'tbsp' ? tbsp(x) : cups(x);
+        if (flash) { el.classList.remove('is-new'); void el.offsetWidth; el.classList.add('is-new'); setTimeout(function () { el.classList.remove('is-new'); }, 700); }
+      });
+      [].forEach.call(d.querySelectorAll('[data-gc-serves]'), function (el) { el.textContent = n; });
+      if (pot) pot.textContent = bigFrom && n >= bigFrom ? calc.getAttribute('data-big-text') : pot.getAttribute('data-small');
+      if (note && A.mix) {
+        // Pouch use goes by cups (a pouch makes pouch/gPerCup of them), not spoons.
+        var g = Math.round(gPerCup * n), share = g / pouchG;
+        note.textContent = 'That\'s about ' + g + ' g of mix: ' +
+          (share < 1 ? 'a ' + pouchG + ' g pouch makes ' + Math.round(pouchG / gPerCup) + ' cups.'
+                     : quarters(share) + (share > 1.125 ? ' pouches.' : ' pouch.'));
+        note.hidden = false;
+      }
+    };
+    less.addEventListener('click', function () { if (n > 1) { n--; draw(true); } });
+    more.addEventListener('click', function () { if (n < maxN) { n++; draw(true); } });
+    ui.hidden = false;
+    draw(false);
+  }
+
   /* ---------- 6. Mailchimp signup (JSONP) ---------- */
   var MC = 'https://{{ site.mailchimp.host }}/subscribe/post-json?u={{ site.mailchimp.u }}&id={{ site.mailchimp.id }}&f_id={{ site.mailchimp.f_id }}';
   /* Sends every named field in the form, not just EMAIL: the hidden SOURCE
@@ -403,7 +465,8 @@ layout: null
   /* ---------- 7. The Chai Club card ----------
      A small card in the bottom-right corner (_includes/popup.html; along the
      bottom on a phone, once they've scrolled). It slides up a few seconds in, never covers the page or takes focus, and goes away
-     for good once someone joins. Closing it hides it for dismiss_days. */
+     for good once someone joins. Closing it hides it for dismiss_days, and
+     leaves a small "10% off" dot in the corner that opens it again. */
   var clubCard = d.getElementById('gc-club');
   if (clubCard) {
     var CLUB_KEY = 'gc_club_dismissed_until';
@@ -416,13 +479,27 @@ layout: null
       } catch (e) {}
       return false;
     };
-    var hideClub = function () {
+    var joined = function () {
+      try { return !!localStorage.getItem('gc_subscribed'); } catch (e) { return false; }
+    };
+    var dot = d.querySelector('[data-gc-club-dot]');
+    var showDot = function (on) {
+      if (!dot) return;
+      if (on && !joined()) {
+        dot.hidden = false;
+        requestAnimationFrame(function () { requestAnimationFrame(function () { dot.classList.add('is-in'); }); });
+      } else {
+        dot.classList.remove('is-in');
+        dot.hidden = true;
+      }
+    };
+    var hideClub = function (then) {
       clubCard.classList.remove('is-in');
-      setTimeout(function () { clubCard.hidden = true; }, 600);
+      setTimeout(function () { clubCard.hidden = true; if (then) then(); }, 600);
     };
     clubCard.querySelector('[data-gc-club-close]').addEventListener('click', function () {
       try { localStorage.setItem(CLUB_KEY, String(Date.now() + days * 864e5)); } catch (e) {}
-      hideClub();
+      hideClub(function () { showDot(true); });
     });
     // Escape closes it, but only while someone is actually in it.
     clubCard.addEventListener('keydown', function (e) {
@@ -434,14 +511,25 @@ layout: null
       clubCard.classList.add('is-done');
       setTimeout(hideClub, 9000);
     });
-    var showClub = function () {
-      if (clubCard.classList.contains('is-in') || !clubCard.hidden || clubSuppressed()) return;
+    var showClub = function (asked) {
+      if (clubCard.classList.contains('is-in') || !clubCard.hidden || (!asked && clubSuppressed())) return;
       clubCard.hidden = false;
       // lay it out off-screen first, then slide it up
       requestAnimationFrame(function () {
         requestAnimationFrame(function () { clubCard.classList.add('is-in'); });
       });
     };
+    // The dot: tapping it brings the card back (and closing it again brings
+    // the dot back). Shown on every page while the card is dismissed.
+    if (dot) {
+      dot.addEventListener('click', function () {
+        showDot(false);
+        showClub(true);
+        var box = clubCard.querySelector('input[type="email"]');
+        if (box) setTimeout(function () { box.focus({ preventScroll: true }); }, 450);
+      });
+      if (!joined() && clubSuppressed()) showDot(true);
+    }
     if (!clubSuppressed()) {
       // On a phone the card spans the bottom of the screen, which on the
       // homepage is where the hero's buttons are. It still comes up after the
