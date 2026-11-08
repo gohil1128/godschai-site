@@ -444,19 +444,20 @@ layout: null
     };
     if (!clubSuppressed()) {
       // On a phone the card spans the bottom of the screen, which on the
-      // homepage is where the hero's buttons are. So there it waits until
-      // they've scrolled past the first screen (or 15 seconds, if they don't).
+      // homepage is where the hero's buttons are. It still comes up after the
+      // same delay (_data/club.yml), it just doesn't beat the scroll to it.
       var phone = window.matchMedia && window.matchMedia('(max-width:560px)').matches;
       var waited = false, scrolled = !phone;
       var tryShow = function () { if (waited && scrolled) showClub(); };
-      setTimeout(function () { waited = true; tryShow(); }, (Number(clubCard.getAttribute('data-delay')) || 10) * 1000);
+      var delayMs = (Number(clubCard.getAttribute('data-delay')) || 5) * 1000;
+      setTimeout(function () { waited = true; tryShow(); }, delayMs);
       if (phone) {
         var onScroll = function () {
           if (window.scrollY < window.innerHeight * 0.6) return;
           scrolled = true; window.removeEventListener('scroll', onScroll); tryShow();
         };
         window.addEventListener('scroll', onScroll, { passive: true });
-        setTimeout(function () { scrolled = true; tryShow(); }, 15000);
+        setTimeout(function () { scrolled = true; tryShow(); }, delayMs);
       }
     }
   }

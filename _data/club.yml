@@ -6,10 +6,10 @@
 # with the members' code. If the service can't be reached, the card signs them
 # up straight to Mailchimp instead, so nobody is lost. See SEO.md, "The Chai Club".
 
-# The card shows this many seconds after someone arrives (on a phone, once they've
-# also scrolled past the first screen, or after 15 seconds), and only to people
-# who haven't joined or closed it. Closing it hides it for dismiss_days.
-delay_seconds: 10
+# The card shows this many seconds after someone arrives (on a phone too), and
+# only to people who haven't joined or closed it. Closing it hides it for
+# dismiss_days.
+delay_seconds: 5
 dismiss_days: 30
 
 # Mailchimp's SOURCE field for these signups.
