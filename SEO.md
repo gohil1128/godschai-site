@@ -442,8 +442,8 @@ python3 tools/build-logo.py
 python3 tools/optimize-images.py
 # 2. change the matching colours in _includes/base-styles-dark.html
 #    (the two rules just under "gods-chai-logo:defined")
-# 3. the browser-tab icon: edit BRAND/INK in tools/make-favicon.py, then
-python3 tools/make-favicon.py
+# 3. the browser-tab icon is its own artwork (see "The browser-tab icon"):
+#    replace it and run  bash tools/make-icons.sh
 ```
 
 Change one without the others and the animated logo and the still ones stop
@@ -482,19 +482,23 @@ That still is what people see for the moment before the video arrives.
 
 ## The browser-tab icon
 
-The little icon on the browser tab is the **G from the logo** — the actual
-letterform, taken out of the animated logo's own artwork, cream on a rust tile
-like the back of the pouch.
+The icon on browser tabs, next to the site in Google results, on an iPhone home
+screen, and the logo in the site's business details for Google, is the **gold
+God's Chai tile** (`uploads/_src/app-icon-source.png`).
 
-`tools/make-favicon.py` builds `favicon.ico`, `favicon-32.png` and
-`apple-touch-icon.png`. Re-run it if the logo artwork ever changes:
+`tools/make-icons.sh` cuts the tile out and writes every size: `favicon.ico`,
+`favicon-32/48/96/144/192.png`, `apple-touch-icon.png` and
+`uploads/opt/app-icon-512.png`. The 16-48px ones are cropped closer around the
+lettering so it stays readable that small. With new artwork, replace the
+source image (and the crop numbers at the top of the script if the tile moved),
+then:
 
 ```bash
-python3 tools/make-favicon.py
+bash tools/make-icons.sh
 ```
 
-A plain G with no tile was tried first — it disappears against a white tab
-strip at small sizes, which is why it sits on a tile.
+Google picks up a new icon when it next crawls the homepage, which can take a
+few days to a few weeks.
 
 ---
 
