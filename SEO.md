@@ -493,10 +493,13 @@ That still is what people see for the moment before the video arrives.
 ## The browser-tab icon
 
 The icon on browser tabs, next to the site in Google results, on an iPhone home
-screen, and the logo in the site's business details for Google, is the **gold
-God's Chai tile** (`uploads/_src/app-icon-source.png`).
+screen, and the logo in the site's business details for Google, is the **glossy
+God's Chai tile in beige** (`uploads/_src/app-icon-source.png` is the original gold
+artwork; the script recolours the tile to beige and keeps the lettering and the
+shine).
 
-`tools/make-icons.sh` cuts the tile out and writes every size: `favicon.ico`,
+`tools/make-icons.sh` cuts the tile out, recolours it (`TINT` at the top of the
+script; `TINT="100,100"` brings the gold back) and writes every size: `favicon.ico`,
 `favicon-32/48/96/144/192.png`, `apple-touch-icon.png` and
 `uploads/opt/app-icon-512.png`. The 16-48px ones are cropped closer around the
 lettering so it stays readable that small. With new artwork, replace the

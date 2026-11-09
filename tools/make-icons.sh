@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# Build every site icon from the app-icon artwork: the gold God's Chai tile.
+# Build every site icon from the app-icon artwork: the glossy God's Chai tile,
+# recoloured from gold to beige (see TINT below).
 #
 #     bash tools/make-icons.sh
 #
@@ -27,15 +28,29 @@ RADIUS=158               # its rounded corners, in source pixels
 # lettering a smudge: those are cut closer around the logo instead.
 SMALL=540x540+693+275
 SMALL_RADIUS=118
-GOLD="#E29F3A"           # the tile's colour, for the square iPhone icon
+# The artwork's tile is gold. The icons use the same glossy tile in beige: the
+# colours are turned down and lightened (TINT = brightness,saturation for
+# ImageMagick's -modulate) everywhere except the dark lettering, so the shine and
+# shading stay. For the original gold, set TINT="100,100".
+TINT="135,58"
 TMP=$(mktemp -d); trap 'rm -rf "$TMP"' EXIT
 
-convert "$SRC" -crop "$CROP" +repage "$TMP/square.png"
+# recolor IN OUT: tile colour changed, dark lettering kept as drawn.
+recolor() {
+  convert "$1" -colorspace Gray -level 22%,48% -negate -blur 0x0.8 "$TMP/mask.png"
+  convert "$1" -modulate "$TINT,100" "$TMP/tinted.png"
+  convert "$TMP/tinted.png" "$1" "$TMP/mask.png" -composite "$2"
+}
+
+convert "$SRC" -crop "$CROP" +repage "$TMP/square-gold.png"
+recolor "$TMP/square-gold.png" "$TMP/square.png"
 convert "$TMP/square.png" \
   \( -size 720x720 xc:none -fill white -draw "roundrectangle 0,0,719,719,$RADIUS,$RADIUS" \) \
   -alpha set -compose DstIn -composite "$TMP/tile.png"
 
-convert "$SRC" -crop "$SMALL" +repage \
+convert "$SRC" -crop "$SMALL" +repage "$TMP/close-gold.png"
+recolor "$TMP/close-gold.png" "$TMP/close-flat.png"
+convert "$TMP/close-flat.png" \
   \( -size 540x540 xc:none -fill white -draw "roundrectangle 0,0,539,539,$SMALL_RADIUS,$SMALL_RADIUS" \) \
   -alpha set -compose DstIn -composite "$TMP/close.png"
 for s in 16 32 48; do
@@ -55,6 +70,7 @@ cp "$TMP/tile-96.png" favicon-96.png
 cp "$TMP/tile-144.png" favicon-144.png
 cp "$TMP/tile-192.png" favicon-192.png
 cp "$TMP/tile-512.png" uploads/opt/app-icon-512.png
+GOLD=$(convert "$TMP/square.png" -format "#%[hex:p{120,360}]" info: | cut -c1-7)   # the tile's own colour
 convert -size 720x720 "xc:$GOLD" "$TMP/tile.png" -compose over -composite \
   -filter Lanczos -resize 180x180 -depth 8 -strip apple-touch-icon.png
 echo "icons written"
