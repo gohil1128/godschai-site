@@ -2,7 +2,8 @@
   A line from _data/brew.yml with its {water}/{milk}/{mix} filled in with the
   amounts for `serves` cups. plain=true gives bare text (structured data);
   otherwise each amount is wrapped so the brew calculator can rescale it.
-  Params: t (the text), plain (optional)
+  Params: t (the text), plain (optional), short (optional: the page rescales it
+  to just the measure, "3 cups", without millilitres or grams)
 {%- endcomment -%}
 {%- assign a = site.data.brew.amounts -%}
 {%- assign out = include.t -%}
@@ -11,7 +12,7 @@
   {%- if include.plain -%}
     {%- assign out = out | replace: token, k[1].text -%}
   {%- else -%}
-    {%- capture span %}<span data-gc-amt="{{ k[0] }}">{{ k[1].text }}</span>{% endcapture -%}
+    {%- capture span %}<span data-gc-amt="{{ k[0] }}"{% if include.short %} data-short{% endif %}>{{ k[1].text }}</span>{% endcapture -%}
     {%- assign out = out | replace: token, span -%}
   {%- endif -%}
 {%- endfor -%}

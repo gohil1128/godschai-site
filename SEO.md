@@ -355,12 +355,15 @@ Another item (chai concentrate by the litre, say) is just one more entry under
 Editing it updates the homepage teaser, the `/how-to-make-masala-chai/` page and
 the `HowTo` structured data (the one that can win a rich result in Google).
 
-**The brew calculator.** On the brew guide, "For − 2 + cups" scales the recipe
-from 1 to 30 cups, in the ingredient list and the step titles, with millilitres
-alongside cups and how much of a pouch it uses. The amounts come from `amounts`
-in `brew.yml` (per cup); in the text, `{water}`, `{milk}` and `{mix}` mark where
-they go. From `big_pot_from` cups the kit suggests a bigger pot. A link like
-`/how-to-make-masala-chai/?cups=12` opens it at 12 cups.
+**The brew board.** At the top of the brew guide, one screen holds everything:
+a "Making − 7 +" cup counter, three
+tiles (water, milk, mix, in cups and ml, and heaped tbsp and grams), a line on
+pouch use and when to use a big pot, and the four steps as tabs with a Next
+button. Changing the cups updates it all in place, and the board keeps its size,
+so nobody has to scroll. The amounts come from `amounts` in `brew.yml` (per
+cup, 1 to 30); in the text, `{water}`, `{milk}` and `{mix}` mark where they go.
+`/how-to-make-masala-chai/?cups=12` opens it at 12 cups. Without JavaScript the
+board stays hidden and the page shows the plain list and four steps for 2 cups.
 
 The longer written guide on that page is normal text in
 `how-to-make-masala-chai/index.html` — edit it like a document.
