@@ -24,15 +24,6 @@ og_image: "uploads/opt/pour-a-1280.jpg"
        data-big="{{ brew.big_pot_from }}" data-big-text="{{ brew.big_pot | escape }}">
     <div class="gc-bb-left">
       <div class="gc-bb-top">
-        <svg class="gc-bb-cup" viewBox="0 0 100 124" aria-hidden="true" focusable="false">
-          <defs>
-            <clipPath id="gc-bb-glass"><path d="M22 34h56l-7 74q-1 9-9 9H38q-8 0-9-9z"/></clipPath>
-            <linearGradient id="gc-bb-chai" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#D9A464"/><stop offset=".6" stop-color="#B9773F"/><stop offset="1" stop-color="#8E4E27"/></linearGradient>
-          </defs>
-          <g class="gc-bb-steam"><path d="M40 24c-5-6 4-10-1-18"/><path d="M50 22c-5-7 5-11 0-19"/><path d="M60 24c-5-6 4-10-1-18"/></g>
-          <g clip-path="url(#gc-bb-glass)"><g class="gc-bb-lvl" data-gc-bb-lvl><rect x="0" y="0" width="100" height="100" fill="url(#gc-bb-chai)"/><rect x="0" y="0" width="100" height="3" fill="#F3DDB8" opacity=".85"/></g></g>
-          <path d="M20 31h60l-7.2 77.4q-1.2 11.6-11 11.6H38.2q-9.8 0-11-11.6z" fill="none" style="stroke:var(--gc-fg)" stroke-width="3.2" stroke-linejoin="round"/>
-        </svg>
         <div>
           <span class="gc-bb-k">Making</span>
           <div class="gc-bb-step" role="group" aria-label="How many cups">
@@ -46,7 +37,7 @@ og_image: "uploads/opt/pour-a-1280.jpg"
       <dl class="gc-bb-tiles">
         <div><dt>Water</dt><dd data-gc-tile="water"><b>{{ brew.amounts.water.text }}</b><small></small></dd></div>
         <div><dt>Milk</dt><dd data-gc-tile="milk"><b>{{ brew.amounts.milk.text }}</b><small></small></dd></div>
-        <div><dt>Mix</dt><dd data-gc-tile="mix"><b>{{ brew.amounts.mix.text | replace: 'heaped ', '' }}</b><small></small></dd></div>
+        <div><dt>Mix, heaped</dt><dd data-gc-tile="mix"><b>{{ brew.amounts.mix.text | replace: 'heaped ', '' }}</b><small></small></dd></div>
       </dl>
       <p class="gc-bb-note" data-gc-bc-note></p>
     </div>
@@ -87,12 +78,7 @@ og_image: "uploads/opt/pour-a-1280.jpg"
     background:rgba(var(--gc-surf-rgb),0.85);border:1px solid rgba(var(--gc-gold-rgb),0.2);box-shadow:0 18px 44px -28px rgba(var(--gc-shadow-rgb),0.35)}
   .gc-bb[hidden]{display:none}
   @media (min-width:860px){.gc-bb{grid-template-columns:1.05fr 1fr;align-items:stretch}}
-  .gc-bb-top{display:flex;align-items:center;gap:clamp(12px,3vw,22px)}
-  .gc-bb-cup{flex:0 0 auto;width:clamp(64px,19vw,92px);height:auto;overflow:visible}
-  .gc-bb-lvl{transform:translateY(104px);transition:transform .55s cubic-bezier(.2,.8,.2,1)}
-  .gc-bb-steam path{fill:none;stroke:var(--gc-muted);stroke-width:2.4;stroke-linecap:round;opacity:0;animation:gc-bb-steam 3s ease-in-out infinite}
-  .gc-bb-steam path:nth-child(2){animation-delay:.9s}.gc-bb-steam path:nth-child(3){animation-delay:1.8s}
-  @keyframes gc-bb-steam{0%{opacity:0;transform:translateY(6px)}40%{opacity:.6}100%{opacity:0;transform:translateY(-6px)}}
+  .gc-bb-top{display:flex;align-items:center;gap:clamp(12px,3vw,22px);padding:2px 4px}
   .gc-bb-k{display:block;font:400 11px 'DM Mono',monospace;letter-spacing:0.16em;text-transform:uppercase;color:var(--gc-muted)}
   .gc-bb-step{display:flex;align-items:center;gap:8px;margin:2px 0}
   .gc-bb-step button{width:44px;height:44px;border-radius:999px;border:1px solid rgba(var(--gc-ink-rgb),0.25);background:transparent;color:var(--gc-fg);
@@ -104,7 +90,7 @@ og_image: "uploads/opt/pour-a-1280.jpg"
   .gc-bb-tiles dt{font:400 10.5px 'DM Mono',monospace;letter-spacing:0.16em;text-transform:uppercase;color:var(--gc-gold-d)}
   .gc-bb-tiles dd{margin:4px 0 0}
   .gc-bb-tiles b{display:block;font:400 clamp(1.15rem,4.6vw,1.5rem)/1.1 'Instrument Serif',serif;color:var(--gc-fg)}
-  .gc-bb-tiles small{display:block;margin-top:3px;font:400 11.5px 'DM Mono',monospace;color:var(--gc-fg4)}
+  .gc-bb-tiles small{display:block;margin-top:3px;font:400 11px 'DM Mono',monospace;color:var(--gc-fg4);white-space:nowrap}
   .gc-bb-note{margin:10px 2px 0;font-size:12.5px;line-height:1.45;color:var(--gc-muted)}
   .gc-bb-right{display:flex;flex-direction:column;min-width:0}
   .gc-bb-tabs{display:flex;gap:6px;padding:4px;border-radius:999px;background:rgba(var(--gc-ink-rgb),0.06)}
@@ -128,10 +114,10 @@ og_image: "uploads/opt/pour-a-1280.jpg"
   @media (max-width:560px){.gc-bb-eyebrow{display:none}.gc-bb{margin-top:16px}}
   /* Short phones: trim a little so the whole board still fits. */
   @media (max-height:700px) and (max-width:560px){
-    .gc-bb{gap:12px;padding:14px}.gc-bb-cup{width:56px}.gc-bb-tiles{margin-top:10px}.gc-bb-tiles > div{padding:8px 8px 7px}
+    .gc-bb{gap:12px;padding:14px}.gc-bb-tiles{margin-top:10px}.gc-bb-tiles > div{padding:8px 8px 7px}
     .gc-bb-note{margin-top:6px}.gc-bb-panels{margin-top:10px}.gc-bb-next{display:none}.gc-bb-step button{width:40px;height:40px}
   }
-  @media (prefers-reduced-motion:reduce){.gc-bb-lvl,.gc-bb-panel{transition:none}.gc-bb-steam path{animation:none;opacity:.35}}
+  @media (prefers-reduced-motion:reduce){.gc-bb-panel{transition:none}}
 </style>
 <section aria-labelledby="need-h2" data-gc-board-hides style="max-width:1240px;margin:0 auto;padding:clamp(30px,4vw,50px) clamp(18px,4vw,40px)">
   <div data-gc-stagger style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:clamp(16px,2vw,24px)">

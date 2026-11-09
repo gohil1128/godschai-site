@@ -281,7 +281,7 @@ layout: null
   }
 
   /* ---------- 5c. Brew board (brew guide) ----------
-     One screen: pick the cups and the water, milk and mix, the glass, the pot
+     One screen: pick the cups and the water, milk and mix, the pot
      note and the step you're on all change in place. The recipe is _data/brew.yml
      (amounts per cup), scaled from 1 to 30 cups. Without JavaScript the board
      stays hidden and the page shows the plain list and four steps (for 2 cups).
@@ -297,7 +297,6 @@ layout: null
     var out = calc.querySelector('[data-gc-bc-n]');
     var less = calc.querySelector('[data-gc-bc-less]'), more = calc.querySelector('[data-gc-bc-more]');
     var unit = calc.querySelector('[data-gc-bc-unit]'), note = calc.querySelector('[data-gc-bc-note]');
-    var lvl = calc.querySelector('[data-gc-bb-lvl]');
     var FR = { 0: '', 0.25: '¼', 0.5: '½', 0.75: '¾' };
     var quarters = function (x) {
       var q = Math.round(x * 4) / 4, w = Math.floor(q), f = FR[q - w];
@@ -328,11 +327,9 @@ layout: null
         var a = A[el.getAttribute('data-gc-tile')]; if (!a) return;
         var x = a.per_cup * n, spoons = /tbsp/.test(a.unit);
         el.querySelector('b').textContent = spoons ? quarters(x) + ' tbsp' : cupText(x);
-        el.querySelector('small').textContent = spoons ? 'heaped · ' + Math.round(x / a.per_cup * gPerCup) + ' g' : ml(x);
+        el.querySelector('small').textContent = spoons ? Math.round(x / a.per_cup * gPerCup) + ' g' : ml(x);
       });
       [].forEach.call(d.querySelectorAll('[data-gc-serves]'), function (el) { el.textContent = n; });
-      // the glass fills as the batch grows (a curve, so the first few cups still show)
-      if (lvl) lvl.style.transform = 'translateY(' + (104 - 66 * (0.2 + 0.8 * Math.sqrt((n - 1) / Math.max(1, maxN - 1)))).toFixed(1) + 'px)';
       if (note) {
         var g = Math.round(gPerCup * n), share = g / pouchG;
         note.textContent = g + ' g of mix, ' + (share < 1 ? 'of a ' + pouchG + ' g pouch (it makes ' + Math.round(pouchG / gPerCup) + ' cups).'
@@ -372,8 +369,16 @@ layout: null
     // never changes height when the cups or the step change.
     var boxes = [calc.querySelector('.gc-bb-panels'), note];
     var reserve = function () {
-      var keep = n; n = maxN; draw(false);
-      boxes.forEach(function (el) { if (el) { el.style.minHeight = ''; el.style.minHeight = el.getBoundingClientRect().height + 'px'; } });
+      // the longest wording isn't always the biggest batch ("of a 125 g pouch…"
+      // is longer than "1¼ pouches"), so try a spread of sizes and keep the tallest
+      var keep = n, tall = boxes.map(function () { return 0; });
+      boxes.forEach(function (el) { if (el) el.style.minHeight = ''; });
+      [1, 2, 3, 4, 5, 6, 8, 10, 12, 15, 20, 25, maxN].forEach(function (k) {
+        if (k > maxN) return;
+        n = k; draw(false);
+        boxes.forEach(function (el, i) { if (el) tall[i] = Math.max(tall[i], el.getBoundingClientRect().height); });
+      });
+      boxes.forEach(function (el, i) { if (el) el.style.minHeight = tall[i] + 'px'; });
       n = keep; draw(false);
     };
     reserve();

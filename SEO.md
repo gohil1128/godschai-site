@@ -356,7 +356,7 @@ Editing it updates the homepage teaser, the `/how-to-make-masala-chai/` page and
 the `HowTo` structured data (the one that can win a rich result in Google).
 
 **The brew board.** At the top of the brew guide, one screen holds everything:
-a "Making − 7 +" cup counter with a glass that fills as the batch grows, three
+a "Making − 7 +" cup counter, three
 tiles (water, milk, mix, in cups and ml, and heaped tbsp and grams), a line on
 pouch use and when to use a big pot, and the four steps as tabs with a Next
 button. Changing the cups updates it all in place, and the board keeps its size,
