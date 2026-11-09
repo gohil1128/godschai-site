@@ -6,9 +6,68 @@ breadcrumb: "How to Make Masala Chai"
 og_image: "uploads/opt/pour-a-1280.jpg"
 ---
 
-<section aria-labelledby="page-h1" style="max-width:1240px;margin:0 auto;padding:clamp(110px,14vh,170px) clamp(18px,4vw,40px) clamp(20px,3vw,30px)">
-  <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gc-gold-t);margin-bottom:14px">Brew it your way</div>
-  <h1 id="page-h1" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(2.3rem,6vw,4.2rem);line-height:0.98;letter-spacing:0;margin:0;max-width:24ch">How to Make Masala Chai <span style="color:var(--gc-coral-t);font-style:italic">(the proper way)</span></h1>
+{%- assign brew = site.data.brew %}
+<section aria-labelledby="page-h1" style="max-width:1240px;margin:0 auto;padding:clamp(108px,12vh,124px) clamp(18px,4vw,40px) clamp(20px,3vw,30px)">
+  <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gc-gold-t);margin-bottom:10px" class="gc-bb-eyebrow">Brew it your way</div>
+  <h1 id="page-h1" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(2rem,5vw,3.4rem);line-height:0.98;letter-spacing:0;margin:0;max-width:24ch">How to Make Masala Chai <span style="color:var(--gc-coral-t);font-style:italic">(the proper way)</span></h1>
+
+  {%- comment -%}
+    The brew board: everything on one screen. Pick the cups, and the three
+    amounts, the pot note and the step you're on all change in place, so nobody
+    has to scroll to see the result. Needs JavaScript (assets/js/site.js, 5c);
+    without it this stays hidden and the plain ingredient list and four steps
+    below are shown instead.
+  {%- endcomment %}
+  <div class="gc-bb" data-gc-brewcalc data-gc-board hidden
+       data-serves="{{ brew.serves }}" data-max="{{ brew.max_cups | default: 30 }}"
+       data-amounts='{{ brew.amounts | jsonify }}' data-g="{{ brew.mix_grams_per_cup }}" data-pouch="{{ brew.pouch_grams }}"
+       data-big="{{ brew.big_pot_from }}" data-big-text="{{ brew.big_pot | escape }}">
+    <div class="gc-bb-left">
+      <div class="gc-bb-top">
+        <svg class="gc-bb-cup" viewBox="0 0 100 124" aria-hidden="true" focusable="false">
+          <defs>
+            <clipPath id="gc-bb-glass"><path d="M22 34h56l-7 74q-1 9-9 9H38q-8 0-9-9z"/></clipPath>
+            <linearGradient id="gc-bb-chai" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#D9A464"/><stop offset=".6" stop-color="#B9773F"/><stop offset="1" stop-color="#8E4E27"/></linearGradient>
+          </defs>
+          <g class="gc-bb-steam"><path d="M40 24c-5-6 4-10-1-18"/><path d="M50 22c-5-7 5-11 0-19"/><path d="M60 24c-5-6 4-10-1-18"/></g>
+          <g clip-path="url(#gc-bb-glass)"><g class="gc-bb-lvl" data-gc-bb-lvl><rect x="0" y="0" width="100" height="100" fill="url(#gc-bb-chai)"/><rect x="0" y="0" width="100" height="3" fill="#F3DDB8" opacity=".85"/></g></g>
+          <path d="M20 31h60l-7.2 77.4q-1.2 11.6-11 11.6H38.2q-9.8 0-11-11.6z" fill="none" style="stroke:var(--gc-fg)" stroke-width="3.2" stroke-linejoin="round"/>
+        </svg>
+        <div>
+          <span class="gc-bb-k">Making</span>
+          <div class="gc-bb-step" role="group" aria-label="How many cups">
+            <button type="button" class="gc-ico" data-gc-bc-less aria-label="One cup fewer">&minus;</button>
+            <output data-gc-bc-n aria-live="polite">{{ brew.serves }}</output>
+            <button type="button" class="gc-ico" data-gc-bc-more aria-label="One cup more">+</button>
+          </div>
+          <span class="gc-bb-k" data-gc-bc-unit>cups</span>
+        </div>
+      </div>
+      <dl class="gc-bb-tiles">
+        <div><dt>Water</dt><dd data-gc-tile="water"><b>{{ brew.amounts.water.text }}</b><small></small></dd></div>
+        <div><dt>Milk</dt><dd data-gc-tile="milk"><b>{{ brew.amounts.milk.text }}</b><small></small></dd></div>
+        <div><dt>Mix</dt><dd data-gc-tile="mix"><b>{{ brew.amounts.mix.text | replace: 'heaped ', '' }}</b><small></small></dd></div>
+      </dl>
+      <p class="gc-bb-note" data-gc-bc-note></p>
+    </div>
+    <div class="gc-bb-right">
+      <div class="gc-bb-tabs" role="tablist" aria-label="The four steps">
+        <button type="button" role="tab" id="gc-bb-t0" aria-controls="gc-bb-p0" aria-selected="true" tabindex="0" data-i="0"><i>01</i>{{ brew.steps[0].label }}</button>
+        <button type="button" role="tab" id="gc-bb-t1" aria-controls="gc-bb-p1" aria-selected="false" tabindex="-1" data-i="1"><i>02</i>{{ brew.steps[1].label }}</button>
+        <button type="button" role="tab" id="gc-bb-t2" aria-controls="gc-bb-p2" aria-selected="false" tabindex="-1" data-i="2"><i>03</i>{{ brew.steps[2].label }}</button>
+        <button type="button" role="tab" id="gc-bb-t3" aria-controls="gc-bb-p3" aria-selected="false" tabindex="-1" data-i="3"><i>04</i>{{ brew.steps[3].label }}</button>
+      </div>
+      <div class="gc-bb-panels">
+        {%- for s in brew.steps %}
+        <div class="gc-bb-panel{% if forloop.first %} is-on{% endif %}" role="tabpanel" id="gc-bb-p{{ forloop.index0 }}" aria-labelledby="gc-bb-t{{ forloop.index0 }}">
+          <h2>{% include brew-text.html t=s.title short=true %}</h2>
+          <p>{{ s.desc }}</p>
+        </div>
+        {%- endfor %}
+      </div>
+      <button type="button" class="gc-bb-next" data-gc-bb-next>Next step <span aria-hidden="true">→</span></button>
+    </div>
+  </div>
   <p style="font-size:clamp(1.05rem,1.5vw,1.25rem);line-height:1.6;color:var(--gc-fg2);max-width:56ch;margin:22px 0 0">Chai isn't a teabag in hot milk. It's whole spices, real tea and a pot that gets your full attention for about eight minutes. Here's exactly how we brew it in Saskatoon — and how to get the same cup at home.</p>
   <div style="display:flex;gap:24px;margin-top:28px;flex-wrap:wrap;font-family:'DM Mono',monospace;font-size:11.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--gc-fg4)">
     <span>Serves <span data-gc-serves>{{ site.data.brew.serves }}</span></span>
@@ -21,40 +80,69 @@ og_image: "uploads/opt/pour-a-1280.jpg"
 
 <div data-gc-reveal>
 
-<!-- WHAT YOU NEED (with the brew calculator: assets/js/site.js) -->
+<!-- WHAT YOU NEED: the plain list (the brew board above replaces it when JavaScript runs) -->
 <style>
-  .gc-bc{display:flex;align-items:center;gap:8px;font:400 12px 'DM Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:var(--gc-muted)}
-  .gc-bc[hidden]{display:none}
-  .gc-bc button{width:34px;height:34px;border-radius:999px;border:1px solid rgba(var(--gc-ink-rgb),0.22);background:transparent;color:var(--gc-fg);
-    font-size:18px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}
-  .gc-bc button:disabled{opacity:0.3;cursor:default}
-  .gc-bc output{min-width:2ch;text-align:center;font:400 22px 'Instrument Serif',serif;letter-spacing:0;text-transform:none;color:var(--gc-fg)}
+  /* The brew board (markup in the hero above) */
+  .gc-bb{margin:22px 0 0;display:grid;gap:18px 40px;max-width:980px;padding:clamp(16px,2.4vw,26px);border-radius:26px;
+    background:rgba(var(--gc-surf-rgb),0.85);border:1px solid rgba(var(--gc-gold-rgb),0.2);box-shadow:0 18px 44px -28px rgba(var(--gc-shadow-rgb),0.35)}
+  .gc-bb[hidden]{display:none}
+  @media (min-width:860px){.gc-bb{grid-template-columns:1.05fr 1fr;align-items:stretch}}
+  .gc-bb-top{display:flex;align-items:center;gap:clamp(12px,3vw,22px)}
+  .gc-bb-cup{flex:0 0 auto;width:clamp(64px,19vw,92px);height:auto;overflow:visible}
+  .gc-bb-lvl{transform:translateY(104px);transition:transform .55s cubic-bezier(.2,.8,.2,1)}
+  .gc-bb-steam path{fill:none;stroke:var(--gc-muted);stroke-width:2.4;stroke-linecap:round;opacity:0;animation:gc-bb-steam 3s ease-in-out infinite}
+  .gc-bb-steam path:nth-child(2){animation-delay:.9s}.gc-bb-steam path:nth-child(3){animation-delay:1.8s}
+  @keyframes gc-bb-steam{0%{opacity:0;transform:translateY(6px)}40%{opacity:.6}100%{opacity:0;transform:translateY(-6px)}}
+  .gc-bb-k{display:block;font:400 11px 'DM Mono',monospace;letter-spacing:0.16em;text-transform:uppercase;color:var(--gc-muted)}
+  .gc-bb-step{display:flex;align-items:center;gap:8px;margin:2px 0}
+  .gc-bb-step button{width:44px;height:44px;border-radius:999px;border:1px solid rgba(var(--gc-ink-rgb),0.25);background:transparent;color:var(--gc-fg);
+    font-size:22px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}
+  .gc-bb-step button:disabled{opacity:0.3;cursor:default}
+  .gc-bb-step output{min-width:2.2ch;text-align:center;font:400 clamp(2.6rem,9vw,3.4rem)/1 'Instrument Serif',serif;color:var(--gc-fg)}
+  .gc-bb-tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:16px 0 0;padding:0}
+  .gc-bb-tiles > div{padding:11px 10px 10px;border-radius:16px;background:rgba(var(--gc-gold-rgb),0.08);border:1px solid rgba(var(--gc-gold-rgb),0.16);min-width:0}
+  .gc-bb-tiles dt{font:400 10.5px 'DM Mono',monospace;letter-spacing:0.16em;text-transform:uppercase;color:var(--gc-gold-d)}
+  .gc-bb-tiles dd{margin:4px 0 0}
+  .gc-bb-tiles b{display:block;font:400 clamp(1.15rem,4.6vw,1.5rem)/1.1 'Instrument Serif',serif;color:var(--gc-fg)}
+  .gc-bb-tiles small{display:block;margin-top:3px;font:400 11.5px 'DM Mono',monospace;color:var(--gc-fg4)}
+  .gc-bb-note{margin:10px 2px 0;font-size:12.5px;line-height:1.45;color:var(--gc-muted)}
+  .gc-bb-right{display:flex;flex-direction:column;min-width:0}
+  .gc-bb-tabs{display:flex;gap:6px;padding:4px;border-radius:999px;background:rgba(var(--gc-ink-rgb),0.06)}
+  .gc-bb-tabs button{flex:1 1 0;min-width:0;display:flex;align-items:baseline;justify-content:center;gap:5px;padding:9px 4px;border:0;border-radius:999px;background:transparent;
+    color:var(--gc-fg4);font:600 12.5px 'Hanken Grotesk',sans-serif;cursor:pointer;transition:background-color .2s ease,color .2s ease}
+  .gc-bb-tabs button i{font:400 10px 'DM Mono',monospace;font-style:normal;color:var(--gc-gold-d)}
+  .gc-bb-tabs button[aria-selected="true"]{background:#F2A93C;color:#2B1B12}
+  .gc-bb-tabs button[aria-selected="true"] i{color:#2B1B12}
+  .gc-bb-tabs button:focus-visible,.gc-bb-next:focus-visible{outline:2px solid var(--gc-gold-t);outline-offset:2px}
+  /* The four panels share one cell, so the box keeps its height whichever step is showing. */
+  .gc-bb-panels{display:grid;margin:14px 0 0;flex:1 1 auto}
+  .gc-bb-panel{grid-area:1/1;visibility:hidden;opacity:0;transition:opacity .25s ease}
+  .gc-bb-panel.is-on{visibility:visible;opacity:1}
+  .gc-bb-panel h2{margin:0;font:400 clamp(1.3rem,5vw,1.7rem)/1.15 'Instrument Serif',serif;color:var(--gc-fg)}
+  .gc-bb-panel p{margin:8px 0 0;font-size:0.95rem;line-height:1.5;color:var(--gc-fg3)}
+  .gc-bb-next{align-self:flex-start;margin:10px 0 0;padding:8px 14px;border-radius:999px;border:1px solid rgba(var(--gc-ink-rgb),0.22);background:transparent;
+    color:var(--gc-fg);font:600 13px 'Hanken Grotesk',sans-serif;cursor:pointer}
+  .gc-bb-next:hover{border-color:var(--gc-gold-t);color:var(--gc-gold-t)}
   [data-gc-amt]{transition:background-color .4s ease;border-radius:4px}
   [data-gc-amt].is-new{background:rgba(var(--gc-gold-rgb),0.18)}
+  @media (max-width:560px){.gc-bb-eyebrow{display:none}.gc-bb{margin-top:16px}}
+  /* Short phones: trim a little so the whole board still fits. */
+  @media (max-height:700px) and (max-width:560px){
+    .gc-bb{gap:12px;padding:14px}.gc-bb-cup{width:56px}.gc-bb-tiles{margin-top:10px}.gc-bb-tiles > div{padding:8px 8px 7px}
+    .gc-bb-note{margin-top:6px}.gc-bb-panels{margin-top:10px}.gc-bb-next{display:none}.gc-bb-step button{width:40px;height:40px}
+  }
+  @media (prefers-reduced-motion:reduce){.gc-bb-lvl,.gc-bb-panel{transition:none}.gc-bb-steam path{animation:none;opacity:.35}}
 </style>
-<section aria-labelledby="need-h2" style="max-width:1240px;margin:0 auto;padding:clamp(30px,4vw,50px) clamp(18px,4vw,40px)">
+<section aria-labelledby="need-h2" data-gc-board-hides style="max-width:1240px;margin:0 auto;padding:clamp(30px,4vw,50px) clamp(18px,4vw,40px)">
   <div data-gc-stagger style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:clamp(16px,2vw,24px)">
     {%- assign brew = site.data.brew %}
-    <div style="padding:28px 26px 30px;background:rgba(var(--gc-surf-rgb),0.8);border:1px solid rgba(var(--gc-gold-rgb),0.16);border-radius:22px"
-         data-gc-brewcalc data-serves="{{ brew.serves }}" data-max="{{ brew.max_cups | default: 30 }}"
-         data-amounts='{{ brew.amounts | jsonify }}' data-g="{{ brew.mix_grams_per_cup }}" data-pouch="{{ brew.pouch_grams }}"
-         data-big="{{ brew.big_pot_from }}" data-big-text="{{ brew.big_pot | escape }}">
-      <div style="display:flex;align-items:center;justify-content:space-between;gap:12px 16px;flex-wrap:wrap;margin:0 0 14px">
-        <h2 id="need-h2" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:1.5rem;margin:0;color:var(--gc-fg)">What you need</h2>
-        <div class="gc-bc" role="group" aria-label="How many cups" hidden>
-          <span>For</span>
-          <button type="button" class="gc-ico" data-gc-bc-less aria-label="One cup fewer">&minus;</button>
-          <output data-gc-bc-n aria-live="polite">{{ brew.serves }}</output>
-          <button type="button" class="gc-ico" data-gc-bc-more aria-label="One cup more">+</button>
-          <span data-gc-bc-unit>cups</span>
-        </div>
-      </div>
+    <div style="padding:28px 26px 30px;background:rgba(var(--gc-surf-rgb),0.8);border:1px solid rgba(var(--gc-gold-rgb),0.16);border-radius:22px">
+      <h2 id="need-h2" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:1.5rem;margin:0 0 14px;color:var(--gc-fg)">What you need</h2>
       <ul style="margin:0;padding-left:20px;color:var(--gc-fg4);line-height:1.7">
         {%- for s in brew.supplies %}
         <li>{% include brew-text.html t=s %}</li>
         {%- endfor %}
       </ul>
-      <p data-gc-bc-note hidden style="margin:14px 0 0;font-size:0.92rem;line-height:1.55;color:var(--gc-muted)"></p>
     </div>
     <div style="padding:28px 26px 30px;background:rgba(var(--gc-surf-rgb),0.8);border:1px solid rgba(var(--gc-gold-rgb),0.16);border-radius:22px">
       <h2 style="font-family:'Instrument Serif',serif;font-weight:400;font-size:1.5rem;margin:0 0 14px;color:var(--gc-fg)">Kit</h2>
@@ -69,7 +157,7 @@ og_image: "uploads/opt/pour-a-1280.jpg"
 </section>
 
 <!-- THE FOUR STEPS -->
-<section aria-labelledby="steps-h2" style="background:linear-gradient(180deg,var(--gc-bg2),var(--gc-card));border-top:1px solid rgba(var(--gc-gold-rgb),0.14);border-bottom:1px solid rgba(var(--gc-gold-rgb),0.14)">
+<section aria-labelledby="steps-h2" data-gc-board-hides style="background:linear-gradient(180deg,var(--gc-bg2),var(--gc-card));border-top:1px solid rgba(var(--gc-gold-rgb),0.14);border-bottom:1px solid rgba(var(--gc-gold-rgb),0.14)">
   <div style="max-width:1240px;margin:0 auto;padding:clamp(48px,6vw,90px) clamp(18px,4vw,40px)">
     <h2 id="steps-h2" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(2rem,4.6vw,3.3rem);line-height:1;letter-spacing:0;margin:0 0 clamp(28px,4vw,40px);color:var(--gc-fg)">Four steps. One proper cup.</h2>
     <div data-gc-stagger style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:clamp(14px,1.8vw,20px)">

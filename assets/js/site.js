@@ -280,11 +280,12 @@ layout: null
     });
   }
 
-  /* ---------- 5c. Brew calculator (brew guide) ----------
-     "For [-] 2 [+] cups" on the brew guide: scales the recipe in
-     _data/brew.yml (amounts per cup) everywhere it appears on the page. Without
-     JavaScript the page shows the recipe for 2, as written. ?cups=6 opens it
-     at 6. */
+  /* ---------- 5c. Brew board (brew guide) ----------
+     One screen: pick the cups and the water, milk and mix, the glass, the pot
+     note and the step you're on all change in place. The recipe is _data/brew.yml
+     (amounts per cup), scaled from 1 to 30 cups. Without JavaScript the board
+     stays hidden and the page shows the plain list and four steps (for 2 cups).
+     ?cups=6 opens it at 6. */
   var calc = d.querySelector('[data-gc-brewcalc]');
   if (calc) {
     var A = {}; try { A = JSON.parse(calc.getAttribute('data-amounts')); } catch (e) {}
@@ -293,25 +294,20 @@ layout: null
     var gPerCup = Number(calc.getAttribute('data-g')) || 5;
     var pouchG = Number(calc.getAttribute('data-pouch')) || 125;
     var bigFrom = Number(calc.getAttribute('data-big')) || 0;
-    var ui = calc.querySelector('.gc-bc'), out = calc.querySelector('[data-gc-bc-n]');
+    var out = calc.querySelector('[data-gc-bc-n]');
     var less = calc.querySelector('[data-gc-bc-less]'), more = calc.querySelector('[data-gc-bc-more]');
     var unit = calc.querySelector('[data-gc-bc-unit]'), note = calc.querySelector('[data-gc-bc-note]');
-    var pot = d.querySelector('[data-gc-bc-pot]');
+    var lvl = calc.querySelector('[data-gc-bb-lvl]');
     var FR = { 0: '', 0.25: '¼', 0.5: '½', 0.75: '¾' };
     var quarters = function (x) {
       var q = Math.round(x * 4) / 4, w = Math.floor(q), f = FR[q - w];
       return (w ? String(w) : (f ? '' : '0')) + f;
     };
-    var cups = function (x) {
-      var q = Math.round(x * 4) / 4, ml = x * 250;
-      var metric = ml < 1000 ? Math.round(ml / 5) * 5 + ' ml' : (Math.round(ml / 50) * 50 / 1000) + ' L';
-      return quarters(x) + (q > 1 ? ' cups' : ' cup') + ' (' + metric + ')';
+    var ml = function (x) {
+      var v = x * 250;
+      return v < 1000 ? Math.round(v / 5) * 5 + ' ml' : (Math.round(v / 50) * 50 / 1000) + ' L';
     };
-    // The mix is measured in heaped tablespoons, 5 g each (the pouch's own
-    // measure); grams alongside, for anyone weighing a big batch.
-    var spoons = function (a, x) {
-      return quarters(x) + ' ' + a.unit + ' (' + Math.round(x / a.per_cup * gPerCup) + ' g)';
-    };
+    var cupText = function (x) { return quarters(x) + (Math.round(x * 4) / 4 > 1 ? ' cups' : ' cup'); };
     var n = base;
     var m = /[?&]cups=(\d+)/.exec(location.search);
     if (m) n = Math.min(maxN, Math.max(1, parseInt(m[1], 10)));
@@ -319,27 +315,70 @@ layout: null
       out.textContent = n;
       unit.textContent = n === 1 ? 'cup' : 'cups';
       less.disabled = n <= 1; more.disabled = n >= maxN;
+      // the amounts in the sentences (step titles, the plain list)
       [].forEach.call(d.querySelectorAll('[data-gc-amt]'), function (el) {
         var a = A[el.getAttribute('data-gc-amt')]; if (!a) return;
-        var x = a.per_cup * n;
-        el.textContent = /tbsp/.test(a.unit) ? spoons(a, x) : cups(x);
+        var x = a.per_cup * n, spoons = /tbsp/.test(a.unit), short = el.hasAttribute('data-short');
+        el.textContent = spoons ? quarters(x) + ' ' + a.unit + (short ? '' : ' (' + Math.round(x / a.per_cup * gPerCup) + ' g)')
+                                : cupText(x) + (short ? '' : ' (' + ml(x) + ')');
         if (flash) { el.classList.remove('is-new'); void el.offsetWidth; el.classList.add('is-new'); setTimeout(function () { el.classList.remove('is-new'); }, 700); }
       });
+      // the three big tiles
+      [].forEach.call(calc.querySelectorAll('[data-gc-tile]'), function (el) {
+        var a = A[el.getAttribute('data-gc-tile')]; if (!a) return;
+        var x = a.per_cup * n, spoons = /tbsp/.test(a.unit);
+        el.querySelector('b').textContent = spoons ? quarters(x) + ' tbsp' : cupText(x);
+        el.querySelector('small').textContent = spoons ? 'heaped · ' + Math.round(x / a.per_cup * gPerCup) + ' g' : ml(x);
+      });
       [].forEach.call(d.querySelectorAll('[data-gc-serves]'), function (el) { el.textContent = n; });
-      if (pot) pot.textContent = bigFrom && n >= bigFrom ? calc.getAttribute('data-big-text') : pot.getAttribute('data-small');
-      if (note && A.mix) {
-        // Pouch use goes by cups (a pouch makes pouch/gPerCup of them), not spoons.
+      // the glass fills as the batch grows (a curve, so the first few cups still show)
+      if (lvl) lvl.style.transform = 'translateY(' + (104 - 66 * (0.2 + 0.8 * Math.sqrt((n - 1) / Math.max(1, maxN - 1)))).toFixed(1) + 'px)';
+      if (note) {
         var g = Math.round(gPerCup * n), share = g / pouchG;
-        note.textContent = 'That\'s about ' + g + ' g of mix: ' +
-          (share < 1 ? 'a ' + pouchG + ' g pouch makes ' + Math.round(pouchG / gPerCup) + ' cups.'
-                     : quarters(share) + (share > 1.125 ? ' pouches.' : ' pouch.'));
-        note.hidden = false;
+        note.textContent = g + ' g of mix, ' + (share < 1 ? 'of a ' + pouchG + ' g pouch (it makes ' + Math.round(pouchG / gPerCup) + ' cups).'
+          : quarters(share) + (share > 1.125 ? ' pouches.' : ' pouch.')) +
+          (bigFrom && n >= bigFrom ? ' Use a big pot, filled no more than halfway: it rises.' : '');
       }
     };
     less.addEventListener('click', function () { if (n > 1) { n--; draw(true); } });
     more.addEventListener('click', function () { if (n < maxN) { n++; draw(true); } });
-    ui.hidden = false;
-    draw(false);
+
+    // the four steps: tabs and a Next button, one at a time
+    var tabs = [].slice.call(calc.querySelectorAll('[role="tab"]'));
+    var panels = [].slice.call(calc.querySelectorAll('[role="tabpanel"]'));
+    var go = function (i, focus) {
+      i = (i + tabs.length) % tabs.length;
+      tabs.forEach(function (t, k) { t.setAttribute('aria-selected', k === i ? 'true' : 'false'); t.tabIndex = k === i ? 0 : -1; });
+      panels.forEach(function (p, k) { p.classList.toggle('is-on', k === i); });
+      if (focus) tabs[i].focus();
+      var nx = calc.querySelector('[data-gc-bb-next]');
+      if (nx) nx.firstChild.textContent = i === tabs.length - 1 ? 'Back to step 1 ' : 'Next step ';
+    };
+    var cur = function () { return tabs.findIndex(function (t) { return t.getAttribute('aria-selected') === 'true'; }); };
+    tabs.forEach(function (t, k) {
+      t.addEventListener('click', function () { go(k); });
+      t.addEventListener('keydown', function (e) {
+        if (e.key === 'ArrowRight') { e.preventDefault(); go(k + 1, true); }
+        else if (e.key === 'ArrowLeft') { e.preventDefault(); go(k - 1, true); }
+      });
+    });
+    var next = calc.querySelector('[data-gc-bb-next]');
+    if (next) next.addEventListener('click', function () { go(cur() + 1); });
+
+    // turn the board on, and the plain version off
+    calc.hidden = false;
+    [].forEach.call(d.querySelectorAll('[data-gc-board-hides]'), function (el) { el.hidden = true; el.style.display = 'none'; });
+    // Reserve room for the longest wording (the biggest batch), so the board
+    // never changes height when the cups or the step change.
+    var boxes = [calc.querySelector('.gc-bb-panels'), note];
+    var reserve = function () {
+      var keep = n; n = maxN; draw(false);
+      boxes.forEach(function (el) { if (el) { el.style.minHeight = ''; el.style.minHeight = el.getBoundingClientRect().height + 'px'; } });
+      n = keep; draw(false);
+    };
+    reserve();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(reserve);
+    window.addEventListener('resize', reserve);
   }
 
   /* ---------- 6. Mailchimp signup (JSONP) ---------- */
