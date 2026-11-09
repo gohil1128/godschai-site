@@ -493,19 +493,20 @@ That still is what people see for the moment before the video arrives.
 ## The browser-tab icon
 
 The icon on browser tabs, next to the site in Google results, on an iPhone home
-screen, and the logo in the site's business details for Google, is the **glossy
-God's Chai tile in off-white**, the same shade as the "GC Tasks" app icon
-(`#F2EFE8`). `uploads/_src/app-icon-source.png` is the original gold artwork; the
-script recolours the tile, adds a soft sheen across the top and a gentle shade at
-the bottom, and keeps the dark lettering as drawn.
+screen, and the logo in the site's business details for Google, is a **glossy
+off-white tile with the God's Chai logo on it**, laid out like the "GC Tasks" app
+icon: the tile is `#F2EFE8`, "God's" and its underline are rust (`#AC6040`),
+"CHAI" is dark brown (`#362218`), there is no tagline, and the logo is about
+68% of the tile wide.
 
-`tools/make-icons.sh` cuts the tile out, recolours and glosses it (`TILE`, `SHEEN` and `SHADE` at the
-top of the script) and writes every size: `favicon.ico`,
-`favicon-32/48/96/144/192.png`, `apple-touch-icon.png` and
-`uploads/opt/app-icon-512.png`. The 16-48px ones are cropped closer around the
-lettering so it stays readable that small. With new artwork, replace the
-source image (and the crop numbers at the top of the script if the tile moved),
-then:
+`tools/make-icons.sh` builds it. The tile's light and shade come from
+`uploads/_src/app-icon-source.png` (the old gold tile, with its lettering taken
+out); the logo is cut from `uploads/_src/artboard.png`. The script writes every
+size: `favicon.ico`, `favicon-32/48/96/144/192.png`, `apple-touch-icon.png` and
+`uploads/opt/app-icon-512.png`. The 16-48px ones are cut a little closer around
+the logo so it stays readable. The settings at the top of the script are the tile
+colour and gloss (`TILE`, `SHEEN`, `SHADE`) and the logo (`LOGO_W` for its size,
+`LOGO_DARK` and `LOGO_RUST` for its colours). After changing any of them:
 
 ```bash
 bash tools/make-icons.sh
