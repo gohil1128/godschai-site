@@ -36,7 +36,7 @@ og_image: "uploads/og-image.jpg"
         <div style="display:flex;gap:13px;flex-wrap:wrap;margin-top:30px">
           {%- if site.data.shop.open %}
           <a href="{{ '/premixes/' | relative_url }}" style="text-decoration:none;background:#FF7A66;color:#2B1B12;font-weight:700;font-size:16px;padding:15px 26px;border-radius:999px;box-shadow:0 12px 34px rgba(var(--gc-coral-rgb),0.45)" class="gc-pill-coral">Shop premixes →</a>
-          <a href="#menu" style="text-decoration:none;background:rgba(var(--gc-ink-rgb),0.10);color:var(--gc-fg);font-weight:600;font-size:16px;padding:15px 24px;border-radius:999px;border:1.5px solid rgba(var(--gc-ink-rgb),0.3);backdrop-filter:blur(4px)" class="gc-pill-ghost">View the menu</a>
+          <a href="{{ '/catering/' | relative_url }}" style="text-decoration:none;background:rgba(var(--gc-ink-rgb),0.10);color:var(--gc-fg);font-weight:600;font-size:16px;padding:15px 24px;border-radius:999px;border:1.5px solid rgba(var(--gc-ink-rgb),0.3);backdrop-filter:blur(4px)" class="gc-pill-ghost">Book catering</a>
           {%- else %}
           <a href="#menu" style="text-decoration:none;background:#FF7A66;color:#2B1B12;font-weight:700;font-size:16px;padding:15px 26px;border-radius:999px;box-shadow:0 12px 34px rgba(var(--gc-coral-rgb),0.45)" class="gc-pill-coral">View the menu →</a>
           <a href="#hot" style="text-decoration:none;background:rgba(var(--gc-ink-rgb),0.10);color:var(--gc-fg);font-weight:600;font-size:16px;padding:15px 24px;border-radius:999px;border:1.5px solid rgba(var(--gc-ink-rgb),0.3);backdrop-filter:blur(4px)" class="gc-pill-ghost">Explore the chai</a>
@@ -67,6 +67,9 @@ og_image: "uploads/og-image.jpg"
       </div>
     </div>
   </div>
+
+  <!-- PREMIXES · CATERING · BULK: the three ways to buy, straight after the hero -->
+  {% include offer-strip.html %}
 
   <!-- PREMIXES -->
   <section id="premix" aria-labelledby="premix-h2" style="background:linear-gradient(135deg,var(--gc-card),var(--gc-card));scroll-margin-top:84px">

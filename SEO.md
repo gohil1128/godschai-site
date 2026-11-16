@@ -370,6 +370,20 @@ The longer written guide on that page is normal text in
 
 ---
 
+## The homepage's three ways to buy
+
+Straight under the hero, `_includes/offer-strip.html` shows three cards:
+**Premixes**, **Catering** and **Bulk orders**, each linking to its page, so
+visitors see what they can buy before they scroll. The pouch price comes from
+`_data/shop.yml` and the notice period from `_data/bulk.yml`; the rest of the
+wording is in the include. The hero's second button goes to Catering.
+
+The menu bar runs in the same order: Shop, Catering, Menu, Brew Guide, Events
+(`_includes/nav-dark.html`). On phones "Brew Guide" shortens to "Brew" so all
+five fit on one line.
+
+---
+
 ## Colours: the daylight theme
 
 The site is a light, daylight theme. Every colour is one of the named colours at
