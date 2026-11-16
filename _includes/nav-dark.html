@@ -25,9 +25,11 @@
       </gods-chai-logo>
     </a>
     <div style="display:flex;align-items:center;gap:clamp(12px,2vw,28px);font-weight:500;font-size:14.5px">
-      <a href="{{ '/' | relative_url }}#menu" style="text-decoration:none;color:var(--gc-fg2)">Menu</a>
-      <a href="{{ '/how-to-make-masala-chai/' | relative_url }}" style="text-decoration:none;color:var(--gc-fg2)">Brew Guide</a>
+      {%- comment -%} What people can buy comes first: the shop and catering. "Brew Guide" shortens to "Brew" on phones to make room. {%- endcomment %}
       <a href="{{ '/premixes/' | relative_url }}" style="text-decoration:none;color:var(--gc-fg2)">{% if site.data.shop.open %}Shop{% else %}Premixes{% endif %}</a>
+      <a href="{{ '/catering/' | relative_url }}" style="text-decoration:none;color:var(--gc-fg2)">Catering</a>
+      <a href="{{ '/' | relative_url }}#menu" style="text-decoration:none;color:var(--gc-fg2)">Menu</a>
+      <a href="{{ '/how-to-make-masala-chai/' | relative_url }}" style="text-decoration:none;color:var(--gc-fg2)">Brew<span class="gc-nav-long"> Guide</span></a>
       <a href="{{ '/events/' | relative_url }}" style="text-decoration:none;color:var(--gc-fg2)">Events</a>
     </div>
     {%- comment -%} The bag opens the cart (_includes/cart-drawer.html); it only exists while the shop is open, and stays hidden until cart.js runs. {%- endcomment %}

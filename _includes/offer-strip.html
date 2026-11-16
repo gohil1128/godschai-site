@@ -1,0 +1,43 @@
+{%- comment -%}
+  The three things to buy, right under the homepage hero, so nobody has to
+  scroll to the bottom to find them: premixes, catering and bulk orders. Each
+  card is one link. Prices and wording come from _data/shop.yml and
+  _data/bulk.yml where they exist.
+{%- endcomment -%}
+{%- assign shop = site.data.shop -%}
+<style>
+  .gc-offers{max-width:1240px;margin:0 auto;padding:clamp(22px,3.5vw,40px) clamp(18px,4vw,40px) clamp(6px,1vw,10px)}
+  .gc-offers h2{margin:0 0 14px;font:400 12px 'DM Mono',monospace;letter-spacing:0.18em;text-transform:uppercase;color:var(--gc-gold-t)}
+  .gc-offers ul{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+  @media (min-width:760px){.gc-offers ul{grid-template-columns:repeat(3,1fr);gap:16px}}
+  .gc-offer{display:flex;align-items:center;gap:14px;height:100%;padding:12px 14px 12px 12px;border-radius:20px;text-decoration:none;
+    background:var(--gc-card);border:1px solid rgba(var(--gc-gold-rgb),0.2);color:var(--gc-fg);
+    transition:border-color .25s ease,transform .25s cubic-bezier(.2,.7,.2,1),box-shadow .25s ease}
+  .gc-offer:hover,.gc-offer:focus-visible{border-color:rgba(var(--gc-gold-rgb),0.55);transform:translateY(-2px);box-shadow:0 14px 30px -22px rgba(var(--gc-shadow-rgb),0.5)}
+  .gc-offer picture{flex:0 0 auto}
+  .gc-offer img{display:block;width:68px;height:68px;object-fit:cover;border-radius:14px}
+  .gc-offer > span{flex:1 1 auto;min-width:0}
+  .gc-offer small{display:block;font:400 10.5px 'DM Mono',monospace;letter-spacing:0.14em;text-transform:uppercase;color:var(--gc-coral-t)}
+  .gc-offer b{display:block;margin-top:3px;font:400 1.3rem/1.1 'Instrument Serif',serif;color:var(--gc-fg)}
+  .gc-offer em{display:block;margin-top:3px;font-style:normal;font-size:13px;line-height:1.35;color:var(--gc-fg4)}
+  .gc-offer i{flex:0 0 auto;font-style:normal;font-size:18px;color:var(--gc-gold-t);transition:transform .25s ease}
+  .gc-offer:hover i,.gc-offer:focus-visible i{transform:translateX(3px)}
+  @media (prefers-reduced-motion:reduce){.gc-offer,.gc-offer i{transition:none}.gc-offer:hover,.gc-offer:hover i{transform:none}}
+</style>
+<section class="gc-offers" aria-labelledby="offers-h2">
+  <h2 id="offers-h2">Take God's Chai home, or to your event</h2>
+  <ul>
+    <li><a class="gc-offer" href="{{ '/premixes/' | relative_url }}">
+      {% include img.html base="pouch-masala-front" ext="jpg" widths="250" sizes="68px" w="544" h="952" alt="" style="object-position:50% 30%" %}
+      <span><small>Premixes</small><b>Masala chai at home</b><em>${% include money.html v=shop.price %} a pouch, 25 cups. Delivered in Saskatoon, shipped across Canada.</em></span>
+      <i aria-hidden="true">→</i></a></li>
+    <li><a class="gc-offer" href="{{ '/catering/' | relative_url }}">
+      {% include img.html base="community-cart" ext="jpg" widths="400" sizes="68px" w="406" h="720" alt="" style="object-position:50% 40%" %}
+      <span><small>Catering</small><b>The chai cart at your event</b><em>Weddings, offices, parties and markets in Saskatoon.</em></span>
+      <i aria-hidden="true">→</i></a></li>
+    <li><a class="gc-offer" href="{{ '/bulk-orders/' | relative_url }}">
+      {% include img.html base="pour-cup" ext="jpg" widths="320" sizes="68px" w="640" h="800" alt="" %}
+      <span><small>Bulk orders</small><b>Chai &amp; samosas for a crowd</b><em>By the cup and by the dozen, with {{ site.data.bulk.notice_hours | default: 48 }} hours' notice.</em></span>
+      <i aria-hidden="true">→</i></a></li>
+  </ul>
+</section>
