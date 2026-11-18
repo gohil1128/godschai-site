@@ -27,7 +27,7 @@
     {%- assign daylen = e.day | size -%}
     {%- if daylen > 2 %}{% assign dayfs = "18px" %}{% else %}{% assign dayfs = "26px" %}{% endif -%}
     <div data-gc-event-end="{{ e.end | date: '%Y-%m-%d' }}" style="display:flex;gap:16px;background:var(--gc-card);border:1px solid rgba(var(--gc-ink-rgb),0.08);border-radius:20px;padding:18px;align-items:flex-start;transition:border-color .3s ease" class="gc-card">
-      <div style="flex:none;min-width:64px;text-align:center;background:#F2A93C;color:#2B1B12;border-radius:14px;padding:11px 8px">
+      <div style="flex:none;min-width:64px;text-align:center;background:#B55F3E;color:#FFFFFF;border-radius:14px;padding:11px 8px">
         <div style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase">{{ e.mon }}</div>
         <div style="font-family:'Instrument Serif',serif;font-weight:400;font-size:{{ dayfs }};line-height:1;margin-top:2px;white-space:nowrap">{{ e.day }}</div>
       </div>

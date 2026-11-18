@@ -397,7 +397,7 @@ changing the look means changing a few values there, not hunting through pages:
 | `--gc-gold-t`, `--gc-coral-t` | gold and coral **text** and thin lines, darkened to read on cream |
 | `--gc-ink-rgb`, `--gc-gold-rgb` … | the same colours as numbers, for borders and tints with some see-through (`rgba(var(--gc-ink-rgb),0.12)`) |
 
-Buttons keep the bright gold (`#F2A93C`) and coral with dark text, as on the pouch.
+Buttons are the brand rust (`#B55F3E`) with white text; the page is cream (`#F2EBE1`) and text espresso (`#3C2116`), the three brand colours.
 
 **Anything on a photo stays dark.** Put `class="gc-dark"` on an element and the
 original dark colours come back for everything inside it. That is how the home
@@ -445,7 +445,7 @@ animations turned off in their device settings.
 The logo wears the pouch's colours: **"God's" in rust (`#B6502B`), the brush
 stroke under it in gold (`#D3A849`)**, and "CHAI" and the tagline in cream on
 dark backgrounds. On light ones (the daylight site, search results, Square
-receipts) "CHAI" is the pouch's dark brown (`#4A2A1F`) instead.
+receipts) "CHAI" is the pouch's dark brown (`#3C2116`) instead.
 
 The animated component can only paint the whole mark one colour, so that colour
 comes from the `tint` on the `<gods-chai-logo>` tag in `_includes/nav-dark.html`

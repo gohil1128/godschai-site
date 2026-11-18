@@ -8,19 +8,19 @@
      versions are the same hues, darkened, for text and thin lines on cream. */
   :root{
     color-scheme:light;
-    --gc-bg:#FDF8EE;--gc-bg-rgb:253,248,238;--gc-bg2:#F7EEDC;--gc-card:#FFFCF5;--gc-surf-rgb:255,252,245;
-    --gc-fg:#2B1B12;--gc-fg2:#4A3223;--gc-fg3:#5C4434;--gc-fg4:#6E5646;--gc-muted:#765F4F;--gc-ink-rgb:43,27,18;
-    --gc-gold-t:#955209;--gc-gold-h:#7C4506;--gc-gold-d:#855010;--gc-gold-rgb:180,106,16;
-    --gc-coral-t:#C23B26;--gc-coral-rgb:214,72,52;--gc-shadow-rgb:59,31,18;
-    --gc-logo:#4A2A1F;
+    --gc-bg:#F2EBE1;--gc-bg-rgb:242,235,225;--gc-bg2:#EAE0D2;--gc-card:#FBF8F3;--gc-surf-rgb:251,248,243;
+    --gc-fg:#3C2116;--gc-fg2:#4A3223;--gc-fg3:#5C4434;--gc-fg4:#6E5646;--gc-muted:#765749;--gc-ink-rgb:60,33,22;
+    --gc-gold-t:#8B472C;--gc-gold-h:#763B24;--gc-gold-d:#7E4128;--gc-gold-rgb:181,95,62;
+    --gc-coral-t:#8B472C;--gc-coral-rgb:181,95,62;--gc-shadow-rgb:59,31,18;
+    --gc-logo:#3C2116;
   }
   .gc-dark{
     color-scheme:dark;
     --gc-bg:#100A05;--gc-bg-rgb:16,10,5;--gc-bg2:#1A100A;--gc-card:#2E1D13;--gc-surf-rgb:28,17,10;
-    --gc-fg:#F3E8D3;--gc-fg2:#E7D6C4;--gc-fg3:#D6C7B4;--gc-fg4:#C7B29E;--gc-muted:#AB9280;--gc-ink-rgb:243,232,211;
-    --gc-gold-t:#F2A93C;--gc-gold-h:#FFBA55;--gc-gold-d:#C58A2E;--gc-gold-rgb:242,169,60;
-    --gc-coral-t:#FF7A66;--gc-coral-rgb:255,122,102;--gc-shadow-rgb:0,0,0;
-    --gc-logo:#F3E8D3;
+    --gc-fg:#F2EBE1;--gc-fg2:#E7D6C4;--gc-fg3:#D6C7B4;--gc-fg4:#C7B29E;--gc-muted:#AB9280;--gc-ink-rgb:242,235,225;
+    --gc-gold-t:#B55F3E;--gc-gold-h:#E39874;--gc-gold-d:#A4573A;--gc-gold-rgb:215,131,95;
+    --gc-coral-t:#E39874;--gc-coral-rgb:227,152,116;--gc-shadow-rgb:0,0,0;
+    --gc-logo:#F2EBE1;
     color:var(--gc-fg);
   }
   /* The header's logo: the cream lockup on dark, the brown one on daylight. */
@@ -33,14 +33,14 @@
   html,body{margin:0;padding:0}
   html{overflow-x:clip;scroll-behavior:smooth}
   body{overflow-x:clip;background:var(--gc-bg)}
-  ::selection{background:#F2A93C;color:#2B1B12}
+  ::selection{background:#B55F3E;color:#FFFFFF}
   a{color:var(--gc-gold-t)}
   a:hover{color:var(--gc-gold-h)}
   @keyframes gc-marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
   @keyframes gc-kb{from{transform:scale(1.03)}to{transform:scale(1.13)}}
   @keyframes gc-cuedot{0%{transform:translateY(0);opacity:0.2}50%{transform:translateY(8px);opacity:1}100%{transform:translateY(0);opacity:0.2}}
   /* Skip link — visible only when focused. */
-  .gc-skip{position:absolute;left:-9999px;top:0;z-index:200;background:#F2A93C;color:#2B1B12;font-family:'Hanken Grotesk',sans-serif;font-weight:700;font-size:14px;padding:12px 18px;border-radius:0 0 10px 0;text-decoration:none}
+  .gc-skip{position:absolute;left:-9999px;top:0;z-index:200;background:#B55F3E;color:#FFFFFF;font-family:'Hanken Grotesk',sans-serif;font-weight:700;font-size:14px;padding:12px 18px;border-radius:0 0 10px 0;text-decoration:none}
   .gc-skip:focus{left:0}
   :focus-visible{outline:2px solid var(--gc-gold-t);outline-offset:3px}
   /* Animated logo in the header. Until the script registers the element the
@@ -131,8 +131,8 @@
   .gc-pill,.gc-pill-coral,.gc-pill-ghost,.gc-ico,.gc-iconbtn,.gc-pill-dark,.gc-pill-cream{
     transition:background-color .26s ease,border-color .26s ease,color .26s ease,
                box-shadow .26s ease,transform .16s cubic-bezier(.2,.7,.2,1)}
-  .gc-pill:hover,.gc-pill:focus-visible{background:#FFBA55!important}
-  .gc-pill-coral:hover,.gc-pill-coral:focus-visible{background:#FF9C8A!important}
+  .gc-pill:hover,.gc-pill:focus-visible{background:#9C4F31!important}
+  .gc-pill-coral:hover,.gc-pill-coral:focus-visible{background:#9C4F31!important}
   .gc-pill-ghost:hover,.gc-pill-ghost:focus-visible{border-color:var(--gc-gold-t)!important;background:rgba(var(--gc-gold-rgb),0.12)!important}
   .gc-ico:hover,.gc-ico:focus-visible{border-color:var(--gc-gold-t)!important;color:var(--gc-gold-t)!important}
   .gc-iconbtn:hover,.gc-iconbtn:focus-visible{background:rgba(var(--gc-bg-rgb),0.8)!important}
@@ -153,7 +153,7 @@
   a{transition:color .22s ease}
   header nav > div > a{position:relative}
   header nav > div > a::after{content:"";position:absolute;left:0;right:0;bottom:9px;height:1.5px;
-    background:#F2A93C;transform:scaleX(0);transform-origin:left center;
+    background:#B55F3E;transform:scaleX(0);transform-origin:left center;
     transition:transform .34s cubic-bezier(.2,.7,.2,1)}
   header nav > div > a:hover::after,header nav > div > a:focus-visible::after{transform:scaleX(1)}
 
