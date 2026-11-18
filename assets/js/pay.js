@@ -55,7 +55,7 @@
     '.message-icon': { color: '#7C6757' },
     '.message-text.is-error': { color: '#C23B26' },
     '.message-icon.is-error': { color: '#C23B26' },
-    input: { backgroundColor: '#FFFCF5', color: '#2B1B12', fontFamily: 'helvetica neue, sans-serif', fontSize: '16px' },
+    input: { backgroundColor: '#FBF8F3', color: '#3C2116', fontFamily: 'helvetica neue, sans-serif', fontSize: '16px' },
     'input::placeholder': { color: '#8A7869' },
     'input.is-error': { color: '#C23B26' }
   };

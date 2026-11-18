@@ -77,17 +77,17 @@ export function customerEmail(o) {
 
   const html = `<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light only"><title>${esc(subject)}</title></head>
-<body style="margin:0;padding:0;background:#F3E8D3">
+<body style="margin:0;padding:0;background:#F2EBE1">
 <div style="display:none;max-height:0;overflow:hidden;opacity:0">Thank you${o.firstName ? ', ' + esc(o.firstName) : ''} — ${pouches} pouch${pouches === 1 ? '' : 'es'} of proper masala chai, ${o.zone === 'saskatoon' ? 'coming to your door' : 'on its way soon'}.</div>
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#F3E8D3"><tr><td align="center" style="padding:24px 12px">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#F2EBE1"><tr><td align="center" style="padding:24px 12px">
   <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="width:100%;max-width:600px;background:#FFFBF4;border-radius:20px;overflow:hidden">
     <tr><td align="center" style="background:#1D120B;padding:30px 24px 26px">
       <a href="${SITE}"><img src="${IMG.logo}" width="96" height="96" alt="God's Chai" style="display:block;width:96px;height:96px"></a>
-      <div style="font:400 12px ${mono};letter-spacing:.2em;text-transform:uppercase;color:#F2A93C;margin-top:18px">Order confirmed · #${esc(o.receipt)}</div>
-      <div style="font:400 38px/1.05 ${serif};color:#F3E8D3;margin-top:10px">Thank you${o.firstName ? ', ' + esc(o.firstName) : ''}.<br><span style="color:#FF6F61;font-style:italic">That's ordered.</span></div>
+      <div style="font:400 12px ${mono};letter-spacing:.2em;text-transform:uppercase;color:#D7835F;margin-top:18px">Order confirmed · #${esc(o.receipt)}</div>
+      <div style="font:400 38px/1.05 ${serif};color:#F2EBE1;margin-top:10px">Thank you${o.firstName ? ', ' + esc(o.firstName) : ''}.<br><span style="color:#B55F3E;font-style:italic">That's ordered.</span></div>
     </td></tr>
     <tr><td style="padding:28px 32px 6px">
-      <div style="font:400 12px ${mono};letter-spacing:.16em;text-transform:uppercase;color:#C58A2E">Your order</div>
+      <div style="font:400 12px ${mono};letter-spacing:.16em;text-transform:uppercase;color:#A4573A">Your order</div>
       <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-top:6px">${items}
       </table>
       <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-top:10px">
@@ -101,7 +101,7 @@ export function customerEmail(o) {
     </td></tr>
     <tr><td style="padding:22px 32px 4px">
       <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#F7EEDD;border-radius:14px"><tr><td style="padding:18px 20px">
-        <div style="font:400 12px ${mono};letter-spacing:.16em;text-transform:uppercase;color:#C58A2E">What happens next · ${esc(z.label)}</div>
+        <div style="font:400 12px ${mono};letter-spacing:.16em;text-transform:uppercase;color:#A4573A">What happens next · ${esc(z.label)}</div>
         <div style="font:400 15px/1.55 ${sans};color:#3A2A1E;margin-top:8px">${z.next}</div>
         ${o.address.length ? `<div style="font:400 14px/1.5 ${sans};color:#5A4535;margin-top:12px"><strong style="color:#1D120B">Delivering to</strong><br>${[esc(o.name)].concat(o.address.map(esc)).join('<br>')}</div>` : ''}
       </td></tr></table>
@@ -109,16 +109,16 @@ export function customerEmail(o) {
     <tr><td style="padding:22px 32px 4px">
       <div style="font:400 26px ${serif};color:#1D120B">Brew it the proper way</div>
       <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-top:8px">
-        ${['1 heaped tablespoon (5 g) per cup into ½ cup of boiling water.', 'Add ½ cup of milk and bring it back to a rolling boil.', 'Simmer 2–3 minutes, till it turns deep caramel.', 'Strain, sweeten to taste. That’s it.'].map((s, i) => `<tr><td width="34" valign="top" style="padding:6px 0;font:400 22px ${serif};color:#F2A93C">0${i + 1}</td><td style="padding:8px 0 6px;font:400 15px/1.45 ${sans};color:#3A2A1E">${s}</td></tr>`).join('')}
+        ${['1 heaped tablespoon (5 g) per cup into ½ cup of boiling water.', 'Add ½ cup of milk and bring it back to a rolling boil.', 'Simmer 2–3 minutes, till it turns deep caramel.', 'Strain, sweeten to taste. That’s it.'].map((s, i) => `<tr><td width="34" valign="top" style="padding:6px 0;font:400 22px ${serif};color:#D7835F">0${i + 1}</td><td style="padding:8px 0 6px;font:400 15px/1.45 ${sans};color:#3A2A1E">${s}</td></tr>`).join('')}
       </table>
-      <table role="presentation" cellpadding="0" cellspacing="0" style="margin-top:14px"><tr><td style="background:#F2A93C;border-radius:999px"><a href="${SITE}/how-to-make-masala-chai/" style="display:inline-block;padding:13px 24px;font:700 15px ${sans};color:#2B1B12;text-decoration:none">The full brew guide →</a></td></tr></table>
+      <table role="presentation" cellpadding="0" cellspacing="0" style="margin-top:14px"><tr><td style="background:#B55F3E;border-radius:999px"><a href="${SITE}/how-to-make-masala-chai/" style="display:inline-block;padding:13px 24px;font:700 15px ${sans};color:#3C2116;text-decoration:none">The full brew guide →</a></td></tr></table>
     </td></tr>
     <tr><td style="padding:26px 32px 30px">
       <div style="font:400 14px/1.6 ${sans};color:#5A4535">Questions, cravings or a brewing emergency? Just hit reply — a real human (usually mid-chai) will answer.${o.receiptUrl ? ` Your card receipt is <a href="${esc(o.receiptUrl)}" style="color:#C2410C">right here</a>.` : ''}</div>
     </td></tr>
     <tr><td align="center" style="background:#1D120B;padding:22px 24px">
-      <div style="font:400 20px ${serif};color:#F3E8D3">Not your average chai.</div>
-      <div style="font:400 12px/1.7 ${sans};color:#AB9280;margin-top:6px"><a href="https://www.instagram.com/godschai" style="color:#F2A93C;text-decoration:none">Instagram @godschai</a> · <a href="${SITE}" style="color:#F2A93C;text-decoration:none">godschai.com</a><br>God's Chai · Saskatoon, SK, Canada<br>You're getting this because you ordered at godschai.com.</div>
+      <div style="font:400 20px ${serif};color:#F2EBE1">Not your average chai.</div>
+      <div style="font:400 12px/1.7 ${sans};color:#AB9280;margin-top:6px"><a href="https://www.instagram.com/godschai" style="color:#D7835F;text-decoration:none">Instagram @godschai</a> · <a href="${SITE}" style="color:#D7835F;text-decoration:none">godschai.com</a><br>God's Chai · Saskatoon, SK, Canada<br>You're getting this because you ordered at godschai.com.</div>
     </td></tr>
   </table>
 </td></tr></table>
