@@ -7,25 +7,25 @@ og_image: "uploads/opt/pour-a-1280.jpg"
 ---
 
 <section aria-labelledby="page-h1" style="max-width:1240px;margin:0 auto;padding:clamp(110px,14vh,170px) clamp(18px,4vw,40px) clamp(20px,3vw,30px)">
-  <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.2em;text-transform:uppercase;color:#F2A93C;margin-bottom:14px">What's in the pot</div>
-  <h1 id="page-h1" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(2.3rem,6vw,4.2rem);line-height:0.98;letter-spacing:0;margin:0;max-width:22ch">The spices in <span style="color:#FF6F61;font-style:italic">masala chai</span></h1>
-  <p style="font-size:clamp(1.05rem,1.5vw,1.25rem);line-height:1.6;color:#E7D6C4;max-width:56ch;margin:22px 0 0">Five spices do almost all the work. Knowing what each one is for is the difference between following a recipe and actually being able to fix a cup that tastes wrong.</p>
+  <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gc-gold-t);margin-bottom:14px">What's in the pot</div>
+  <h1 id="page-h1" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(2.3rem,6vw,4.2rem);line-height:0.98;letter-spacing:0;margin:0;max-width:22ch">The spices in <span style="color:var(--gc-coral-t);font-style:italic">masala chai</span></h1>
+  <p style="font-size:clamp(1.05rem,1.5vw,1.25rem);line-height:1.6;color:var(--gc-fg2);max-width:56ch;margin:22px 0 0">Five spices do almost all the work. Knowing what each one is for is the difference between following a recipe and actually being able to fix a cup that tastes wrong.</p>
 </section>
 
 <div data-gc-reveal>
 
 <section aria-labelledby="five-h2" style="max-width:1240px;margin:0 auto;padding:clamp(20px,3vw,34px) clamp(18px,4vw,40px)">
-  <h2 id="five-h2" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(1.9rem,4.4vw,2.6rem);letter-spacing:0;margin:0 0 8px;color:#F3E8D3">The five that matter</h2>
-  <p style="font-size:1.05rem;line-height:1.6;color:#C7B29E;max-width:52ch;margin:0 0 28px">Rough amounts for two cups. Crush the whole spices first — a rolling pin and a tea towel are plenty.</p>
+  <h2 id="five-h2" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(1.9rem,4.4vw,2.6rem);letter-spacing:0;margin:0 0 8px;color:var(--gc-fg)">The five that matter</h2>
+  <p style="font-size:1.05rem;line-height:1.6;color:var(--gc-fg4);max-width:52ch;margin:0 0 28px">Rough amounts for two cups. Crush the whole spices first — a rolling pin and a tea towel are plenty.</p>
   <div id="spice-grid" data-gc-stagger style="display:grid;grid-template-columns:repeat(auto-fit,minmax(205px,1fr));gap:clamp(12px,1.6vw,18px)">
     {% for sp in site.data.spices %}
-    <div style="padding:22px 20px 24px;background:rgba(28,17,10,0.8);border:1px solid rgba(242,169,60,0.16);border-radius:22px" class="gc-card">
-      <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding-bottom:14px;border-bottom:1px solid rgba(243,232,211,0.10)">
-        <span style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#F2A93C">{{ sp.role }}</span>
-        <span style="font-family:'DM Mono',monospace;font-size:11px;color:#C58A2E;white-space:nowrap">{{ sp.amount }}</span>
+    <div style="padding:22px 20px 24px;background:rgba(var(--gc-surf-rgb),0.8);border:1px solid rgba(var(--gc-gold-rgb),0.16);border-radius:22px" class="gc-card">
+      <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding-bottom:14px;border-bottom:1px solid rgba(var(--gc-ink-rgb),0.10)">
+        <span style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--gc-gold-t)">{{ sp.role }}</span>
+        <span style="font-family:'DM Mono',monospace;font-size:11px;color:var(--gc-gold-d);white-space:nowrap">{{ sp.amount }}</span>
       </div>
-      <h3 style="font-family:'Instrument Serif',serif;font-weight:400;font-size:1.32rem;margin:16px 0 0;color:#F3E8D3">{{ sp.name }}</h3>
-      <p style="color:#C7B29E;line-height:1.55;margin:9px 0 0;font-size:0.95rem">{{ sp.desc }}</p>
+      <h3 style="font-family:'Instrument Serif',serif;font-weight:400;font-size:1.32rem;margin:16px 0 0;color:var(--gc-fg)">{{ sp.name }}</h3>
+      <p style="color:var(--gc-fg4);line-height:1.55;margin:9px 0 0;font-size:0.95rem">{{ sp.desc }}</p>
     </div>
     {% endfor %}
   </div>

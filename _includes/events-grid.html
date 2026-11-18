@@ -1,15 +1,24 @@
 {%- comment -%}
-  Pop-up schedule grid. Every event is rendered server-side so crawlers and AI
-  answer engines can read the whole schedule; assets/js/site.js hides the ones
-  whose date has passed for human visitors.
-  Params: limit (optional), heading, heading_id
+  Pop-up schedule. Only upcoming events go in the grid: an event whose end date
+  had passed when the site was built isn't shown there (and, on the homepage,
+  isn't shown at all). assets/js/site.js also hides any that pass between
+  builds. With archive=true (the /events/ page) the past ones are listed below
+  the grid under "Past pop-ups", clearly marked as past, so the history stays
+  readable without looking current.
+  Params: limit (optional), heading, heading_id, archive (optional)
 {%- endcomment -%}
-{%- assign evs = site.data.events -%}
+{%- assign today = site.time | date: '%Y-%m-%d' -%}
+{%- assign upcoming = "" | split: "" -%}{%- assign past = "" | split: "" -%}
+{%- for e in site.data.events -%}
+  {%- assign endd = e.end | date: '%Y-%m-%d' -%}
+  {%- if endd >= today %}{% assign upcoming = upcoming | push: e %}{% else %}{% assign past = past | push: e %}{% endif -%}
+{%- endfor -%}
+{%- assign evs = upcoming -%}
 {%- if include.limit -%}{% assign evs = evs | slice: 0, include.limit %}{%- endif -%}
 <section id="events" aria-labelledby="{{ include.heading_id | default: 'events-h2' }}" style="max-width:1240px;margin:0 auto;padding:clamp(46px,6vw,88px) clamp(18px,4vw,40px);scroll-margin-top:84px">
   <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:18px;flex-wrap:wrap;margin-bottom:30px">
     <div>
-      <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.18em;text-transform:uppercase;color:#F2A93C">Find us in the wild</div>
+      <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.18em;text-transform:uppercase;color:var(--gc-gold-t)">Find us in the wild</div>
       <h2 id="{{ include.heading_id | default: 'events-h2' }}" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(2rem,4.4vw,3.3rem);letter-spacing:0;line-height:1;margin:10px 0 0">{{ include.heading | default: "Events &amp; pop-ups" }}</h2>
     </div>
   </div>
@@ -17,22 +26,37 @@
     {%- for e in evs %}
     {%- assign daylen = e.day | size -%}
     {%- if daylen > 2 %}{% assign dayfs = "18px" %}{% else %}{% assign dayfs = "26px" %}{% endif -%}
-    <div data-gc-event-end="{{ e.end | date: '%Y-%m-%d' }}" style="display:flex;gap:16px;background:#342216;border:1px solid rgba(243,232,211,0.08);border-radius:20px;padding:18px;align-items:flex-start;transition:border-color .3s ease" class="gc-card">
-      <div style="flex:none;min-width:64px;text-align:center;background:#F2A93C;color:#2B1B12;border-radius:14px;padding:11px 8px">
+    <div data-gc-event-end="{{ e.end | date: '%Y-%m-%d' }}" style="display:flex;gap:16px;background:var(--gc-card);border:1px solid rgba(var(--gc-ink-rgb),0.08);border-radius:20px;padding:18px;align-items:flex-start;transition:border-color .3s ease" class="gc-card">
+      <div style="flex:none;min-width:64px;text-align:center;background:#B55F3E;color:#FFFFFF;border-radius:14px;padding:11px 8px">
         <div style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase">{{ e.mon }}</div>
         <div style="font-family:'Instrument Serif',serif;font-weight:400;font-size:{{ dayfs }};line-height:1;margin-top:2px;white-space:nowrap">{{ e.day }}</div>
       </div>
       <div style="flex:1">
         <h3 style="font-family:'Instrument Serif',serif;font-weight:400;font-size:1.18rem;margin:0;letter-spacing:0">{{ e.name }}</h3>
-        <div style="font-family:'DM Mono',monospace;font-size:12px;color:#FF7A66;margin:5px 0 8px;letter-spacing:0.04em">{{ e.where }}</div>
-        <p style="font-size:0.92rem;line-height:1.45;color:#C7B29E;margin:0">{{ e.desc }}</p>
+        <div style="font-family:'DM Mono',monospace;font-size:12px;color:var(--gc-coral-t);margin:5px 0 8px;letter-spacing:0.04em">{{ e.where }}</div>
+        <p style="font-size:0.92rem;line-height:1.45;color:var(--gc-fg4);margin:0">{{ e.desc }}</p>
       </div>
     </div>
     {%- endfor %}
-    <div data-gc-events-empty hidden style="display:none;grid-column:1/-1;flex-direction:column;align-items:center;text-align:center;gap:8px;background:#342216;border:1px dashed rgba(243,232,211,0.18);border-radius:20px;padding:34px 24px">
-      <div style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#F2A93C">Between pop-ups</div>
-      <div style="font-family:'Instrument Serif',serif;font-weight:400;font-size:1.5rem;color:#F3E8D3">No events on the calendar right now</div>
-      <p style="font-size:0.95rem;line-height:1.45;color:#C7B29E;margin:0;max-width:42ch">We're plotting the next one. Follow <a href="{{ site.social.instagram }}" target="_blank" rel="noopener" style="color:#F2A93C;font-weight:600">{{ site.social.instagram_handle }}</a> to catch the next drop first.</p>
+    <div data-gc-events-empty{% if evs.size > 0 %} hidden{% endif %} style="display:{% if evs.size > 0 %}none{% else %}flex{% endif %};grid-column:1/-1;flex-direction:column;align-items:center;text-align:center;gap:8px;background:var(--gc-card);border:1px dashed rgba(var(--gc-ink-rgb),0.18);border-radius:20px;padding:34px 24px">
+      <div style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--gc-gold-t)">Between pop-ups</div>
+      <div style="font-family:'Instrument Serif',serif;font-weight:400;font-size:1.5rem;color:var(--gc-fg)">No events on the calendar right now</div>
+      <p style="font-size:0.95rem;line-height:1.45;color:var(--gc-fg4);margin:0;max-width:42ch">We're plotting the next one. Follow <a href="{{ site.social.instagram }}" target="_blank" rel="noopener" style="color:var(--gc-gold-t);font-weight:600">{{ site.social.instagram_handle }}</a> to catch the next drop first.</p>
     </div>
   </div>
+  {%- if include.archive and past.size > 0 %}
+  <div style="margin-top:clamp(36px,5vw,56px)">
+    <h3 id="past-h3" style="font-family:'DM Mono',monospace;font-weight:400;font-size:12px;letter-spacing:0.18em;text-transform:uppercase;color:var(--gc-muted);margin:0 0 12px">Past pop-ups</h3>
+    <ul aria-labelledby="past-h3" style="list-style:none;margin:0;padding:0;border-top:1px solid rgba(var(--gc-ink-rgb),0.10)">
+      {%- assign pastnew = past | reverse %}
+      {%- for e in pastnew %}
+      <li style="display:flex;flex-wrap:wrap;gap:4px 16px;align-items:baseline;padding:11px 0;border-bottom:1px solid rgba(var(--gc-ink-rgb),0.10);font-size:0.95rem;color:var(--gc-fg4)">
+        <span style="font-family:'DM Mono',monospace;font-size:12px;min-width:12ch;color:var(--gc-muted)">{{ e.start | date: '%b %-d, %Y' }}</span>
+        <span style="color:var(--gc-fg2)">{{ e.name }}</span>
+        <span style="font-size:0.88rem">{{ e.venue }}</span>
+      </li>
+      {%- endfor %}
+    </ul>
+  </div>
+  {%- endif %}
 </section>

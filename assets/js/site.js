@@ -150,8 +150,10 @@ layout: null
     }
     if (nav) {
       var solid = y > vh * 0.72;
-      nav.style.background = solid ? 'rgba(24,15,9,0.92)' : 'transparent';
-      nav.style.borderBottomColor = solid ? 'rgba(243,232,211,0.10)' : 'transparent';
+      // Over the hero photo the header wears the dark colours; solid, it's daylight.
+      nav.classList.toggle('gc-dark', !solid);
+      nav.style.background = solid ? 'rgba(var(--gc-bg-rgb),0.92)' : 'transparent';
+      nav.style.borderBottomColor = solid ? 'rgba(var(--gc-ink-rgb),0.10)' : 'transparent';
       nav.style.backdropFilter = solid ? 'blur(12px)' : 'none';
       nav.style.webkitBackdropFilter = solid ? 'blur(12px)' : 'none';
     }
@@ -241,6 +243,149 @@ layout: null
     if (empty && remaining === 0) { empty.hidden = false; empty.style.display = 'flex'; }
   }
 
+  /* ---------- 5b. Catering enquiry (catering page) ----------
+     Checks the form, then opens an email to the shop with everything filled in.
+     The page also shows the address, in case no email app opens. */
+  var enq = d.querySelector('[data-gc-enquiry]');
+  if (enq) {
+    var enqErr = enq.querySelector('[data-gc-enquiry-err]');
+    var enqDone = enq.querySelector('[data-gc-enquiry-done]');
+    enq.addEventListener('submit', function (ev) {
+      ev.preventDefault();
+      var bad = [].filter.call(enq.querySelectorAll('[required]'), function (f) {
+        var wrong = !f.value.trim() || (f.type === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(f.value.trim()));
+        f.setAttribute('aria-invalid', wrong ? 'true' : 'false');
+        return wrong;
+      });
+      if (bad.length) { enqErr.textContent = 'Almost! Fill in the highlighted boxes.'; bad[0].focus(); return; }
+      enqErr.textContent = '';
+      var v = function (n) { var f = enq.elements[n]; return f ? f.value.trim() : ''; };
+      var when = v('date') ? new Date(v('date') + 'T12:00:00').toLocaleDateString('en-CA', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' }) : '';
+      var text = [
+        'Hi God\'s Chai, we\'d love the chai cart at our event.', '',
+        'Date: ' + when, 'Event: ' + v('type'), 'Guests: about ' + v('guests'),
+        'Chai: ' + v('temp'), 'Where: ' + v('where'), '',
+        'Name: ' + v('name'), 'Email: ' + v('email')
+      ].concat(v('phone') ? ['Phone: ' + v('phone')] : [])
+       .concat(v('notes') ? ['', v('notes')] : [])
+       .concat(['', 'Are you free, and what would it cost? Thanks!']).join('\r\n');
+      var to = enq.getAttribute('data-to') || '';
+      var href = 'mailto:' + to + '?subject=' + encodeURIComponent('Chai catering: ' + v('type') + ', ' + when) + '&body=' + encodeURIComponent(text);
+      var link = enq.querySelector('[data-gc-enquiry-mailto]');
+      if (link) link.href = href;
+      enqDone.hidden = false;
+      enqDone.focus({ preventScroll: true });
+      if (typeof gtag === 'function') gtag('event', 'generate_lead', { form: 'catering' });
+      if (to) window.location.href = href;
+    });
+  }
+
+  /* ---------- 5c. Brew board (brew guide) ----------
+     One screen: pick the cups and the water, milk and mix, the pot
+     note and the step you're on all change in place. The recipe is _data/brew.yml
+     (amounts per cup), scaled from 1 to 30 cups. Without JavaScript the board
+     stays hidden and the page shows the plain list and four steps (for 2 cups).
+     ?cups=6 opens it at 6. */
+  var calc = d.querySelector('[data-gc-brewcalc]');
+  if (calc) {
+    var A = {}; try { A = JSON.parse(calc.getAttribute('data-amounts')); } catch (e) {}
+    var base = Number(calc.getAttribute('data-serves')) || 2;
+    var maxN = Number(calc.getAttribute('data-max')) || 30;
+    var gPerCup = Number(calc.getAttribute('data-g')) || 5;
+    var pouchG = Number(calc.getAttribute('data-pouch')) || 125;
+    var bigFrom = Number(calc.getAttribute('data-big')) || 0;
+    var out = calc.querySelector('[data-gc-bc-n]');
+    var less = calc.querySelector('[data-gc-bc-less]'), more = calc.querySelector('[data-gc-bc-more]');
+    var unit = calc.querySelector('[data-gc-bc-unit]'), note = calc.querySelector('[data-gc-bc-note]');
+    var FR = { 0: '', 0.25: '¼', 0.5: '½', 0.75: '¾' };
+    var quarters = function (x) {
+      var q = Math.round(x * 4) / 4, w = Math.floor(q), f = FR[q - w];
+      return (w ? String(w) : (f ? '' : '0')) + f;
+    };
+    var ml = function (x) {
+      var v = x * 250;
+      return v < 1000 ? Math.round(v / 5) * 5 + ' ml' : (Math.round(v / 50) * 50 / 1000) + ' L';
+    };
+    var cupText = function (x) { return quarters(x) + (Math.round(x * 4) / 4 > 1 ? ' cups' : ' cup'); };
+    var n = base;
+    var m = /[?&]cups=(\d+)/.exec(location.search);
+    if (m) n = Math.min(maxN, Math.max(1, parseInt(m[1], 10)));
+    var draw = function (flash) {
+      out.textContent = n;
+      unit.textContent = n === 1 ? 'cup' : 'cups';
+      less.disabled = n <= 1; more.disabled = n >= maxN;
+      // the amounts in the sentences (step titles, the plain list)
+      [].forEach.call(d.querySelectorAll('[data-gc-amt]'), function (el) {
+        var a = A[el.getAttribute('data-gc-amt')]; if (!a) return;
+        var x = a.per_cup * n, spoons = /tbsp/.test(a.unit), short = el.hasAttribute('data-short');
+        el.textContent = spoons ? quarters(x) + ' ' + a.unit + (short ? '' : ' (' + Math.round(x / a.per_cup * gPerCup) + ' g)')
+                                : cupText(x) + (short ? '' : ' (' + ml(x) + ')');
+        if (flash) { el.classList.remove('is-new'); void el.offsetWidth; el.classList.add('is-new'); setTimeout(function () { el.classList.remove('is-new'); }, 700); }
+      });
+      // the three big tiles
+      [].forEach.call(calc.querySelectorAll('[data-gc-tile]'), function (el) {
+        var a = A[el.getAttribute('data-gc-tile')]; if (!a) return;
+        var x = a.per_cup * n, spoons = /tbsp/.test(a.unit);
+        el.querySelector('b').textContent = spoons ? quarters(x) + ' tbsp' : cupText(x);
+        el.querySelector('small').textContent = spoons ? Math.round(x / a.per_cup * gPerCup) + ' g' : ml(x);
+      });
+      [].forEach.call(d.querySelectorAll('[data-gc-serves]'), function (el) { el.textContent = n; });
+      if (note) {
+        var g = Math.round(gPerCup * n), share = g / pouchG;
+        note.textContent = g + ' g of mix, ' + (share < 1 ? 'of a ' + pouchG + ' g pouch (it makes ' + Math.round(pouchG / gPerCup) + ' cups).'
+          : quarters(share) + (share > 1.125 ? ' pouches.' : ' pouch.')) +
+          (bigFrom && n >= bigFrom ? ' Use a big pot, filled no more than halfway: it rises.' : '');
+      }
+    };
+    less.addEventListener('click', function () { if (n > 1) { n--; draw(true); } });
+    more.addEventListener('click', function () { if (n < maxN) { n++; draw(true); } });
+
+    // the four steps: tabs and a Next button, one at a time
+    var tabs = [].slice.call(calc.querySelectorAll('[role="tab"]'));
+    var panels = [].slice.call(calc.querySelectorAll('[role="tabpanel"]'));
+    var go = function (i, focus) {
+      i = (i + tabs.length) % tabs.length;
+      tabs.forEach(function (t, k) { t.setAttribute('aria-selected', k === i ? 'true' : 'false'); t.tabIndex = k === i ? 0 : -1; });
+      panels.forEach(function (p, k) { p.classList.toggle('is-on', k === i); });
+      if (focus) tabs[i].focus();
+      var nx = calc.querySelector('[data-gc-bb-next]');
+      if (nx) nx.firstChild.textContent = i === tabs.length - 1 ? 'Back to step 1 ' : 'Next step ';
+    };
+    var cur = function () { return tabs.findIndex(function (t) { return t.getAttribute('aria-selected') === 'true'; }); };
+    tabs.forEach(function (t, k) {
+      t.addEventListener('click', function () { go(k); });
+      t.addEventListener('keydown', function (e) {
+        if (e.key === 'ArrowRight') { e.preventDefault(); go(k + 1, true); }
+        else if (e.key === 'ArrowLeft') { e.preventDefault(); go(k - 1, true); }
+      });
+    });
+    var next = calc.querySelector('[data-gc-bb-next]');
+    if (next) next.addEventListener('click', function () { go(cur() + 1); });
+
+    // turn the board on, and the plain version off
+    calc.hidden = false;
+    [].forEach.call(d.querySelectorAll('[data-gc-board-hides]'), function (el) { el.hidden = true; el.style.display = 'none'; });
+    // Reserve room for the longest wording (the biggest batch), so the board
+    // never changes height when the cups or the step change.
+    var boxes = [calc.querySelector('.gc-bb-panels'), note];
+    var reserve = function () {
+      // the longest wording isn't always the biggest batch ("of a 125 g pouch…"
+      // is longer than "1¼ pouches"), so try a spread of sizes and keep the tallest
+      var keep = n, tall = boxes.map(function () { return 0; });
+      boxes.forEach(function (el) { if (el) el.style.minHeight = ''; });
+      [1, 2, 3, 4, 5, 6, 8, 10, 12, 15, 20, 25, maxN].forEach(function (k) {
+        if (k > maxN) return;
+        n = k; draw(false);
+        boxes.forEach(function (el, i) { if (el) tall[i] = Math.max(tall[i], el.getBoundingClientRect().height); });
+      });
+      boxes.forEach(function (el, i) { if (el) el.style.minHeight = tall[i] + 'px'; });
+      n = keep; draw(false);
+    };
+    reserve();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(reserve);
+    window.addEventListener('resize', reserve);
+  }
+
   /* ---------- 6. Mailchimp signup (JSONP) ---------- */
   var MC = 'https://{{ site.mailchimp.host }}/subscribe/post-json?u={{ site.mailchimp.u }}&id={{ site.mailchimp.id }}&f_id={{ site.mailchimp.f_id }}';
   /* Sends every named field in the form, not just EMAIL: the hidden SOURCE
@@ -270,6 +415,37 @@ layout: null
     d.body.appendChild(s);
     setTimeout(function () { settle(false); if (s.parentNode) s.parentNode.removeChild(s); }, 8000);
   }
+  /* The Chai Club card (_includes/popup.html) joins through the checkout
+     service, which adds them to Mailchimp tagged "chai-club" and emails the
+     welcome note with the members' code. If the service can't be reached, or
+     couldn't put them on the list itself, they're signed up straight to
+     Mailchimp as above, so nobody is lost. */
+  var CLUB_IN = 'You’re in the Chai Club! ✶ ';
+  function join(form, done) {
+    var api = form.getAttribute('data-gc-club-api');
+    var email = (form.querySelector('input[name="EMAIL"]') || {}).value || '';
+    var direct = function (note) {
+      subscribe(form, function (ok, custom) {
+        done(ok, ok ? (custom ? 'You’re already on our list, so you’re in the club. ✶' : CLUB_IN + (note || 'Watch your inbox for your member perks.')) : null);
+      });
+    };
+    if (!api || !window.fetch) return direct();
+    var timer, finished = false;
+    var fallback = function () { if (finished) return; finished = true; clearTimeout(timer); direct(); };
+    timer = setTimeout(fallback, 9000);
+    fetch(api, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email: email, source: (form.elements.SOURCE || {}).value || '' }) })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (data) {
+        if (finished) return;
+        if (!data || !data.ok) return fallback();
+        finished = true; clearTimeout(timer);
+        var note = data.already ? 'You’re already a member. Your code is in your welcome email.'
+          : data.emailed ? 'Check your inbox for your welcome note and your 10% code.' : 'Watch your inbox for your member perks.';
+        if (data.listed) done(true, (data.already ? 'Welcome back! ✶ ' : CLUB_IN) + note);
+        else direct(note);
+      }, fallback);
+  }
+
   /* The welcome offer (welcome_offer in _data/shop.yml): whoever signs up gets
      the code on the spot, and it's kept in this browser so the cart can remind
      them of it. */
@@ -313,134 +489,107 @@ layout: null
     tell('sending');
     if (btn) { btn.disabled = true; btn.dataset.label = btn.textContent; btn.textContent = 'Sending…'; }
     if (msg) { msg.style.display = 'none'; msg.textContent = ''; }
-    subscribe(form, function (ok, custom) {
+    var club = form.hasAttribute('data-gc-club');
+    (club ? join : subscribe)(form, function (ok, custom) {
       if (btn) { btn.disabled = false; btn.textContent = btn.dataset.label || 'Sign up'; }
       if (!msg) return;
       msg.style.display = 'block';
-      msg.style.color = ok ? '#F2A93C' : '#FF7A66';
-      if (ok && WELCOME) showCode(msg, !!custom);
+      msg.style.color = ok ? 'var(--gc-gold-t)' : 'var(--gc-coral-t)';
+      if (ok && WELCOME && !club) showCode(msg, !!custom);
       else msg.textContent = ok ? (custom || "Thanks — you're subscribed. ✶")
                                 : "That didn't go through — check your email and try again.";
       tell(ok ? 'done' : 'error');
       if (ok) {
         input.value = '';
         try { localStorage.setItem('gc_subscribed', '1'); } catch (e) {}
-        // With a code to copy, the box stays open until they close it.
-        if (form.id === 'gc-popup-form' && !WELCOME) setTimeout(closePopup, 2800);
       }
     });
   });
 
-  /* ---------- 7. Newsletter: an edge tab, not an interruption ----------
-     Nothing opens on its own. A small tab slides in at the side of the screen
-     after a few seconds and the modal only opens if the visitor taps it, so the
-     page is never covered by something they did not ask for. Dismissing the tab
-     — or closing the modal, or subscribing — puts it away for 30 days. */
-  var overlay = d.getElementById('gc-popup-overlay');
-  var nudge = d.getElementById('gc-nudge');
-  if (overlay) {
-    // Its own key, deliberately not the one the old auto-opening modal used.
-    // Sharing that one meant anyone who had closed the old popup in the last
-    // 30 days never saw the tab at all — and the tab is a different, far
-    // smaller thing to have turned down.
-    var DISMISS_KEY = 'gc_nudge_dismissed_until';
-    var lastFocus = null;
-    var shown = false;
-
-    var suppressed = function () {
+  /* ---------- 7. The Chai Club card ----------
+     A small card in the bottom-right corner (_includes/popup.html; along the
+     bottom on a phone, once they've scrolled). It slides up a few seconds in, never covers the page or takes focus, and goes away
+     for good once someone joins. Closing it hides it for dismiss_days, and
+     leaves a small "10% off" dot in the corner that opens it again. */
+  var clubCard = d.getElementById('gc-club');
+  if (clubCard) {
+    var CLUB_KEY = 'gc_club_dismissed_until';
+    var days = Number(clubCard.getAttribute('data-days')) || 30;
+    var clubSuppressed = function () {
       try {
         if (localStorage.getItem('gc_subscribed')) return true;
-        var until = parseInt(localStorage.getItem(DISMISS_KEY) || '0', 10);
+        var until = parseInt(localStorage.getItem(CLUB_KEY) || '0', 10);
         if (until && Date.now() < until) return true;
       } catch (e) {}
       return false;
     };
-
-    function openPopup() {
-      if (shown || suppressed()) return;
-      shown = true;
-      hideNudge();
-      lastFocus = d.activeElement;
-      overlay.hidden = false;
-      overlay.style.display = 'flex';
-      loadLight();
-      var first = overlay.querySelector('input, button');
-      if (first) first.focus();
-      d.addEventListener('keydown', onKeydown, true);
-    }
-    window.closePopup = closePopup;
-
-    /* The particle light at the top of the box. particles.js is only fetched
-       once somebody actually opens the box, so nobody else pays for it. */
-    var light = null, lightCanvas = overlay.querySelector('[data-gc-status]');
-    function loadLight() {
-      if (!lightCanvas || light || loadLight.busy) return;
-      var go = function () {
-        if (!window.GCParticles) return;
-        lightCanvas.hidden = false;
-        light = window.GCParticles.status(lightCanvas);
-        if (!light) lightCanvas.hidden = true;
-      };
-      if (window.GCParticles) return go();
-      loadLight.busy = true;
-      var sc = d.createElement('script');
-      sc.src = '{{ "/assets/js/particles.js" | relative_url }}';
-      sc.onload = go;
-      d.head.appendChild(sc);
-    }
-    var popupForm = d.getElementById('gc-popup-form');
-    if (popupForm) popupForm.addEventListener('gc:signup', function (e) {
-      if (!light) return;
-      light.show(e.detail);
-      if (e.detail === 'error') setTimeout(function () { if (light) light.show('idle'); }, 2200);
+    var joined = function () {
+      try { return !!localStorage.getItem('gc_subscribed'); } catch (e) { return false; }
+    };
+    var dot = d.querySelector('[data-gc-club-dot]');
+    var showDot = function (on) {
+      if (!dot) return;
+      if (on && !joined()) {
+        dot.hidden = false;
+        requestAnimationFrame(function () { requestAnimationFrame(function () { dot.classList.add('is-in'); }); });
+      } else {
+        dot.classList.remove('is-in');
+        dot.hidden = true;
+      }
+    };
+    var hideClub = function (then) {
+      clubCard.classList.remove('is-in');
+      setTimeout(function () { clubCard.hidden = true; if (then) then(); }, 600);
+    };
+    clubCard.querySelector('[data-gc-club-close]').addEventListener('click', function () {
+      try { localStorage.setItem(CLUB_KEY, String(Date.now() + days * 864e5)); } catch (e) {}
+      hideClub(function () { showDot(true); });
     });
-    function hideNudge() {
-      if (!nudge) return;
-      nudge.classList.remove('is-in');
-      nudge.hidden = true;
-    }
-    function closePopup() {
-      overlay.style.display = 'none';
-      overlay.hidden = true;
-      try { localStorage.setItem(DISMISS_KEY, String(Date.now() + 30 * 24 * 60 * 60 * 1000)); } catch (e) {}
-      d.removeEventListener('keydown', onKeydown, true);
-      if (lastFocus && lastFocus.focus) lastFocus.focus();
-    }
-    function onKeydown(e) {
-      if (e.key === 'Escape') { e.preventDefault(); closePopup(); return; }
-      if (e.key !== 'Tab') return;
-      // focus trap
-      var f = [].slice.call(overlay.querySelectorAll('a[href], button:not([disabled]), input, [tabindex]:not([tabindex="-1"])'))
-                .filter(function (el) { return el.offsetParent !== null; });
-      if (!f.length) return;
-      var first = f[0], last = f[f.length - 1];
-      if (e.shiftKey && d.activeElement === first) { e.preventDefault(); last.focus(); }
-      else if (!e.shiftKey && d.activeElement === last) { e.preventDefault(); first.focus(); }
-    }
-
-    var closeBtn = d.getElementById('gc-popup-close');
-    var noThanks = d.getElementById('gc-popup-no-thanks');
-    if (closeBtn) closeBtn.addEventListener('click', closePopup);
-    if (noThanks) noThanks.addEventListener('click', closePopup);
-    overlay.addEventListener('click', function (e) { if (e.target === overlay) closePopup(); });
-
-    if (nudge) {
-      var nudgeOpen = d.getElementById('gc-nudge-open');
-      var nudgeClose = d.getElementById('gc-nudge-close');
-      if (nudgeOpen) nudgeOpen.addEventListener('click', openPopup);
-      if (nudgeClose) nudgeClose.addEventListener('click', function () {
-        hideNudge();
-        try { localStorage.setItem(DISMISS_KEY, String(Date.now() + 30 * 24 * 60 * 60 * 1000)); } catch (e) {}
+    // Escape closes it, but only while someone is actually in it.
+    clubCard.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') clubCard.querySelector('[data-gc-club-close]').click();
+    });
+    var clubForm = clubCard.querySelector('form');
+    clubForm.addEventListener('gc:signup', function (e) {
+      if (e.detail !== 'done') return;
+      clubCard.classList.add('is-done');
+      setTimeout(hideClub, 9000);
+    });
+    var showClub = function (asked) {
+      if (clubCard.classList.contains('is-in') || !clubCard.hidden || (!asked && clubSuppressed())) return;
+      clubCard.hidden = false;
+      // lay it out off-screen first, then slide it up
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () { clubCard.classList.add('is-in'); });
       });
-      if (!suppressed()) {
-        setTimeout(function () {
-          if (suppressed() || shown) return;
-          nudge.hidden = false;
-          // let the browser lay it out off-screen before sliding it in
-          requestAnimationFrame(function () {
-            requestAnimationFrame(function () { nudge.classList.add('is-in'); });
-          });
-        }, 5000);
+    };
+    // The dot: tapping it brings the card back (and closing it again brings
+    // the dot back). Shown on every page while the card is dismissed.
+    if (dot) {
+      dot.addEventListener('click', function () {
+        showDot(false);
+        showClub(true);
+        var box = clubCard.querySelector('input[type="email"]');
+        if (box) setTimeout(function () { box.focus({ preventScroll: true }); }, 450);
+      });
+      if (!joined() && clubSuppressed()) showDot(true);
+    }
+    if (!clubSuppressed()) {
+      // On a phone the card spans the bottom of the screen, which on the
+      // homepage is where the hero's buttons are. It still comes up after the
+      // same delay (_data/club.yml), it just doesn't beat the scroll to it.
+      var phone = window.matchMedia && window.matchMedia('(max-width:560px)').matches;
+      var waited = false, scrolled = !phone;
+      var tryShow = function () { if (waited && scrolled) showClub(); };
+      var delayMs = (Number(clubCard.getAttribute('data-delay')) || 5) * 1000;
+      setTimeout(function () { waited = true; tryShow(); }, delayMs);
+      if (phone) {
+        var onScroll = function () {
+          if (window.scrollY < window.innerHeight * 0.6) return;
+          scrolled = true; window.removeEventListener('scroll', onScroll); tryShow();
+        };
+        window.addEventListener('scroll', onScroll, { passive: true });
+        setTimeout(function () { scrolled = true; tryShow(); }, delayMs);
       }
     }
   }

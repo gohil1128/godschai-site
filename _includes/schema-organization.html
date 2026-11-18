@@ -5,9 +5,17 @@
   "@id": "{{ '/' | absolute_url }}#organization",
   "name": "God's Chai",
   "url": "{{ '/' | absolute_url }}",
-  "logo": "{{ 'uploads/opt/artboard-256.png' | absolute_url }}",
+  "logo": "{{ 'uploads/opt/app-icon-512.png' | absolute_url }}",
   "image": "{{ 'uploads/opt/hero-journey-web-1600.jpg' | absolute_url }}",
   "description": "Masala chai made with whole spices from Kerala and single-origin Assam tea, brewed fresh in Saskatoon.",
+  "email": "{{ site.data.shop.email }}",
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "contactType": "customer service",
+    "email": "{{ site.data.shop.email }}",
+    "areaServed": "CA",
+    "availableLanguage": ["English"]
+  },
   "areaServed": {
     "@type": "City",
     "name": "Saskatoon",

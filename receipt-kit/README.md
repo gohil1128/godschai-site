@@ -28,4 +28,4 @@ accounts it's under **Business → Receipts**):
   customers, or switch it off for a cleaner receipt.
 
 Under **Account & Settings → Business → Brand** (if you see it), set the
-brand colour to `#F2A93C`.
+brand colour to `#B55F3E`.

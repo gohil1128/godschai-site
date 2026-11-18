@@ -89,13 +89,21 @@ get no email from Square), set these up:
    can now go to more than one address too, e.g. `ORDER_ALERT_TO` =
    `sip@godschai.com,harshraj.gohil28@gmail.com`. Redeploy.
 
+## Chai Club joins (`api/club.js`)
+
+The Chai Club card on the website posts `{ email }` here. It adds them to
+Mailchimp (tags `chai-club`, `opted-in`), emails the welcome note with the
+code CHAI10 (`lib/club.js`) once, and tags them `club-welcome-sent`. It uses
+`MAILCHIMP_API_KEY`, `RESEND_API_KEY` and `EMAIL_FROM` below. `GET` says which
+parts are switched on. See SEO.md, "The Chai Club".
+
 ### All settings
 
 | Variable | |
 | --- | --- |
 | `SQUARE_ACCESS_TOKEN` | Needed. Also used by the checkout. |
 | `SQUARE_APPLICATION_ID` | For our own payment page. Not a secret. |
-| `MAILCHIMP_API_KEY` | Optional. Adds every online buyer to the email list (tag `customer`, *Last order* date). See SEO.md, "Customers on the list". |
+| `MAILCHIMP_API_KEY` | Optional. Adds every online buyer to the email list (tag `customer`, *Last order* date), and Chai Club members (tag `chai-club`). See SEO.md, "Customers on the list" and "The Chai Club". |
 | `MAILCHIMP_LIST_ID` | Optional. Which Mailchimp audience; defaults to the one the site's signup forms use. |
 | `SQUARE_WEBHOOK_SIGNATURE_KEY` | Needed. From the Square webhook subscription. |
 | `RESEND_API_KEY` | Needed. From Resend. |

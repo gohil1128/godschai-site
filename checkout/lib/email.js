@@ -110,7 +110,7 @@ export function customerEmail(o) {
   // The same four steps as the brew guide on the site (_data/brew.yml).
   const steps = [
     ['Boil', ' 1 cup water and 1 cup milk together.'],
-    ['Blend', " in 2 tbsp God's Chai and sugar to taste."],
+    ['Blend', " in 2 heaped tbsp God's Chai and sugar to taste."],
     ['Let it rise', " 2–3 times. Don't skip this one."],
     ['Strain', ' and enjoy. Kadak, every single cup.'],
   ].map(([b, rest], i, all) => {
@@ -226,7 +226,7 @@ ${address}
     `Total: ${money(o.total)}`, '',
     `What happens next (${z.label}): ${z.next}`, '',
     o.address.length ? `${o.zone === 'saskatoon' ? 'Delivering' : 'Shipping'} to: ${[o.name].concat(o.address).filter(Boolean).join(', ')}` : null, '',
-    'Four steps to a proper cup: 1. Boil 1 cup water and 1 cup milk together. 2. Blend in 2 tbsp God\'s Chai and sugar to taste. 3. Let it rise 2–3 times. Don\'t skip this one. 4. Strain and enjoy. Kadak, every single cup.', '',
+    'Four steps to a proper cup: 1. Boil 1 cup water and 1 cup milk together. 2. Blend in 2 heaped tbsp God\'s Chai and sugar to taste. 3. Let it rise 2–3 times. Don\'t skip this one. 4. Strain and enjoy. Kadak, every single cup.', '',
     'Questions about your order? Just reply to this email.',
     o.receiptUrl ? `Receipt: ${o.receiptUrl}` : null,
     `Tag your first cup @godschai — ${INSTAGRAM}`,

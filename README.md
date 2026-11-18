@@ -29,7 +29,7 @@ structured data and sitemap stay in sync automatically.
 ```
 _data/          menu.yml, events.yml, brew.yml, bulk.yml  ← the content you edit
 _includes/      head, nav, footer, signup form, popup, schema, image helper
-_layouts/       default.html (dark pages), light.html (the menu page)
+_layouts/       default.html (every page, daylight colours), product.html
 assets/js/      site.js — all interaction, plain JavaScript, no framework
 assets/fonts/   self-hosted woff2 + fonts.css
 uploads/        original photos

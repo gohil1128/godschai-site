@@ -79,13 +79,18 @@ Open **`_data/events.yml`** and copy a block:
   desc: "Two days of local makers and our chai cart by the north doors."
 ```
 
-**You never need to delete old events.** Once the `end` date has passed the event
-hides itself from visitors automatically, but stays in the page so Google and AI
-search tools can still see your history. Delete them only if you want to tidy up.
+**You never need to delete old events.** Once an event's `end` date has passed
+it leaves the schedule and the homepage and moves to a short **"Past pop-ups"**
+list at the bottom of `/events/`, marked as past. (That move happens the next
+time the site is published; in between, the page hides it from the schedule by
+itself.) Google's event listing only ever gets the upcoming ones.
+
+Two optional lines: `street: "503 Ruth St W"` gives Google the street address,
+and `free: false` tells it the event charges admission.
 
 Keep `start` and `end` accurate — those are what Google shows in event results.
 
-The homepage and the `/events/` page both show the whole list, so adding one
+The homepage and the `/events/` page both show the upcoming list, so adding one
 block puts it in both places. If the homepage says "No events on the calendar
 right now", it means every `end` date in the file has passed — add the next
 pop-up and it comes straight back.
@@ -146,8 +151,9 @@ button. The bag in the top bar opens the cart, which slides in from the
 right. It shows the pouches, the delivery choice, PST and a "free shipping"
 progress bar, then the Square checkout button. The cart is remembered in the
 visitor's own browser as they move around the site. It empties itself once
-they reach `/order-confirmed/`. The code is in `assets/js/cart.js` and
-`_includes/cart-drawer.html`.
+they reach `/order-confirmed/`. On a phone, swiping a pouch row to the left
+takes that blend out of the cart (the *Remove* link does the same). The code
+is in `assets/js/cart.js` and `_includes/cart-drawer.html`.
 
 **Each pre-made link works for one sale only.** Square closes a checkout
 link once it has been paid. Anyone who opens a used link lands straight on
@@ -260,8 +266,8 @@ so it's a job to hand to Claude with Square connected. The box's heading is
 | Setting | What it does |
 | --- | --- |
 | `open` | The launch switch. `false` shows "launching this fall" and the email signups; `true` turns every premix box on the site into "order now". |
-| `price` | $14.99 a pouch, before tax. |
-| `pair_price` | "Try both": one Original Masala + one Rose & Cardamom for $24.99, for every pair in the order. The saving comes off before PST. The Square links for orders with both blends include it, as does `checkout/api/checkout.js`. |
+| `price` | $15.99 a pouch, before tax. |
+| `pair_price` | "Try both": one Original Masala + one Rose & Cardamom for $28.99, for every pair in the order. The saving comes off before PST. `checkout/lib/order.js` (`PAIR_SAVING`, in cents: 2 × price − pair price) applies it on Square. The pre-made links for orders with both blends are left out, because they carry the old price. |
 | `max_each` | Most pouches of one blend in an order (3). |
 | `checkout_api` | The checkout service's address. Blank until it's set up; then any quantity can be ordered (up to `max_each_api`). |
 | `pay_on_site` | `true` sends checkout to our own payment page, `/checkout/`. Needs the steps above. |
@@ -349,8 +355,59 @@ Another item (chai concentrate by the litre, say) is just one more entry under
 Editing it updates the homepage teaser, the `/how-to-make-masala-chai/` page and
 the `HowTo` structured data (the one that can win a rich result in Google).
 
+**The brew board.** At the top of the brew guide, one screen holds everything:
+a "Making − 7 +" cup counter, three
+tiles (water, milk, mix, in cups and ml, and heaped tbsp and grams), a line on
+pouch use and when to use a big pot, and the four steps as tabs with a Next
+button. Changing the cups updates it all in place, and the board keeps its size,
+so nobody has to scroll. The amounts come from `amounts` in `brew.yml` (per
+cup, 1 to 30); in the text, `{water}`, `{milk}` and `{mix}` mark where they go.
+`/how-to-make-masala-chai/?cups=12` opens it at 12 cups. Without JavaScript the
+board stays hidden and the page shows the plain list and four steps for 2 cups.
+
 The longer written guide on that page is normal text in
 `how-to-make-masala-chai/index.html` — edit it like a document.
+
+---
+
+## The homepage's three ways to buy
+
+Straight under the hero, `_includes/offer-strip.html` shows three cards:
+**Premixes**, **Catering** and **Bulk orders**, each linking to its page, so
+visitors see what they can buy before they scroll. The pouch price comes from
+`_data/shop.yml` and the notice period from `_data/bulk.yml`; the rest of the
+wording is in the include. The hero's second button goes to Catering.
+
+The menu bar runs in the same order: Shop, Catering, Menu, Brew Guide, Events
+(`_includes/nav-dark.html`). On phones "Brew Guide" shortens to "Brew" so all
+five fit on one line.
+
+---
+
+## Colours: the daylight theme
+
+The site is a light, daylight theme. Every colour is one of the named colours at
+the top of `_includes/base-styles-dark.html` (the file keeps its old name), so
+changing the look means changing a few values there, not hunting through pages:
+
+| Name | Used for |
+| --- | --- |
+| `--gc-bg`, `--gc-bg2`, `--gc-card` | page, alternate sections, cards |
+| `--gc-fg`, `--gc-fg2` … `--gc-fg4`, `--gc-muted` | text, from headline to quiet |
+| `--gc-gold-t`, `--gc-coral-t` | gold and coral **text** and thin lines, darkened to read on cream |
+| `--gc-ink-rgb`, `--gc-gold-rgb` … | the same colours as numbers, for borders and tints with some see-through (`rgba(var(--gc-ink-rgb),0.12)`) |
+
+Buttons are the brand rust (`#B55F3E`) with white text; the page is cream (`#F2EBE1`) and text espresso (`#3C2116`), the three brand colours.
+
+**Anything on a photo stays dark.** Put `class="gc-dark"` on an element and the
+original dark colours come back for everything inside it. That is how the home
+page's hero, the "Kadak" banner and the two video tiles keep light text over
+their photos, and how the header stays light-on-photo until you scroll past the
+hero (then `assets/js/site.js` takes the class off and the header turns daylight).
+New photo sections: add `gc-dark` to the section and nothing else.
+
+Not changed: the emails (order confirmation, the Chai Club welcome, the Square
+receipt kit). They have their own colours in `checkout/lib/`.
 
 ---
 
@@ -387,11 +444,12 @@ animations turned off in their device settings.
 
 The logo wears the pouch's colours: **"God's" in rust (`#B6502B`), the brush
 stroke under it in gold (`#D3A849`)**, and "CHAI" and the tagline in cream on
-the dark site. On light backgrounds (search results, Square receipts) "CHAI" is
-the pouch's dark brown (`#4A2A1F`) instead.
+dark backgrounds. On light ones (the daylight site, search results, Square
+receipts) "CHAI" is the pouch's dark brown (`#3C2116`) instead.
 
-The animated component can only paint the whole mark one colour, so the cream
+The animated component can only paint the whole mark one colour, so that colour
 comes from the `tint` on the `<gods-chai-logo>` tag in `_includes/nav-dark.html`
+(it reads the `--gc-logo` colour, cream in the dark scope and brown on daylight)
 and the rust and gold are painted over their pieces by two rules in
 `_includes/base-styles-dark.html`.
 
@@ -408,8 +466,8 @@ python3 tools/build-logo.py
 python3 tools/optimize-images.py
 # 2. change the matching colours in _includes/base-styles-dark.html
 #    (the two rules just under "gods-chai-logo:defined")
-# 3. the browser-tab icon: edit BRAND/INK in tools/make-favicon.py, then
-python3 tools/make-favicon.py
+# 3. the browser-tab icon is its own artwork (see "The browser-tab icon"):
+#    replace it and run  bash tools/make-icons.sh
 ```
 
 Change one without the others and the animated logo and the still ones stop
@@ -448,19 +506,28 @@ That still is what people see for the moment before the video arrives.
 
 ## The browser-tab icon
 
-The little icon on the browser tab is the **G from the logo** — the actual
-letterform, taken out of the animated logo's own artwork, cream on a rust tile
-like the back of the pouch.
+The icon on browser tabs, next to the site in Google results, on an iPhone home
+screen, and the logo in the site's business details for Google, is a **glossy
+off-white tile with the God's Chai logo on it**, laid out like the "GC Tasks" app
+icon: the tile is `#F2EFE8`, "God's" and its underline are rust (`#AC6040`),
+"CHAI" is dark brown (`#362218`), there is no tagline, and the logo is about
+68% of the tile wide.
 
-`tools/make-favicon.py` builds `favicon.ico`, `favicon-32.png` and
-`apple-touch-icon.png`. Re-run it if the logo artwork ever changes:
+`tools/make-icons.sh` builds it. The tile's light and shade come from
+`uploads/_src/app-icon-source.png` (the old gold tile, with its lettering taken
+out); the logo is cut from `uploads/_src/artboard.png`. The script writes every
+size: `favicon.ico`, `favicon-32/48/96/144/192.png`, `apple-touch-icon.png` and
+`uploads/opt/app-icon-512.png`. The 16-48px ones are cut a little closer around
+the logo so it stays readable. The settings at the top of the script are the tile
+colour and gloss (`TILE`, `SHEEN`, `SHADE`) and the logo (`LOGO_W` for its size,
+`LOGO_DARK` and `LOGO_RUST` for its colours). After changing any of them:
 
 ```bash
-python3 tools/make-favicon.py
+bash tools/make-icons.sh
 ```
 
-A plain G with no tile was tried first — it disappears against a white tab
-strip at small sizes, which is why it sits on a tile.
+Google picks up a new icon when it next crawls the homepage, which can take a
+few days to a few weeks.
 
 ---
 
@@ -510,33 +577,68 @@ state's shape and colour live in `PRESETS` near the top of the file.
 
 ---
 
-## The email signup tab
+## The Chai Club
 
-Nothing pops open on its own any more. About five seconds in, a small amber tab
-slides in at the left edge of the screen reading **"spiced, never spammy"** — a
-nod to "spiced, never syruped" on the ticker. Tapping it opens the signup box;
-tapping the little × puts it away. Either way it stays gone for 30 days, and it
-never appears again for someone who has already subscribed.
+The Chai Club card is the site's email signup. It's styled like the club poster:
+cream, "JOIN the *Chai* club", and a yellow 10% badge. Nothing covers the page
+and nothing takes focus:
 
-It sits lower on a laptop than on a phone. A laptop has room to the left of the
-headline; a phone doesn't, so there it moves up into the gap between the header
-and the first line of text.
+- **When it appears:** 5 seconds in (`delay_seconds` in `_data/club.yml`), it
+  slides up in the **bottom-right corner**. On a **phone** it runs along the
+  bottom, after the same delay. On product pages it sits above the phone buy bar.
+- **What's on it:** one line, a "See the perks" link that opens the four perks,
+  and an email box with a **Join** button.
+- **Closing it:** the × (or Escape) hides it for 30 days and leaves a small gold
+  **"10% off" dot** in the same corner, on every page, that opens it again. The
+  dot goes away for good once they join.
+- **After joining:** it says *"You're in the Chai Club! ✶ Check your inbox…"*,
+  then tidies itself away. Members never see it again.
+- **Where it never shows:** the checkout page and the order-confirmed page.
 
-It covers half a percent of the screen on a laptop and about 1.6% on a phone — the old
-version covered the whole page — so people can read without dismissing anything
-first. That is also better for Google, which marks sites down for covering the
-page with something the visitor didn't ask for.
+**What happens when someone joins (all automatic):**
+
+1. The card sends their email to the checkout service (`checkout/api/club.js`).
+2. The service adds them to Mailchimp (label `chai-club`) and tags them
+   **`chai-club`** and **`opted-in`**. They asked to join, so under Canada's
+   anti-spam law you can keep emailing them until they unsubscribe.
+3. The service emails them the **welcome note with the code CHAI10**: 10% off
+   their first order of chai mixes. It's sent from `orders@godschai.com`, and
+   replies go to sip@godschai.com. Then they're tagged **`club-welcome-sent`**,
+   so nobody gets it twice.
+4. At checkout they type CHAI10 into Square's coupon box. **Square makes sure
+   it only works once per customer**, as long as the coupon is set up as below.
+   It **can't be combined with the "Try both" pair price**: Square greys out
+   the coupon box on an order that already has a discount. The welcome email
+   says so, and the cart shows "Coupon codes can't be added to the pair price"
+   whenever the pair saving is in the basket.
+
+If the service can't be reached, or Mailchimp isn't connected to it yet, the
+card signs them up straight to Mailchimp (label `chai-club`). Nobody is lost;
+they just don't get the welcome email until they join again or you email them.
+
+**One-time setup:**
+
+- **In Square:** Dashboard → Customers → Marketing → **Coupons → Create
+  coupon.** Code `CHAI10`, 10% off, the whole order (or just the two chai
+  mixes), usable online, **limited to once per customer**. Activate it.
+- **In Vercel** (godschai-site-checkout → Settings → Environment Variables):
+  `MAILCHIMP_API_KEY` (Mailchimp → Profile → Extras → API keys). The welcome
+  email also needs `EMAIL_FROM`, which the order emails already use. Redeploy.
+- **Check:** `https://godschai-site-checkout.vercel.app/api/club` should say
+  `"mailchimp":true,"welcomeEmails":true`.
+
+**Emailing members:** in Mailchimp, make a segment with the tag `chai-club`.
+That's who to invite to tasting nights and flavour votes. Tagged `chai-club` but
+not `club-welcome-sent` means they joined before the welcome email was switched
+on: send them the code once by hand (or as a one-off campaign to that segment).
 
 | What to change | Where |
 | --- | --- |
-| The wording on the tab | `_includes/popup.html` — the text inside `gc-nudge-open` |
-| The five-second delay | `assets/js/site.js`, section 7 — the `5000` |
-| The 30-day gap before it returns | same section — the `30 * 24 * 60 * 60 * 1000` |
-| Where it sits, and its colours | `_includes/base-styles-dark.html` — the `#gc-nudge` rules |
-| The wording inside the signup box | `_includes/popup.html` |
-
-Keep the tab short. It's rotated on its side, so long wording makes it tall
-enough to start covering things.
+| The line, the perks, the delay, the 30 days | `_data/club.yml` |
+| The perks in the welcome email (keep them matching) | `checkout/lib/club.js` |
+| The welcome email itself | `checkout/lib/club.js` |
+| How the card looks | `_includes/popup.html` |
+| When it shows | `assets/js/site.js`, section 7 |
 
 ---
 
@@ -554,7 +656,8 @@ email one group without the others:
 | `premix-launch` | homepage premix box, both forms on `/premixes/`, the end of all four guide pages | one email when the premixes launch |
 | `premix-news` | the form at the bottom of `/premixes/`, once the shop is open | new blends and restocks |
 | `events` | `/events/` | the pop-up schedule |
-| `newsletter` | the footer, and the side tab | general news (plus the 10% code while the welcome offer is on) |
+| `newsletter` | the footer | general news (plus the 10% code while the welcome offer is on) |
+| `chai-club` | the Chai Club card | the club's perks; their welcome email carries 10% off their first order |
 | `welcome` | the "Get 10% off" line in the cart | the 10% code, and the odd email |
 
 **One-time setup in Mailchimp** — without this, Mailchimp quietly throws the
