@@ -1,0 +1,51 @@
+# The @godschai grid on the homepage (_includes/insta-grid.html).
+# See SEO.md, "The Instagram grid".
+
+# Live posts. Leave blank and the grid shows the nine tiles below.
+# Paste a Behold JSON feed address here (behold.so → connect @godschai →
+# New feed → JSON → copy the URL) and the grid shows your latest nine
+# Instagram posts instead, updated by Behold. If the feed ever fails to load,
+# the nine tiles below stay up, so the section is never empty.
+feed_url: ""
+
+# Where live post images are served from. Only used when feed_url is set; the
+# browser refuses images from anywhere not listed here.
+image_hosts: "https://*.behold.pictures https://*.cdninstagram.com https://*.fbcdn.net"
+
+# The nine tiles shown until (or unless) the live feed is on, in grid order:
+# left to right, top to bottom. Each one opens Instagram.
+#   image  — a photo in uploads/opt (name without the -640.jpg end)
+#   widths — the sizes that exist for it in uploads/opt
+#   video  — optional: a clip in uploads/video that plays in the tile
+#   link   — optional: a particular post's address; defaults to the profile
+#   alt    — what the photo shows, for screen readers and Google
+tiles:
+  - image: community-cart
+    widths: "400"
+    video: community-cart.mp4
+    alt: "Three God's Chai cups held up in front of the cart under its orange canopy"
+  - image: drink-gulabo-studio
+    widths: "320,640"
+    alt: "Gulabo Rose Refresher: house rose syrup with lemon and soda"
+  - image: pouch-masala-front
+    widths: "250,500"
+    alt: "The Original Masala premix pouch"
+  - image: pour-cup
+    widths: "320,640"
+    alt: "A cup of God's Chai on a green rug"
+  - image: community-rose
+    widths: "400"
+    video: community-rose.mp4
+    alt: "An iced God's Chai topped with rose petals"
+  - image: drink-lavender
+    widths: "320,640"
+    alt: "Lavender Cold Foam Chai topped with lavender cream-cheese foam"
+  - image: pouch-rose-front
+    widths: "250,500"
+    alt: "The Rose & Cardamom premix pouch"
+  - image: drink-chocolate
+    widths: "320,640"
+    alt: "Iced Chocolate Chai with dark chocolate, hazelnut syrup and biscuit crumbles"
+  - image: drink-montblanc-v2
+    widths: "320,640"
+    alt: "YXE's Mont Blanc: coffee and chai concentrate with a vanilla cream top"
