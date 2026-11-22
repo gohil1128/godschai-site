@@ -94,13 +94,6 @@
   @media (max-width:430px){
     #hot > div > div{min-width:0!important}
   }
-  /* Community grid: with three tiles, auto-fit left empty cells (a whole dead
-     column at desktop widths). Fixed column counts make the tiles tile exactly. */
-  @media (min-width:700px){
-    #community div[style*="grid-auto-rows"]{grid-template-columns:repeat(4,1fr)!important}
-    #community div[style*="grid-auto-rows"] > div:nth-child(2),
-    #community div[style*="grid-auto-rows"] > div:nth-child(3){grid-column:span 1!important;grid-row:span 2!important}
-  }
   /* Five spice cards: auto-fit gives a clean row of five from 1180px and 3+2 on a
      tablet, but leaves a 4+1 orphan in the band between. Pin it to three there. */
   @media (min-width:900px) and (max-width:1179px){

@@ -593,4 +593,54 @@ layout: null
       }
     }
   }
+
+  /* ---------- 8. Instagram grid: latest posts (homepage) ----------
+     The nine tiles are already on the page from _data/instagram.yml. When
+     that file has a feed_url (a Behold JSON feed), fetch it and put the newest
+     posts in their place, one tile per post. Anything that goes wrong (feed
+     down, blocked, odd shape) just leaves the tiles that are there. */
+  var igGrid = d.querySelector('[data-gc-ig][data-feed]');
+  if (igGrid && window.fetch) {
+    var igSrc = function (p) {
+      var sz = p.sizes || {};
+      var pick = (sz.medium && sz.medium.mediaUrl) || (sz.large && sz.large.mediaUrl) || (sz.small && sz.small.mediaUrl);
+      if (pick) return pick;
+      if (p.thumbnailUrl) return p.thumbnailUrl;
+      var t = p.mediaType || p.media_type || '';
+      return t === 'VIDEO' ? (p.thumbnail_url || '') : (p.mediaUrl || p.media_url || '');
+    };
+    var igAlt = function (p) {
+      var c = String(p.prunedCaption || p.caption || '').replace(/\s+/g, ' ').trim();
+      if (c.length > 120) c = c.slice(0, 117).replace(/\s+\S*$/, '') + '…';
+      return c || 'A God\'s Chai post on Instagram';
+    };
+    fetch(igGrid.getAttribute('data-feed'), { credentials: 'omit' })
+      .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+      .then(function (data) {
+        var posts = (Array.isArray(data) ? data : (data && data.posts) || []).filter(function (p) {
+          return p && /^https:\/\//.test(p.permalink || '') && /^https:\/\//.test(igSrc(p));
+        });
+        var slots = [].slice.call(igGrid.children);
+        if (posts.length < 3) return; // not worth replacing the tiles for
+        posts.slice(0, slots.length).forEach(function (p, i) {
+          var img = new Image();
+          img.onload = function () {
+            var a = d.createElement('a');
+            a.className = 'gc-ig-tile';
+            a.href = p.permalink; a.target = '_blank'; a.rel = 'noopener';
+            img.alt = igAlt(p); img.decoding = 'async';
+            a.appendChild(img);
+            var t = p.mediaType || p.media_type || '';
+            if (t === 'VIDEO' || p.isReel) {
+              a.insertAdjacentHTML('beforeend', '<svg class="gc-ig-reel" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg>');
+            }
+            var old = slots[i].querySelector('video');
+            if (old) { try { old.pause(); } catch (err) {} }
+            slots[i].replaceChildren ? slots[i].replaceChildren(a) : (slots[i].innerHTML = '', slots[i].appendChild(a));
+          };
+          img.src = igSrc(p);
+        });
+      })
+      .catch(function () {});
+  }
 })();

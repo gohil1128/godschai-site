@@ -15,6 +15,9 @@
 {%- if site.data.shop.open and site.data.shop.checkout_api != "" -%}{%- assign api_parts = site.data.shop.checkout_api | split: "/" -%}{%- capture api_origin %} {{ api_parts[0] }}//{{ api_parts[2] }}{% endcapture -%}{%- endif -%}
 {%- comment -%} And the Chai Club card's join address (_data/club.yml). {%- endcomment -%}
 {%- if site.data.club.api != "" -%}{%- assign club_parts = site.data.club.api | split: "/" -%}{%- capture club_origin %}{{ club_parts[0] }}//{{ club_parts[2] }}{% endcapture -%}{%- unless api_origin contains club_origin -%}{%- assign api_origin = api_origin | append: " " | append: club_origin -%}{%- endunless -%}{%- endif -%}
+{%- comment -%} And the Instagram grid's live feed, when it's on (_data/instagram.yml). {%- endcomment -%}
+{%- assign ig_img = "" -%}
+{%- if site.data.instagram.feed_url and site.data.instagram.feed_url != "" -%}{%- assign ig_parts = site.data.instagram.feed_url | split: "/" -%}{%- assign api_origin = api_origin | append: " " | append: ig_parts[0] | append: "//" | append: ig_parts[2] -%}{%- capture ig_img %} {{ site.data.instagram.image_hosts }}{% endcapture -%}{%- endif -%}
 {%- comment -%} description_open: an alternative description for once the shop is open (_data/shop.yml). {%- endcomment -%}
 {%- assign desc = page.description -%}
 {%- if site.data.shop.open and page.description_open -%}{%- assign desc = page.description_open -%}{%- endif -%}
@@ -25,7 +28,7 @@
      meta tag. 'unsafe-inline' covers the inline styles the design relies on; there is no
      'unsafe-eval' because the site no longer evaluates JS at runtime. -->
 {%- assign csp = page.csp -%}
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://*.list-manage.com https://www.clarity.ms{% if csp.script %} {{ csp.script }}{% endif %}; style-src 'self' 'unsafe-inline'{% if csp.style %} {{ csp.style }}{% endif %}; font-src 'self'{% if csp.font %} {{ csp.font }}{% endif %}; img-src 'self' data: https://*.google-analytics.com https://*.googletagmanager.com https://*.clarity.ms https://c.bing.com{% if csp.img %} {{ csp.img }}{% endif %}; media-src 'self'; connect-src 'self'{{ api_origin }} https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://stats.g.doubleclick.net https://*.clarity.ms https://c.bing.com{% if csp.connect %} {{ csp.connect }}{% endif %}; object-src 'none'; base-uri 'self'; form-action 'self'; frame-src {% if csp.frame %}{{ csp.frame }}{% else %}'none'{% endif %}">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://*.list-manage.com https://www.clarity.ms https://scripts.clarity.ms{% if csp.script %} {{ csp.script }}{% endif %}; style-src 'self' 'unsafe-inline'{% if csp.style %} {{ csp.style }}{% endif %}; font-src 'self'{% if csp.font %} {{ csp.font }}{% endif %}; img-src 'self' data: https://*.google-analytics.com https://*.googletagmanager.com https://*.clarity.ms https://c.bing.com{{ ig_img }}{% if csp.img %} {{ csp.img }}{% endif %}; media-src 'self'; connect-src 'self'{{ api_origin }} https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://stats.g.doubleclick.net https://*.clarity.ms https://c.bing.com{% if csp.connect %} {{ csp.connect }}{% endif %}; object-src 'none'; base-uri 'self'; form-action 'self'; frame-src {% if csp.frame %}{{ csp.frame }}{% else %}'none'{% endif %}">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 
 <title>{{ page.title }}</title>

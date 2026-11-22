@@ -1,0 +1,54 @@
+{%- comment -%}
+  The @godschai grid on the homepage: nine square tiles in three rows, the way
+  Instagram lays out a profile. Every tile opens Instagram. The tiles come from
+  _data/instagram.yml; when that file has a feed_url, site.js (section 8)
+  swaps in the latest posts once they load and leaves these up if they don't.
+  See SEO.md, "The Instagram grid".
+{%- endcomment -%}
+{%- assign ig = site.data.instagram -%}
+<style>
+  .gc-ig{background:rgba(var(--gc-surf-rgb),0.6);scroll-margin-top:84px}
+  .gc-ig-in{max-width:880px;margin:0 auto;padding:clamp(46px,6vw,88px) clamp(14px,4vw,40px);text-align:center}
+  .gc-ig-eyebrow{font:400 12px 'DM Mono',monospace;letter-spacing:0.18em;text-transform:uppercase;color:var(--gc-coral-t)}
+  .gc-ig h2{margin:10px 0 clamp(20px,3vw,30px);font:400 clamp(2.2rem,5vw,3.4rem)/1 'Instrument Serif',serif;letter-spacing:0}
+  .gc-ig h2 a{color:var(--gc-fg);text-decoration:none}
+  .gc-ig h2 a:hover{color:var(--gc-gold-t)}
+  .gc-ig-grid{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:3px;border-radius:14px;overflow:hidden}
+  .gc-ig-grid li{position:relative;aspect-ratio:1/1;background:var(--gc-card)}
+  .gc-ig-tile{position:absolute;inset:0;display:block;overflow:hidden}
+  .gc-ig-tile picture,.gc-ig-tile img,.gc-ig-tile video{display:block;width:100%;height:100%;object-fit:cover}
+  .gc-ig-tile img,.gc-ig-tile video{transition:transform .5s cubic-bezier(.2,.7,.2,1)}
+  .gc-ig-tile::after{content:"";position:absolute;inset:0;background:rgba(var(--gc-shadow-rgb),0);transition:background .25s ease}
+  .gc-ig-tile:hover img,.gc-ig-tile:hover video,.gc-ig-tile:focus-visible img,.gc-ig-tile:focus-visible video{transform:scale(1.04)}
+  .gc-ig-tile:hover::after,.gc-ig-tile:focus-visible::after{background:rgba(var(--gc-shadow-rgb),0.18)}
+  .gc-ig-tile:focus-visible{outline:3px solid var(--gc-gold-t);outline-offset:-3px}
+  /* Instagram marks a reel with a small play glyph in the corner. */
+  .gc-ig-reel{position:absolute;top:8px;right:8px;z-index:1;width:18px;height:18px;color:#FFFFFF;filter:drop-shadow(0 1px 2px rgba(0,0,0,0.45));pointer-events:none}
+  .gc-ig-cta{display:flex;flex-direction:column;align-items:center;gap:10px;margin-top:clamp(22px,3vw,30px)}
+  .gc-ig-cta a{display:inline-flex;align-items:center;gap:9px;text-decoration:none;background:#B55F3E;color:#FFFFFF;font-weight:700;font-size:15.5px;padding:13px 24px;border-radius:999px}
+  .gc-ig-cta p{margin:0;font:400 12px/1.5 'DM Mono',monospace;letter-spacing:0.04em;color:var(--gc-fg4)}
+  @media (prefers-reduced-motion:reduce){.gc-ig-tile img,.gc-ig-tile video,.gc-ig-tile::after{transition:none}.gc-ig-tile:hover img,.gc-ig-tile:hover video{transform:none}}
+</style>
+<section id="community" class="gc-ig" aria-labelledby="community-h2">
+  <div class="gc-ig-in">
+    <div class="gc-ig-eyebrow">The God's Chai community</div>
+    <h2 id="community-h2"><a href="{{ site.social.instagram }}" target="_blank" rel="noopener">{{ site.social.instagram_handle }}</a></h2>
+    <ul class="gc-ig-grid" data-gc-stagger data-gc-ig{% if ig.feed_url != "" %} data-feed="{{ ig.feed_url }}"{% endif %}>
+      {%- for t in ig.tiles limit: 9 %}
+      {%- assign ws = t.widths | split: "," -%}
+      <li><a class="gc-ig-tile" href="{{ t.link | default: site.social.instagram }}" target="_blank" rel="noopener"{% if t.video %} aria-label="{{ t.alt | escape }}"{% endif %}>
+        {%- if t.video %}
+        <video data-src="{{ '/uploads/video/' | relative_url }}{{ t.video }}::video/mp4" muted loop playsinline preload="none" poster="{{ '/uploads/opt/' | relative_url }}{{ t.image }}-{{ ws | last }}.jpg" aria-hidden="true"></video>
+        <svg class="gc-ig-reel" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg>
+        {%- else %}
+        {% include img.html base=t.image widths=t.widths sizes="(min-width:880px) 280px, 33vw" alt=t.alt %}
+        {%- endif %}
+      </a></li>
+      {%- endfor %}
+    </ul>
+    <div class="gc-ig-cta">
+      <a href="{{ site.social.instagram }}" target="_blank" rel="noopener" class="gc-pill"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>Follow {{ site.social.instagram_handle }}</a>
+      <p>Tag us in your cup and we might feature it here.</p>
+    </div>
+  </div>
+</section>

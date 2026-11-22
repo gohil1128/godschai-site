@@ -479,22 +479,37 @@ top of a section hiding behind the bar when someone clicks Menu or Events.
 
 ---
 
-## The two clips in the community strip
+## The Instagram grid
 
-The two moving tiles under the `@godschai` heading play
-`uploads/video/community-cart.mp4` and `uploads/video/community-rose.mp4`.
-Neither starts downloading until it scrolls into view, both pause when it
-scrolls away, and both are silent until someone taps the speaker button.
+Near the bottom of the homepage, under the `@godschai` heading, nine square
+tiles sit three to a row like an Instagram profile, with a **Follow @godschai**
+button below. Every tile opens Instagram. The component is
+`_includes/insta-grid.html`; what goes in it is `_data/instagram.yml`.
 
-They used to be phone recordings served from a Cloudflare bucket — one of them
-a 50 MB 4K file that started downloading on the home page. They are now ordinary
-web video kept in the project: 381 KB and 199 KB. Phones that refused the old
-format play these fine.
+**Show your real, latest posts (recommended, about two minutes):**
 
-**To swap a clip**, put the new one in `uploads/video/` with the same name. It
-wants to be H.264 MP4, no wider than about 500px, 30fps — anything bigger is
-thrown away by the tile it plays in. Then grab a still from it, save it as
-`uploads/community-cart.png` (or `-rose`), and run:
+1. Sign up free at **behold.so** and connect the @godschai Instagram account.
+2. **New feed → JSON feed**, and copy the feed's address (it starts
+   `https://feeds.behold.so/`).
+3. Paste it into `_data/instagram.yml` as `feed_url: "https://feeds.behold.so/…"`
+   and commit.
+
+From then on the grid shows your nine newest posts (reels get a small ▶ in the
+corner) and keeps up by itself as you post; Behold refreshes it. If the feed
+ever fails to load, the nine tiles below stay up, so the section is never
+empty. To go back to the fixed tiles, set `feed_url: ""`.
+
+**The fixed tiles** (what shows without a feed) are listed under `tiles:` in
+the same file, in grid order: a photo from `uploads/opt`, alt text, and
+optionally a `link` to a particular post (otherwise the tile opens the
+profile). Two of them are clips:
+
+- `uploads/video/community-cart.mp4` and `uploads/video/community-rose.mp4`
+  play silently in their tiles. Neither starts downloading until it scrolls
+  into view, and both pause when it scrolls away.
+- **To swap a clip**, put the new one in `uploads/video/` with the same name.
+  It should be H.264 MP4, no wider than about 500px, at 30fps. Then save a
+  still from it as `uploads/community-cart.png` (or `-rose`) and run:
 
 ```bash
 python3 tools/optimize-images.py
