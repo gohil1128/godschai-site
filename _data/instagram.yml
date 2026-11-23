@@ -2,15 +2,15 @@
 # See SEO.md, "The Instagram grid".
 
 # Live posts. Leave blank and the grid shows the nine tiles below.
-# Paste a Behold JSON feed address here (behold.so → connect @godschai →
-# New feed → JSON → copy the URL) and the grid shows your latest nine
-# Instagram posts instead, updated by Behold. If the feed ever fails to load,
+# This is the Behold JSON feed for @godschai (behold.so → your feed → copy the
+# URL). The grid shows your latest Instagram posts, up to nine, in full rows
+# of three (so six posts show as two rows), updated by Behold. If the feed ever fails to load,
 # the nine tiles below stay up, so the section is never empty.
-feed_url: ""
+feed_url: "https://feeds.behold.so/yaYMWGX27bRtXXqLcLOC"
 
 # Where live post images are served from. Only used when feed_url is set; the
 # browser refuses images from anywhere not listed here.
-image_hosts: "https://*.behold.pictures https://*.cdninstagram.com https://*.fbcdn.net"
+image_hosts: "https://behold.pictures https://*.behold.pictures https://*.cdninstagram.com https://*.fbcdn.net"
 
 # The nine tiles shown until (or unless) the live feed is on, in grid order:
 # left to right, top to bottom. Each one opens Instagram.

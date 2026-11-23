@@ -494,8 +494,11 @@ button below. Every tile opens Instagram. The component is
 3. Paste it into `_data/instagram.yml` as `feed_url: "https://feeds.behold.so/…"`
    and commit.
 
-From then on the grid shows your nine newest posts (reels get a small ▶ in the
-corner) and keeps up by itself as you post; Behold refreshes it. If the feed
+From then on the grid shows your newest posts, up to nine, in full rows of
+three (reels get a small ▶ in the corner) and keeps up by itself as you post;
+Behold refreshes it. The feed is already on: `feed_url` in
+`_data/instagram.yml` is the @godschai Behold feed. Behold's free plan may cap
+how many posts the feed holds (it holds six today, so the grid shows two rows). If the feed
 ever fails to load, the nine tiles below stay up, so the section is never
 empty. To go back to the fixed tiles, set `feed_url: ""`.
 
