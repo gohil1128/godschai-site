@@ -621,8 +621,12 @@ layout: null
           return p && /^https:\/\//.test(p.permalink || '') && /^https:\/\//.test(igSrc(p));
         });
         var slots = [].slice.call(igGrid.children);
-        if (posts.length < 3) return; // not worth replacing the tiles for
-        posts.slice(0, slots.length).forEach(function (p, i) {
+        // whole rows of three only, so a feed with six posts shows two full rows
+        var count = Math.min(posts.length, slots.length);
+        count -= count % 3;
+        if (count < 3) return; // not worth replacing the tiles for
+        slots.slice(count).forEach(function (li) { li.remove(); });
+        posts.slice(0, count).forEach(function (p, i) {
           var img = new Image();
           img.onload = function () {
             var a = d.createElement('a');
