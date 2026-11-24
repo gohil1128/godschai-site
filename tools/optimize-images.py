@@ -58,10 +58,8 @@ FULL_BLEED = {
     "samosa-warmer.jpeg": (800, 1600),
     "spice-flatlay.jpeg": (800, 1600),
     "booth-crowd.jpeg": (800, 1600),
-    # Photo bands: an iced chai held up at the booth (iced chai guide) and the
-    # tins of the blend at a market (premixes page).
+    # Photo band: an iced chai held up at the booth (iced chai guide).
     "iced-chai-booth.jpeg": (800, 1600),
-    "chai-tins.jpeg": (800, 1600),
 }
 
 # Logos are square with transparency, so the fallback stays PNG.
@@ -83,16 +81,12 @@ PRODUCT = {
 POSTERS = {
     "community-cart.png": (400,),
     "community-rose.png": (400,),
-    # The homepage hero loops (wide for landscape screens, tall for phones) and
-    # the four brew-guide step clips: each still is the clip's first frame.
+    # The homepage hero loops (wide for landscape screens, tall for phones):
+    # each still is the clip's first frame.
     "hero-pot-wide.png": (640, 1280),
     "hero-pot-tall.png": (608,),
     "hero-strain-wide.png": (640, 1280),
     "hero-strain-tall.png": (608,),
-    "brew-boil.png": (320, 640),
-    "brew-blend.png": (320, 640),
-    "brew-rise.png": (320, 640),
-    "brew-strain.png": (320, 640),
 }
 
 OG_SOURCE = "hero-journey-web.jpeg"

@@ -351,54 +351,37 @@ Another item (chai concentrate by the litre, say) is just one more entry under
 
 ## Change the brew guide
 
-**`_data/brew.yml`** holds the four steps, the ingredient list and the timings.
-Editing it updates the homepage teaser, the `/how-to-make-masala-chai/` page and
-the `HowTo` structured data (the one that can win a rich result in Google).
+`/how-to-make-masala-chai/` is one small card, and nothing else:
 
-**The brew board.** At the top of the brew guide, one screen holds everything:
-a "Making − 7 +" cup counter, three
-tiles (water, milk, mix, in cups and ml, and heaped tbsp and grams), a line on
-pouch use and when to use a big pot, and the four steps as tabs with a Next
-button. Changing the cups updates it all in place, and the board keeps its size,
-so nobody has to scroll. The amounts come from `amounts` in `brew.yml` (per
-cup, 1 to 30); in the text, `{water}`, `{milk}` and `{mix}` mark where they go.
-`/how-to-make-masala-chai/?cups=12` opens it at 12 cups. Without JavaScript the
-board stays hidden and the page shows the plain list and four steps for 2 cups.
+- **Cups** (− 2 +): the water, milk and heaped tablespoons of mix (with ml and
+  grams) follow, and so do the amounts in the steps. From 5 cups it says to
+  use a big pot. `?cups=6` opens it at 6.
+- **Shade**: a slim bar of four chai colours, Light, Smooth, Kadak (how we pour
+  it) and Extra kadak, with a line about the one picked. It sets the simmer
+  time and the number of rises in step 03. `#colour` jumps to it (the premix
+  pages link there).
+- **The four steps**, with the time to the boil on step 01 and the simmer time
+  on step 03.
+- **A simmer timer** in step 03: ▶ starts it when the mix is in, tap again to
+  pause. A thin bar fills from milky to the shade picked, a soft chime and a
+  line prompt each rise, three chimes say strain (phones that can, buzz too),
+  and the screen stays awake while it runs.
 
-**The step clips.** Beside each step's words in the board is a few seconds of
-that step from the How to make chai shoot: milk going in, the mix spooned in,
-the pot rising, straining into the mug. Each step names its clip as `clip:` in
-`brew.yml` (`uploads/video/<clip>.mp4`, still in `uploads/opt/<clip>-640.jpg`).
-Only the step showing plays, it pauses when the board scrolls away, and with
-reduced motion or data saver on it stays a still. On very short phones the
-clips are left out so the board still fits.
+It's all written out for 2 cups and Kadak, so it reads right without
+JavaScript (then the controls are just hidden). Markup and styles:
+`how-to-make-masala-chai/index.html`; behaviour: `assets/js/site.js`, 5c.
 
-**The colour guide.** Under the board, "Brew it to your shade" is one simple
-colour bar in four parts, from Light to Extra kadak, shaded to look like
-chai (a sheen on top, depth below, a fine grain) (Kadak is marked "How we
-pour it"). Picking one shows how long to bring the pot to the boil, how long
-to simmer once the mix is in and how many times to let it rise, for the same
-number of cups as the board (change it in either place).
+Everything it says comes from **`_data/brew.yml`**: `amounts` (per cup), the
+`steps` (also used by the homepage teaser), the `shades` (name, colour,
+simmer minutes for 2 cups, rises, a line about it) and the timing rule
+(`boil_base`, `boil_per_cup`, `simmer_per_cup`). The times are rough guides
+for a stove on medium-high; change them after timing your own pot. The same
+file feeds the page's `HowTo` structured data, which Google can show as a
+recipe-style result.
 
-**Each shade has its own timer**: the ▶ button under it (it shows the time,
-then the countdown, and tapping it again pauses). "Mix is in: start the timer"
-does the same for the shade picked. While it runs:
-
-- a bar fills, darkening from milky to the shade, with a mark where each rise
-  falls;
-- a soft chime and a prompt mark each rise, and three chimes say when to
-  strain (phones that can, buzz too);
-- the screen stays awake.
-
-Everything it uses is in `brew.yml`: `shades` (name, colour, simmer minutes for
-2 cups, rises, a line about it) and the timing rule (`boil_base`,
-`boil_per_cup`, `simmer_per_cup`). The times are rough guides for a stove on
-medium-high, so change them freely after timing your own pot. The shade
-colours were taken from our brewing footage. Markup:
-`_includes/colour-guide.html`; behaviour: `assets/js/site.js`, 5d.
-
-The longer written guide on that page is normal text in
-`how-to-make-masala-chai/index.html` — edit it like a document.
+The longer written guide (why the double boil, the spices, common mistakes)
+was taken off the page to keep it simple; it's in the git history if it's
+ever wanted back.
 
 ---
 
@@ -467,8 +450,6 @@ slightly matte, deep shadows), each with its graded original in
   `/events/`.
 - `iced-chai-booth`: an iced chai held up at the booth, under the heading on
   `/how-to-make-iced-chai/`.
-- `chai-tins`: the tins of the blend at a market, after "Why bother with ours"
-  on `/premixes/`.
 
 The page photos use `_includes/photo-band.html`: a wide photo (21:9, or the
 `ratio` you give it, e.g. "3/2"; 4:3 on phones) with an optional one-line
