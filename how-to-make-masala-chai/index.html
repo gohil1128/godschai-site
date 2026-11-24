@@ -1,249 +1,165 @@
 ---
 layout: default
 title: "How to Make Masala Chai (The Proper Way)"
-description: "The real way to make masala chai on the stovetop: the water-to-milk ratio, why the double boil matters, which whole spices to use, and the mistakes to avoid."
+description: "Make masala chai at home the God's Chai way: pick how many cups and how strong, and get the amounts, the four stovetop steps and a simmer timer."
 breadcrumb: "How to Make Masala Chai"
 og_image: "uploads/opt/pour-a-1280.jpg"
 ---
 
-{%- assign brew = site.data.brew %}
-<section aria-labelledby="page-h1" style="max-width:1240px;margin:0 auto;padding:clamp(108px,12vh,124px) clamp(18px,4vw,40px) clamp(20px,3vw,30px)">
-  <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gc-gold-t);margin-bottom:10px" class="gc-bb-eyebrow">Brew it your way</div>
-  <h1 id="page-h1" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(2rem,5vw,3.4rem);line-height:0.98;letter-spacing:0;margin:0;max-width:24ch">How to Make Masala Chai <span style="color:var(--gc-coral-t);font-style:italic">(the proper way)</span></h1>
+{%- comment -%}
+  The brew guide: one card that holds everything. How many cups (the amounts
+  follow), what shade (the simmer time and rises follow), and the four steps,
+  with a simmer timer on the third. Everything it says comes from
+  _data/brew.yml: amounts, steps, shades and the timing rule. It's written out
+  here for `serves` cups and the house shade, so it reads fine without
+  JavaScript; assets/js/site.js (5c) makes the cups, shade and timer work.
+  ?cups=6 opens it at 6 cups; #colour jumps to the shades.
+{%- endcomment -%}
+{%- assign brew = site.data.brew -%}
+{%- assign n0 = brew.serves -%}
+{%- assign house = brew.shades | where: "house", true | first | default: brew.shades[0] -%}
+{%- assign boil0 = brew.boil_per_cup | times: n0 | plus: brew.boil_base | times: 2 | round | divided_by: 2.0 -%}
+{%- assign extra0 = n0 | minus: 2 | at_least: 0 | times: brew.simmer_per_cup -%}
+{%- assign sim0 = house.minutes | plus: extra0 | times: 2 | round | divided_by: 2.0 -%}
+{%- assign tot0 = boil0 | plus: sim0 | plus: 0.5 | round -%}
+{%- capture boil0t %}{{ boil0 | append: "" | remove: ".0" | replace: ".5", "½" }}{% endcapture -%}
+{%- capture sim0t %}{{ sim0 | append: "" | remove: ".0" | replace: ".5", "½" }}{% endcapture -%}
+{%- assign simsec = sim0 | times: 60 | round -%}{%- assign simm = simsec | divided_by: 60 -%}{%- assign sims = simsec | modulo: 60 -%}
+{%- capture clock0 %}{{ simm }}:{% if sims < 10 %}0{% endif %}{{ sims }}{% endcapture -%}
+{%- assign ml0 = brew.amounts.water.per_cup | times: n0 | times: 250 | round -%}
+{%- assign mlk0 = brew.amounts.milk.per_cup | times: n0 | times: 250 | round -%}
+{%- assign g0 = brew.mix_grams_per_cup | times: n0 | round -%}
 
-  {%- comment -%}
-    The brew board: everything on one screen. Pick the cups, and the three
-    amounts, the pot note and the step you're on all change in place, so nobody
-    has to scroll to see the result. Needs JavaScript (assets/js/site.js, 5c);
-    without it this stays hidden and the plain ingredient list and four steps
-    below are shown instead.
-  {%- endcomment %}
-  <div class="gc-bb" data-gc-brewcalc data-gc-board hidden
-       data-serves="{{ brew.serves }}" data-max="{{ brew.max_cups | default: 30 }}"
-       data-amounts='{{ brew.amounts | jsonify }}' data-g="{{ brew.mix_grams_per_cup }}" data-pouch="{{ brew.pouch_grams }}"
-       data-big="{{ brew.big_pot_from }}" data-big-text="{{ brew.big_pot | escape }}">
-    <div class="gc-bb-left">
-      <div class="gc-bb-top">
-        <div>
-          <span class="gc-bb-k">Making</span>
-          <div class="gc-bb-step" role="group" aria-label="How many cups">
-            <button type="button" class="gc-ico" data-gc-bc-less aria-label="One cup fewer">&minus;</button>
-            <output data-gc-bc-n aria-live="polite">{{ brew.serves }}</output>
-            <button type="button" class="gc-ico" data-gc-bc-more aria-label="One cup more">+</button>
-          </div>
-          <span class="gc-bb-k" data-gc-bc-unit>cups</span>
-        </div>
-      </div>
-      <dl class="gc-bb-tiles">
-        <div><dt>Water</dt><dd data-gc-tile="water"><b>{{ brew.amounts.water.text }}</b><small></small></dd></div>
-        <div><dt>Milk</dt><dd data-gc-tile="milk"><b>{{ brew.amounts.milk.text }}</b><small></small></dd></div>
-        <div><dt>Mix, heaped</dt><dd data-gc-tile="mix"><b>{{ brew.amounts.mix.text | replace: 'heaped ', '' }}</b><small></small></dd></div>
-      </dl>
-      <p class="gc-bb-note" data-gc-bc-note></p>
-    </div>
-    <div class="gc-bb-right">
-      <div class="gc-bb-tabs" role="tablist" aria-label="The four steps">
-        <button type="button" role="tab" id="gc-bb-t0" aria-controls="gc-bb-p0" aria-selected="true" tabindex="0" data-i="0"><i>01</i>{{ brew.steps[0].label }}</button>
-        <button type="button" role="tab" id="gc-bb-t1" aria-controls="gc-bb-p1" aria-selected="false" tabindex="-1" data-i="1"><i>02</i>{{ brew.steps[1].label }}</button>
-        <button type="button" role="tab" id="gc-bb-t2" aria-controls="gc-bb-p2" aria-selected="false" tabindex="-1" data-i="2"><i>03</i>{{ brew.steps[2].label }}</button>
-        <button type="button" role="tab" id="gc-bb-t3" aria-controls="gc-bb-p3" aria-selected="false" tabindex="-1" data-i="3"><i>04</i>{{ brew.steps[3].label }}</button>
-      </div>
-      <div class="gc-bb-panels">
-        {%- for s in brew.steps %}
-        <div class="gc-bb-panel{% if forloop.first %} is-on{% endif %}" role="tabpanel" id="gc-bb-p{{ forloop.index0 }}" aria-labelledby="gc-bb-t{{ forloop.index0 }}">
-          {%- if s.clip %}
-          {%- comment -%} A few silent seconds of this step (uploads/video/<clip>.mp4); only the step showing plays. {%- endcomment %}
-          <video class="gc-bb-clip" data-gc-bbclip data-clip="{{ '/uploads/video/' | relative_url }}{{ s.clip }}.mp4" poster="{{ '/uploads/opt/' | relative_url }}{{ s.clip }}-640.jpg" width="640" height="360" muted loop playsinline preload="none" aria-hidden="true"></video>
-          {%- endif %}
-          <div>
-            <h2>{% include brew-text.html t=s.title short=true %}</h2>
-            <p>{{ s.desc }}</p>
-          </div>
-        </div>
-        {%- endfor %}
-      </div>
-      <div class="gc-bb-foot">
-        <button type="button" class="gc-bb-next" data-gc-bb-next>Next step <span aria-hidden="true">→</span></button>
-        <a class="gc-bb-cg" href="#colour">Pick your shade <span aria-hidden="true">↓</span></a>
-      </div>
-    </div>
-  </div>
-  <p style="font-size:clamp(1.05rem,1.5vw,1.25rem);line-height:1.6;color:var(--gc-fg2);max-width:56ch;margin:22px 0 0">Chai isn't a teabag in hot milk. It's whole spices, real tea and a pot that gets your full attention for about eight minutes. Here's exactly how we brew it in Saskatoon — and how to get the same cup at home.</p>
-  <div style="display:flex;gap:24px;margin-top:28px;flex-wrap:wrap;font-family:'DM Mono',monospace;font-size:11.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--gc-fg4)">
-    <span>Serves <span data-gc-serves>{{ site.data.brew.serves }}</span></span>
-    <span style="color:var(--gc-gold-t)">·</span>
-    <span>About 10 minutes</span>
-    <span style="color:var(--gc-gold-t)">·</span>
-    <span>Stovetop only</span>
-  </div>
-</section>
-
-<div data-gc-reveal>
-
-<!-- WHAT YOU NEED: the plain list (the brew board above replaces it when JavaScript runs) -->
 <style>
-  /* The brew board (markup in the hero above) */
-  .gc-bb{margin:22px 0 0;display:grid;gap:18px 40px;max-width:980px;padding:clamp(16px,2.4vw,26px);border-radius:26px;
-    background:rgba(var(--gc-surf-rgb),0.85);border:1px solid rgba(var(--gc-gold-rgb),0.2);box-shadow:0 18px 44px -28px rgba(var(--gc-shadow-rgb),0.35)}
-  .gc-bb[hidden]{display:none}
-  @media (min-width:860px){.gc-bb{grid-template-columns:1.05fr 1fr;align-items:stretch}}
-  .gc-bb-top{display:flex;align-items:center;gap:clamp(12px,3vw,22px);padding:2px 4px}
-  .gc-bb-k{display:block;font:400 11px 'DM Mono',monospace;letter-spacing:0.16em;text-transform:uppercase;color:var(--gc-muted)}
-  .gc-bb-step{display:flex;align-items:center;gap:8px;margin:2px 0}
-  .gc-bb-step button{width:44px;height:44px;border-radius:999px;border:1px solid rgba(var(--gc-ink-rgb),0.25);background:transparent;color:var(--gc-fg);
-    font-size:22px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}
-  .gc-bb-step button:disabled{opacity:0.3;cursor:default}
-  .gc-bb-step output{min-width:2.2ch;text-align:center;font:400 clamp(2.6rem,9vw,3.4rem)/1 'Instrument Serif',serif;color:var(--gc-fg)}
-  .gc-bb-tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:16px 0 0;padding:0}
-  .gc-bb-tiles > div{padding:11px 10px 10px;border-radius:16px;background:rgba(var(--gc-gold-rgb),0.08);border:1px solid rgba(var(--gc-gold-rgb),0.16);min-width:0}
-  .gc-bb-tiles dt{font:400 10.5px 'DM Mono',monospace;letter-spacing:0.16em;text-transform:uppercase;color:var(--gc-gold-d)}
-  .gc-bb-tiles dd{margin:4px 0 0}
-  .gc-bb-tiles b{display:block;font:400 clamp(1.15rem,4.6vw,1.5rem)/1.1 'Instrument Serif',serif;color:var(--gc-fg)}
-  .gc-bb-tiles small{display:block;margin-top:3px;font:400 11px 'DM Mono',monospace;color:var(--gc-fg4);white-space:nowrap}
-  .gc-bb-note{margin:10px 2px 0;font-size:12.5px;line-height:1.45;color:var(--gc-muted)}
-  .gc-bb-right{display:flex;flex-direction:column;min-width:0}
-  .gc-bb-tabs{display:flex;gap:6px;padding:4px;border-radius:999px;background:rgba(var(--gc-ink-rgb),0.06)}
-  .gc-bb-tabs button{flex:1 1 0;min-width:0;display:flex;align-items:baseline;justify-content:center;gap:5px;padding:9px 4px;border:0;border-radius:999px;background:transparent;
-    color:var(--gc-fg4);font:600 12.5px 'Hanken Grotesk',sans-serif;cursor:pointer;transition:background-color .2s ease,color .2s ease}
-  .gc-bb-tabs button i{font:400 10px 'DM Mono',monospace;font-style:normal;color:var(--gc-gold-d)}
-  .gc-bb-tabs button[aria-selected="true"]{background:#B55F3E;color:#FFFFFF}
-  .gc-bb-tabs button[aria-selected="true"] i{color:#3C2116}
-  .gc-bb-tabs button:focus-visible,.gc-bb-next:focus-visible{outline:2px solid var(--gc-gold-t);outline-offset:2px}
-  /* The four panels share one cell, so the box keeps its height whichever step is showing. */
-  .gc-bb-panels{display:grid;margin:14px 0 0;flex:1 1 auto}
-  .gc-bb-panel{grid-area:1/1;visibility:hidden;opacity:0;transition:opacity .25s ease}
-  .gc-bb-panel.is-on{visibility:visible;opacity:1}
-  .gc-bb-panel:has(.gc-bb-clip){display:grid;grid-template-columns:auto minmax(0,1fr);gap:14px;align-items:start}
-  .gc-bb-clip{display:block;width:92px;height:auto;aspect-ratio:1/1;object-fit:cover;border-radius:14px;background:rgba(var(--gc-ink-rgb),0.06)}
-  @media (min-width:860px){.gc-bb-clip{width:136px}}
-  .gc-bb-panel h2{margin:0;font:400 clamp(1.3rem,5vw,1.7rem)/1.15 'Instrument Serif',serif;color:var(--gc-fg)}
-  .gc-bb-panel p{margin:8px 0 0;font-size:0.95rem;line-height:1.5;color:var(--gc-fg3)}
-  .gc-bb-foot{display:flex;align-items:center;flex-wrap:wrap;gap:6px 16px;margin:10px 0 0}
-  .gc-bb-cg{font:600 13px 'Hanken Grotesk',sans-serif;color:var(--gc-gold-t);text-decoration:underline;text-underline-offset:3px}
-  .gc-bb-next{align-self:flex-start;margin:0;padding:8px 14px;border-radius:999px;border:1px solid rgba(var(--gc-ink-rgb),0.22);background:transparent;
-    color:var(--gc-fg);font:600 13px 'Hanken Grotesk',sans-serif;cursor:pointer}
-  .gc-bb-next:hover{border-color:var(--gc-gold-t);color:var(--gc-gold-t)}
-  [data-gc-amt]{transition:background-color .4s ease;border-radius:4px}
-  [data-gc-amt].is-new{background:rgba(var(--gc-gold-rgb),0.18)}
-  @media (max-width:560px){.gc-bb-eyebrow{display:none}.gc-bb{margin-top:16px}}
-  /* Short phones: trim a little so the whole board still fits. */
-  @media (max-height:700px) and (max-width:560px){
-    .gc-bb{gap:12px;padding:14px}.gc-bb-tiles{margin-top:10px}.gc-bb-tiles > div{padding:8px 8px 7px}
-    .gc-bb-note{margin-top:6px}.gc-bb-panels{margin-top:10px}.gc-bb-foot{display:none}.gc-bb-step button{width:40px;height:40px}
-    .gc-bb-clip{display:none}.gc-bb-panel:has(.gc-bb-clip){display:block}
+  .gc-g{max-width:760px;margin:0 auto;padding:clamp(104px,12vh,124px) clamp(18px,4vw,32px) clamp(48px,7vw,90px)}
+  .gc-g h1{margin:0;font:400 clamp(2rem,5vw,2.9rem)/1 'Instrument Serif',serif;letter-spacing:0;color:var(--gc-fg)}
+  .gc-g h1 em{color:var(--gc-coral-t)}
+  .gc-g-sub{margin:10px 0 0;color:var(--gc-fg4);font-size:1rem;line-height:1.5}
+  .gc-g-card{margin-top:clamp(20px,3vw,28px);padding:clamp(18px,3vw,30px);border-radius:24px;background:rgba(var(--gc-surf-rgb),0.7);
+    border:1px solid rgba(var(--gc-gold-rgb),0.16)}
+  .gc-g-k{display:block;font:400 10.5px 'DM Mono',monospace;letter-spacing:0.16em;text-transform:uppercase;color:var(--gc-muted)}
+  /* cups + amounts */
+  .gc-g-top{display:grid;grid-template-columns:auto minmax(0,1fr);gap:14px clamp(18px,4vw,36px);align-items:center}
+  .gc-g-cups{display:flex;align-items:center;gap:6px}
+  .gc-g-cups button{width:34px;height:34px;padding:0;border-radius:999px;border:1px solid rgba(var(--gc-ink-rgb),0.2);background:transparent;color:var(--gc-fg);
+    font-size:18px;line-height:1;cursor:pointer}
+  .gc-g-cups button:disabled{opacity:0.3;cursor:default}
+  .gc-g-cups output{min-width:1.6ch;text-align:center;font:400 2.4rem/1 'Instrument Serif',serif;color:var(--gc-fg)}
+  .gc-g-amts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:0}
+  .gc-g-amts div{min-width:0}
+  .gc-g-amts dd{margin:3px 0 0}
+  .gc-g-amts b{display:block;font:400 1.25rem/1.1 'Instrument Serif',serif;color:var(--gc-fg)}
+  .gc-g-amts small{font:400 11px 'DM Mono',monospace;color:var(--gc-fg4)}
+  .gc-g-note{margin:10px 0 0;font-size:12.5px;line-height:1.45;color:var(--gc-muted)}
+  .gc-g-note:empty{display:none}
+  /* the shade: a slim bar of four chai colours */
+  .gc-g-sh{border:0;min-width:0;margin:22px 0 0;padding:20px 0 0;border-top:1px solid rgba(var(--gc-ink-rgb),0.08);scroll-margin-top:96px}
+  .gc-g-sh legend{float:left;width:100%;padding:0;margin:0 0 10px}
+  .gc-g-bar{clear:both;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:3px}
+  .gc-g-bar label{display:flex;flex-direction:column;gap:7px;cursor:pointer;text-align:center;min-width:0}
+  .gc-g-bar input{position:absolute;opacity:0;width:1px;height:1px;pointer-events:none}
+  .gc-g-sw{position:relative;display:block;height:26px;background:var(--c);transition:box-shadow .2s ease}
+  .gc-g-bar label:first-of-type .gc-g-sw{border-radius:999px 4px 4px 999px}
+  .gc-g-bar label:last-of-type .gc-g-sw{border-radius:4px 999px 999px 4px}
+  .gc-g-sw::after,.gc-g-fill::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+    background:linear-gradient(180deg,rgba(255,247,232,0.38) 0,rgba(255,247,232,0.1) 24%,rgba(255,247,232,0) 50%),linear-gradient(0deg,rgba(52,24,6,0.26) 0,rgba(52,24,6,0) 55%)}
+  .gc-g-bar label:has(input:checked) .gc-g-sw{box-shadow:0 0 0 2px var(--gc-bg),0 0 0 3.5px #B55F3E}
+  .gc-g-bar label:has(input:focus-visible) .gc-g-sw{outline:2px solid var(--gc-gold-t);outline-offset:4px}
+  .gc-g-bar span:last-child{font-size:12.5px;color:var(--gc-fg4);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .gc-g-bar label:has(input:checked) span:last-child{color:var(--gc-fg);font-weight:600}
+  .gc-g-shnote{margin:10px 0 0;font-size:13px;line-height:1.45;color:var(--gc-fg4)}
+  /* the four steps */
+  .gc-g-steps{list-style:none;margin:22px 0 0;padding:6px 0 0;border-top:1px solid rgba(var(--gc-ink-rgb),0.08)}
+  .gc-g-steps li{display:grid;grid-template-columns:2.2em minmax(0,1fr);gap:12px;padding:14px 0;border-bottom:1px solid rgba(var(--gc-ink-rgb),0.06)}
+  .gc-g-steps li:last-child{border-bottom:0;padding-bottom:4px}
+  .gc-g-steps i{font:400 11px 'DM Mono',monospace;font-style:normal;color:var(--gc-gold-t);padding-top:5px}
+  .gc-g-steps h2{margin:0;font:400 1.2rem/1.25 'Instrument Serif',serif;color:var(--gc-fg)}
+  .gc-g-steps p{margin:3px 0 0;font-size:14px;line-height:1.5;color:var(--gc-fg4)}
+  .gc-g-t{font:400 11px 'DM Mono',monospace;letter-spacing:0.06em;color:var(--gc-gold-t);white-space:nowrap}
+  /* the simmer timer, inside step 03 */
+  .gc-g-timer{display:flex;align-items:center;gap:12px;margin-top:10px}
+  .gc-g-run{display:inline-flex;align-items:center;gap:7px;flex:0 0 auto;padding:6px 12px;border-radius:999px;cursor:pointer;
+    border:1px solid rgba(var(--gc-ink-rgb),0.2);background:transparent;color:var(--gc-fg);font:500 12.5px 'DM Mono',monospace}
+  .gc-g-run svg{width:9px;height:9px;fill:currentColor}
+  .gc-g-run.is-on{background:#B55F3E;border-color:#B55F3E;color:#FFFFFF}
+  .gc-g-run:focus-visible,.gc-g-reset:focus-visible,.gc-g-cups button:focus-visible{outline:2px solid var(--gc-gold-t);outline-offset:2px}
+  .gc-g-track{position:relative;flex:1 1 auto;height:8px;border-radius:999px;background:rgba(var(--gc-ink-rgb),0.07);overflow:hidden}
+  .gc-g-fill{position:absolute;inset:0 auto 0 0;width:0;border-radius:999px;background:var(--c,#A9703F);transition:width .3s linear}
+  .gc-g-reset{border:0;background:none;padding:2px;cursor:pointer;font-size:12.5px;color:var(--gc-fg4);text-decoration:underline;text-underline-offset:3px}
+  .gc-g-cue{margin:8px 0 0;font-size:13.5px;font-weight:600;color:var(--gc-coral-t)}
+  .gc-g-cue:empty{display:none}
+  .gc-g-foot{margin:16px 0 0;font:400 11px 'DM Mono',monospace;letter-spacing:0.06em;color:var(--gc-fg4)}
+  @media (max-width:560px){
+    .gc-g-top{grid-template-columns:1fr}
+    .gc-g-amts b{font-size:1.1rem}
   }
-  @media (prefers-reduced-motion:reduce){.gc-bb-panel{transition:none}}
+  @media (prefers-reduced-motion:reduce){.gc-g-fill,.gc-g-sw{transition:none}}
 </style>
-<section aria-labelledby="need-h2" data-gc-board-hides style="max-width:1240px;margin:0 auto;padding:clamp(30px,4vw,50px) clamp(18px,4vw,40px)">
-  <div data-gc-stagger style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:clamp(16px,2vw,24px)">
-    {%- assign brew = site.data.brew %}
-    <div style="padding:28px 26px 30px;background:rgba(var(--gc-surf-rgb),0.8);border:1px solid rgba(var(--gc-gold-rgb),0.16);border-radius:22px">
-      <h2 id="need-h2" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:1.5rem;margin:0 0 14px;color:var(--gc-fg)">What you need</h2>
-      <ul style="margin:0;padding-left:20px;color:var(--gc-fg4);line-height:1.7">
-        {%- for s in brew.supplies %}
-        <li>{% include brew-text.html t=s %}</li>
-        {%- endfor %}
-      </ul>
-    </div>
-    <div style="padding:28px 26px 30px;background:rgba(var(--gc-surf-rgb),0.8);border:1px solid rgba(var(--gc-gold-rgb),0.16);border-radius:22px">
-      <h2 style="font-family:'Instrument Serif',serif;font-weight:400;font-size:1.5rem;margin:0 0 14px;color:var(--gc-fg)">Kit</h2>
-      <ul style="margin:0;padding-left:20px;color:var(--gc-fg4);line-height:1.7">
-        {%- for t in site.data.brew.tools %}
-        <li{% if forloop.first %} data-gc-bc-pot data-small="{{ t | escape }}"{% endif %}>{{ t }}</li>
-        {%- endfor %}
-      </ul>
-      <p style="color:var(--gc-muted);font-size:0.92rem;line-height:1.55;margin:14px 0 0">No fancy equipment. A pot and a strainer are the whole setup.</p>
-    </div>
-  </div>
-</section>
 
-<!-- THE FOUR STEPS -->
-<section aria-labelledby="steps-h2" data-gc-board-hides style="background:linear-gradient(180deg,var(--gc-bg2),var(--gc-card));border-top:1px solid rgba(var(--gc-gold-rgb),0.14);border-bottom:1px solid rgba(var(--gc-gold-rgb),0.14)">
-  <div style="max-width:1240px;margin:0 auto;padding:clamp(48px,6vw,90px) clamp(18px,4vw,40px)">
-    <h2 id="steps-h2" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(2rem,4.6vw,3.3rem);line-height:1;letter-spacing:0;margin:0 0 clamp(28px,4vw,40px);color:var(--gc-fg)">Four steps. One proper cup.</h2>
-    <div data-gc-stagger style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:clamp(14px,1.8vw,20px)">
-      {%- for s in site.data.brew.steps %}
-      {%- if s.accent %}{% assign bc = "rgba(var(--gc-coral-rgb),0.3)" %}{% assign bh = "rgba(var(--gc-coral-rgb),0.65)" %}{% assign nc = "var(--gc-coral-t)" %}{% assign lc = "var(--gc-coral-t)" %}
-      {%- else %}{% assign bc = "rgba(var(--gc-gold-rgb),0.16)" %}{% assign bh = "rgba(var(--gc-gold-rgb),0.5)" %}{% assign nc = "var(--gc-gold-t)" %}{% assign lc = "var(--gc-gold-d)" %}{% endif %}
-      <div style="padding:26px 24px 28px;background:rgba(var(--gc-surf-rgb),0.72);border:1px solid {{ bc }};border-radius:22px;--gc-bh:{{ bh }}" class="gc-card gc-lift">
-        <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding-bottom:16px;border-bottom:1px solid rgba(var(--gc-ink-rgb),0.10)">
-          <span style="font-family:'Instrument Serif',serif;font-size:44px;line-height:0.8;color:{{ nc }}">0{{ forloop.index }}</span>
-          <span style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:{{ lc }}">{{ s.label }}</span>
+<section class="gc-g" aria-labelledby="page-h1">
+  <h1 id="page-h1">How to make <em>masala chai</em></h1>
+  <p class="gc-g-sub">Pick your cups and your shade; the rest follows.</p>
+
+  <div class="gc-g-card" data-gc-guide
+       data-serves="{{ n0 }}" data-max="{{ brew.max_cups | default: 30 }}"
+       data-amounts='{{ brew.amounts | jsonify }}' data-g="{{ brew.mix_grams_per_cup }}" data-pouch="{{ brew.pouch_grams }}" data-big="{{ brew.big_pot_from }}"
+       data-shades='{{ brew.shades | jsonify | escape }}' data-start="{{ brew.shade_start }}"
+       data-boil-base="{{ brew.boil_base }}" data-boil-per="{{ brew.boil_per_cup }}" data-simmer-per="{{ brew.simmer_per_cup }}">
+
+    <div class="gc-g-top">
+      <div>
+        <span class="gc-g-k">Cups</span>
+        <div class="gc-g-cups" role="group" aria-label="How many cups">
+          <button type="button" data-gc-g-less aria-label="One cup fewer" hidden>&minus;</button>
+          <output data-gc-g-n aria-live="polite">{{ n0 }}</output>
+          <button type="button" data-gc-g-more aria-label="One cup more" hidden>+</button>
         </div>
-        <h3 style="font-family:'Instrument Serif',serif;font-weight:400;font-size:1.32rem;margin:20px 0 0;color:var(--gc-fg)">{% include brew-text.html t=s.title %}</h3>
-        <p style="color:var(--gc-fg4);line-height:1.55;margin:9px 0 0;font-size:0.95rem">{{ s.desc }}</p>
       </div>
-      {%- endfor %}
+      <dl class="gc-g-amts">
+        <div><dt class="gc-g-k">Water</dt><dd data-gc-g-amt="water"><b>{{ brew.amounts.water.text }}</b><small>{{ ml0 }} ml</small></dd></div>
+        <div><dt class="gc-g-k">Milk</dt><dd data-gc-g-amt="milk"><b>{{ brew.amounts.milk.text }}</b><small>{{ mlk0 }} ml</small></dd></div>
+        <div><dt class="gc-g-k">Mix, heaped</dt><dd data-gc-g-amt="mix"><b>{{ brew.amounts.mix.text | replace: 'heaped ', '' }}</b><small>{{ g0 }} g</small></dd></div>
+      </dl>
     </div>
+    <p class="gc-g-note" data-gc-g-note></p>
+
+    <fieldset class="gc-g-sh" id="colour">
+      <legend class="gc-g-k">Shade</legend>
+      <div class="gc-g-bar">
+        {%- for s in brew.shades %}
+        <label><input type="radio" name="gc-shade" value="{{ forloop.index0 }}"{% if s.name == house.name %} checked{% endif %}><span class="gc-g-sw" style="--c:{{ s.hex }}" aria-hidden="true"></span><span>{{ s.name }}</span></label>
+        {%- endfor %}
+      </div>
+      <p class="gc-g-shnote"><span data-gc-g-shnote>{{ house.note }}</span> For Rose &amp; Cardamom, go a shade lighter.</p>
+    </fieldset>
+
+    <ol class="gc-g-steps">
+      {%- for s in brew.steps %}
+      <li>
+        <i>0{{ forloop.index }}</i>
+        <div>
+        {%- if s.accent %}
+          <h2>Let it rise <span data-gc-g-rises>{{ house.rises }}</span> <span data-gc-g-times>{% if house.rises == 1 %}time{% else %}times{% endif %}</span> <span class="gc-g-t">· <span data-gc-g-sim>{{ sim0t }}</span> min</span></h2>
+          <p>{{ s.desc }}</p>
+          <div class="gc-g-timer" data-gc-g-timer hidden>
+            <button type="button" class="gc-g-run" data-gc-g-run aria-label="Start the {{ clock0 }} simmer timer"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M2 1l7 4-7 4z"/></svg><span data-gc-g-clock>{{ clock0 }}</span></button>
+            <span class="gc-g-track" aria-hidden="true"><span class="gc-g-fill" data-gc-g-fill></span></span>
+            <button type="button" class="gc-g-reset" data-gc-g-reset hidden>Reset</button>
+          </div>
+          <p class="gc-g-cue" data-gc-g-cue aria-live="polite"></p>
+        {%- else %}
+          <h2>{% include brew-text.html t=s.title short=true %}{% if forloop.first %} <span class="gc-g-t">· <span data-gc-g-boil>{{ boil0t }}</span> min</span>{% endif %}</h2>
+          <p>{{ s.desc }}</p>
+        {%- endif %}
+        </div>
+      </li>
+      {%- endfor %}
+    </ol>
+    <p class="gc-g-foot">About <span data-gc-g-total>{{ tot0 }}</span> minutes in all, on medium-high.</p>
   </div>
 </section>
 
-<!-- COLOUR GUIDE: the shades and a simmer timer (_includes/colour-guide.html, _data/brew.yml) -->
-{% include colour-guide.html %}
-
-<!-- LONG-FORM GUIDE -->
-<section aria-labelledby="deep-h2" style="max-width:1240px;margin:0 auto;padding:clamp(48px,6vw,90px) clamp(18px,4vw,40px)">
-  <div style="max-width:68ch" class="gc-prose">
-    <h2 id="deep-h2">Why the double boil matters</h2>
-    <p>This is the step people skip, and it's the one that makes chai taste like chai. Letting the pot rise and pulling it back — two or three times — does two things at once. It drives the spice oils out of the whole spices and into the milk, and it thickens the milk slightly so the cup has body instead of tasting watery.</p>
-    <p>A single boil gives you spiced milk. Two or three gives you <strong>kadak</strong> — strong, full, the kind of cup that stands up on its own. Watch the pot, let it climb to the rim, lift it off the heat for a few seconds, put it back. Repeat. That's the whole trick, and it costs you about three minutes.</p>
-
-    <h2>The water-to-milk ratio</h2>
-    <p>Equal parts. One cup water, one cup milk, for two small cups of chai. Start the spices and tea in the water so they have a chance to open up, then let the milk in on the boil.</p>
-    <p>Want it richer? Push it to 1 part water and 1.5 parts milk. Want the spice louder and the dairy quieter? Go the other way. What you shouldn't do is brew tea in milk alone — the tea can't extract properly and you end up with a flat, sweet cup that tastes like a dessert instead of a drink.</p>
-    <p>Oat milk works, and it's what we use in the Iced Banana Bread Chai. It foams well and takes spice nicely. Almond milk splits more easily on a hard boil — keep the heat lower if that's what you've got.</p>
-
-    <h2>The spices — and why each one is there</h2>
-    <p>Our blend is built on whole spices from Kerala, ground in small batches. If you're building your own, this is the working logic:</p>
-    <ul>
-      <li><strong>Green cardamom</strong> — the backbone. Floral, cooling, unmistakably chai. If you only use one spice, it's this one.</li>
-      <li><strong>Ginger</strong> — the heat and the bite. Fresh gives you brightness; dried gives you a deeper, slower warmth.</li>
-      <li><strong>Cinnamon or cassia bark</strong> — the sweetness that isn't sugar. It rounds the sharp edges off the ginger.</li>
-      <li><strong>Cloves</strong> — powerful and easy to overdo. Two or three for a pot is plenty; more and they take the whole cup over.</li>
-      <li><strong>Black pepper</strong> — the one nobody guesses. A few cracks lift everything else and leave a warmth at the back of the throat.</li>
-    </ul>
-    <p>Crush whole spices lightly before they go in — you want them cracked open, not powdered. Powder clouds the cup and turns bitter fast.</p>
-
-    <h2>Which tea to use</h2>
-    <p>Assam, loose leaf, strong. We use single-origin Assam because it's malty enough to hold its own against milk and spice — a delicate tea just disappears. A robust CTC works well too, and it's what most Indian households reach for.</p>
-    <p>Two teaspoons for two cups. Add it to the water with the spices, not at the end.</p>
-
-    <h2>Common mistakes</h2>
-    <ul>
-      <li><strong>Boiling the tea too long.</strong> Past about four minutes of hard boiling, tannins take over and the cup turns bitter. Strong isn't the same as over-brewed.</li>
-      <li><strong>Adding sugar at the end.</strong> Sugar in during the boil integrates. Sugar stirred in after sits on top and tastes like a separate ingredient.</li>
-      <li><strong>Powdered spice mixes.</strong> Pre-ground blends go stale and taste dusty. Whole spices, cracked fresh, are a different drink entirely.</li>
-      <li><strong>Skipping the strain.</strong> A fine mesh strainer is not optional. Grit ruins an otherwise perfect cup.</li>
-      <li><strong>Walking away.</strong> Chai boils over the second you stop watching. Ask anyone.</li>
-    </ul>
-
-    <h2>How to adjust the strength</h2>
-    <p>Three dials, and it's worth knowing which one to turn.</p>
-    <p>For <strong>more spice</strong>, add more masala at the start — not at the end. For <strong>stronger tea</strong>, add more leaf rather than boiling longer, which only adds bitterness. For a <strong>thicker, creamier</strong> cup, add an extra rise and let it reduce a little further.</p>
-    <p>And if it comes out too strong, don't dilute it with water — that flattens everything. Add a splash more hot milk instead.</p>
-
-    <h2>Keep reading</h2>
-    <ul>
-      <li><a href="{{ '/masala-chai-spices/' | relative_url }}">The spices in masala chai, and what each one does</a></li>
-      <li><a href="{{ '/how-to-make-iced-chai/' | relative_url }}">How to make iced chai that isn't watery</a></li>
-      <li><a href="{{ '/chai-tea-latte-vs-masala-chai/' | relative_url }}">Chai tea latte vs masala chai</a></li>
-    </ul>
-
-    <h2>Or let us pour it</h2>
-    <p>If you'd rather skip the pot, we're out at pop-ups across Saskatoon all summer with the same brew — hot, iced, and a few things you won't make at home.</p>
-  </div>
-
-  <div style="display:flex;gap:13px;flex-wrap:wrap;margin-top:34px">
-    <a href="{{ '/' | relative_url }}#menu" style="text-decoration:none;background:#B55F3E;color:#FFFFFF;font-weight:700;font-size:16px;padding:15px 26px;border-radius:999px" class="gc-pill">See the menu →</a>
-    <a href="{{ '/events/' | relative_url }}" style="text-decoration:none;background:rgba(var(--gc-ink-rgb),0.10);color:var(--gc-fg);font-weight:600;font-size:16px;padding:15px 24px;border-radius:999px;border:1.5px solid rgba(var(--gc-ink-rgb),0.3)" class="gc-pill-ghost">Find us this week</a>
-  </div>
-</section>
-
-{% include cta-premix.html id="brewpage" %}
-
-</div>
-
-{% comment %} HowTo — rich-result eligible, generated from _data/brew.yml. {% endcomment %}
+{%- comment -%} HowTo structured data: the method at `serves` cups, for Google's rich results. Not shown on the page. {%- endcomment %}
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -276,7 +192,7 @@ og_image: "uploads/opt/pour-a-1280.jpg"
       {%- capture st %}{% include brew-text.html t=s.title plain=true %}{% endcapture %}
       "name": {{ st | strip | jsonify }},
       "text": {{ s.desc | jsonify }},
-      "url": "{{ page.url | absolute_url }}#steps-h2"
+      "url": "{{ page.url | absolute_url }}#page-h1"
     }{% unless forloop.last %},{% endunless %}
     {%- endfor %}
   ],
