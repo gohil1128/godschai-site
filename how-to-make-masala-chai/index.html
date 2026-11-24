@@ -51,8 +51,14 @@ og_image: "uploads/opt/pour-a-1280.jpg"
       <div class="gc-bb-panels">
         {%- for s in brew.steps %}
         <div class="gc-bb-panel{% if forloop.first %} is-on{% endif %}" role="tabpanel" id="gc-bb-p{{ forloop.index0 }}" aria-labelledby="gc-bb-t{{ forloop.index0 }}">
-          <h2>{% include brew-text.html t=s.title short=true %}</h2>
-          <p>{{ s.desc }}</p>
+          {%- if s.clip %}
+          {%- comment -%} A few silent seconds of this step (uploads/video/<clip>.mp4); only the step showing plays. {%- endcomment %}
+          <video class="gc-bb-clip" data-gc-bbclip data-clip="{{ '/uploads/video/' | relative_url }}{{ s.clip }}.mp4" poster="{{ '/uploads/opt/' | relative_url }}{{ s.clip }}-640.jpg" width="640" height="360" muted loop playsinline preload="none" aria-hidden="true"></video>
+          {%- endif %}
+          <div>
+            <h2>{% include brew-text.html t=s.title short=true %}</h2>
+            <p>{{ s.desc }}</p>
+          </div>
         </div>
         {%- endfor %}
       </div>
@@ -104,6 +110,9 @@ og_image: "uploads/opt/pour-a-1280.jpg"
   .gc-bb-panels{display:grid;margin:14px 0 0;flex:1 1 auto}
   .gc-bb-panel{grid-area:1/1;visibility:hidden;opacity:0;transition:opacity .25s ease}
   .gc-bb-panel.is-on{visibility:visible;opacity:1}
+  .gc-bb-panel:has(.gc-bb-clip){display:grid;grid-template-columns:auto minmax(0,1fr);gap:14px;align-items:start}
+  .gc-bb-clip{display:block;width:92px;height:auto;aspect-ratio:1/1;object-fit:cover;border-radius:14px;background:rgba(var(--gc-ink-rgb),0.06)}
+  @media (min-width:860px){.gc-bb-clip{width:136px}}
   .gc-bb-panel h2{margin:0;font:400 clamp(1.3rem,5vw,1.7rem)/1.15 'Instrument Serif',serif;color:var(--gc-fg)}
   .gc-bb-panel p{margin:8px 0 0;font-size:0.95rem;line-height:1.5;color:var(--gc-fg3)}
   .gc-bb-next{align-self:flex-start;margin:10px 0 0;padding:8px 14px;border-radius:999px;border:1px solid rgba(var(--gc-ink-rgb),0.22);background:transparent;
@@ -116,6 +125,7 @@ og_image: "uploads/opt/pour-a-1280.jpg"
   @media (max-height:700px) and (max-width:560px){
     .gc-bb{gap:12px;padding:14px}.gc-bb-tiles{margin-top:10px}.gc-bb-tiles > div{padding:8px 8px 7px}
     .gc-bb-note{margin-top:6px}.gc-bb-panels{margin-top:10px}.gc-bb-next{display:none}.gc-bb-step button{width:40px;height:40px}
+    .gc-bb-clip{display:none}.gc-bb-panel:has(.gc-bb-clip){display:block}
   }
   @media (prefers-reduced-motion:reduce){.gc-bb-panel{transition:none}}
 </style>

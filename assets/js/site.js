@@ -176,9 +176,20 @@ layout: null
   }
 
   /* ---------- 4. Videos: load when visible, one audio source at a time ---------- */
-  var videos = [].slice.call(d.querySelectorAll('video'));
+  /* Decorative loops (the hero, the brew-guide steps) carry data-gc-calm: with
+     reduced motion or data saver on they never load, and their still stays up. */
+  var saveData = !!(navigator.connection && navigator.connection.saveData);
+  var videos = [].slice.call(d.querySelectorAll('video')).filter(function (v) {
+    // the brew board's step clips are run by the board itself (5c)
+    if (v.hasAttribute('data-gc-bbclip')) return false;
+    return !(v.hasAttribute('data-gc-calm') && (reduceMotion || saveData));
+  });
   if (videos.length) {
-    videos.forEach(function (v) { v.muted = true; v.defaultMuted = true; v.volume = 0; });
+    videos.forEach(function (v) {
+      v.muted = true; v.defaultMuted = true; v.volume = 0;
+      // data-gc-fade: start invisible over the still, fade in once frames are actually playing
+      if (v.hasAttribute('data-gc-fade')) v.addEventListener('playing', function () { v.classList.add('is-on'); });
+    });
     if ('IntersectionObserver' in window) {
       var vio = new IntersectionObserver(function (entries) {
         entries.forEach(function (e) {
@@ -343,10 +354,28 @@ layout: null
     // the four steps: tabs and a Next button, one at a time
     var tabs = [].slice.call(calc.querySelectorAll('[role="tab"]'));
     var panels = [].slice.call(calc.querySelectorAll('[role="tabpanel"]'));
+    // Each step's clip: only the one showing loads and plays, and only while
+    // the board is on screen. Reduced motion or data saver keeps the stills.
+    var clips = panels.map(function (p) { return p.querySelector('[data-gc-bbclip]'); });
+    var clipsCalm = reduceMotion || saveData, boardSeen = true, step = 0;
+    var playClip = function () {
+      clips.forEach(function (v, k) {
+        if (!v) return;
+        if (k === step && boardSeen && !clipsCalm && getComputedStyle(v).display !== 'none') {
+          if (!v.getAttribute('src')) v.src = v.getAttribute('data-clip');
+          v.muted = true;
+          var pr = v.play(); if (pr && pr.catch) pr.catch(function () {});
+        } else { try { v.pause(); } catch (err) {} }
+      });
+    };
+    if (clips.some(Boolean) && 'IntersectionObserver' in window) {
+      new IntersectionObserver(function (es) { boardSeen = es[0].isIntersecting; playClip(); }, { threshold: 0.2 }).observe(calc);
+    }
     var go = function (i, focus) {
       i = (i + tabs.length) % tabs.length;
       tabs.forEach(function (t, k) { t.setAttribute('aria-selected', k === i ? 'true' : 'false'); t.tabIndex = k === i ? 0 : -1; });
       panels.forEach(function (p, k) { p.classList.toggle('is-on', k === i); });
+      step = i; playClip();
       if (focus) tabs[i].focus();
       var nx = calc.querySelector('[data-gc-bb-next]');
       if (nx) nx.firstChild.textContent = i === tabs.length - 1 ? 'Back to step 1 ' : 'Next step ';

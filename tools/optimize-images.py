@@ -46,6 +46,9 @@ DRINK_WIDTHS = (320, 640)
 FULL_BLEED = {
     "hero-journey-web.jpeg": (480, 960, 1600),
     "pour-a.jpeg": (640, 1280),
+    # Colour-graded stills from the How to make chai shoot (Nov 2026).
+    "premix-macro.jpeg": (640, 1200),
+    "pouch-masala-kitchen.jpeg": (640, 1200),
 }
 
 # Logos are square with transparency, so the fallback stays PNG.
@@ -67,6 +70,14 @@ PRODUCT = {
 POSTERS = {
     "community-cart.png": (400,),
     "community-rose.png": (400,),
+    # The homepage hero loop (wide for landscape screens, tall for phones) and
+    # the four brew-guide step clips: each still is the clip's first frame.
+    "hero-pot-wide.png": (640, 1280),
+    "hero-pot-tall.png": (608,),
+    "brew-boil.png": (320, 640),
+    "brew-blend.png": (320, 640),
+    "brew-rise.png": (320, 640),
+    "brew-strain.png": (320, 640),
 }
 
 OG_SOURCE = "hero-journey-web.jpeg"
