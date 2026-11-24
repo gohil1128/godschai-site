@@ -373,15 +373,22 @@ Only the step showing plays, it pauses when the board scrolls away, and with
 reduced motion or data saver on it stays a still. On very short phones the
 clips are left out so the board still fits.
 
-**The colour guide.** Under the board, "Brew it to your shade" shows four cups
-of chai from above, from Light to Extra kadak (Kadak is marked "How we pour
-it"). Picking one shows how long to bring the pot to the boil, how long to
-simmer once the mix is in and how many times to let it rise, for the same
-number of cups as the board (change it in either place). "Mix is in: start the
-timer" counts the simmer down: the cup on screen darkens from milky to the
-shade picked, it prompts each rise, and it says when to strain (phones that
-can, buzz). The board's "Pick your shade ↓" link and each premix page's "How
-to brew it" link to it (`/how-to-make-masala-chai/#colour`).
+**The colour guide.** Under the board, "Brew it to your shade" is one simple
+colour bar in four parts, from Light to Extra kadak, shaded to look like
+chai (a sheen on top, depth below, a fine grain) (Kadak is marked "How we
+pour it"). Picking one shows how long to bring the pot to the boil, how long
+to simmer once the mix is in and how many times to let it rise, for the same
+number of cups as the board (change it in either place).
+
+**Each shade has its own timer**: the ▶ button under it (it shows the time,
+then the countdown, and tapping it again pauses). "Mix is in: start the timer"
+does the same for the shade picked. While it runs:
+
+- a bar fills, darkening from milky to the shade, with a mark where each rise
+  falls;
+- a soft chime and a prompt mark each rise, and three chimes say when to
+  strain (phones that can, buzz too);
+- the screen stays awake.
 
 Everything it uses is in `brew.yml`: `shades` (name, colour, simmer minutes for
 2 cups, rises, a line about it) and the timing rule (`boil_base`,
@@ -397,25 +404,40 @@ The longer written guide on that page is normal text in
 
 ## The homepage hero
 
-The top of the homepage is chai rising to a rolling boil in a steel pot: a
-9-second silent loop from the How to make chai shoot (Aug 2025, shared in Drive
-Nov 2026), colour-graded a little richer and seamless where it loops. Wide
-screens play `uploads/video/hero-pot-wide.mp4` (1280×720, about 1.4 MB);
-phones and other tall screens play a portrait cut, `hero-pot-tall.mp4`. Only
-the one that fits is downloaded.
+The hero rotates through a few pictures, crossfading:
 
-Its first frame (`uploads/_src/hero-pot-wide.png` / `-tall.png`) loads first
-and stays up for anyone with reduced motion or data saver on. The video fades
-in over it once it's playing. A dark wash behind the words keeps them
-readable over the bright foam.
+1. chai rising to a rolling boil in a steel pot: a 9-second silent loop from
+   the How to make chai shoot, colour-graded and seamless where it loops;
+2. then the photos listed in **`_data/hero.yml`** (now: the three cups at the
+   cart, chai poured from a kettle, and chai strained into a mug), each for a
+   few seconds with a slow drift, and round again.
 
-The old hero photo (the three cups at the cart, `hero-journey-web`) is still
-the picture links show when the site is shared, and the business photo
-Google gets.
+**The indicator** is one small cup at the bottom of the hero. It fills with
+chai while each picture shows, and when it's full the next one comes in.
+Tapping it skips ahead. It pauses while the hero is off screen or the tab is
+hidden. With reduced motion on, nothing moves by itself: the cup only moves
+on when tapped. Each photo loads only when it's next.
 
-**To change the loop**, replace the two MP4s (H.264, no sound, under 2 MB),
-save their first frames over the two PNGs, and run
-`python3 tools/optimize-images.py`.
+**To change the pictures**, edit `_data/hero.yml`: add or remove a slide,
+change how long each shows (`seconds`, or `video_seconds` for the loop), and
+set `focus` to the part of the photo to keep when a phone crops it. A new
+photo needs its web sizes first: put it in `uploads/`, list it under
+`FULL_BLEED` in `tools/optimize-images.py`, and run the tool.
+
+**The loop:** wide screens play `uploads/video/hero-pot-wide.mp4` (1280×720,
+about 1.4 MB); phones and other tall screens play a portrait cut,
+`hero-pot-tall.mp4`. Only the one that fits is downloaded. Its first frame
+loads first and stays for reduced motion or data saver; the video fades in
+over it. To change the loop, replace the two MP4s (H.264, no sound, under
+2 MB), save their first frames over `uploads/_src/hero-pot-wide.png` /
+`-tall.png`, and run `python3 tools/optimize-images.py`.
+
+**The three facts** (100% real spices, Kerala + Assam, made in Saskatoon) sit
+under the buttons as one quiet line of small text, so they don't compete with
+the picture. A dark wash behind the words keeps them readable.
+
+The cups-at-the-cart photo is also the picture links show when the site is
+shared, and the business photo Google gets.
 
 ### Other photos from the shoot
 
