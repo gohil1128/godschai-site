@@ -51,6 +51,15 @@ FULL_BLEED = {
     "pouch-masala-kitchen.jpeg": (640, 1200),
     # A hero slide: straining into the mug (a graded frame of MVI_0853).
     "hero-strain.png": (960, 1600),
+    # From the God's Chai Content folder (graded with the site's warm, matte
+    # look): the hero's golden-hour bar (wide for landscape screens, tall for
+    # phones), and the photo bands on catering, bulk orders, spices and events.
+    "hero-golden-wide.jpeg": (960, 1600, 2000),
+    "hero-golden-tall.jpeg": (640, 1100),
+    "catering-sunset.jpeg": (800, 1600),
+    "samosa-warmer.jpeg": (800, 1600),
+    "spice-flatlay.jpeg": (800, 1600),
+    "booth-crowd.jpeg": (800, 1600),
 }
 
 # Logos are square with transparency, so the fallback stays PNG.

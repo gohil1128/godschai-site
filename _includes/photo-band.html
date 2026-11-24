@@ -1,0 +1,16 @@
+{%- comment -%}
+  A wide photo across the page, with an optional caption under it. Params:
+    base, widths — the photo in uploads/opt (see tools/optimize-images.py)
+    alt          — what it shows
+    focus        — the part to keep when it's cropped (x% y%), default centre
+    caption      — optional, one short line
+  It's 21:9 on wide screens and 4:3 on phones. The styles are in
+  _includes/base-styles-dark.html (.gc-band).
+{%- endcomment -%}
+{%- capture st %}display:block;width:100%;height:100%;object-fit:cover;object-position:{{ include.focus | default: '50% 50%' }}{% endcapture -%}
+<figure class="gc-band">
+  <div class="gc-band-pic">{% include img.html base=include.base ext="jpg" widths=include.widths sizes="(min-width:1240px) 1160px, 92vw" w="1600" h="1067" alt=include.alt wrap="display:block;width:100%;height:100%" style=st %}</div>
+  {%- if include.caption %}
+  <figcaption>{{ include.caption }}</figcaption>
+  {%- endif %}
+</figure>

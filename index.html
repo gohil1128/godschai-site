@@ -20,7 +20,8 @@ og_image: "uploads/og-image.jpg"
   <section class="gc-dark" aria-labelledby="hero-h1" style="position:relative;height:100vh;min-height:620px;background:var(--gc-bg)">
     <div style="position:relative;height:100%;overflow:hidden;background:var(--gc-bg)">
     {%- comment -%}
-      Hero: chai rising to a rolling boil, a 9-second silent loop from the
+      Hero: it opens on the golden-hour photo of the bar (_data/hero.yml, lead),
+      then chai rising to a rolling boil, a 9-second silent loop from the
       How to make chai shoot. The still (its first frame) is what loads first
       and what stays up for anyone with reduced motion or data saver on; the
       video fades in over it once it is playing. Phones and other tall screens
@@ -69,28 +70,21 @@ og_image: "uploads/og-image.jpg"
     <div class="gc-hero-media">
       {%- assign o = '/uploads/opt/' | relative_url %}
       {%- assign hero = site.data.hero %}
-      <div class="gc-hero-slide is-on" data-gc-slide data-secs="{{ hero.video_seconds | default: 9 }}">
+      {%- comment -%} The opening picture (hero.yml, lead), then the video loop, then the other photos. {%- endcomment %}
+      {%- if hero.lead %}{% include hero-slide.html sl=hero.lead first=true %}{% endif %}
+      <div class="gc-hero-slide{% unless hero.lead %} is-on{% endunless %}" data-gc-slide data-secs="{{ hero.video_seconds | default: 9 }}">
+      {%- if hero.lead %}{% assign vp = "data-" %}{% else %}{% assign vp = "" %}{% endif %}
       <picture>
-        <source type="image/webp" media="(max-aspect-ratio:1/1)" srcset="{{ o }}hero-pot-tall-608.webp">
-        <source media="(max-aspect-ratio:1/1)" srcset="{{ o }}hero-pot-tall-608.jpg">
-        <source type="image/webp" srcset="{{ o }}hero-pot-wide-640.webp 640w, {{ o }}hero-pot-wide-1280.webp 1280w" sizes="100vw">
-        <img src="{{ o }}hero-pot-wide-1280.jpg" srcset="{{ o }}hero-pot-wide-640.jpg 640w, {{ o }}hero-pot-wide-1280.jpg 1280w" sizes="100vw" width="1280" height="720" alt="Masala chai rising to a rolling boil in a steel pot" fetchpriority="high" decoding="async">
+        <source type="image/webp" media="(max-aspect-ratio:1/1)" {{ vp }}srcset="{{ o }}hero-pot-tall-608.webp">
+        <source media="(max-aspect-ratio:1/1)" {{ vp }}srcset="{{ o }}hero-pot-tall-608.jpg">
+        <source type="image/webp" {{ vp }}srcset="{{ o }}hero-pot-wide-640.webp 640w, {{ o }}hero-pot-wide-1280.webp 1280w" sizes="100vw">
+        <img {{ vp }}src="{{ o }}hero-pot-wide-1280.jpg" {{ vp }}srcset="{{ o }}hero-pot-wide-640.jpg 640w, {{ o }}hero-pot-wide-1280.jpg 1280w" sizes="100vw" width="1280" height="720" alt="Masala chai rising to a rolling boil in a steel pot" decoding="async"{% unless hero.lead %} fetchpriority="high"{% endunless %}>
       </picture>
       <video class="gc-hero-wide" data-gc-calm data-gc-fade data-src="{{ '/uploads/video/hero-pot-wide.mp4' | relative_url }}::video/mp4" muted loop playsinline preload="none" aria-hidden="true"></video>
       <video class="gc-hero-tall" data-gc-calm data-gc-fade data-src="{{ '/uploads/video/hero-pot-tall.mp4' | relative_url }}::video/mp4" muted loop playsinline preload="none" aria-hidden="true"></video>
       </div>
       {%- comment -%} The photos load only when their turn is next (site.js, 3b). {%- endcomment %}
-      {%- for sl in hero.slides %}
-      {%- assign ws = sl.widths | split: "," %}
-      {%- capture wset %}{% for w in ws %}{{ o }}{{ sl.image }}-{{ w }}.webp {{ w }}w{% unless forloop.last %}, {% endunless %}{% endfor %}{% endcapture %}
-      {%- capture jset %}{% for w in ws %}{{ o }}{{ sl.image }}-{{ w }}.jpg {{ w }}w{% unless forloop.last %}, {% endunless %}{% endfor %}{% endcapture %}
-      <div class="gc-hero-slide is-still" data-gc-slide data-secs="{{ hero.seconds | default: 6 }}" style="--secs:{{ hero.seconds | default: 6 }}s">
-        <picture>
-          <source type="image/webp" data-srcset="{{ wset }}" sizes="100vw">
-          <img data-src="{{ o }}{{ sl.image }}-{{ ws | last }}.jpg" data-srcset="{{ jset }}" sizes="100vw" alt="{{ sl.alt | escape }}" decoding="async" style="object-position:{{ sl.focus | default: '50% 50%' }}">
-        </picture>
-      </div>
-      {%- endfor %}
+      {%- for sl in hero.slides %}{% include hero-slide.html sl=sl first=false %}{% endfor %}
       <div class="gc-hero-scrim"></div>
     </div>
 
@@ -99,10 +93,8 @@ og_image: "uploads/og-image.jpg"
 
     <div style="position:relative;z-index:2;max-width:1320px;margin:0 auto;height:100%;display:flex;flex-direction:column;justify-content:flex-end;padding:0 clamp(20px,6vw,90px) clamp(74px,13vh,150px)">
       <div data-gc-hero-in style="opacity:0;transform:translateY(28px);transition:opacity 1.1s cubic-bezier(.2,.7,.2,1),transform 1.1s cubic-bezier(.2,.7,.2,1);max-width:800px">
-        <div style="display:inline-flex;align-items:center;gap:9px;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gc-gold-t)">
-          <span style="width:8px;height:8px;border-radius:999px;background:#B55F3E;display:inline-block"></span><h1 id="hero-h1" style="font:inherit;letter-spacing:inherit;text-transform:inherit;color:inherit;margin:0">Masala Chai in Saskatoon</h1>
-        </div>
-        <p style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(3rem,9vw,7rem);line-height:0.92;letter-spacing:0;margin:16px 0 0;text-shadow:0 6px 40px rgba(0,0,0,0.5)">Not your<br><span style="color:var(--gc-coral-t);font-style:italic">average</span> chai.</p>
+        {%- comment -%} The page's main heading. "Masala chai in Saskatoon" stays in it for Google and screen readers, but isn't shown. {%- endcomment %}
+        <h1 id="hero-h1" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(3rem,9vw,7rem);line-height:0.92;letter-spacing:0;margin:0;text-shadow:0 6px 40px rgba(0,0,0,0.5)">Not your<br><span style="color:var(--gc-coral-t);font-style:italic">average</span> chai.<span class="gc-vh"> Masala chai in Saskatoon.</span></h1>
         <p style="font-size:clamp(1.05rem,1.5vw,1.3rem);line-height:1.5;color:var(--gc-fg2);max-width:36ch;margin:20px 0 0;text-shadow:0 2px 16px rgba(0,0,0,0.6)">Whole spices from Kerala. Single-origin Assam tea. Poured fresh, the real way.</p>
         <div style="display:flex;gap:13px;flex-wrap:wrap;margin-top:30px">
           {%- if site.data.shop.open %}

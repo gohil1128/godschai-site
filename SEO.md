@@ -406,11 +406,17 @@ The longer written guide on that page is normal text in
 
 The hero rotates through a few pictures, crossfading:
 
-1. chai rising to a rolling boil in a steel pot: a 9-second silent loop from
-   the How to make chai shoot, colour-graded and seamless where it loops;
-2. then the photos listed in **`_data/hero.yml`** (now: the three cups at the
-   cart, chai poured from a kettle, and chai strained into a mug), each for a
-   few seconds with a slow drift, and round again.
+1. it opens on the `lead` photo in **`_data/hero.yml`**: the God's Chai bar at
+   golden hour (Poise Studio, August), with a portrait version for phones;
+2. then chai rising to a rolling boil in a steel pot: a 9-second silent loop
+   from the How to make chai shoot, colour-graded and seamless where it loops;
+3. then the other photos in `hero.yml` (now: the three cups at the cart, chai
+   poured from a kettle, and chai strained into a mug), each for a few seconds
+   with a slow drift, and round again.
+
+The headline, "Not your average chai.", is the page's main heading (its
+`h1`). "Masala chai in Saskatoon" is part of it for Google and screen readers,
+but isn't shown.
 
 **The indicator** is one small cup at the bottom of the hero. It fills with
 chai while each picture shows, and when it's full the next one comes in.
@@ -438,6 +444,25 @@ the picture. A dark wash behind the words keeps them readable.
 
 The cups-at-the-cart photo is also the picture links show when the site is
 shared, and the business photo Google gets.
+
+### Photos from the God's Chai Content folder
+
+Picked from the event photos in Drive and graded to match the site (warm,
+slightly matte, deep shadows), each with its graded original in
+`uploads/_src/`:
+
+- `hero-golden-wide` / `hero-golden-tall`: the hero's opening photo.
+- `catering-sunset`: the bar at sunset, under the heading on `/catering/`.
+- `samosa-warmer`: samosas in the warmer, under the order form on
+  `/bulk-orders/`.
+- `spice-flatlay`: the spice jars and mortars, under the heading on
+  `/masala-chai-spices/`.
+- `booth-crowd`: the queue at the booth on Canada Day, under the schedule on
+  `/events/`.
+
+The four page photos use `_includes/photo-band.html`: a wide photo (21:9, 4:3
+on phones) with an optional one-line caption. To use it elsewhere:
+`{% include photo-band.html base="samosa-warmer" widths="800,1600" alt="…" caption="…" %}`.
 
 ### Other photos from the shoot
 
