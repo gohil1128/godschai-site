@@ -1,8 +1,7 @@
 # The homepage hero's rotating pictures. It opens on `lead`, then the video
 # loop of chai rising to a boil (video_seconds), then fades through `slides`,
-# each for `seconds`, and round again. The little cup at the bottom of the hero
-# fills as each one plays; tapping it skips to the next. With reduced motion
-# on, it stays on the first and only moves when the cup is tapped.
+# each for `seconds`, and round again, by itself. With reduced motion on, it
+# stays on the first.
 #
 #   image       — a photo in uploads/opt (the name without -<width>.jpg)
 #   widths      — the sizes that exist for it there
