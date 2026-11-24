@@ -1,6 +1,6 @@
 {%- comment -%}
   The colour guide (brew guide page): four shades of chai from milky to extra
-  kadak, and a timer for the one you pick. Shades, times and the timing rule
+  kadak as one simple colour bar, each with its own simmer timer. Shades, times and the timing rule
   are in _data/brew.yml (shades, boil_*, simmer_per_cup). It shares its cup
   count with the brew board above, both ways. assets/js/site.js, 5d, runs it;
   without JavaScript the shades and their times for 2 cups still show.
@@ -23,55 +23,46 @@
   .gc-cg-eyebrow{font:400 12px 'DM Mono',monospace;letter-spacing:0.18em;text-transform:uppercase;color:var(--gc-coral-t)}
   .gc-cg h2{margin:10px 0 0;font:400 clamp(2rem,4.6vw,3.3rem)/1 'Instrument Serif',serif;letter-spacing:0;color:var(--gc-fg)}
   .gc-cg-lede{margin:14px 0 0;max-width:54ch;font-size:1.05rem;line-height:1.6;color:var(--gc-fg3)}
-  .gc-cg-pick{border:0;min-width:0;margin:clamp(24px,3vw,34px) 0 0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(8px,1.6vw,18px)}
-  .gc-cg-pick legend{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
-  .gc-cg-sw{position:relative;display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px 4px 12px;border-radius:20px;text-align:center;
-    border:1px solid rgba(var(--gc-gold-rgb),0.2);background:rgba(var(--gc-surf-rgb),0.72);transition:border-color .2s ease,box-shadow .2s ease}
-  .gc-cg-sw label{display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;width:100%}
-  .gc-cg-sw input{position:absolute;opacity:0;width:1px;height:1px;pointer-events:none}
-  .gc-cg-sw:has(input:checked){border-color:#B55F3E;box-shadow:inset 0 0 0 1.5px #B55F3E}
-  .gc-cg-sw:has(input:focus-visible){outline:2px solid var(--gc-gold-t);outline-offset:2px}
-  .gc-cg-sw label:hover .gc-cg-cup{transform:translateY(-2px)}
-  /* A real-looking cup seen from above: the chai is a flat colour (so the timer
-     can darken it live), and uploads/cup-overlay.png lays the ceramic, the
-     shading, the bubbles and the reflection over it. */
+  /* The shades: one colour bar in four parts, lightest to darkest. */
   @property --c{syntax:'<color>';inherits:true;initial-value:#A87A52}
-  .gc-cg-cup{position:relative;display:block;width:clamp(56px,13vw,104px);aspect-ratio:1/1;border-radius:50%;
-    background:radial-gradient(circle closest-side,var(--c) 81%,transparent 82%);
-    box-shadow:0 12px 22px -12px rgba(var(--gc-shadow-rgb),0.65),0 2px 5px -2px rgba(var(--gc-shadow-rgb),0.35);
-    transition:--c .45s ease,transform .25s cubic-bezier(.2,.7,.2,1)}
-  .gc-cg-cup::after{content:"";position:absolute;inset:0;border-radius:50%;background:url({{ '/uploads/cup-overlay.png' | relative_url }}) center/100% 100% no-repeat;
-    background-image:image-set(url({{ '/uploads/opt/cup-overlay.webp' | relative_url }}) type("image/webp"),url({{ '/uploads/cup-overlay.png' | relative_url }}) type("image/png"))}
+  .gc-cg-pick{border:0;min-width:0;margin:clamp(30px,4vw,42px) 0 0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}
+  .gc-cg-pick legend{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+  .gc-cg-sw{position:relative;display:flex;flex-direction:column;align-items:center;gap:10px;min-width:0;text-align:center}
+  .gc-cg-sw label{display:flex;flex-direction:column;align-items:stretch;gap:10px;width:100%;cursor:pointer}
+  .gc-cg-sw input{position:absolute;opacity:0;width:1px;height:1px;pointer-events:none}
+  .gc-cg-seg{display:block;height:clamp(46px,7vw,64px);background:var(--c);transition:transform .25s cubic-bezier(.2,.7,.2,1),box-shadow .25s ease}
+  .gc-cg-sw:first-of-type .gc-cg-seg{border-radius:16px 0 0 16px}
+  .gc-cg-sw:last-of-type .gc-cg-seg{border-radius:0 16px 16px 0}
+  .gc-cg-sw label:hover .gc-cg-seg{transform:scaleY(1.06)}
+  .gc-cg-sw:has(input:checked) .gc-cg-seg{transform:scaleY(1.14);border-radius:12px;box-shadow:0 0 0 3px var(--gc-bg),0 0 0 5px #B55F3E,0 12px 24px -14px rgba(var(--gc-shadow-rgb),0.7);position:relative;z-index:1}
+  .gc-cg-sw:has(input:focus-visible) .gc-cg-seg{outline:2px solid var(--gc-gold-t);outline-offset:6px}
   .gc-cg-sw b{font:400 clamp(1rem,2.6vw,1.3rem)/1.1 'Instrument Serif',serif;color:var(--gc-fg)}
+  .gc-cg-sw:has(input:checked) b{color:#B55F3E}
   .gc-cg-sw small{font:400 11px 'DM Mono',monospace;letter-spacing:0.04em;color:var(--gc-fg4)}
-  .gc-cg-sw em{position:absolute;top:-9px;left:50%;transform:translateX(-50%);white-space:nowrap;font:500 9px 'DM Mono',monospace;font-style:normal;letter-spacing:0.1em;text-transform:uppercase;color:#FFFFFF;background:#B55F3E;padding:3px 7px;border-radius:999px}
+  .gc-cg-sw em{position:absolute;top:-24px;left:50%;transform:translateX(-50%);white-space:nowrap;font:500 9px 'DM Mono',monospace;font-style:normal;letter-spacing:0.1em;text-transform:uppercase;color:#FFFFFF;background:#B55F3E;padding:3px 7px;border-radius:999px;z-index:2}
   /* each shade's own timer */
-  .gc-cg-run{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-width:0;max-width:100%;padding:7px 11px;border-radius:999px;cursor:pointer;
+  .gc-cg-run{display:inline-flex;align-items:center;justify-content:center;gap:6px;max-width:calc(100% - 6px);padding:7px 11px;border-radius:999px;cursor:pointer;
     border:1px solid rgba(var(--gc-ink-rgb),0.22);background:transparent;color:var(--gc-fg);font:500 12.5px 'DM Mono',monospace;letter-spacing:0.02em;white-space:nowrap;
     transition:background-color .2s ease,color .2s ease,border-color .2s ease}
   .gc-cg-run:hover{border-color:#B55F3E;color:#B55F3E}
   .gc-cg-run svg{width:10px;height:10px;flex:0 0 auto;fill:currentColor}
   .gc-cg-run.is-on{background:#B55F3E;border-color:#B55F3E;color:#FFFFFF}
-  .gc-cg.is-live [data-gc-cg-swmin]{display:none}
-  .gc-cg.is-live .gc-cg-dial{cursor:pointer}
   .gc-cg-run:focus-visible{outline:2px solid var(--gc-gold-t);outline-offset:2px}
-  .gc-cg-out{margin-top:clamp(16px,2.4vw,24px);display:grid;gap:clamp(18px,3vw,40px);align-items:center;padding:clamp(18px,2.8vw,32px);border-radius:26px;
+  .gc-cg.is-live [data-gc-cg-swmin]{display:none}
+  /* The picked shade, its timings, and the timer as a bar that fills and darkens */
+  .gc-cg-out{margin-top:clamp(20px,3vw,30px);padding:clamp(18px,2.8vw,32px);border-radius:26px;
     background:rgba(var(--gc-surf-rgb),0.85);border:1px solid rgba(var(--gc-gold-rgb),0.2);box-shadow:0 18px 44px -30px rgba(var(--gc-shadow-rgb),0.35)}
-  @media (min-width:760px){.gc-cg-out{grid-template-columns:auto minmax(0,1fr)}}
-  .gc-cg-dial{position:relative;width:clamp(150px,36vw,220px);aspect-ratio:1/1;margin:0 auto}
-  .gc-cg-dial .gc-cg-cup{position:absolute;inset:14px;width:auto}
-  .gc-cg-dial svg{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg)}
-  .gc-cg-dial circle{fill:none;stroke-width:5}
-  .gc-cg-dial .t{stroke:rgba(var(--gc-ink-rgb),0.1)}
-  .gc-cg-dial .p{stroke:#B55F3E;stroke-linecap:round;stroke-dasharray:100;stroke-dashoffset:100;transition:stroke-dashoffset .3s linear}
-  .gc-cg-clock{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;color:#FFF8EC;text-shadow:0 1px 8px rgba(0,0,0,0.35);pointer-events:none}
-  .gc-cg-clock.is-light{color:#3C2116;text-shadow:none}
-  .gc-cg-clock b{font:400 clamp(1.8rem,6vw,2.5rem)/1 'Instrument Serif',serif}
-  .gc-cg-clock span{font:400 10.5px 'DM Mono',monospace;letter-spacing:0.14em;text-transform:uppercase}
   .gc-cg-out h3{margin:0;font:400 clamp(1.6rem,4vw,2.2rem)/1.05 'Instrument Serif',serif;color:var(--gc-fg)}
   .gc-cg-out h3 small{font:400 11px 'DM Mono',monospace;letter-spacing:0.14em;text-transform:uppercase;color:var(--gc-coral-t);vertical-align:middle;margin-left:8px}
   .gc-cg-note{margin:6px 0 0;color:var(--gc-fg3);line-height:1.5}
-  .gc-cg-time{list-style:none;margin:16px 0 0;padding:0;display:grid;gap:8px}
+  .gc-cg-meter{margin:18px 0 0}
+  .gc-cg-meter-top{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+  .gc-cg-meter-top b{font:400 clamp(2.2rem,7vw,3rem)/1 'Instrument Serif',serif;color:var(--gc-fg);font-variant-numeric:tabular-nums}
+  .gc-cg-meter-top span{font:400 11px 'DM Mono',monospace;letter-spacing:0.14em;text-transform:uppercase;color:var(--gc-fg4)}
+  .gc-cg-track{position:relative;height:18px;margin-top:10px;border-radius:999px;background:rgba(var(--gc-ink-rgb),0.08);overflow:hidden}
+  .gc-cg-fill{position:absolute;inset:0 auto 0 0;width:100%;border-radius:999px;background:var(--c);transition:width .3s linear,--c .45s ease}
+  .gc-cg-tick{position:absolute;top:3px;bottom:3px;width:2px;border-radius:2px;background:rgba(255,255,255,0.75);box-shadow:0 0 0 1px rgba(var(--gc-ink-rgb),0.12)}
+  .gc-cg-time{list-style:none;margin:18px 0 0;padding:0;display:grid;gap:8px}
   .gc-cg-time li{display:grid;grid-template-columns:5.2em minmax(0,1fr);gap:12px;align-items:baseline;padding:10px 0 0;border-top:1px solid rgba(var(--gc-ink-rgb),0.09);color:var(--gc-fg3);line-height:1.45}
   .gc-cg-time li b{font:400 1.25rem/1 'Instrument Serif',serif;color:var(--gc-fg);white-space:nowrap}
   .gc-cg-total{margin:12px 0 0;font:400 12px 'DM Mono',monospace;letter-spacing:0.06em;color:var(--gc-fg4)}
@@ -84,16 +75,17 @@
   .gc-cg-reset{border:0;background:none;cursor:pointer;color:var(--gc-gold-t);font:600 14px 'Hanken Grotesk',sans-serif;text-decoration:underline;text-underline-offset:3px;padding:6px 2px}
   .gc-cg-cue{margin:12px 0 0;min-height:1.5em;font-weight:600;color:var(--gc-coral-t)}
   .gc-cg-rose{margin:16px 0 0;font-size:13.5px;color:var(--gc-muted)}
-  @media (max-width:420px){.gc-cg-sw em{font-size:8px;padding:2px 5px;letter-spacing:0.06em}.gc-cg-sw b{font-size:0.98rem}}
-  @media (prefers-reduced-motion:reduce){.gc-cg-sw,.gc-cg-cup,.gc-cg-dial .p{transition:none}.gc-cg-sw:hover{transform:none}}
+  @media (min-width:860px){.gc-cg-cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:clamp(24px,4vw,56px);align-items:start}.gc-cg-cols .gc-cg-time{margin-top:0}}
+  @media (max-width:420px){.gc-cg-sw em{font-size:8px;padding:2px 5px;letter-spacing:0.06em}.gc-cg-sw b{font-size:0.98rem}.gc-cg-run{padding:6px 8px;font-size:11.5px}}
+  @media (prefers-reduced-motion:reduce){.gc-cg-seg,.gc-cg-fill{transition:none}.gc-cg-sw label:hover .gc-cg-seg{transform:none}}
 </style>
 <section id="colour" class="gc-cg" aria-labelledby="colour-h2" data-gc-cg
   data-shades='{{ brew.shades | jsonify | escape }}' data-start="{{ brew.shade_start }}" data-serves="{{ n0 }}" data-max="{{ brew.max_cups | default: 30 }}"
   data-boil-base="{{ brew.boil_base }}" data-boil-per="{{ brew.boil_per_cup }}" data-simmer-per="{{ brew.simmer_per_cup }}">
   <div class="gc-cg-eyebrow">The colour guide</div>
   <h2 id="colour-h2">Brew it to your shade</h2>
-  <p class="gc-cg-lede">Chai deepens the longer it simmers. Pick the colour you like, and we'll time the pot for you.</p>
-  <fieldset class="gc-cg-pick" aria-describedby="colour-h2">
+  <p class="gc-cg-lede">Chai deepens the longer it simmers. Pick the colour you like and start its timer: we'll tell you when to let it rise and when to strain.</p>
+  <fieldset class="gc-cg-pick">
     <legend>Your shade</legend>
     {%- for s in brew.shades %}
     {%- capture smin %}{{ s.minutes | append: "" | remove: ".0" | replace: ".5", "½" }}{% endcapture %}
@@ -102,7 +94,7 @@
       <label>
         <input type="radio" name="gc-shade" value="{{ forloop.index0 }}"{% if s.name == house.name %} checked{% endif %}>
         {%- if s.house %}<em>How we pour it</em>{% endif %}
-        <span class="gc-cg-cup" style="--c:{{ s.hex }}" aria-hidden="true"></span>
+        <span class="gc-cg-seg" style="--c:{{ s.hex }}" aria-hidden="true"></span>
         <b>{{ s.name }}</b>
         <small data-gc-cg-swmin>{{ smin }} min simmer</small>
       </label>
@@ -112,32 +104,33 @@
   </fieldset>
 
   <div class="gc-cg-out">
-    <div class="gc-cg-dial">
-      <span class="gc-cg-cup" data-gc-cg-cup style="--c:{{ house.hex }}"></span>
-      <svg viewBox="0 0 100 100" aria-hidden="true"><circle class="t" cx="50" cy="50" r="47.5"/><circle class="p" cx="50" cy="50" r="47.5" pathLength="100" data-gc-cg-ring/></svg>
-      <div class="gc-cg-clock" aria-hidden="true"><b data-gc-cg-clock>{{ clock0 }}</b><span data-gc-cg-clock-k>simmer</span></div>
-    </div>
-    <div>
-      <h3><span data-gc-cg-name>{{ house.name }}</span>{% if house.house %}<small data-gc-cg-house>How we pour it</small>{% endif %}</h3>
-      <p class="gc-cg-note" data-gc-cg-note>{{ house.note }}</p>
-      <ol class="gc-cg-time">
-        <li><b><span data-gc-cg-boil>{{ boil0t }}</span> min</b><span>Water and milk up to the boil.</span></li>
-        <li><b><span data-gc-cg-sim>{{ sim0t }}</span> min</b><span>Mix in, then simmer and let it rise <span data-gc-cg-rises>{{ house.rises }}</span> <span data-gc-cg-times>times</span>.</span></li>
-        <li><b>Then</b><span>Strain it into the cup, straight away.</span></li>
-      </ol>
-      <p class="gc-cg-total">About <span data-gc-cg-total>{{ tot0 }}</span> minutes in all, for <span data-gc-cg-n>{{ n0 }}</span> <span data-gc-cg-unit>cups</span>, on medium-high.</p>
-      <div class="gc-cg-ctl" data-gc-cg-ctl hidden>
-        <div class="gc-cg-cups" role="group" aria-label="How many cups">
-          <button type="button" data-gc-cg-less aria-label="One cup fewer">&minus;</button>
-          <output data-gc-cg-out>{{ n0 }}</output>
-          <button type="button" data-gc-cg-more aria-label="One cup more">+</button>
-          <span>cups</span>
+    <h3><span data-gc-cg-name>{{ house.name }}</span>{% if house.house %}<small data-gc-cg-house>How we pour it</small>{% endif %}</h3>
+    <p class="gc-cg-note" data-gc-cg-note>{{ house.note }}</p>
+    <div class="gc-cg-cols">
+      <div class="gc-cg-meter">
+        <div class="gc-cg-meter-top"><b data-gc-cg-clock>{{ clock0 }}</b><span data-gc-cg-clock-k>simmer</span></div>
+        <div class="gc-cg-track" aria-hidden="true"><span class="gc-cg-fill" data-gc-cg-fill style="--c:{{ house.hex }}"></span><span data-gc-cg-ticks></span></div>
+        <div class="gc-cg-ctl" data-gc-cg-ctl hidden>
+          <div class="gc-cg-cups" role="group" aria-label="How many cups">
+            <button type="button" data-gc-cg-less aria-label="One cup fewer">&minus;</button>
+            <output data-gc-cg-out>{{ n0 }}</output>
+            <button type="button" data-gc-cg-more aria-label="One cup more">+</button>
+            <span>cups</span>
+          </div>
+          <button type="button" class="gc-cg-go" data-gc-cg-go>Mix is in: start the timer</button>
+          <button type="button" class="gc-cg-reset" data-gc-cg-reset hidden>Reset</button>
         </div>
-        <button type="button" class="gc-cg-go" data-gc-cg-go>Mix is in: start the timer</button>
-        <button type="button" class="gc-cg-reset" data-gc-cg-reset hidden>Reset</button>
+        <p class="gc-cg-cue" data-gc-cg-cue aria-live="polite"></p>
       </div>
-      <p class="gc-cg-cue" data-gc-cg-cue aria-live="polite"></p>
-      <p class="gc-cg-rose">Brewing Rose &amp; Cardamom? Go a shade lighter, so the rose stays bright.</p>
+      <div>
+        <ol class="gc-cg-time">
+          <li><b><span data-gc-cg-boil>{{ boil0t }}</span> min</b><span>Water and milk up to the boil.</span></li>
+          <li><b><span data-gc-cg-sim>{{ sim0t }}</span> min</b><span>Mix in, then simmer and let it rise <span data-gc-cg-rises>{{ house.rises }}</span> <span data-gc-cg-times>times</span>.</span></li>
+          <li><b>Then</b><span>Strain it into the cup, straight away.</span></li>
+        </ol>
+        <p class="gc-cg-total">About <span data-gc-cg-total>{{ tot0 }}</span> minutes in all, for <span data-gc-cg-n>{{ n0 }}</span> <span data-gc-cg-unit>cups</span>, on medium-high.</p>
+        <p class="gc-cg-rose">Brewing Rose &amp; Cardamom? Go a shade lighter, so the rose stays bright.</p>
+      </div>
     </div>
   </div>
 </section>

@@ -373,26 +373,21 @@ Only the step showing plays, it pauses when the board scrolls away, and with
 reduced motion or data saver on it stays a still. On very short phones the
 clips are left out so the board still fits.
 
-**The colour guide.** Under the board, "Brew it to your shade" shows four cups
-of chai from above, from Light to Extra kadak (Kadak is marked "How we pour
-it"). Each cup is drawn to look real: a white ceramic cup with depth at the
-edge, a ring of small bubbles and a window reflection
-(`uploads/cup-overlay.png`, drawn by `tools/make-cup-overlay.py`), laid over
-the shade's colour.
+**The colour guide.** Under the board, "Brew it to your shade" is one simple
+colour bar in four parts, from Light to Extra kadak (Kadak is marked "How we
+pour it"). Picking one shows how long to bring the pot to the boil, how long
+to simmer once the mix is in and how many times to let it rise, for the same
+number of cups as the board (change it in either place).
 
-Picking one shows how long to bring the pot to the boil, how long to simmer
-once the mix is in and how many times to let it rise, for the same number of
-cups as the board (change it in either place).
+**Each shade has its own timer**: the ▶ button under it (it shows the time,
+then the countdown, and tapping it again pauses). "Mix is in: start the timer"
+does the same for the shade picked. While it runs:
 
-**Each shade has its own timer**: the ▶ button on its card (it shows the time,
-then the countdown, and tapping it again pauses). The big cup and "Mix is in:
-start the timer" do the same for the shade picked. While it runs:
-
-- the cup on screen darkens from milky to the shade;
+- a bar fills, darkening from milky to the shade, with a mark where each rise
+  falls;
 - a soft chime and a prompt mark each rise, and three chimes say when to
   strain (phones that can, buzz too);
-- the screen stays awake. The board's "Pick your shade ↓" link and each premix page's "How
-to brew it" link to it (`/how-to-make-masala-chai/#colour`).
+- the screen stays awake.
 
 Everything it uses is in `brew.yml`: `shades` (name, colour, simmer minutes for
 2 cups, rises, a line about it) and the timing rule (`boil_base`,

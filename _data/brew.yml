@@ -53,11 +53,10 @@ steps:
     desc: "Pour through a fine strainer into your cup. Kadak, spiced, exactly right."
     accent: false
 
-# The colour guide on the brew guide page: four shades, lightest first, with a
-# timer for the one you pick. hex is the colour of the chai in the cup,
+# The colour guide on the brew guide page: four shades, lightest first, shown
+# as one colour bar, each with its own timer. hex is the colour of the chai,
 # taken from our own brewing footage and shifted from kitchen-bulb orange to
-# how it looks in daylight. The cup drawn around it is uploads/cup-overlay.png
-# (tools/make-cup-overlay.py). minutes is how
+# how it looks in daylight. minutes is how
 # long to simmer once the mix is in, for 2 cups on medium-high; rises is how
 # many times to let it climb the pot in that time. house: true marks how we
 # pour it at the cart. Change any of it here and the guide and timer follow.

@@ -426,8 +426,8 @@ layout: null
   /* ---------- 5d. Colour guide (brew guide) ----------
      Four shades, lightest first (_data/brew.yml, shades). Picking one shows its
      timings for the cups in the brew board (shared both ways), and a simmer
-     timer: start it when the mix goes in (from the big dial, or the button on
-     any shade's card), and the cup on screen darkens from milky to the shade you
+     timer: start it when the mix goes in (from the button under any shade, or
+     the main one), and the bar fills and darkens from milky to the shade you
      picked as it counts down. A soft chime marks each rise and the end, phones
      that can buzz, and the screen stays awake while it runs. */
   var cg = d.querySelector('[data-gc-cg]');
@@ -438,8 +438,8 @@ layout: null
     var startHex = cg.getAttribute('data-start') || '#EBDDC8';
     var q = function (sel) { return cg.querySelector(sel); };
     var radios = [].slice.call(cg.querySelectorAll('input[name="gc-shade"]'));
-    var cup = q('[data-gc-cg-cup]'), ring = q('[data-gc-cg-ring]'), clock = q('[data-gc-cg-clock]'), clockK = q('[data-gc-cg-clock-k]');
-    var clockWrap = clock.parentNode, dial = q('.gc-cg-dial');
+    var fill = q('[data-gc-cg-fill]'), ticks = q('[data-gc-cg-ticks]'), clock = q('[data-gc-cg-clock]'), clockK = q('[data-gc-cg-clock-k]');
+    var meter = q('.gc-cg-meter');
     var runBtns = [].slice.call(cg.querySelectorAll('[data-gc-cg-run]'));
     var PLAY = 'M2 1l7 4-7 4z', PAUSE = 'M2 1h2.4v8H2zM5.6 1H8v8H5.6z';
     // a soft kitchen-timer chime (made on the fly; needs the tap that starts the timer)
@@ -482,12 +482,10 @@ layout: null
       b.setAttribute('aria-label', on ? (paused ? 'Carry on the ' : 'Pause the ') + nm + ' timer, ' + mmss(secs) + ' left' : 'Start a ' + mmss(secs) + ' timer for ' + nm);
     };
     var paint = function (frac) {   // frac: 0 = just mixed in, 1 = the shade picked
-      var s = SH[pick] || {}, c = frac >= 1 ? s.hex : mix(startHex, s.hex, Math.max(0, frac));
-      cup.style.setProperty('--c', c);
-      // dark digits on a light cup, light digits on a dark one
-      var rgb = hexRgb(c), lum = (0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2]) / 255;
-      clockWrap.classList.toggle('is-light', lum > 0.62);
-      ring.style.strokeDashoffset = String(100 - 100 * Math.max(0, Math.min(1, frac)));
+      var s = SH[pick] || {}, f = Math.max(0, Math.min(1, frac));
+      fill.style.setProperty('--c', f >= 1 ? s.hex : mix(startHex, s.hex, f));
+      // idle, the bar shows the whole shade; running, it fills as the time goes
+      fill.style.width = (running || left ? Math.max(f * 100, 2) : 100) + '%';
     };
     var show = function () {
       var t = times(), s = t.s;
@@ -497,6 +495,12 @@ layout: null
       setText('[data-gc-cg-boil]', nice(t.boil));
       setText('[data-gc-cg-sim]', nice(t.sim));
       setText('[data-gc-cg-rises]', s.rises || 2);
+      // a mark on the bar where each rise falls
+      ticks.innerHTML = '';
+      for (var ri = 1; ri <= (s.rises || 2); ri++) {
+        var tk = d.createElement('span'); tk.className = 'gc-cg-tick';
+        tk.style.left = 'calc(' + ((ri - 0.5) / (s.rises || 2) * 100) + '% - 1px)'; ticks.appendChild(tk);
+      }
       setText('[data-gc-cg-times]', (s.rises || 2) === 1 ? 'time' : 'times');
       setText('[data-gc-cg-total]', t.total);
       setText('[data-gc-cg-n]', cgN);
@@ -541,8 +545,7 @@ layout: null
       timer = setInterval(tick, 250); tick();
     };
     goBtn.addEventListener('click', function () { if (!running && left === 0 && clockK.textContent === 'ready') { show(); } start(); });
-    // the big cup is a start / pause button too
-    dial.addEventListener('click', function () { goBtn.click(); });
+
     resetBtn.addEventListener('click', function () { stop(false); show(); });
     radios.forEach(function (r, k) { r.addEventListener('change', function () { if (r.checked) { pick = k; stop(false); show(); } }); });
     // each shade's own button: pick it and start (or pause / carry on if it's the one running)
@@ -553,8 +556,8 @@ layout: null
           radios[k].checked = true; pick = k; stop(false); show();
         }
         start();
-        var rr = dial.getBoundingClientRect();
-        if (rr.top < 60 || rr.bottom > window.innerHeight) dial.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' });
+        var rr = meter.getBoundingClientRect();
+        if (rr.top < 80 || rr.bottom > window.innerHeight) meter.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' });
       });
     });
     cg.classList.add('is-live');
