@@ -195,6 +195,9 @@ layout: null
         entries.forEach(function (e) {
           var v = e.target;
           if (e.isIntersecting) {
+            // a hero slide that isn't showing stays paused and unloaded (3b loads it before its turn)
+            var slide = v.closest && v.closest('[data-gc-slide]');
+            if (slide && !slide.classList.contains('is-on')) { try { v.pause(); } catch (err) {} return; }
             if (!v.getAttribute('src') && v.dataset.src) {
               // swap in the <source> children so the browser can pick mp4/webm
               (v.dataset.src || '').split('|').forEach(function (pair) {
@@ -208,9 +211,6 @@ layout: null
               v.removeAttribute('data-src');
               v.load();
             }
-            // a hero slide that isn't showing stays paused (3b plays it on its turn)
-            var slide = v.closest && v.closest('[data-gc-slide]');
-            if (slide && !slide.classList.contains('is-on')) { try { v.pause(); } catch (err) {} return; }
             var pr = v.play(); if (pr && pr.catch) pr.catch(function () {});
           } else { try { v.pause(); } catch (err) {} }
         });
@@ -256,6 +256,16 @@ layout: null
       [].forEach.call(heroSlides[k].querySelectorAll('[data-srcset]'), function (el) { el.setAttribute('srcset', el.getAttribute('data-srcset')); el.removeAttribute('data-srcset'); });
       var im = heroSlides[k].querySelector('img[data-src]');
       if (im) { im.src = im.getAttribute('data-src'); im.removeAttribute('data-src'); }
+      // and the loop, if it's this one's (the version that fits the screen; never with reduced motion or data saver)
+      if (reduceMotion || saveData) return;
+      heroVids(k).forEach(function (v) {
+        if (!v.dataset.src || getComputedStyle(v).display === 'none') return;
+        v.dataset.src.split('|').forEach(function (pair) {
+          var bits = pair.split('::'); if (!bits[0]) return;
+          var so = d.createElement('source'); so.src = bits[0]; if (bits[1]) so.type = bits[1]; v.appendChild(so);
+        });
+        v.removeAttribute('data-src'); v.preload = 'auto'; v.load();
+      });
     };
     var heroVids = function (k) { return [].slice.call(heroSlides[k].querySelectorAll('video')); };
     var heroPaused = function () { heroCup.classList.toggle('is-paused', !heroSeen || d.hidden); };

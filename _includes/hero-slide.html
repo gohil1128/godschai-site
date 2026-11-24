@@ -1,0 +1,28 @@
+{%- comment -%}
+  One photo slide of the homepage hero (_data/hero.yml). Params:
+    sl    — the slide: image, widths, focus, alt, and optionally a portrait
+            version for phones and other tall screens: tall, tall_widths, tall_focus
+    first — the slide the page opens on: loads straight away, at high priority
+  Every other slide carries its addresses in data- attributes, and site.js (3b)
+  fills them in just before its turn, so nobody downloads pictures they never see.
+{%- endcomment -%}
+{%- assign o = '/uploads/opt/' | relative_url -%}
+{%- assign sl = include.sl -%}
+{%- assign secs = site.data.hero.seconds | default: 6 -%}
+{%- assign hs_lazy = "data-" -%}{%- if include.first -%}{%- assign hs_lazy = "" -%}{%- endif -%}
+{%- assign ws = sl.widths | split: "," -%}
+{%- capture wset %}{% for w in ws %}{{ o }}{{ sl.image }}-{{ w }}.webp {{ w }}w{% unless forloop.last %}, {% endunless %}{% endfor %}{% endcapture -%}
+{%- capture jset %}{% for w in ws %}{{ o }}{{ sl.image }}-{{ w }}.jpg {{ w }}w{% unless forloop.last %}, {% endunless %}{% endfor %}{% endcapture -%}
+<div class="gc-hero-slide is-still{% if include.first %} is-on{% endif %}" data-gc-slide data-secs="{{ secs }}" style="--secs:{{ secs }}s">
+  <picture>
+    {%- if sl.tall %}
+    {%- assign tws = sl.tall_widths | split: "," %}
+    {%- capture twset %}{% for w in tws %}{{ o }}{{ sl.tall }}-{{ w }}.webp {{ w }}w{% unless forloop.last %}, {% endunless %}{% endfor %}{% endcapture %}
+    {%- capture tjset %}{% for w in tws %}{{ o }}{{ sl.tall }}-{{ w }}.jpg {{ w }}w{% unless forloop.last %}, {% endunless %}{% endfor %}{% endcapture %}
+    <source type="image/webp" media="(max-aspect-ratio:1/1)" {{ hs_lazy }}srcset="{{ twset }}" sizes="100vw">
+    <source media="(max-aspect-ratio:1/1)" {{ hs_lazy }}srcset="{{ tjset }}" sizes="100vw">
+    {%- endif %}
+    <source type="image/webp" {{ hs_lazy }}srcset="{{ wset }}" sizes="100vw">
+    <img {{ hs_lazy }}src="{{ o }}{{ sl.image }}-{{ ws | last }}.jpg" {{ hs_lazy }}srcset="{{ jset }}" sizes="100vw" alt="{{ sl.alt | escape }}" decoding="async"{% if include.first %} fetchpriority="high"{% endif %} style="object-position:{{ sl.focus | default: '50% 50%' }}">
+  </picture>
+</div>

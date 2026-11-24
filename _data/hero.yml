@@ -1,16 +1,26 @@
-# The homepage hero's rotating pictures. It opens on the video loop of chai
-# rising to a boil (video_seconds), then fades through these slides, each for
-# `seconds`, and round again. The little cup at the bottom of the hero fills
-# as each one plays; tapping it skips to the next. With reduced motion on, it
-# stays on the first and only moves when the cup is tapped.
+# The homepage hero's rotating pictures. It opens on `lead`, then the video
+# loop of chai rising to a boil (video_seconds), then fades through `slides`,
+# each for `seconds`, and round again. The little cup at the bottom of the hero
+# fills as each one plays; tapping it skips to the next. With reduced motion
+# on, it stays on the first and only moves when the cup is tapped.
 #
-#   image  — a photo in uploads/opt (the name without -<width>.jpg)
-#   widths — the sizes that exist for it there
-#   focus  — the part to keep when a screen crops it (x% y%)
-#   alt    — what it shows
+#   image       — a photo in uploads/opt (the name without -<width>.jpg)
+#   widths      — the sizes that exist for it there
+#   focus       — the part to keep when a screen crops it (x% y%)
+#   tall        — optional: a portrait version for phones and other tall
+#                 screens, with its own tall_widths and tall_focus
+#   alt         — what it shows
+# Leave `lead` out and the hero opens on the video instead.
 # See SEO.md, "The homepage hero".
 video_seconds: 9
 seconds: 6
+lead:
+  image: hero-golden-wide
+  widths: "960,1600,2000"
+  focus: "62% 60%"
+  tall: hero-golden-tall
+  tall_widths: "640,1100"
+  alt: "The God's Chai bar at golden hour, set up on the grass for an outdoor event"
 slides:
   - image: hero-journey-web
     widths: "480,960,1600"
