@@ -25,19 +25,36 @@
   .gc-cg-lede{margin:14px 0 0;max-width:54ch;font-size:1.05rem;line-height:1.6;color:var(--gc-fg3)}
   .gc-cg-pick{border:0;min-width:0;margin:clamp(24px,3vw,34px) 0 0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(8px,1.6vw,18px)}
   .gc-cg-pick legend{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
-  .gc-cg-sw{position:relative;display:flex;flex-direction:column;align-items:center;gap:7px;padding:16px 4px 12px;border-radius:20px;cursor:pointer;text-align:center;
-    border:1px solid rgba(var(--gc-gold-rgb),0.2);background:rgba(var(--gc-surf-rgb),0.72);transition:border-color .2s ease,box-shadow .2s ease,transform .2s cubic-bezier(.2,.7,.2,1)}
-  .gc-cg-sw:hover{transform:translateY(-2px);border-color:rgba(var(--gc-gold-rgb),0.5)}
+  .gc-cg-sw{position:relative;display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px 4px 12px;border-radius:20px;text-align:center;
+    border:1px solid rgba(var(--gc-gold-rgb),0.2);background:rgba(var(--gc-surf-rgb),0.72);transition:border-color .2s ease,box-shadow .2s ease}
+  .gc-cg-sw label{display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;width:100%}
   .gc-cg-sw input{position:absolute;opacity:0;width:1px;height:1px;pointer-events:none}
   .gc-cg-sw:has(input:checked){border-color:#B55F3E;box-shadow:inset 0 0 0 1.5px #B55F3E}
   .gc-cg-sw:has(input:focus-visible){outline:2px solid var(--gc-gold-t);outline-offset:2px}
-  /* a cup of chai seen from above: the colour, lighter where the light hits, a cream rim */
-  .gc-cg-cup{display:block;width:clamp(52px,12vw,96px);aspect-ratio:1/1;border-radius:50%;background:var(--c);
-    background:radial-gradient(circle at 42% 38%,color-mix(in srgb,var(--c) 72%,#FFF8EC) 0%,var(--c) 52%,color-mix(in srgb,var(--c) 82%,#2A1408) 100%);
-    box-shadow:inset 0 0 0 clamp(4px,0.9vw,7px) #F8F3EA,0 0 0 1px rgba(var(--gc-ink-rgb),0.14),0 12px 24px -14px rgba(var(--gc-shadow-rgb),0.7);transition:background .5s ease}
+  .gc-cg-sw label:hover .gc-cg-cup{transform:translateY(-2px)}
+  /* A real-looking cup seen from above: the chai is a flat colour (so the timer
+     can darken it live), and uploads/cup-overlay.png lays the ceramic, the
+     shading, the bubbles and the reflection over it. */
+  @property --c{syntax:'<color>';inherits:true;initial-value:#A87A52}
+  .gc-cg-cup{position:relative;display:block;width:clamp(56px,13vw,104px);aspect-ratio:1/1;border-radius:50%;
+    background:radial-gradient(circle closest-side,var(--c) 81%,transparent 82%);
+    box-shadow:0 12px 22px -12px rgba(var(--gc-shadow-rgb),0.65),0 2px 5px -2px rgba(var(--gc-shadow-rgb),0.35);
+    transition:--c .45s ease,transform .25s cubic-bezier(.2,.7,.2,1)}
+  .gc-cg-cup::after{content:"";position:absolute;inset:0;border-radius:50%;background:url({{ '/uploads/cup-overlay.png' | relative_url }}) center/100% 100% no-repeat;
+    background-image:image-set(url({{ '/uploads/opt/cup-overlay.webp' | relative_url }}) type("image/webp"),url({{ '/uploads/cup-overlay.png' | relative_url }}) type("image/png"))}
   .gc-cg-sw b{font:400 clamp(1rem,2.6vw,1.3rem)/1.1 'Instrument Serif',serif;color:var(--gc-fg)}
   .gc-cg-sw small{font:400 11px 'DM Mono',monospace;letter-spacing:0.04em;color:var(--gc-fg4)}
   .gc-cg-sw em{position:absolute;top:-9px;left:50%;transform:translateX(-50%);white-space:nowrap;font:500 9px 'DM Mono',monospace;font-style:normal;letter-spacing:0.1em;text-transform:uppercase;color:#FFFFFF;background:#B55F3E;padding:3px 7px;border-radius:999px}
+  /* each shade's own timer */
+  .gc-cg-run{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-width:0;max-width:100%;padding:7px 11px;border-radius:999px;cursor:pointer;
+    border:1px solid rgba(var(--gc-ink-rgb),0.22);background:transparent;color:var(--gc-fg);font:500 12.5px 'DM Mono',monospace;letter-spacing:0.02em;white-space:nowrap;
+    transition:background-color .2s ease,color .2s ease,border-color .2s ease}
+  .gc-cg-run:hover{border-color:#B55F3E;color:#B55F3E}
+  .gc-cg-run svg{width:10px;height:10px;flex:0 0 auto;fill:currentColor}
+  .gc-cg-run.is-on{background:#B55F3E;border-color:#B55F3E;color:#FFFFFF}
+  .gc-cg.is-live [data-gc-cg-swmin]{display:none}
+  .gc-cg.is-live .gc-cg-dial{cursor:pointer}
+  .gc-cg-run:focus-visible{outline:2px solid var(--gc-gold-t);outline-offset:2px}
   .gc-cg-out{margin-top:clamp(16px,2.4vw,24px);display:grid;gap:clamp(18px,3vw,40px);align-items:center;padding:clamp(18px,2.8vw,32px);border-radius:26px;
     background:rgba(var(--gc-surf-rgb),0.85);border:1px solid rgba(var(--gc-gold-rgb),0.2);box-shadow:0 18px 44px -30px rgba(var(--gc-shadow-rgb),0.35)}
   @media (min-width:760px){.gc-cg-out{grid-template-columns:auto minmax(0,1fr)}}
@@ -76,16 +93,21 @@
   <div class="gc-cg-eyebrow">The colour guide</div>
   <h2 id="colour-h2">Brew it to your shade</h2>
   <p class="gc-cg-lede">Chai deepens the longer it simmers. Pick the colour you like, and we'll time the pot for you.</p>
-  <fieldset class="gc-cg-pick">
+  <fieldset class="gc-cg-pick" aria-describedby="colour-h2">
     <legend>Your shade</legend>
     {%- for s in brew.shades %}
-    <label class="gc-cg-sw">
-      <input type="radio" name="gc-shade" value="{{ forloop.index0 }}"{% if s.name == house.name %} checked{% endif %}>
-      {%- if s.house %}<em>How we pour it</em>{% endif %}
-      <span class="gc-cg-cup" style="--c:{{ s.hex }}" aria-hidden="true"></span>
-      <b>{{ s.name }}</b>
-      <small>{{ s.minutes | append: "" | remove: ".0" | replace: ".5", "½" }} min simmer</small>
-    </label>
+    {%- capture smin %}{{ s.minutes | append: "" | remove: ".0" | replace: ".5", "½" }}{% endcapture %}
+    {%- assign ssec = s.minutes | times: 60 | round -%}{%- assign sm = ssec | divided_by: 60 -%}{%- assign ss = ssec | modulo: 60 -%}
+    <div class="gc-cg-sw">
+      <label>
+        <input type="radio" name="gc-shade" value="{{ forloop.index0 }}"{% if s.name == house.name %} checked{% endif %}>
+        {%- if s.house %}<em>How we pour it</em>{% endif %}
+        <span class="gc-cg-cup" style="--c:{{ s.hex }}" aria-hidden="true"></span>
+        <b>{{ s.name }}</b>
+        <small data-gc-cg-swmin>{{ smin }} min simmer</small>
+      </label>
+      <button type="button" class="gc-cg-run" data-gc-cg-run="{{ forloop.index0 }}" hidden aria-label="Start a {{ smin }} minute timer for {{ s.name }}"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M2 1l7 4-7 4z"/></svg><span>{{ sm }}:{% if ss < 10 %}0{% endif %}{{ ss }}</span></button>
+    </div>
     {%- endfor %}
   </fieldset>
 

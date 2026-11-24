@@ -426,8 +426,10 @@ layout: null
   /* ---------- 5d. Colour guide (brew guide) ----------
      Four shades, lightest first (_data/brew.yml, shades). Picking one shows its
      timings for the cups in the brew board (shared both ways), and a simmer
-     timer: start it when the mix goes in, and the cup on screen darkens from
-     milky to the shade you picked as it counts down, with a cue for each rise. */
+     timer: start it when the mix goes in (from the big dial, or the button on
+     any shade's card), and the cup on screen darkens from milky to the shade you
+     picked as it counts down. A soft chime marks each rise and the end, phones
+     that can buzz, and the screen stays awake while it runs. */
   var cg = d.querySelector('[data-gc-cg]');
   if (cg) {
     var SH = []; try { SH = JSON.parse(cg.getAttribute('data-shades')); } catch (e) {}
@@ -437,7 +439,27 @@ layout: null
     var q = function (sel) { return cg.querySelector(sel); };
     var radios = [].slice.call(cg.querySelectorAll('input[name="gc-shade"]'));
     var cup = q('[data-gc-cg-cup]'), ring = q('[data-gc-cg-ring]'), clock = q('[data-gc-cg-clock]'), clockK = q('[data-gc-cg-clock-k]');
-    var clockWrap = clock.parentNode;
+    var clockWrap = clock.parentNode, dial = q('.gc-cg-dial');
+    var runBtns = [].slice.call(cg.querySelectorAll('[data-gc-cg-run]'));
+    var PLAY = 'M2 1l7 4-7 4z', PAUSE = 'M2 1h2.4v8H2zM5.6 1H8v8H5.6z';
+    // a soft kitchen-timer chime (made on the fly; needs the tap that starts the timer)
+    var actx = null;
+    var chime = function (n, f) {
+      if (!actx) return;
+      for (var i = 0; i < n; i++) {
+        var o = actx.createOscillator(), g = actx.createGain(), t0 = actx.currentTime + i * 0.32;
+        o.type = 'sine'; o.frequency.value = f || 880;
+        g.gain.setValueAtTime(0.0001, t0); g.gain.exponentialRampToValueAtTime(0.12, t0 + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.28);
+        o.connect(g); g.connect(actx.destination); o.start(t0); o.stop(t0 + 0.3);
+      }
+    };
+    // keep the screen on while it counts (where the browser allows it)
+    var lock = null;
+    var wake = function (on) {
+      if (on && !lock && navigator.wakeLock) navigator.wakeLock.request('screen').then(function (l) { lock = l; l.addEventListener('release', function () { lock = null; }); }).catch(function () {});
+      if (!on && lock) { try { lock.release(); } catch (e) {} lock = null; }
+    };
+    d.addEventListener('visibilitychange', function () { if (running && d.visibilityState === 'visible') wake(true); });
     var goBtn = q('[data-gc-cg-go]'), resetBtn = q('[data-gc-cg-reset]'), cue = q('[data-gc-cg-cue]');
     var cgLess = q('[data-gc-cg-less]'), cgMore = q('[data-gc-cg-more]'), cgOut = q('[data-gc-cg-out]');
     var cgN = cgNum('data-serves', 2), pick = Math.max(0, radios.findIndex(function (r) { return r.checked; }));
@@ -452,6 +474,13 @@ layout: null
     };
     var timer = null, endAt = 0, left = 0, running = false, total = 0, cuesSaid = 0;
     var setText = function (sel, v) { var el = q(sel); if (el) el.textContent = v; };
+    var setRun = function (b, secs, on, paused) {
+      b.querySelector('span').textContent = mmss(secs);
+      b.querySelector('path').setAttribute('d', on && !paused ? PAUSE : PLAY);
+      b.classList.toggle('is-on', !!on);
+      var nm = (SH[+b.getAttribute('data-gc-cg-run')] || {}).name || '';
+      b.setAttribute('aria-label', on ? (paused ? 'Carry on the ' : 'Pause the ') + nm + ' timer, ' + mmss(secs) + ' left' : 'Start a ' + mmss(secs) + ' timer for ' + nm);
+    };
     var paint = function (frac) {   // frac: 0 = just mixed in, 1 = the shade picked
       var s = SH[pick] || {}, c = frac >= 1 ? s.hex : mix(startHex, s.hex, Math.max(0, frac));
       cup.style.setProperty('--c', c);
@@ -473,39 +502,62 @@ layout: null
       setText('[data-gc-cg-n]', cgN);
       setText('[data-gc-cg-unit]', cgN === 1 ? 'cup' : 'cups');
       cgOut.textContent = cgN; cgLess.disabled = cgN <= 1; cgMore.disabled = cgN >= cgMax;
+      runBtns.forEach(function (b, k) { if (!(k === pick && (running || left))) setRun(b, half((SH[k].minutes || 3) + simPer * Math.max(0, cgN - 2)) * 60, false); });
       if (!running && !left) { clock.textContent = mmss(t.sim * 60); clockK.textContent = 'simmer'; paint(1); }
     };
     var stop = function (keep) {
       if (timer) clearInterval(timer); timer = null; running = false;
-      if (!keep) { left = 0; cuesSaid = 0; cue.textContent = ''; goBtn.textContent = 'Mix is in: start the timer'; resetBtn.hidden = true; }
+      if (!keep) { left = 0; cuesSaid = 0; cue.textContent = ''; goBtn.textContent = 'Mix is in: start the timer'; resetBtn.hidden = true; wake(false); }
     };
     var tick = function () {
       left = Math.max(0, (endAt - Date.now()) / 1000);
       var done = total - left, frac = total ? done / total : 1, s = SH[pick] || {}, rises = s.rises || 2;
       clock.textContent = mmss(left); paint(frac);
+      if (runBtns[pick]) setRun(runBtns[pick], left, true, false);
       // a cue as each rise comes due, spread evenly through the simmer
       var due = Math.min(rises, Math.floor(frac * rises + 0.5));
-      if (left > 0 && due > cuesSaid) { cuesSaid = due; cue.textContent = 'Rise ' + due + ' of ' + rises + ': let it climb the pot, then pull it back.'; }
+      if (left > 0 && due > cuesSaid) { cuesSaid = due; cue.textContent = 'Rise ' + due + ' of ' + rises + ': let it climb the pot, then pull it back.'; chime(1, 660); }
       if (left <= 0) {
         stop(true); left = 0; clockK.textContent = 'ready';
         cue.textContent = 'Done: ' + (s.name || 'your chai') + '. Strain it now.';
         goBtn.textContent = 'Start again'; resetBtn.hidden = false;
         if (navigator.vibrate) { try { navigator.vibrate([180, 90, 180]); } catch (e) {} }
+        chime(3, 880); wake(false);
+        if (runBtns[pick]) { setRun(runBtns[pick], 0, false); runBtns[pick].querySelector('span').textContent = 'Done'; }
       }
     };
     var start = function () {
+      if (!actx) { try { var AC = window.AudioContext || window.webkitAudioContext; if (AC) actx = new AC(); } catch (e) {} }
+      if (actx && actx.state === 'suspended') { try { actx.resume(); } catch (e) {} }
       if (running) {   // pause
         stop(true); left = Math.max(0, (endAt - Date.now()) / 1000);
-        goBtn.textContent = 'Carry on'; clockK.textContent = 'paused'; return;
+        goBtn.textContent = 'Carry on'; clockK.textContent = 'paused'; wake(false);
+        if (runBtns[pick]) setRun(runBtns[pick], left, true, true);
+        return;
       }
       if (!left) { total = times().sim * 60; left = total; cuesSaid = 0; cue.textContent = 'Simmering on medium-high. Stay close: it climbs fast.'; paint(0); }
-      endAt = Date.now() + left * 1000; running = true; clockK.textContent = 'left';
+      endAt = Date.now() + left * 1000; running = true; clockK.textContent = 'left'; wake(true);
       goBtn.textContent = 'Pause'; resetBtn.hidden = false;
       timer = setInterval(tick, 250); tick();
     };
     goBtn.addEventListener('click', function () { if (!running && left === 0 && clockK.textContent === 'ready') { show(); } start(); });
+    // the big cup is a start / pause button too
+    dial.addEventListener('click', function () { goBtn.click(); });
     resetBtn.addEventListener('click', function () { stop(false); show(); });
     radios.forEach(function (r, k) { r.addEventListener('change', function () { if (r.checked) { pick = k; stop(false); show(); } }); });
+    // each shade's own button: pick it and start (or pause / carry on if it's the one running)
+    runBtns.forEach(function (b, k) {
+      b.hidden = false;
+      b.addEventListener('click', function () {
+        if (k !== pick || (!running && !left)) {
+          radios[k].checked = true; pick = k; stop(false); show();
+        }
+        start();
+        var rr = dial.getBoundingClientRect();
+        if (rr.top < 60 || rr.bottom > window.innerHeight) dial.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'center' });
+      });
+    });
+    cg.classList.add('is-live');
     var setCups = function (k) {
       k = Math.min(cgMax, Math.max(1, k));
       if (k === cgN) return;

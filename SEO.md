@@ -375,12 +375,23 @@ clips are left out so the board still fits.
 
 **The colour guide.** Under the board, "Brew it to your shade" shows four cups
 of chai from above, from Light to Extra kadak (Kadak is marked "How we pour
-it"). Picking one shows how long to bring the pot to the boil, how long to
-simmer once the mix is in and how many times to let it rise, for the same
-number of cups as the board (change it in either place). "Mix is in: start the
-timer" counts the simmer down: the cup on screen darkens from milky to the
-shade picked, it prompts each rise, and it says when to strain (phones that
-can, buzz). The board's "Pick your shade ↓" link and each premix page's "How
+it"). Each cup is drawn to look real: a white ceramic cup with depth at the
+edge, a ring of small bubbles and a window reflection
+(`uploads/cup-overlay.png`, drawn by `tools/make-cup-overlay.py`), laid over
+the shade's colour.
+
+Picking one shows how long to bring the pot to the boil, how long to simmer
+once the mix is in and how many times to let it rise, for the same number of
+cups as the board (change it in either place).
+
+**Each shade has its own timer**: the ▶ button on its card (it shows the time,
+then the countdown, and tapping it again pauses). The big cup and "Mix is in:
+start the timer" do the same for the shade picked. While it runs:
+
+- the cup on screen darkens from milky to the shade;
+- a soft chime and a prompt mark each rise, and three chimes say when to
+  strain (phones that can, buzz too);
+- the screen stays awake. The board's "Pick your shade ↓" link and each premix page's "How
 to brew it" link to it (`/how-to-make-masala-chai/#colour`).
 
 Everything it uses is in `brew.yml`: `shades` (name, colour, simmer minutes for
