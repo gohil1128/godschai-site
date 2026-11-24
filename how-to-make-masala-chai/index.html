@@ -62,7 +62,10 @@ og_image: "uploads/opt/pour-a-1280.jpg"
         </div>
         {%- endfor %}
       </div>
-      <button type="button" class="gc-bb-next" data-gc-bb-next>Next step <span aria-hidden="true">→</span></button>
+      <div class="gc-bb-foot">
+        <button type="button" class="gc-bb-next" data-gc-bb-next>Next step <span aria-hidden="true">→</span></button>
+        <a class="gc-bb-cg" href="#colour">Pick your shade <span aria-hidden="true">↓</span></a>
+      </div>
     </div>
   </div>
   <p style="font-size:clamp(1.05rem,1.5vw,1.25rem);line-height:1.6;color:var(--gc-fg2);max-width:56ch;margin:22px 0 0">Chai isn't a teabag in hot milk. It's whole spices, real tea and a pot that gets your full attention for about eight minutes. Here's exactly how we brew it in Saskatoon — and how to get the same cup at home.</p>
@@ -115,7 +118,9 @@ og_image: "uploads/opt/pour-a-1280.jpg"
   @media (min-width:860px){.gc-bb-clip{width:136px}}
   .gc-bb-panel h2{margin:0;font:400 clamp(1.3rem,5vw,1.7rem)/1.15 'Instrument Serif',serif;color:var(--gc-fg)}
   .gc-bb-panel p{margin:8px 0 0;font-size:0.95rem;line-height:1.5;color:var(--gc-fg3)}
-  .gc-bb-next{align-self:flex-start;margin:10px 0 0;padding:8px 14px;border-radius:999px;border:1px solid rgba(var(--gc-ink-rgb),0.22);background:transparent;
+  .gc-bb-foot{display:flex;align-items:center;flex-wrap:wrap;gap:6px 16px;margin:10px 0 0}
+  .gc-bb-cg{font:600 13px 'Hanken Grotesk',sans-serif;color:var(--gc-gold-t);text-decoration:underline;text-underline-offset:3px}
+  .gc-bb-next{align-self:flex-start;margin:0;padding:8px 14px;border-radius:999px;border:1px solid rgba(var(--gc-ink-rgb),0.22);background:transparent;
     color:var(--gc-fg);font:600 13px 'Hanken Grotesk',sans-serif;cursor:pointer}
   .gc-bb-next:hover{border-color:var(--gc-gold-t);color:var(--gc-gold-t)}
   [data-gc-amt]{transition:background-color .4s ease;border-radius:4px}
@@ -124,7 +129,7 @@ og_image: "uploads/opt/pour-a-1280.jpg"
   /* Short phones: trim a little so the whole board still fits. */
   @media (max-height:700px) and (max-width:560px){
     .gc-bb{gap:12px;padding:14px}.gc-bb-tiles{margin-top:10px}.gc-bb-tiles > div{padding:8px 8px 7px}
-    .gc-bb-note{margin-top:6px}.gc-bb-panels{margin-top:10px}.gc-bb-next{display:none}.gc-bb-step button{width:40px;height:40px}
+    .gc-bb-note{margin-top:6px}.gc-bb-panels{margin-top:10px}.gc-bb-foot{display:none}.gc-bb-step button{width:40px;height:40px}
     .gc-bb-clip{display:none}.gc-bb-panel:has(.gc-bb-clip){display:block}
   }
   @media (prefers-reduced-motion:reduce){.gc-bb-panel{transition:none}}
@@ -172,6 +177,9 @@ og_image: "uploads/opt/pour-a-1280.jpg"
     </div>
   </div>
 </section>
+
+<!-- COLOUR GUIDE: the shades and a simmer timer (_includes/colour-guide.html, _data/brew.yml) -->
+{% include colour-guide.html %}
 
 <!-- LONG-FORM GUIDE -->
 <section aria-labelledby="deep-h2" style="max-width:1240px;margin:0 auto;padding:clamp(48px,6vw,90px) clamp(18px,4vw,40px)">

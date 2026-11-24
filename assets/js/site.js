@@ -348,8 +348,15 @@ layout: null
           (bigFrom && n >= bigFrom ? ' Use a big pot, filled no more than halfway: it rises.' : '');
       }
     };
-    less.addEventListener('click', function () { if (n > 1) { n--; draw(true); } });
-    more.addEventListener('click', function () { if (n < maxN) { n++; draw(true); } });
+    // the colour guide (5d) shares the cup count: tell it, and take it from it
+    var tell = function () { d.dispatchEvent(new CustomEvent('gc:cups', { detail: n })); };
+    less.addEventListener('click', function () { if (n > 1) { n--; draw(true); tell(); } });
+    more.addEventListener('click', function () { if (n < maxN) { n++; draw(true); tell(); } });
+    d.addEventListener('gc:cups-set', function (e) {
+      var k = Math.min(maxN, Math.max(1, Number(e.detail) || n));
+      if (k !== n) { n = k; draw(true); }
+      tell();
+    });
 
     // the four steps: tabs and a Next button, one at a time
     var tabs = [].slice.call(calc.querySelectorAll('[role="tab"]'));
@@ -413,6 +420,109 @@ layout: null
     reserve();
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(reserve);
     window.addEventListener('resize', reserve);
+    tell();
+  }
+
+  /* ---------- 5d. Colour guide (brew guide) ----------
+     Four shades, lightest first (_data/brew.yml, shades). Picking one shows its
+     timings for the cups in the brew board (shared both ways), and a simmer
+     timer: start it when the mix goes in, and the cup on screen darkens from
+     milky to the shade you picked as it counts down, with a cue for each rise. */
+  var cg = d.querySelector('[data-gc-cg]');
+  if (cg) {
+    var SH = []; try { SH = JSON.parse(cg.getAttribute('data-shades')); } catch (e) {}
+    var cgNum = function (k, f) { var v = parseFloat(cg.getAttribute(k)); return isNaN(v) ? f : v; };
+    var cgMax = cgNum('data-max', 30), boilBase = cgNum('data-boil-base', 2.5), boilPer = cgNum('data-boil-per', 0.75), simPer = cgNum('data-simmer-per', 0.15);
+    var startHex = cg.getAttribute('data-start') || '#EBDDC8';
+    var q = function (sel) { return cg.querySelector(sel); };
+    var radios = [].slice.call(cg.querySelectorAll('input[name="gc-shade"]'));
+    var cup = q('[data-gc-cg-cup]'), ring = q('[data-gc-cg-ring]'), clock = q('[data-gc-cg-clock]'), clockK = q('[data-gc-cg-clock-k]');
+    var clockWrap = clock.parentNode;
+    var goBtn = q('[data-gc-cg-go]'), resetBtn = q('[data-gc-cg-reset]'), cue = q('[data-gc-cg-cue]');
+    var cgLess = q('[data-gc-cg-less]'), cgMore = q('[data-gc-cg-more]'), cgOut = q('[data-gc-cg-out]');
+    var cgN = cgNum('data-serves', 2), pick = Math.max(0, radios.findIndex(function (r) { return r.checked; }));
+    var half = function (x) { return Math.round(x * 2) / 2; };
+    var nice = function (x) { var w = Math.floor(x); return (w || x < 0.5 ? String(w) : '') + (x - w >= 0.5 ? '½' : ''); };
+    var mmss = function (t) { t = Math.max(0, Math.ceil(t)); var m = Math.floor(t / 60), s = t % 60; return m + ':' + (s < 10 ? '0' : '') + s; };
+    var hexRgb = function (h) { h = h.replace('#', ''); return [0, 2, 4].map(function (i) { return parseInt(h.substr(i, 2), 16); }); };
+    var mix = function (a, b, t) { var A = hexRgb(a), B = hexRgb(b); return '#' + A.map(function (v, i) { var c = Math.round(v + (B[i] - v) * t); return (c < 16 ? '0' : '') + c.toString(16); }).join(''); };
+    var times = function () {
+      var s = SH[pick] || {}, boil = half(boilBase + boilPer * cgN), sim = half((s.minutes || 3) + simPer * Math.max(0, cgN - 2));
+      return { s: s, boil: boil, sim: sim, total: Math.round(boil + sim + 0.5) };
+    };
+    var timer = null, endAt = 0, left = 0, running = false, total = 0, cuesSaid = 0;
+    var setText = function (sel, v) { var el = q(sel); if (el) el.textContent = v; };
+    var paint = function (frac) {   // frac: 0 = just mixed in, 1 = the shade picked
+      var s = SH[pick] || {}, c = frac >= 1 ? s.hex : mix(startHex, s.hex, Math.max(0, frac));
+      cup.style.setProperty('--c', c);
+      // dark digits on a light cup, light digits on a dark one
+      var rgb = hexRgb(c), lum = (0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2]) / 255;
+      clockWrap.classList.toggle('is-light', lum > 0.62);
+      ring.style.strokeDashoffset = String(100 - 100 * Math.max(0, Math.min(1, frac)));
+    };
+    var show = function () {
+      var t = times(), s = t.s;
+      setText('[data-gc-cg-name]', s.name || '');
+      var hb = q('[data-gc-cg-house]'); if (hb) hb.hidden = !s.house;
+      setText('[data-gc-cg-note]', s.note || '');
+      setText('[data-gc-cg-boil]', nice(t.boil));
+      setText('[data-gc-cg-sim]', nice(t.sim));
+      setText('[data-gc-cg-rises]', s.rises || 2);
+      setText('[data-gc-cg-times]', (s.rises || 2) === 1 ? 'time' : 'times');
+      setText('[data-gc-cg-total]', t.total);
+      setText('[data-gc-cg-n]', cgN);
+      setText('[data-gc-cg-unit]', cgN === 1 ? 'cup' : 'cups');
+      cgOut.textContent = cgN; cgLess.disabled = cgN <= 1; cgMore.disabled = cgN >= cgMax;
+      if (!running && !left) { clock.textContent = mmss(t.sim * 60); clockK.textContent = 'simmer'; paint(1); }
+    };
+    var stop = function (keep) {
+      if (timer) clearInterval(timer); timer = null; running = false;
+      if (!keep) { left = 0; cuesSaid = 0; cue.textContent = ''; goBtn.textContent = 'Mix is in: start the timer'; resetBtn.hidden = true; }
+    };
+    var tick = function () {
+      left = Math.max(0, (endAt - Date.now()) / 1000);
+      var done = total - left, frac = total ? done / total : 1, s = SH[pick] || {}, rises = s.rises || 2;
+      clock.textContent = mmss(left); paint(frac);
+      // a cue as each rise comes due, spread evenly through the simmer
+      var due = Math.min(rises, Math.floor(frac * rises + 0.5));
+      if (left > 0 && due > cuesSaid) { cuesSaid = due; cue.textContent = 'Rise ' + due + ' of ' + rises + ': let it climb the pot, then pull it back.'; }
+      if (left <= 0) {
+        stop(true); left = 0; clockK.textContent = 'ready';
+        cue.textContent = 'Done: ' + (s.name || 'your chai') + '. Strain it now.';
+        goBtn.textContent = 'Start again'; resetBtn.hidden = false;
+        if (navigator.vibrate) { try { navigator.vibrate([180, 90, 180]); } catch (e) {} }
+      }
+    };
+    var start = function () {
+      if (running) {   // pause
+        stop(true); left = Math.max(0, (endAt - Date.now()) / 1000);
+        goBtn.textContent = 'Carry on'; clockK.textContent = 'paused'; return;
+      }
+      if (!left) { total = times().sim * 60; left = total; cuesSaid = 0; cue.textContent = 'Simmering on medium-high. Stay close: it climbs fast.'; paint(0); }
+      endAt = Date.now() + left * 1000; running = true; clockK.textContent = 'left';
+      goBtn.textContent = 'Pause'; resetBtn.hidden = false;
+      timer = setInterval(tick, 250); tick();
+    };
+    goBtn.addEventListener('click', function () { if (!running && left === 0 && clockK.textContent === 'ready') { show(); } start(); });
+    resetBtn.addEventListener('click', function () { stop(false); show(); });
+    radios.forEach(function (r, k) { r.addEventListener('change', function () { if (r.checked) { pick = k; stop(false); show(); } }); });
+    var setCups = function (k) {
+      k = Math.min(cgMax, Math.max(1, k));
+      if (k === cgN) return;
+      cgN = k; stop(false); show();
+      d.dispatchEvent(new CustomEvent('gc:cups-set', { detail: cgN }));
+    };
+    cgLess.addEventListener('click', function () { setCups(cgN - 1); });
+    cgMore.addEventListener('click', function () { setCups(cgN + 1); });
+    d.addEventListener('gc:cups', function (e) {
+      var k = Number(e.detail) || cgN;
+      if (k !== cgN) { cgN = k; stop(false); show(); }
+    });
+    // start from the board's count (it may have opened with ?cups=)
+    var boardN = d.querySelector('[data-gc-brewcalc]:not([hidden]) [data-gc-bc-n]');
+    if (boardN) cgN = Math.min(cgMax, Math.max(1, parseInt(boardN.textContent, 10) || cgN));
+    q('[data-gc-cg-ctl]').hidden = false;
+    show();
   }
 
   /* ---------- 6. Mailchimp signup (JSONP) ---------- */

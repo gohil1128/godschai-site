@@ -373,6 +373,23 @@ Only the step showing plays, it pauses when the board scrolls away, and with
 reduced motion or data saver on it stays a still. On very short phones the
 clips are left out so the board still fits.
 
+**The colour guide.** Under the board, "Brew it to your shade" shows four cups
+of chai from above, from Light to Extra kadak (Kadak is marked "How we pour
+it"). Picking one shows how long to bring the pot to the boil, how long to
+simmer once the mix is in and how many times to let it rise, for the same
+number of cups as the board (change it in either place). "Mix is in: start the
+timer" counts the simmer down: the cup on screen darkens from milky to the
+shade picked, it prompts each rise, and it says when to strain (phones that
+can, buzz). The board's "Pick your shade ↓" link and each premix page's "How
+to brew it" link to it (`/how-to-make-masala-chai/#colour`).
+
+Everything it uses is in `brew.yml`: `shades` (name, colour, simmer minutes for
+2 cups, rises, a line about it) and the timing rule (`boil_base`,
+`boil_per_cup`, `simmer_per_cup`). The times are rough guides for a stove on
+medium-high, so change them freely after timing your own pot. The shade
+colours were taken from our brewing footage. Markup:
+`_includes/colour-guide.html`; behaviour: `assets/js/site.js`, 5d.
+
 The longer written guide on that page is normal text in
 `how-to-make-masala-chai/index.html` — edit it like a document.
 
