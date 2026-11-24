@@ -418,11 +418,12 @@ The headline, "Not your average chai.", is the page's main heading (its
 `h1`). "Masala chai in Saskatoon" is part of it for Google and screen readers,
 but isn't shown.
 
-**The indicator** is one small cup at the bottom of the hero. It fills with
-chai while each picture shows, and when it's full the next one comes in.
-Tapping it skips ahead. It pauses while the hero is off screen or the tab is
-hidden. With reduced motion on, nothing moves by itself: the cup only moves
-on when tapped. Each photo loads only when it's next.
+**It runs by itself and loops**: each picture shows for its time (`seconds`,
+or `video_seconds` for the loop), crossfades into the next, and after the last
+it goes back to the first, round and round. It holds still while the hero is
+off screen or the tab is hidden, and carries on when you come back. With
+reduced motion on, nothing moves on its own (it stays on the opening photo).
+Each photo loads only when it's next.
 
 **To change the pictures**, edit `_data/hero.yml`: add or remove a slide,
 change how long each shows (`seconds`, or `video_seconds` for the loop), and
