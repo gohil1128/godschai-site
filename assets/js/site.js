@@ -208,6 +208,9 @@ layout: null
               v.removeAttribute('data-src');
               v.load();
             }
+            // a hero slide that isn't showing stays paused (3b plays it on its turn)
+            var slide = v.closest && v.closest('[data-gc-slide]');
+            if (slide && !slide.classList.contains('is-on')) { try { v.pause(); } catch (err) {} return; }
             var pr = v.play(); if (pr && pr.catch) pr.catch(function () {});
           } else { try { v.pause(); } catch (err) {} }
         });
@@ -235,6 +238,56 @@ layout: null
       btn.setAttribute('aria-pressed', willUnmute ? 'true' : 'false');
       if (willUnmute) { var p2 = v.play(); if (p2 && p2.catch) p2.catch(function () {}); }
     });
+  }
+
+  /* ---------- 3b. Hero: rotating pictures, with one cup as the indicator ----------
+     The video loop first, then the photos in _data/hero.yml, crossfading. The
+     cup at the bottom fills with chai while each one shows (a CSS animation;
+     when it ends, the next picture comes in), and tapping it skips ahead.
+     Each photo loads only when it's next. It pauses while the hero is off
+     screen or the tab is hidden; with reduced motion it never moves on its
+     own. Without JavaScript the first picture just stays. */
+  var heroSlides = [].slice.call(d.querySelectorAll('[data-gc-slide]'));
+  var heroCup = d.querySelector('[data-gc-hero-cup]');
+  if (heroSlides.length > 1 && heroCup) {
+    var hn = heroSlides.length, hi = 0, heroSeen = true;
+    var cupFill = heroCup.querySelector('.gc-hero-cup-fill');
+    var loadSlide = function (k) {
+      [].forEach.call(heroSlides[k].querySelectorAll('[data-srcset]'), function (el) { el.setAttribute('srcset', el.getAttribute('data-srcset')); el.removeAttribute('data-srcset'); });
+      var im = heroSlides[k].querySelector('img[data-src]');
+      if (im) { im.src = im.getAttribute('data-src'); im.removeAttribute('data-src'); }
+    };
+    var heroVids = function (k) { return [].slice.call(heroSlides[k].querySelectorAll('video')); };
+    var heroPaused = function () { heroCup.classList.toggle('is-paused', !heroSeen || d.hidden); };
+    var runCup = function () {
+      var secs = Number(heroSlides[hi].getAttribute('data-secs')) || 6;
+      heroCup.style.setProperty('--secs', secs + 's');
+      heroCup.classList.remove('is-run'); void heroCup.offsetWidth;
+      if (!reduceMotion) heroCup.classList.add('is-run');
+      loadSlide((hi + 1) % hn);   // get the next one ready
+    };
+    var showSlide = function (k) {
+      var prev = hi; hi = (k + hn) % hn;
+      if (prev === hi) return;
+      loadSlide(hi);
+      heroSlides[prev].classList.remove('is-on');
+      heroSlides[hi].classList.add('is-on');
+      heroVids(prev).forEach(function (v) { try { v.pause(); } catch (err) {} });
+      heroVids(hi).forEach(function (v) {
+        if (v.querySelector('source') && getComputedStyle(v).display !== 'none') { try { v.currentTime = 0; } catch (err) {} var pr = v.play(); if (pr && pr.catch) pr.catch(function () {}); }
+      });
+      heroCup.setAttribute('aria-label', 'Next picture (now showing ' + (hi + 1) + ' of ' + hn + ')');
+      runCup();
+    };
+    cupFill.addEventListener('animationend', function (e) { if (e.target === cupFill) showSlide(hi + 1); });
+    heroCup.addEventListener('click', function () { showSlide(hi + 1); });
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (es) { heroSeen = es[0].isIntersecting; heroPaused(); }, { threshold: 0.3 }).observe(heroSlides[0].parentNode);
+    }
+    d.addEventListener('visibilitychange', heroPaused);
+    heroCup.hidden = false;
+    heroCup.setAttribute('aria-label', 'Next picture (now showing 1 of ' + hn + ')');
+    runCup();
   }
 
   /* ---------- 5. Hide events whose date has passed ---------- */

@@ -54,36 +54,37 @@ steps:
     accent: false
 
 # The colour guide on the brew guide page: four shades, lightest first, shown
-# as one colour bar, each with its own timer. hex is the colour of the chai,
-# taken from our own brewing footage and shifted from kitchen-bulb orange to
-# how it looks in daylight. minutes is how
-# long to simmer once the mix is in, for 2 cups on medium-high; rises is how
+# as one colour bar, each with its own timer. hex is the colour of the chai:
+# the warm caramel of chai seen through a glass, checked against our own
+# brewing footage (the page adds the sheen and depth that make it look wet).
+# minutes is how long to simmer once the mix is in, for 2 cups on
+# medium-high; rises is how
 # many times to let it climb the pot in that time. house: true marks how we
 # pour it at the cart. Change any of it here and the guide and timer follow.
 shades:
   - name: "Light"
-    hex: "#D8C1A2"
+    hex: "#D9B98E"
     minutes: 1
     rises: 1
     note: "Milky and gentle. The spice is there, the tea stays soft."
   - name: "Smooth"
-    hex: "#C3A07B"
+    hex: "#C79A68"
     minutes: 2
     rises: 2
     note: "Golden and easy-going. A good first cup for anyone new to chai."
   - name: "Kadak"
-    hex: "#A87A52"
+    hex: "#A9703F"
     minutes: 3
     rises: 3
     house: true
     note: "Deep caramel, strong and spiced: how we pour it at the cart."
   - name: "Extra kadak"
-    hex: "#86593A"
+    hex: "#7E4B27"
     minutes: 4.5
     rises: 4
     note: "Dark and bold, for chai people. Much longer and it turns bitter."
 # Where the timer's colour starts: milk with the mix just stirred in.
-shade_start: "#EADCC8"
+shade_start: "#ECDDC4"
 # Rough timings that grow with the pot (a stove on medium-high):
 # bringing the water and milk to the boil takes boil_base + boil_per_cup x cups
 # minutes, and a bigger pot takes a little longer to come back up each time it

@@ -30,7 +30,15 @@
   .gc-cg-sw{position:relative;display:flex;flex-direction:column;align-items:center;gap:10px;min-width:0;text-align:center}
   .gc-cg-sw label{display:flex;flex-direction:column;align-items:stretch;gap:10px;width:100%;cursor:pointer}
   .gc-cg-sw input{position:absolute;opacity:0;width:1px;height:1px;pointer-events:none}
-  .gc-cg-seg{display:block;height:clamp(46px,7vw,64px);background:var(--c);transition:transform .25s cubic-bezier(.2,.7,.2,1),box-shadow .25s ease}
+  .gc-cg-seg{position:relative;display:block;height:clamp(46px,7vw,64px);background:var(--c);transition:transform .25s cubic-bezier(.2,.7,.2,1),box-shadow .25s ease}
+  /* Chai, not paint: a sheen across the top, depth toward the bottom, a thin
+     bright meniscus line and a faint grain, over the shade's colour. */
+  .gc-cg-seg::after,.gc-cg-fill::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+    background:linear-gradient(180deg,rgba(255,247,232,0.42) 0,rgba(255,247,232,0.14) 20%,rgba(255,247,232,0) 46%),
+      linear-gradient(0deg,rgba(52,24,6,0.32) 0,rgba(52,24,6,0.08) 40%,rgba(52,24,6,0) 62%),
+      radial-gradient(120% 90% at 30% 0%,rgba(255,236,206,0.18),rgba(255,236,206,0) 60%),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='70'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 .95 0 0 0 0 .88 0 0 0 .07 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    box-shadow:inset 0 2px 0 rgba(255,246,228,0.5),inset 0 -3px 6px rgba(40,16,4,0.22)}
   .gc-cg-sw:first-of-type .gc-cg-seg{border-radius:16px 0 0 16px}
   .gc-cg-sw:last-of-type .gc-cg-seg{border-radius:0 16px 16px 0}
   .gc-cg-sw label:hover .gc-cg-seg{transform:scaleY(1.06)}
@@ -61,6 +69,7 @@
   .gc-cg-meter-top span{font:400 11px 'DM Mono',monospace;letter-spacing:0.14em;text-transform:uppercase;color:var(--gc-fg4)}
   .gc-cg-track{position:relative;height:18px;margin-top:10px;border-radius:999px;background:rgba(var(--gc-ink-rgb),0.08);overflow:hidden}
   .gc-cg-fill{position:absolute;inset:0 auto 0 0;width:100%;border-radius:999px;background:var(--c);transition:width .3s linear,--c .45s ease}
+  .gc-cg-track{height:22px}
   .gc-cg-tick{position:absolute;top:3px;bottom:3px;width:2px;border-radius:2px;background:rgba(255,255,255,0.75);box-shadow:0 0 0 1px rgba(var(--gc-ink-rgb),0.12)}
   .gc-cg-time{list-style:none;margin:18px 0 0;padding:0;display:grid;gap:8px}
   .gc-cg-time li{display:grid;grid-template-columns:5.2em minmax(0,1fr);gap:12px;align-items:baseline;padding:10px 0 0;border-top:1px solid rgba(var(--gc-ink-rgb),0.09);color:var(--gc-fg3);line-height:1.45}

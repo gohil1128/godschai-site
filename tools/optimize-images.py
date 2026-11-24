@@ -49,6 +49,8 @@ FULL_BLEED = {
     # Colour-graded stills from the How to make chai shoot (Nov 2026).
     "premix-macro.jpeg": (640, 1200),
     "pouch-masala-kitchen.jpeg": (640, 1200),
+    # A hero slide: straining into the mug (a graded frame of MVI_0853).
+    "hero-strain.png": (960, 1600),
 }
 
 # Logos are square with transparency, so the fallback stays PNG.

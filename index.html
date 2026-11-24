@@ -25,7 +25,9 @@ og_image: "uploads/og-image.jpg"
       and what stays up for anyone with reduced motion or data saver on; the
       video fades in over it once it is playing. Phones and other tall screens
       get a portrait cut of the same shot. Files: uploads/video/hero-pot-*.mp4,
-      stills in uploads/_src/hero-pot-*.png. See SEO.md, "The homepage hero".
+      stills in uploads/_src/hero-pot-*.png. After it, the hero fades through the
+      photos in _data/hero.yml, with a single cup at the bottom as the indicator
+      (it fills while each one shows; tap it to skip). See SEO.md, "The homepage hero".
     {%- endcomment %}
     <style>
       .gc-hero-media{position:absolute;inset:0}
@@ -37,9 +39,37 @@ og_image: "uploads/og-image.jpg"
       /* The foam is bright: a wash behind the words keeps them readable (from the left on wide screens, all over on tall ones). */
       .gc-hero-scrim{position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(var(--gc-bg-rgb),0.78) 0%,rgba(var(--gc-bg-rgb),0.5) 38%,rgba(var(--gc-bg-rgb),0.08) 70%)}
       @media (max-aspect-ratio:1/1){.gc-hero-scrim{background:rgba(var(--gc-bg-rgb),0.5)}}
+      /* rotating slides: the video first, then the photos, crossfading */
+      .gc-hero-slide{position:absolute;inset:0;opacity:0;transition:opacity 1.4s ease}
+      .gc-hero-slide.is-on{opacity:1}
+      .gc-hero-slide.is-on.is-still img{animation:gc-hero-drift var(--secs,6s) linear forwards}
+      @keyframes gc-hero-drift{from{transform:scale(1)}to{transform:scale(1.06)}}
+      /* the indicator: one cup that fills with chai while each picture shows */
+      .gc-hero-cup{position:absolute;left:50%;bottom:clamp(12px,2.4vh,24px);transform:translateX(-50%);z-index:3;width:46px;height:46px;padding:0;border:0;border-radius:999px;
+        background:transparent;color:rgba(255,248,236,0.82);cursor:pointer;opacity:0.85;transition:opacity .2s ease,transform .2s ease}
+      .gc-hero-cup:hover{opacity:1;transform:translateX(-50%) translateY(-2px)}
+      .gc-hero-cup:focus-visible{outline:2px solid var(--gc-gold-t);outline-offset:3px}
+      .gc-hero-cup svg{width:100%;height:100%;overflow:visible}
+      .gc-hero-cup-fill{fill:#C68A52;transform-box:fill-box;transform-origin:50% 100%;transform:scaleY(0.04)}
+      .gc-hero-cup.is-run .gc-hero-cup-fill{animation:gc-cup-fill var(--secs,6s) linear forwards}
+      .gc-hero-cup.is-paused .gc-hero-cup-fill,.gc-hero-cup.is-paused .gc-hero-cup-steam{animation-play-state:paused}
+      @keyframes gc-cup-fill{from{transform:scaleY(0.04)}to{transform:scaleY(1)}}
+      .gc-hero-cup-steam{opacity:0}
+      .gc-hero-cup.is-run .gc-hero-cup-steam{animation:gc-cup-steam var(--secs,6s) linear forwards}
+      @keyframes gc-cup-steam{0%,80%{opacity:0;transform:translateY(2px)}100%{opacity:0.9;transform:translateY(0)}}
+      /* the three facts under the buttons: present, but quiet */
+      .gc-hero-facts{display:flex;flex-wrap:wrap;align-items:center;gap:6px 0;margin:26px 0 0;padding:0;list-style:none;
+        font:400 10.5px/1.4 'DM Mono',monospace;letter-spacing:0.14em;text-transform:uppercase;color:rgba(var(--gc-ink-rgb),0.62)}
+      .gc-hero-facts li{display:flex;align-items:center;white-space:nowrap}
+      .gc-hero-facts li + li::before{content:"";width:3px;height:3px;border-radius:50%;background:currentColor;opacity:0.55;margin:0 12px}
+      .gc-hero-facts b{font-weight:500;color:var(--gc-gold-t);margin-right:6px}
+      @media (max-width:560px){.gc-hero-facts{gap:5px 16px;margin-top:22px;font-size:10px;letter-spacing:0.12em}.gc-hero-facts li + li::before{display:none}}
+      @media (prefers-reduced-motion:reduce){.gc-hero-slide{transition:none}.gc-hero-slide.is-on.is-still img{animation:none}.gc-hero-cup-fill{transform:scaleY(1)}}
     </style>
     <div class="gc-hero-media">
       {%- assign o = '/uploads/opt/' | relative_url %}
+      {%- assign hero = site.data.hero %}
+      <div class="gc-hero-slide is-on" data-gc-slide data-secs="{{ hero.video_seconds | default: 9 }}">
       <picture>
         <source type="image/webp" media="(max-aspect-ratio:1/1)" srcset="{{ o }}hero-pot-tall-608.webp">
         <source media="(max-aspect-ratio:1/1)" srcset="{{ o }}hero-pot-tall-608.jpg">
@@ -48,6 +78,19 @@ og_image: "uploads/og-image.jpg"
       </picture>
       <video class="gc-hero-wide" data-gc-calm data-gc-fade data-src="{{ '/uploads/video/hero-pot-wide.mp4' | relative_url }}::video/mp4" muted loop playsinline preload="none" aria-hidden="true"></video>
       <video class="gc-hero-tall" data-gc-calm data-gc-fade data-src="{{ '/uploads/video/hero-pot-tall.mp4' | relative_url }}::video/mp4" muted loop playsinline preload="none" aria-hidden="true"></video>
+      </div>
+      {%- comment -%} The photos load only when their turn is next (site.js, 3b). {%- endcomment %}
+      {%- for sl in hero.slides %}
+      {%- assign ws = sl.widths | split: "," %}
+      {%- capture wset %}{% for w in ws %}{{ o }}{{ sl.image }}-{{ w }}.webp {{ w }}w{% unless forloop.last %}, {% endunless %}{% endfor %}{% endcapture %}
+      {%- capture jset %}{% for w in ws %}{{ o }}{{ sl.image }}-{{ w }}.jpg {{ w }}w{% unless forloop.last %}, {% endunless %}{% endfor %}{% endcapture %}
+      <div class="gc-hero-slide is-still" data-gc-slide data-secs="{{ hero.seconds | default: 6 }}" style="--secs:{{ hero.seconds | default: 6 }}s">
+        <picture>
+          <source type="image/webp" data-srcset="{{ wset }}" sizes="100vw">
+          <img data-src="{{ o }}{{ sl.image }}-{{ ws | last }}.jpg" data-srcset="{{ jset }}" sizes="100vw" alt="{{ sl.alt | escape }}" decoding="async" style="object-position:{{ sl.focus | default: '50% 50%' }}">
+        </picture>
+      </div>
+      {%- endfor %}
       <div class="gc-hero-scrim"></div>
     </div>
 
@@ -70,15 +113,24 @@ og_image: "uploads/og-image.jpg"
           <a href="#hot" style="text-decoration:none;background:rgba(var(--gc-ink-rgb),0.10);color:var(--gc-fg);font-weight:600;font-size:16px;padding:15px 24px;border-radius:999px;border:1.5px solid rgba(var(--gc-ink-rgb),0.3);backdrop-filter:blur(4px)" class="gc-pill-ghost">Explore the chai</a>
           {%- endif %}
         </div>
-        <div style="display:flex;gap:24px;margin-top:32px;flex-wrap:wrap">
-          <div><div style="font-family:'Instrument Serif',serif;font-weight:400;font-size:26px;color:var(--gc-gold-t)">100%</div><div style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.1em;color:var(--gc-fg4);text-transform:uppercase;margin-top:2px">Real spices</div></div>
-          <div style="width:1px;background:rgba(var(--gc-ink-rgb),0.2)"></div>
-          <div><div style="font-family:'Instrument Serif',serif;font-weight:400;font-size:26px;color:var(--gc-gold-t)">2</div><div style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.1em;color:var(--gc-fg4);text-transform:uppercase;margin-top:2px">Kerala + Assam</div></div>
-          <div style="width:1px;background:rgba(var(--gc-ink-rgb),0.2)"></div>
-          <div><div style="font-family:'Instrument Serif',serif;font-weight:400;font-size:26px;color:var(--gc-gold-t)">YXE</div><div style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.1em;color:var(--gc-fg4);text-transform:uppercase;margin-top:2px">Made in Saskatoon</div></div>
-        </div>
+        <ul class="gc-hero-facts">
+          <li><b>100%</b>real spices</li>
+          <li><b>2</b>origins, Kerala + Assam</li>
+          <li><b>YXE</b>made in Saskatoon</li>
+        </ul>
       </div>
     </div>
+    {%- if hero.slides.size > 0 %}
+    <button type="button" class="gc-hero-cup" data-gc-hero-cup hidden aria-label="Next picture">
+      <svg viewBox="0 0 40 40" aria-hidden="true">
+        <defs><clipPath id="gc-hero-cup-in"><path d="M9.5 15h19l-2.1 15.2a4 4 0 0 1-4 3.4h-6.8a4 4 0 0 1-4-3.4z"/></clipPath></defs>
+        <g clip-path="url(#gc-hero-cup-in)"><rect class="gc-hero-cup-fill" x="6" y="15" width="26" height="20"/></g>
+        <path d="M9.5 15h19l-2.1 15.2a4 4 0 0 1-4 3.4h-6.8a4 4 0 0 1-4-3.4z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+        <path d="M28.2 18.2h1.6a3.3 3.3 0 0 1 0 6.6h-2.6" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+        <path class="gc-hero-cup-steam" d="M16 11.5c-1.4-1.6 1.4-2.6 0-4.4M22 11.5c-1.4-1.6 1.4-2.6 0-4.4" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+      </svg>
+    </button>
+    {%- endif %}
     </div>
   </section>
 
