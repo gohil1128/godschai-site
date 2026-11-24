@@ -20,14 +20,12 @@ og_image: "uploads/og-image.jpg"
   <section class="gc-dark" aria-labelledby="hero-h1" style="position:relative;height:100vh;min-height:620px;background:var(--gc-bg)">
     <div style="position:relative;height:100%;overflow:hidden;background:var(--gc-bg)">
     {%- comment -%}
-      Hero: it opens on the golden-hour photo of the bar (_data/hero.yml, lead),
-      then chai rising to a rolling boil, a 9-second silent loop from the
-      How to make chai shoot. The still (its first frame) is what loads first
-      and what stays up for anyone with reduced motion or data saver on; the
-      video fades in over it once it is playing. Phones and other tall screens
-      get a portrait cut of the same shot. Files: uploads/video/hero-pot-*.mp4,
-      stills in uploads/_src/hero-pot-*.png. After it, the hero fades through the
-      photos in _data/hero.yml, on a timer, round and round (site.js, 3b).
+      Hero: the slides in _data/hero.yml, crossfading on a timer, round and
+      round (site.js, 3b): the golden-hour photo of the bar, then photos and
+      silent video loops from the How to make chai shoot. A loop's first frame
+      loads first and stays for anyone with reduced motion or data saver on;
+      the video fades in over it once it's playing. Phones and other tall
+      screens get portrait versions.
       See SEO.md, "The homepage hero".
     {%- endcomment %}
     <style>
@@ -58,20 +56,15 @@ og_image: "uploads/og-image.jpg"
       {%- assign o = '/uploads/opt/' | relative_url %}
       {%- assign hero = site.data.hero %}
       {%- comment -%} The opening picture (hero.yml, lead), then the video loop, then the other photos. {%- endcomment %}
+      {%- comment -%}
+        The slides, in order (_data/hero.yml): `lead` first if there is one,
+        then `slides`, photos and video loops alike. Only the first loads up
+        front; site.js (3b) loads each of the others just before its turn.
+      {%- endcomment %}
       {%- if hero.lead %}{% include hero-slide.html sl=hero.lead first=true %}{% endif %}
-      <div class="gc-hero-slide{% unless hero.lead %} is-on{% endunless %}" data-gc-slide data-secs="{{ hero.video_seconds | default: 9 }}">
-      {%- if hero.lead %}{% assign vp = "data-" %}{% else %}{% assign vp = "" %}{% endif %}
-      <picture>
-        <source type="image/webp" media="(max-aspect-ratio:1/1)" {{ vp }}srcset="{{ o }}hero-pot-tall-608.webp">
-        <source media="(max-aspect-ratio:1/1)" {{ vp }}srcset="{{ o }}hero-pot-tall-608.jpg">
-        <source type="image/webp" {{ vp }}srcset="{{ o }}hero-pot-wide-640.webp 640w, {{ o }}hero-pot-wide-1280.webp 1280w" sizes="100vw">
-        <img {{ vp }}src="{{ o }}hero-pot-wide-1280.jpg" {{ vp }}srcset="{{ o }}hero-pot-wide-640.jpg 640w, {{ o }}hero-pot-wide-1280.jpg 1280w" sizes="100vw" width="1280" height="720" alt="Masala chai rising to a rolling boil in a steel pot" decoding="async"{% unless hero.lead %} fetchpriority="high"{% endunless %}>
-      </picture>
-      <video class="gc-hero-wide" data-gc-calm data-gc-fade data-src="{{ '/uploads/video/hero-pot-wide.mp4' | relative_url }}::video/mp4" muted loop playsinline preload="none" aria-hidden="true"></video>
-      <video class="gc-hero-tall" data-gc-calm data-gc-fade data-src="{{ '/uploads/video/hero-pot-tall.mp4' | relative_url }}::video/mp4" muted loop playsinline preload="none" aria-hidden="true"></video>
-      </div>
-      {%- comment -%} The photos load only when their turn is next (site.js, 3b). {%- endcomment %}
-      {%- for sl in hero.slides %}{% include hero-slide.html sl=sl first=false %}{% endfor %}
+      {%- for sl in hero.slides %}
+      {%- if forloop.first and hero.lead == nil %}{% include hero-slide.html sl=sl first=true %}{% else %}{% include hero-slide.html sl=sl first=false %}{% endif %}
+      {%- endfor %}
       <div class="gc-hero-scrim"></div>
     </div>
 

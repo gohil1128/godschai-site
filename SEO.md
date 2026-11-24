@@ -404,15 +404,17 @@ The longer written guide on that page is normal text in
 
 ## The homepage hero
 
-The hero rotates through a few pictures, crossfading:
+The hero rotates through a few pictures, crossfading, in the order listed in
+**`_data/hero.yml`**:
 
-1. it opens on the `lead` photo in **`_data/hero.yml`**: the God's Chai bar at
-   golden hour (Poise Studio, August), with a portrait version for phones;
-2. then chai rising to a rolling boil in a steel pot: a 9-second silent loop
-   from the How to make chai shoot, colour-graded and seamless where it loops;
-3. then the other photos in `hero.yml` (now: the three cups at the cart, chai
-   poured from a kettle, and chai strained into a mug), each for a few seconds
-   with a slow drift, and round again.
+1. the `lead` photo: the God's Chai bar at golden hour (Poise Studio, August),
+   with a portrait version for phones;
+2. a video loop of chai rising to a rolling boil in a steel pot (9 s);
+3. the three cups held up at the cart (6 s);
+4. a video loop of chai strained into a mug (8 s);
+
+and round again. Both loops are silent, colour-graded clips from the How to
+make chai shoot, seamless where they loop.
 
 The headline, "Not your average chai.", is the page's main heading (its
 `h1`). "Masala chai in Saskatoon" is part of it for Google and screen readers,
@@ -431,13 +433,16 @@ set `focus` to the part of the photo to keep when a phone crops it. A new
 photo needs its web sizes first: put it in `uploads/`, list it under
 `FULL_BLEED` in `tools/optimize-images.py`, and run the tool.
 
-**The loop:** wide screens play `uploads/video/hero-pot-wide.mp4` (1280×720,
-about 1.4 MB); phones and other tall screens play a portrait cut,
-`hero-pot-tall.mp4`. Only the one that fits is downloaded. Its first frame
-loads first and stays for reduced motion or data saver; the video fades in
-over it. To change the loop, replace the two MP4s (H.264, no sound, under
-2 MB), save their first frames over `uploads/_src/hero-pot-wide.png` /
-`-tall.png`, and run `python3 tools/optimize-images.py`.
+**The loops:** each video slide has a wide version for landscape screens
+(`uploads/video/<name>-wide.mp4`, 1280×720) and a portrait cut for phones
+(`<name>-tall.mp4`); only the one that fits is downloaded, just before its
+turn. Its first frame loads first and stays for reduced motion or data saver;
+the video fades in over it. In `hero.yml` a video slide is just
+`video: hero-strain` (plus `alt`, and `seconds` if it isn't 9). To add or
+change one: put the two MP4s in `uploads/video/` (H.264, no sound, ideally
+under 2 MB), save their first frames as `uploads/_src/<name>-wide.png` and
+`-tall.png`, list those under `POSTERS` in `tools/optimize-images.py`
+(640, 1280 and 608 wide), and run it.
 
 **The three facts** (100% real spices, Kerala + Assam, made in Saskatoon) sit
 under the buttons as one quiet line of small text, so they don't compete with
@@ -460,9 +465,14 @@ slightly matte, deep shadows), each with its graded original in
   `/masala-chai-spices/`.
 - `booth-crowd`: the queue at the booth on Canada Day, under the schedule on
   `/events/`.
+- `iced-chai-booth`: an iced chai held up at the booth, under the heading on
+  `/how-to-make-iced-chai/`.
+- `chai-tins`: the tins of the blend at a market, after "Why bother with ours"
+  on `/premixes/`.
 
-The four page photos use `_includes/photo-band.html`: a wide photo (21:9, 4:3
-on phones) with an optional one-line caption. To use it elsewhere:
+The page photos use `_includes/photo-band.html`: a wide photo (21:9, or the
+`ratio` you give it, e.g. "3/2"; 4:3 on phones) with an optional one-line
+caption. To use it elsewhere:
 `{% include photo-band.html base="samosa-warmer" widths="800,1600" alt="…" caption="…" %}`.
 
 ### Other photos from the shoot

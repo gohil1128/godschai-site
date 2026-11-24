@@ -1,15 +1,21 @@
-# The homepage hero's rotating pictures. It opens on `lead`, then the video
-# loop of chai rising to a boil (video_seconds), then fades through `slides`,
-# each for `seconds`, and round again, by itself. With reduced motion on, it
-# stays on the first.
+# The homepage hero's rotating pictures. It opens on `lead`, then fades
+# through `slides` in order, each for its time, and round again, by itself.
+# With reduced motion on, it stays on the first.
 #
+# A photo slide:
 #   image       — a photo in uploads/opt (the name without -<width>.jpg)
 #   widths      — the sizes that exist for it there
 #   focus       — the part to keep when a screen crops it (x% y%)
 #   tall        — optional: a portrait version for phones and other tall
-#                 screens, with its own tall_widths and tall_focus
+#                 screens, with its own tall_widths
 #   alt         — what it shows
-# Leave `lead` out and the hero opens on the video instead.
+#   seconds     — optional: how long it shows (otherwise `seconds` below)
+# A video slide (a silent loop):
+#   video       — the name before -wide.mp4 / -tall.mp4 in uploads/video
+#                 (first frames in uploads/_src/<video>-wide.png / -tall.png)
+#   alt         — what it shows
+#   seconds     — optional: how long it shows (otherwise `video_seconds`)
+# Leave `lead` out and the hero opens on the first slide instead.
 # See SEO.md, "The homepage hero".
 video_seconds: 9
 seconds: 6
@@ -21,15 +27,12 @@ lead:
   tall_widths: "640,1100"
   alt: "The God's Chai bar at golden hour, set up on the grass for an outdoor event"
 slides:
+  - video: hero-pot
+    alt: "Masala chai rising to a rolling boil in a steel pot"
   - image: hero-journey-web
     widths: "480,960,1600"
     focus: "50% 32%"
     alt: "Three God's Chai cups held up at the cart in Saskatoon"
-  - image: pour-a
-    widths: "640,1280"
-    focus: "50% 45%"
-    alt: "Masala chai poured from a glass kettle into a cup"
-  - image: hero-strain
-    widths: "960,1600"
-    focus: "47% 50%"
+  - video: hero-strain
+    seconds: 8
     alt: "Fresh chai strained into a mug, a pouch of God's Chai behind it"

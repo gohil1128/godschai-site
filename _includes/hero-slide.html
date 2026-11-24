@@ -1,15 +1,36 @@
 {%- comment -%}
-  One photo slide of the homepage hero (_data/hero.yml). Params:
-    sl    — the slide: image, widths, focus, alt, and optionally a portrait
-            version for phones and other tall screens: tall, tall_widths, tall_focus
+  One slide of the homepage hero (_data/hero.yml). Params:
+    sl    — the slide. A photo: image, widths, focus, alt, and optionally a
+            portrait version for phones and other tall screens: tall,
+            tall_widths. A video: video (the name before -wide.mp4 /
+            -tall.mp4 in uploads/video), alt, and optionally seconds.
     first — the slide the page opens on: loads straight away, at high priority
   Every other slide carries its addresses in data- attributes, and site.js (3b)
   fills them in just before its turn, so nobody downloads pictures they never see.
 {%- endcomment -%}
 {%- assign o = '/uploads/opt/' | relative_url -%}
 {%- assign sl = include.sl -%}
-{%- assign secs = site.data.hero.seconds | default: 6 -%}
 {%- assign hs_lazy = "data-" -%}{%- if include.first -%}{%- assign hs_lazy = "" -%}{%- endif -%}
+{%- if sl.video -%}
+{%- comment -%}
+  A video loop: wide for landscape screens, a portrait cut for phones. Its
+  first frame (uploads/_src/<video>-wide.png / -tall.png, sized by
+  tools/optimize-images.py) shows first, and stays for reduced motion or data
+  saver; the video fades in over it once it's playing.
+{%- endcomment -%}
+{%- assign secs = sl.seconds | default: site.data.hero.video_seconds | default: 9 -%}
+<div class="gc-hero-slide{% if include.first %} is-on{% endif %}" data-gc-slide data-secs="{{ secs }}">
+  <picture>
+    <source type="image/webp" media="(max-aspect-ratio:1/1)" {{ hs_lazy }}srcset="{{ o }}{{ sl.video }}-tall-608.webp">
+    <source media="(max-aspect-ratio:1/1)" {{ hs_lazy }}srcset="{{ o }}{{ sl.video }}-tall-608.jpg">
+    <source type="image/webp" {{ hs_lazy }}srcset="{{ o }}{{ sl.video }}-wide-640.webp 640w, {{ o }}{{ sl.video }}-wide-1280.webp 1280w" sizes="100vw">
+    <img {{ hs_lazy }}src="{{ o }}{{ sl.video }}-wide-1280.jpg" {{ hs_lazy }}srcset="{{ o }}{{ sl.video }}-wide-640.jpg 640w, {{ o }}{{ sl.video }}-wide-1280.jpg 1280w" sizes="100vw" width="1280" height="720" alt="{{ sl.alt | escape }}" decoding="async"{% if include.first %} fetchpriority="high"{% endif %}>
+  </picture>
+  <video class="gc-hero-wide" data-gc-calm data-gc-fade data-src="{{ '/uploads/video/' | relative_url }}{{ sl.video }}-wide.mp4::video/mp4" muted loop playsinline preload="none" aria-hidden="true"></video>
+  <video class="gc-hero-tall" data-gc-calm data-gc-fade data-src="{{ '/uploads/video/' | relative_url }}{{ sl.video }}-tall.mp4::video/mp4" muted loop playsinline preload="none" aria-hidden="true"></video>
+</div>
+{%- else -%}
+{%- assign secs = sl.seconds | default: site.data.hero.seconds | default: 6 -%}
 {%- assign ws = sl.widths | split: "," -%}
 {%- capture wset %}{% for w in ws %}{{ o }}{{ sl.image }}-{{ w }}.webp {{ w }}w{% unless forloop.last %}, {% endunless %}{% endfor %}{% endcapture -%}
 {%- capture jset %}{% for w in ws %}{{ o }}{{ sl.image }}-{{ w }}.jpg {{ w }}w{% unless forloop.last %}, {% endunless %}{% endfor %}{% endcapture -%}
@@ -26,3 +47,4 @@
     <img {{ hs_lazy }}src="{{ o }}{{ sl.image }}-{{ ws | last }}.jpg" {{ hs_lazy }}srcset="{{ jset }}" sizes="100vw" alt="{{ sl.alt | escape }}" decoding="async"{% if include.first %} fetchpriority="high"{% endif %} style="object-position:{{ sl.focus | default: '50% 50%' }}">
   </picture>
 </div>
+{%- endif -%}
