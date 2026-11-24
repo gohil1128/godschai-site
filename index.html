@@ -19,8 +19,36 @@ og_image: "uploads/og-image.jpg"
   <!-- ================= HERO ================= -->
   <section class="gc-dark" aria-labelledby="hero-h1" style="position:relative;height:100vh;min-height:620px;background:var(--gc-bg)">
     <div style="position:relative;height:100%;overflow:hidden;background:var(--gc-bg)">
-    <div style="position:absolute;inset:0">
-      {% include img.html base="hero-journey-web" ext="jpg" widths="480,960,1600" sizes="100vw" priority=true w="1700" h="2718" alt="Three God's Chai cups held stacked at the cart in Saskatoon" wrap="display:block;width:100%;height:100%" style="width:100%;height:100%;object-fit:cover;object-position:50% 18%;display:block;filter:saturate(1.06) sepia(0.08)" %}
+    {%- comment -%}
+      Hero: chai rising to a rolling boil, a 9-second silent loop from the
+      How to make chai shoot. The still (its first frame) is what loads first
+      and what stays up for anyone with reduced motion or data saver on; the
+      video fades in over it once it is playing. Phones and other tall screens
+      get a portrait cut of the same shot. Files: uploads/video/hero-pot-*.mp4,
+      stills in uploads/_src/hero-pot-*.png. See SEO.md, "The homepage hero".
+    {%- endcomment %}
+    <style>
+      .gc-hero-media{position:absolute;inset:0}
+      .gc-hero-media img,.gc-hero-media video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+      .gc-hero-media video{opacity:0;transition:opacity .9s ease}
+      .gc-hero-media video.is-on{opacity:1}
+      .gc-hero-tall{display:none!important}
+      @media (max-aspect-ratio:1/1){.gc-hero-wide{display:none!important}.gc-hero-tall{display:block!important}}
+      /* The foam is bright: a wash behind the words keeps them readable (from the left on wide screens, all over on tall ones). */
+      .gc-hero-scrim{position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(var(--gc-bg-rgb),0.78) 0%,rgba(var(--gc-bg-rgb),0.5) 38%,rgba(var(--gc-bg-rgb),0.08) 70%)}
+      @media (max-aspect-ratio:1/1){.gc-hero-scrim{background:rgba(var(--gc-bg-rgb),0.5)}}
+    </style>
+    <div class="gc-hero-media">
+      {%- assign o = '/uploads/opt/' | relative_url %}
+      <picture>
+        <source type="image/webp" media="(max-aspect-ratio:1/1)" srcset="{{ o }}hero-pot-tall-608.webp">
+        <source media="(max-aspect-ratio:1/1)" srcset="{{ o }}hero-pot-tall-608.jpg">
+        <source type="image/webp" srcset="{{ o }}hero-pot-wide-640.webp 640w, {{ o }}hero-pot-wide-1280.webp 1280w" sizes="100vw">
+        <img src="{{ o }}hero-pot-wide-1280.jpg" srcset="{{ o }}hero-pot-wide-640.jpg 640w, {{ o }}hero-pot-wide-1280.jpg 1280w" sizes="100vw" width="1280" height="720" alt="Masala chai rising to a rolling boil in a steel pot" fetchpriority="high" decoding="async">
+      </picture>
+      <video class="gc-hero-wide" data-gc-calm data-gc-fade data-src="{{ '/uploads/video/hero-pot-wide.mp4' | relative_url }}::video/mp4" muted loop playsinline preload="none" aria-hidden="true"></video>
+      <video class="gc-hero-tall" data-gc-calm data-gc-fade data-src="{{ '/uploads/video/hero-pot-tall.mp4' | relative_url }}::video/mp4" muted loop playsinline preload="none" aria-hidden="true"></video>
+      <div class="gc-hero-scrim"></div>
     </div>
 
     <div style="position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(var(--gc-bg-rgb),0.60) 0%,rgba(var(--gc-bg-rgb),0.10) 26%,rgba(var(--gc-bg-rgb),0) 44%,rgba(var(--gc-bg-rgb),0.45) 68%,rgba(var(--gc-bg-rgb),0.94) 100%)"></div>

@@ -60,13 +60,19 @@ og_image: "uploads/og-image.jpg"
 </section>
 {%- endunless %}
 
+<style>.gc-why{display:grid;gap:clamp(24px,4vw,56px);align-items:center}@media (min-width:900px){.gc-why{grid-template-columns:minmax(0,1.15fr) minmax(0,1fr)}}</style>
 <section aria-labelledby="why-h2" style="background:rgba(var(--gc-surf-rgb),0.6);border-top:1px solid rgba(var(--gc-ink-rgb),0.08);border-bottom:1px solid rgba(var(--gc-ink-rgb),0.08)">
   <div style="max-width:1240px;margin:0 auto;padding:clamp(46px,6vw,84px) clamp(18px,4vw,40px)">
+    <div class="gc-why">
+    <div>
     <h2 id="why-h2" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(1.9rem,4.4vw,3rem);letter-spacing:0;margin:0 0 18px;color:var(--gc-fg)">Why bother with ours</h2>
     <div class="gc-prose" style="max-width:64ch">
       <p>Most chai premixes on a Canadian shelf are sugar and powdered flavour with a bit of tea dust in it. You can taste the shortcut immediately — it's sweet, it's flat, and it doesn't smell like anything.</p>
       <p>Ours is the recipe we've been pouring at pop-ups across Saskatoon: whole cardamom, ginger, cassia, clove and pepper from Kerala, ground in small batches, with single-origin Assam that's malty enough to stand up to milk. Nothing added to make it cheaper.</p>
       <p>If you want to make it from scratch {% if site.data.shop.open %}instead{% else %}in the meantime{% endif %}, our <a href="{{ '/how-to-make-masala-chai/' | relative_url }}">guide to making masala chai</a> has the full method — ratios, spices and the mistakes to avoid.</p>
+    </div>
+    </div>
+    {% include img.html base="premix-macro" ext="jpg" widths="640,1200" sizes="(min-width:900px) 460px, 92vw" w="1200" h="800" alt="Close-up of God's Chai premix: Assam tea with flecks of ground spice" wrap="display:block" style="display:block;width:100%;height:auto;border-radius:22px" %}
     </div>
   </div>
 </section>

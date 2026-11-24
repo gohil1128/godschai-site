@@ -365,8 +365,69 @@ cup, 1 to 30); in the text, `{water}`, `{milk}` and `{mix}` mark where they go.
 `/how-to-make-masala-chai/?cups=12` opens it at 12 cups. Without JavaScript the
 board stays hidden and the page shows the plain list and four steps for 2 cups.
 
+**The step clips.** Beside each step's words in the board is a few seconds of
+that step from the How to make chai shoot: milk going in, the mix spooned in,
+the pot rising, straining into the mug. Each step names its clip as `clip:` in
+`brew.yml` (`uploads/video/<clip>.mp4`, still in `uploads/opt/<clip>-640.jpg`).
+Only the step showing plays, it pauses when the board scrolls away, and with
+reduced motion or data saver on it stays a still. On very short phones the
+clips are left out so the board still fits.
+
+**The colour guide.** Under the board, "Brew it to your shade" shows four cups
+of chai from above, from Light to Extra kadak (Kadak is marked "How we pour
+it"). Picking one shows how long to bring the pot to the boil, how long to
+simmer once the mix is in and how many times to let it rise, for the same
+number of cups as the board (change it in either place). "Mix is in: start the
+timer" counts the simmer down: the cup on screen darkens from milky to the
+shade picked, it prompts each rise, and it says when to strain (phones that
+can, buzz). The board's "Pick your shade ↓" link and each premix page's "How
+to brew it" link to it (`/how-to-make-masala-chai/#colour`).
+
+Everything it uses is in `brew.yml`: `shades` (name, colour, simmer minutes for
+2 cups, rises, a line about it) and the timing rule (`boil_base`,
+`boil_per_cup`, `simmer_per_cup`). The times are rough guides for a stove on
+medium-high, so change them freely after timing your own pot. The shade
+colours were taken from our brewing footage. Markup:
+`_includes/colour-guide.html`; behaviour: `assets/js/site.js`, 5d.
+
 The longer written guide on that page is normal text in
 `how-to-make-masala-chai/index.html` — edit it like a document.
+
+---
+
+## The homepage hero
+
+The top of the homepage is chai rising to a rolling boil in a steel pot: a
+9-second silent loop from the How to make chai shoot (Aug 2025, shared in Drive
+Nov 2026), colour-graded a little richer and seamless where it loops. Wide
+screens play `uploads/video/hero-pot-wide.mp4` (1280×720, about 1.4 MB);
+phones and other tall screens play a portrait cut, `hero-pot-tall.mp4`. Only
+the one that fits is downloaded.
+
+Its first frame (`uploads/_src/hero-pot-wide.png` / `-tall.png`) loads first
+and stays up for anyone with reduced motion or data saver on. The video fades
+in over it once it's playing. A dark wash behind the words keeps them
+readable over the bright foam.
+
+The old hero photo (the three cups at the cart, `hero-journey-web`) is still
+the picture links show when the site is shared, and the business photo
+Google gets.
+
+**To change the loop**, replace the two MP4s (H.264, no sound, under 2 MB),
+save their first frames over the two PNGs, and run
+`python3 tools/optimize-images.py`.
+
+### Other photos from the shoot
+
+- `premix-macro` (a close-up of the mix) sits beside "Why bother with ours" on
+  `/premixes/`.
+- `pouch-masala-kitchen` (Original Masala on the kitchen counter) is the photo
+  in the "Want the blend, not the shopping list?" box at the foot of the
+  guide pages (`_includes/cta-premix.html`).
+
+Both are graded originals in `uploads/_src/`. Two holiday shots of the pouches
+from the same folder (IMG_0884, IMG_0924) aren't used yet: they'd suit a
+Christmas gift note.
 
 ---
 

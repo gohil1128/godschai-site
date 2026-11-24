@@ -33,18 +33,60 @@ tools:
 
 steps:
   - label: "Boil"
+    clip: "brew-boil"
     title: "{water} water, {milk} milk"
     desc: "Bring both to a boil together in a small pot. Equal parts, no measuring cup gymnastics."
     accent: false
   - label: "Blend"
+    clip: "brew-blend"
     title: "{mix} God's Chai"
     desc: "Stir in the mix and sugar to taste. Give the bag a shake first — the spices settle."
     accent: false
   - label: "Rise"
+    clip: "brew-rise"
     title: "Let it rise 2–3 times"
     desc: "Let it climb the pot, pull it back, repeat. This is where the magic happens — don't skip it."
     accent: true
   - label: "Strain"
+    clip: "brew-strain"
     title: "Strain and enjoy"
     desc: "Pour through a fine strainer into your cup. Kadak, spiced, exactly right."
     accent: false
+
+# The colour guide on the brew guide page: four shades, lightest first, with a
+# timer for the one you pick. hex is the colour of a cup of it seen from
+# above (taken from our own brewing footage, then evened out). minutes is how
+# long to simmer once the mix is in, for 2 cups on medium-high; rises is how
+# many times to let it climb the pot in that time. house: true marks how we
+# pour it at the cart. Change any of it here and the guide and timer follow.
+shades:
+  - name: "Light"
+    hex: "#DCC2A0"
+    minutes: 1
+    rises: 1
+    note: "Milky and gentle. The spice is there, the tea stays soft."
+  - name: "Smooth"
+    hex: "#C99D6B"
+    minutes: 2
+    rises: 2
+    note: "Golden and easy-going. A good first cup for anyone new to chai."
+  - name: "Kadak"
+    hex: "#AE7442"
+    minutes: 3
+    rises: 3
+    house: true
+    note: "Deep caramel, strong and spiced: how we pour it at the cart."
+  - name: "Extra kadak"
+    hex: "#8B5A33"
+    minutes: 4.5
+    rises: 4
+    note: "Dark and bold, for chai people. Much longer and it turns bitter."
+# Where the timer's colour starts: milk with the mix just stirred in.
+shade_start: "#EBDDC8"
+# Rough timings that grow with the pot (a stove on medium-high):
+# bringing the water and milk to the boil takes boil_base + boil_per_cup x cups
+# minutes, and a bigger pot takes a little longer to come back up each time it
+# rises, so the simmer gets simmer_per_cup extra minutes for each cup over 2.
+boil_base: 2.5
+boil_per_cup: 0.75
+simmer_per_cup: 0.15
