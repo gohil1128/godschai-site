@@ -177,6 +177,7 @@ layout: null
 
   /* ---------- 4. Videos: load when visible, one audio source at a time ---------- */
   var videos = [].slice.call(d.querySelectorAll('video'));
+  var reduceMotion = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
   if (videos.length) {
     videos.forEach(function (v) { v.muted = true; v.defaultMuted = true; v.volume = 0; });
     if ('IntersectionObserver' in window) {
@@ -197,6 +198,8 @@ layout: null
               v.removeAttribute('data-src');
               v.load();
             }
+            // A decorative background (the home hero) stays on its still for people who asked for less motion.
+            if (v.hasAttribute('data-gc-hero-video') && reduceMotion) return;
             var pr = v.play(); if (pr && pr.catch) pr.catch(function () {});
           } else { try { v.pause(); } catch (err) {} }
         });

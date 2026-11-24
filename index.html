@@ -20,7 +20,12 @@ og_image: "uploads/og-image.jpg"
   <section class="gc-dark" aria-labelledby="hero-h1" style="position:relative;height:100vh;min-height:620px;background:var(--gc-bg)">
     <div style="position:relative;height:100%;overflow:hidden;background:var(--gc-bg)">
     <div style="position:absolute;inset:0">
-      {% include img.html base="hero-journey-web" ext="jpg" widths="480,960,1600" sizes="100vw" priority=true w="1700" h="2718" alt="Three God's Chai cups held stacked at the cart in Saskatoon" wrap="display:block;width:100%;height:100%" style="width:100%;height:100%;object-fit:cover;object-position:50% 18%;display:block;filter:saturate(1.06) sepia(0.08)" %}
+      <!-- Chai simmering, an 8-second silent loop. site.js plays it while it is on screen; the still (the poster)
+           shows while it loads and stays for anyone who has asked their device for less motion. -->
+      <video data-gc-hero-video muted loop playsinline preload="auto" aria-hidden="true" poster="{{ '/assets/video/chai-loop.jpg' | relative_url }}" style="display:block;width:100%;height:100%;object-fit:cover;object-position:center 55%">
+        <source src="{{ '/assets/video/chai-loop.webm' | relative_url }}" type="video/webm">
+        <source src="{{ '/assets/video/chai-loop.mp4' | relative_url }}" type="video/mp4">
+      </video>
     </div>
 
     <div style="position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(var(--gc-bg-rgb),0.60) 0%,rgba(var(--gc-bg-rgb),0.10) 26%,rgba(var(--gc-bg-rgb),0) 44%,rgba(var(--gc-bg-rgb),0.45) 68%,rgba(var(--gc-bg-rgb),0.94) 100%)"></div>
