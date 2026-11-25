@@ -556,10 +556,10 @@ pot clip with:
 
 `btn-boil-still.webp` is one frame of it, used when reduced motion is on.
 The tint and hover are in `_includes/base-styles-dark.html` (`--gc-boil`).
-The tint is a gradient of the real chai in the clip, sampled from the video
-frames: milky foam `#E2B578` at the top left, the chai itself `#CB9449` in the
-middle and the deep brew `#A46D2A` at the bottom right, with dark espresso text (`#2B170B`) so the label
-stays easy to read. Hover makes it a little lighter.
+The tint is our original coral as a gradient: light coral `#DE8460` at the top
+left, the brand coral `#B55F3E` in the middle and a deeper `#964A2C` at the
+bottom right. Labels are cream. It's slightly see-through, so the boiling chai
+shows in it. Hover deepens it to the original hover colour (`#9C4F31`).
 
 Forms (catering enquiry, bulk orders, checkout, the email sign-ups, the Chai
 Club card) all use the same minimal fields: a small mono label, the field as a
