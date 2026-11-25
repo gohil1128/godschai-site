@@ -21,17 +21,17 @@ tools:
 steps:
   - label: "Concentrate"
     title: "Brew it double-strength"
-    desc: "Half the water, everything else the same. It should taste slightly too strong hot — that is the point."
+    desc: "Half the water, everything else the same. It should taste a little too strong hot."
     accent: false
   - label: "Sweeten"
     title: "Sugar goes in hot"
-    desc: "Sweeten and taste while it is still in the pot. Sugar will not dissolve once it is cold."
+    desc: "Sweeten while it is still in the pot. Sugar will not dissolve cold."
     accent: false
   - label: "Chill"
     title: "Strain, then cool it right down"
-    desc: "Strain the spices out first or they keep extracting. Two to three hours in the fridge, or fifteen minutes in a sink of cold water."
+    desc: "Strain, then chill: two to three hours in the fridge, or fifteen minutes in a sink of cold water."
     accent: true
   - label: "Pour"
     title: "Over chai ice, not water ice"
-    desc: "Freeze a batch of chai in a tray and use those cubes. They melt into the drink instead of watering it down."
+    desc: "Freeze a tray of chai and use those cubes. They melt into chai, not water."
     accent: false
