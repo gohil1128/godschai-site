@@ -50,7 +50,7 @@ steps:
   - label: "Strain"
     clip: "brew-strain"
     title: "Strain and enjoy"
-    desc: "Pour through a fine strainer into your cup. Kadak, spiced, exactly right."
+    desc: "Pour through a fine strainer into your cup. Strong, spiced, exactly right."
     accent: false
 
 # The shades in the brew guide (/how-to-make-masala-chai/), lightest first,
@@ -73,13 +73,13 @@ shades:
     minutes: 2
     rises: 2
     note: "Golden and easy-going. A good first cup for anyone new to chai."
-  - name: "Kadak"
+  - name: "Bold"
     hex: "#A9703F"
     minutes: 3
     rises: 3
     house: true
     note: "Deep caramel, strong and spiced: how we pour it at the cart."
-  - name: "Extra kadak"
+  - name: "Extra bold"
     hex: "#7E4B27"
     minutes: 4.5
     rises: 4
