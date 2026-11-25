@@ -764,8 +764,8 @@ and nothing takes focus:
   and an email box with a **Join** button.
 - **Closing it:** the × (or Escape) hides it for 30 days and leaves a small
   **"10% off" dot** in the same corner, on every page, that opens it again. The
-  dot is frosted glass so it doesn't compete with the photos: smoky with cream
-  text over the homepage hero, pale with brown text on the light pages. It
+  dot is frosted glass so it doesn't compete with the photos: bright clear
+  glass with white text over the homepage hero, pale with brown text on the light pages. It
   goes away for good once they join. Styles: `_includes/popup.html`.
 - **After joining:** it says *"You're in the Chai Club! ✶ Check your inbox…"*,
   then tidies itself away. Members never see it again.
