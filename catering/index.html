@@ -63,17 +63,24 @@ og_image: "uploads/og-image.jpg"
 {%- assign to = site.data.shop.email -%}
 <style>
   .gc-eq{max-width:1240px;margin:0 auto;padding:clamp(46px,6vw,84px) clamp(18px,4vw,40px) 0;scroll-margin-top:84px}
-  .gc-eq form{max-width:760px;padding:clamp(20px,3vw,30px);border-radius:22px;border:1px solid rgba(var(--gc-gold-rgb),0.16);background:rgba(var(--gc-surf-rgb),0.8)}
-  .gc-eq-2{display:grid;gap:0 12px}
-  @media (min-width:620px){.gc-eq-2{grid-template-columns:1fr 1fr}}
-  .gc-eq label{display:block;margin:0 0 14px}
-  .gc-eq label > span{display:block;font-size:13.5px;color:var(--gc-fg3);margin:0 0 6px}
-  .gc-eq label > span small{color:var(--gc-muted);font-size:12.5px}
-  .gc-eq input,.gc-eq select,.gc-eq textarea{display:block;width:100%;box-sizing:border-box;margin:0;padding:13px 14px;border-radius:12px;
-    border:1px solid rgba(var(--gc-ink-rgb),0.18);background:rgba(var(--gc-ink-rgb),0.05);color:var(--gc-fg);font:400 15px 'Hanken Grotesk',sans-serif}
-  .gc-eq textarea{min-height:92px;resize:vertical;line-height:1.45}
-  .gc-eq input:focus,.gc-eq select:focus,.gc-eq textarea:focus{outline:2px solid var(--gc-gold-t);outline-offset:1px;border-color:var(--gc-gold-t)}
-  .gc-eq [aria-invalid="true"]{border-color:var(--gc-coral-t)}
+  .gc-eq form{max-width:640px}
+  .gc-eq-2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0 18px}
+  /* Minimal fields: a hairline underline on the page, no boxes. Text stays 16px so phones don't zoom in. */
+  .gc-eq label{display:block;margin:0 0 16px;min-width:0}
+  .gc-eq label > span{display:block;font:400 10.5px/1.4 'DM Mono',monospace;letter-spacing:0.12em;text-transform:uppercase;color:var(--gc-muted);margin:0}
+  .gc-eq label > span small{font:400 11.5px 'Hanken Grotesk',sans-serif;letter-spacing:0;text-transform:none;color:var(--gc-muted);opacity:0.8}
+  .gc-eq label input,.gc-eq label select,.gc-eq label textarea{display:block;width:100%;min-width:0;max-width:100%;box-sizing:border-box;margin:0;min-height:40px;padding:7px 0 8px;
+    border:0;border-bottom:1px solid rgba(var(--gc-ink-rgb),0.2);border-radius:0;background:transparent;color:var(--gc-fg);
+    font:400 16px 'Hanken Grotesk',sans-serif;-webkit-appearance:none;appearance:none;transition:border-color .2s ease,box-shadow .2s ease}
+  .gc-eq label input[type="date"],.gc-eq label input[type="time"]{text-align:left}
+  .gc-eq label input::-webkit-date-and-time-value{text-align:left}
+  .gc-eq label select{padding-right:20px;background-image:linear-gradient(45deg,transparent 50%,var(--gc-muted) 50%),linear-gradient(135deg,var(--gc-muted) 50%,transparent 50%);
+    background-position:calc(100% - 8px) 55%,calc(100% - 3px) 55%;background-size:5px 5px;background-repeat:no-repeat;text-overflow:ellipsis}
+  .gc-eq label select option{background:var(--gc-bg2);color:var(--gc-fg)}
+  .gc-eq label textarea{min-height:44px;resize:vertical;line-height:1.45}
+  .gc-eq label input::placeholder,.gc-eq label textarea::placeholder{color:var(--gc-muted);opacity:0.65}
+  .gc-eq label input:focus,.gc-eq label select:focus,.gc-eq label textarea:focus{outline:none;border-bottom-color:var(--gc-coral-t);box-shadow:0 1px 0 var(--gc-coral-t)}
+  .gc-eq label input[aria-invalid="true"],.gc-eq label select[aria-invalid="true"],.gc-eq label textarea[aria-invalid="true"]{border-bottom-color:var(--gc-coral-t)}
   .gc-eq-err{min-height:1.2em;margin:4px 0 12px;font-size:14px;color:var(--gc-coral-t)}
   .gc-eq-done{margin:16px 0 0;font-size:14.5px;line-height:1.55;color:var(--gc-fg3)}
   .gc-eq-done[hidden]{display:none}
@@ -103,7 +110,7 @@ og_image: "uploads/og-image.jpg"
     <label><span>Email <small>(we'll reply here)</small></span><input type="email" name="email" autocomplete="email" required></label>
     <label><span>Anything else? <small>(optional)</small></span><textarea name="notes" placeholder="Start and finish times, drinks you'd like, samosas…"></textarea></label>
     <p class="gc-eq-err" data-gc-enquiry-err role="alert"></p>
-    <button type="submit" class="gc-pill" style="border:0;cursor:pointer;background:#B55F3E;color:#FFFFFF;font:700 16px 'Hanken Grotesk',sans-serif;padding:15px 26px;border-radius:999px">Send my enquiry</button>
+    <button type="submit" class="gc-pill" style="border:0;cursor:pointer;background:#B55F3E;color:#FFFFFF;font:600 15px 'Hanken Grotesk',sans-serif;padding:12px 22px;border-radius:999px">Send my enquiry</button>
     <p class="gc-eq-done" data-gc-enquiry-done hidden tabindex="-1">Your email app should have opened with everything filled in: just press send. Nothing opened? Write to {% if to != "" %}<a href="mailto:{{ to }}" data-gc-enquiry-mailto>{{ to }}</a> or {% endif %}message us on <a href="{{ site.social.instagram }}" target="_blank" rel="noopener">Instagram</a>.</p>
   </form>
 </section>

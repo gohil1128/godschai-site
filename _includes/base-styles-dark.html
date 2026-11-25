@@ -181,12 +181,21 @@
 
   /* Email fields. Their only feedback was the focus ring the browser draws
      around them; the field itself never acknowledged the cursor. */
+  /* The email sign-up field (_includes/signup-form.html): a hairline underline, no box. */
+  .gc-su-in{box-sizing:border-box;margin:0;padding:8px 0 9px;min-height:40px;border:0;border-bottom:1px solid rgba(var(--gc-ink-rgb),0.24);border-radius:0;
+    background:transparent;color:var(--gc-fg);font:400 16px 'Hanken Grotesk',sans-serif;-webkit-appearance:none;appearance:none}
+  .gc-su-in::placeholder{color:var(--gc-muted);opacity:0.7}
   input[type="email"]{transition:border-color .22s ease,background-color .22s ease}
   input[type="email"]:hover{border-color:rgba(var(--gc-ink-rgb),0.34)!important}
   input[type="email"]:focus{border-color:rgba(var(--gc-gold-rgb),0.55)!important;background:rgba(var(--gc-ink-rgb),0.09)!important}
   /* Both email fields carry outline:none inline, which also deleted the focus
      ring for anyone moving through the form on a keyboard. Put it back. */
   input[type="email"]:focus-visible{outline:2px solid var(--gc-gold-t)!important;outline-offset:2px}
+  /* ...except the minimal underline fields, which show focus as a coral underline. */
+  input.gc-su-in[type="email"]:hover,.gc-eq label input[type="email"]:hover,.gc-bk-f input[type="email"]:hover,.gc-co-f input[type="email"]:hover{border-color:rgba(var(--gc-ink-rgb),0.4)!important}
+  input.gc-su-in[type="email"]:focus,.gc-eq label input[type="email"]:focus,.gc-bk-f input[type="email"]:focus,.gc-co-f input[type="email"]:focus{
+    background:transparent!important;border-color:var(--gc-coral-t)!important;box-shadow:0 1px 0 var(--gc-coral-t);outline:none}
+  input.gc-su-in[type="email"]:focus-visible,.gc-eq label input[type="email"]:focus-visible,.gc-bk-f input[type="email"]:focus-visible,.gc-co-f input[type="email"]:focus-visible{outline:none!important}
 
   /* The ticker runs on a loop; stop it while someone is reading it. */
   /* !important: the track sets animation as an inline shorthand, which carries
