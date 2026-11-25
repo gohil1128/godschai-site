@@ -931,7 +931,9 @@ Instagram button on a phone.
 ## Change site-wide details
 
 **`_config.yml`** holds the things that appear everywhere: the Instagram, TikTok
-and Facebook links (`social`; leave `facebook` empty to hide its icon), the Google Analytics ID, the Mailchimp list, and the season label shown on
+and Facebook links (`social`; leave `facebook` empty to hide its icon),
+`long_copy` (false hides the longer write-ups, "Why bother with ours" on
+/premixes/ and "How it works" on /catering/; true brings them back), the Google Analytics ID, the Mailchimp list, and the season label shown on
 the menu (`season: "Summer 2026"`).
 
 ---
