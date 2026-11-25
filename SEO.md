@@ -503,6 +503,13 @@ visitors see what they can buy before they scroll. The pouch price comes from
 `_data/shop.yml` and the notice period from `_data/bulk.yml`; the rest of the
 wording is in the include. The hero's second button goes to Catering.
 
+Each card has a small square photo from our own shoots: `offer-premix` (the
+real Original Masala pouch on a kitchen counter), `offer-catering` (the team
+behind the God's Chai bar) and `offer-bulk` (samosas in the warmer). They're
+cropped square and graded to match the site; the graded originals are in
+`uploads/_src/offer-*.jpg`, sized by `tools/optimize-images.py`. To swap one,
+replace that file with another square photo and run the script.
+
 The menu bar runs in the same order: Shop, Catering, Menu, Brew Guide, Events
 (`_includes/nav-dark.html`). On phones "Brew Guide" shortens to "Brew" so all
 five fit on one line.
