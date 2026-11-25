@@ -62,13 +62,6 @@ og_image: "uploads/og-image.jpg"
       .gc-hero-slide.is-on{opacity:1}
       .gc-hero-slide.is-on.is-still img{animation:gc-hero-drift var(--secs,6s) linear forwards}
       @keyframes gc-hero-drift{from{transform:scale(1)}to{transform:scale(1.06)}}
-      /* the three facts under the buttons: present, but quiet */
-      .gc-hero-facts{display:flex;flex-wrap:wrap;align-items:center;gap:6px 0;margin:26px 0 0;padding:0;list-style:none;
-        font:400 10.5px/1.4 'DM Mono',monospace;letter-spacing:0.14em;text-transform:uppercase;color:rgba(var(--gc-ink-rgb),0.62)}
-      .gc-hero-facts li{display:flex;align-items:center;white-space:nowrap}
-      .gc-hero-facts li + li::before{content:"";width:3px;height:3px;border-radius:50%;background:currentColor;opacity:0.55;margin:0 12px}
-      .gc-hero-facts b{font-weight:500;color:var(--gc-gold-t);margin-right:6px}
-      @media (max-width:560px){.gc-hero-facts{gap:5px 16px;margin-top:22px;font-size:10px;letter-spacing:0.12em}.gc-hero-facts li + li::before{display:none}}
       @media (prefers-reduced-motion:reduce){.gc-hero-slide{transition:none}.gc-hero-slide.is-on.is-still img{animation:none}}
     </style>
     <div class="gc-hero-media">
@@ -94,7 +87,7 @@ og_image: "uploads/og-image.jpg"
       <div data-gc-hero-in style="opacity:0;transform:translateY(28px);transition:opacity 1.1s cubic-bezier(.2,.7,.2,1),transform 1.1s cubic-bezier(.2,.7,.2,1);max-width:800px">
         {%- comment -%} The page's main heading. "Masala chai in Saskatoon" stays in it for Google and screen readers, but isn't shown. {%- endcomment %}
         <h1 id="hero-h1" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(3rem,9vw,7rem);line-height:0.92;letter-spacing:0;margin:0;text-shadow:0 6px 40px rgba(0,0,0,0.5)">Not your<br><span style="color:var(--gc-coral-t);font-style:italic">average</span> chai.<span class="gc-vh"> Masala chai in Saskatoon.</span></h1>
-        <p style="font-size:clamp(1.05rem,1.5vw,1.3rem);line-height:1.5;color:var(--gc-fg2);max-width:36ch;margin:20px 0 0;text-shadow:0 2px 16px rgba(0,0,0,0.6)">Whole spices from Kerala. Single-origin Assam tea. Poured fresh, the real way.</p>
+        <p style="font-size:clamp(1.05rem,1.5vw,1.3rem);line-height:1.5;color:var(--gc-fg2);max-width:36ch;margin:20px 0 0;text-shadow:0 2px 16px rgba(0,0,0,0.6)">Kerala spice &times; Assam tea.<br>Brewed loud in YXE. <span style="color:var(--gc-coral-t)" aria-hidden="true">✶</span></p>
         <div style="display:flex;gap:13px;flex-wrap:wrap;margin-top:30px">
           {%- if site.data.shop.open %}
           <a href="{{ '/premixes/' | relative_url }}" class="gc-hb gc-hb-main">Shop premixes →</a>
@@ -104,11 +97,6 @@ og_image: "uploads/og-image.jpg"
           <a href="{{ '/catering/' | relative_url }}" class="gc-hb">Book catering</a>
           {%- endif %}
         </div>
-        <ul class="gc-hero-facts">
-          <li><b>100%</b>real spices</li>
-          <li><b>2</b>origins, Kerala + Assam</li>
-          <li><b>YXE</b>made in Saskatoon</li>
-        </ul>
       </div>
     </div>
     </div>

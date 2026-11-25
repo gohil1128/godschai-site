@@ -453,9 +453,11 @@ under 2 MB), save their first frames as `uploads/_src/<name>-wide.png` and
 `-tall.png`, list those under `POSTERS` in `tools/optimize-images.py`
 (640, 1280 and 608 wide), and run it.
 
-**The three facts** (100% real spices, Kerala + Assam, made in Saskatoon) sit
-under the buttons as one quiet line of small text, so they don't compete with
-the picture. A dark wash behind the words keeps them readable.
+**The words**: the headline, one line under it ("Kerala spice × Assam tea.
+Brewed loud in YXE."), and the two buttons, which are bright frosted glass so
+the photo shows through. A dark wash behind the words keeps them readable.
+(The small "100% real spices · 2 origins · YXE" row was dropped once the line
+above it said the same.)
 
 The cups-at-the-cart photo is also the picture links show when the site is
 shared, and the business photo Google gets.
