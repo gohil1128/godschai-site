@@ -801,6 +801,9 @@ Small warm touches, in the spirit of light through steam:
 - a faint glow on the italic accent word in headings;
 - a warm bloom under cards and buttons on hover;
 - a slow breath of golden light over the photo bands.
+- a warm halo with faint rays behind every logo (header, footer and the menu's
+  logo tiles), breathing slowly. Add `class="gc-glow"` to anything else that
+  should glow.
 
 They're all in `_includes/base-styles-dark.html` under "Light". The colours are
 `--gc-glow-rgb` and `--gc-ray-rgb`. Everything stops when the visitor has

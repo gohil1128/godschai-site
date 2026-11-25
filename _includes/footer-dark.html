@@ -1,7 +1,7 @@
 <footer style="background:var(--gc-bg2);color:var(--gc-fg)">
   <div style="max-width:1240px;margin:0 auto;padding:clamp(36px,5vw,64px) clamp(18px,4vw,40px) 28px;display:flex;gap:clamp(26px,4vw,64px);flex-wrap:wrap;justify-content:space-between">
     <div style="flex:1 1 300px;min-width:240px;max-width:520px">
-      {% include img.html base="artboard" ext="png" widths="128,256" sizes="64px" w="256" h="256" alt="" wrap="display:block" style="height:64px;width:auto;display:block" %}
+      <span class="gc-glow" style="display:inline-block">{% include img.html base="artboard" ext="png" widths="128,256" sizes="64px" w="256" h="256" alt="" wrap="display:block" style="height:64px;width:auto;display:block" %}</span>
       <p style="color:var(--gc-muted);line-height:1.5;max-width:34ch;margin:12px 0 0">Not your average chai. Real spice, real tea, zero syrups. Poured fresh in Saskatoon.</p>
       <nav aria-label="Footer" class="gc-footer-links gc-fl">
         <a href="{{ '/premixes/' | relative_url }}">Shop</a>
