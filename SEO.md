@@ -509,7 +509,8 @@ It's kept short: only what a visitor needs to decide, in this order.
 3. **The three ways to buy**: premixes, catering and bulk orders (below).
 4. **Premixes**: both pouches with Add buttons, the price, delivery, and a
    link to the brew guide.
-5. **The menu**: every drink and the samosa in one grid of photo cards, from
+5. **The menu**: every drink and the samosa as rounded photos with their
+   name underneath, all on one deep, warm gradient (no separate cards), from
    `_data/menu.yml` (`_includes/menu-card.html`). Four across on desktop, two
    on phones. The Menu link lands here (`#menu`).
 6. **Events**: the next pop-ups (`_data/events.yml`).
