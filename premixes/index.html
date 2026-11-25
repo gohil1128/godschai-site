@@ -61,6 +61,8 @@ og_image: "uploads/og-image.jpg"
 {%- endunless %}
 
 <style>.gc-why{display:grid;gap:clamp(24px,4vw,56px);align-items:center}@media (min-width:900px){.gc-why{grid-template-columns:minmax(0,1.15fr) minmax(0,1fr)}}</style>
+{%- comment -%} "Why bother with ours". Hidden for now: set long_copy: true in _config.yml to bring it back. {%- endcomment -%}
+{%- if site.long_copy %}
 <section aria-labelledby="why-h2" style="background:rgba(var(--gc-surf-rgb),0.6);border-top:1px solid rgba(var(--gc-ink-rgb),0.08);border-bottom:1px solid rgba(var(--gc-ink-rgb),0.08)">
   <div style="max-width:1240px;margin:0 auto;padding:clamp(46px,6vw,84px) clamp(18px,4vw,40px)">
     <div class="gc-why">
@@ -76,6 +78,7 @@ og_image: "uploads/og-image.jpg"
     </div>
   </div>
 </section>
+{%- endif %}
 
 <section aria-labelledby="list-h2" style="max-width:1240px;margin:0 auto;padding:clamp(46px,6vw,84px) clamp(18px,4vw,40px)">
   {%- if site.data.shop.open %}

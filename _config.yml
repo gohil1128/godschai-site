@@ -6,6 +6,10 @@ baseurl: ""
 lang: "en-CA"
 locale: "en_CA"
 
+# Longer write-up sections ("Why bother with ours" on /premixes/, "How it
+# works" on /catering/) are hidden while the site is kept short. true shows them.
+long_copy: false
+
 social:
   instagram: "https://www.instagram.com/godschai"
   tiktok: "https://www.tiktok.com/@godschaii"
