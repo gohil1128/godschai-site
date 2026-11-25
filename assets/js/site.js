@@ -344,9 +344,9 @@ layout: null
   }
 
   /* ---------- 5c. Brew guide (/how-to-make-masala-chai/) ----------
-     One card: the cups (the water, milk and mix follow), the shade (the
-     simmer time and number of rises follow) and the four steps, with a simmer
-     timer on the third. The recipe and timings are _data/brew.yml. The page is
+     The cups (the water, milk and mix follow), the shade tiles (each shows
+     its simmer time for that many cups; the one picked sets the rises and the
+     timer) and the four step cards, with a simmer timer on the third. The recipe and timings are _data/brew.yml. The page is
      written out for 2 cups and the house shade, so without JavaScript it still
      reads right; this makes the controls work. ?cups=6 opens it at 6. The
      timer fills a bar from milky to the shade picked, prompts each rise with a
@@ -415,6 +415,10 @@ layout: null
 
     var draw = function (flash) {
       set('[data-gc-g-n]', n);
+      set('[data-gc-g-cupword]', n === 1 ? 'cup' : 'cups');
+      [].forEach.call(guide.querySelectorAll('[data-gc-g-swmin]'), function (el, k) {
+        el.textContent = nice(half(((SH[k] || {}).minutes || 3) + simPer * Math.max(0, n - 2)));
+      });
       less.disabled = n <= 1; more.disabled = n >= maxN;
       [].forEach.call(guide.querySelectorAll('[data-gc-g-amt]'), function (el) {
         var a = A[el.getAttribute('data-gc-g-amt')]; if (!a) return;

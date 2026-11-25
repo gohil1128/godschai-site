@@ -87,6 +87,11 @@ POSTERS = {
     "hero-pot-tall.png": (608,),
     "hero-strain-wide.png": (640, 1280),
     "hero-strain-tall.png": (608,),
+    # The brew guide's four step videos: each still is the clip's first frame.
+    "brew-boil.png": (320, 640),
+    "brew-blend.png": (320, 640),
+    "brew-rise.png": (320, 640),
+    "brew-strain.png": (320, 640),
 }
 
 OG_SOURCE = "hero-journey-web.jpeg"
