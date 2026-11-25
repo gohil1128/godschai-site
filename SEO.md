@@ -359,8 +359,6 @@ Another item (chai concentrate by the litre, say) is just one more entry under
 2. **"I'm making − 2 + cups"**: four tiles follow, water, whole milk, God's
    Chai (heaped tablespoons and grams, with the pouch photo) and sugar (to
    taste). From 5 cups a line says to use a big pot. `?cups=6` opens it at 6.
-3. **You'll need** (pot, tablespoon, fine strainer, cup) and **which milk**
-   (whole, or barista oat). Plain text and line icons in the page.
 4. **Pick your shade**: four chai-coloured tiles, Light, Smooth, Bold
    (marked "How we pour it") and Extra bold, each with its simmer time for
    the cups chosen. The one picked sets the rises and the timer in step 3.
@@ -377,8 +375,7 @@ Another item (chai concentrate by the litre, say) is just one more entry under
 6. **How did your cup turn out?** Four chips (just right, too weak, too
    strong, boiled over), each showing a tip. CSS only, so it works without
    JavaScript.
-7. **Questions**: mix per cup, what's in the blends (from
-   `_data/premixes.yml`), sweetened?, iced? Also published as `FAQPage`
+7. **Questions**: mix per cup, sweetened?, iced? Also published as `FAQPage`
    structured data; change the answers in the page and both follow.
 8. **The premix**: pouch photo, price (while `shop.open`), pouch size and
    cups, and a link to `/premixes/`.
@@ -408,6 +405,11 @@ recipe-style result.
 
 The longer written guide (why the double boil, the spices, common mistakes)
 is in the git history if it's ever wanted back.
+
+The three guide articles (iced chai, the spices, chai latte vs masala chai)
+are kept short on purpose: a line of intro, the core (steps, spice cards or
+the two-card answer), one short list of tips, and the premix. The longer
+versions are in the git history (before December 2026).
 
 ---
 

@@ -118,10 +118,11 @@ og_image: "uploads/opt/pour-a-1280.jpg"
   .gc-bg-steps>li.is-accent{border-color:rgba(var(--gc-gold-rgb),0.4)}
   .gc-bg-clip{position:relative;aspect-ratio:4/3;background:#2A1A10}
   .gc-bg-clip video{display:block;width:100%;height:100%;object-fit:cover}
-  .gc-bg-no{position:absolute;left:10px;top:10px;display:grid;place-items:center;width:28px;height:28px;border-radius:999px;background:#F2EBE1;color:#3C2116;
-    font:500 12px 'DM Mono',monospace;box-shadow:0 2px 6px rgba(0,0,0,0.2)}
-  .gc-bg-tag{position:absolute;right:10px;top:10px;padding:4px 9px;border-radius:999px;background:rgba(16,10,5,0.6);color:#F2EBE1;
-    font:400 10.5px 'DM Mono',monospace;letter-spacing:0.04em;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+  /* The step number and time sit quietly on the video: small text, no badge. */
+  .gc-bg-no{position:absolute;left:11px;top:9px;color:rgba(255,250,242,0.82);font:500 11px/1 'DM Mono',monospace;letter-spacing:0.08em;
+    text-shadow:0 1px 6px rgba(0,0,0,0.6);pointer-events:none}
+  .gc-bg-tag{position:absolute;right:11px;top:9px;color:rgba(255,250,242,0.82);font:400 10.5px/1 'DM Mono',monospace;letter-spacing:0.06em;
+    text-shadow:0 1px 6px rgba(0,0,0,0.6);pointer-events:none}
   .gc-bg-body{display:flex;flex-direction:column;flex:1 1 auto;padding:14px 16px 16px}
   .gc-bg-body h3{margin:0;font:400 1.25rem/1.2 'Instrument Serif',serif;color:var(--gc-fg)}
   .gc-bg-body p{margin:6px 0 0;font-size:13.5px;line-height:1.5;color:var(--gc-fg4)}
@@ -225,8 +226,8 @@ og_image: "uploads/opt/pour-a-1280.jpg"
     .gc-bg-steps>li{display:grid;grid-template-columns:92px minmax(0,1fr);border-radius:16px}
     .gc-bg-clip{aspect-ratio:auto;min-height:92px}
     .gc-bg-clip video{position:absolute;inset:0}
-    .gc-bg-no{left:6px;top:6px;width:22px;height:22px;font-size:10.5px}
-    .gc-bg-tag{top:auto;right:auto;left:6px;bottom:6px;padding:2px 7px;font-size:9.5px}
+    .gc-bg-no{left:8px;top:7px;font-size:10px}
+    .gc-bg-tag{top:auto;right:auto;left:8px;bottom:7px;font-size:9.5px}
     .gc-bg-body{padding:9px 12px 10px}
     .gc-bg-body h3{font-size:1.05rem}
     .gc-bg-body p{margin-top:3px;font-size:12.5px;line-height:1.4}
@@ -259,7 +260,7 @@ og_image: "uploads/opt/pour-a-1280.jpg"
   <section class="gc-bg-top" aria-labelledby="page-h1">
     <div>
       <h1 id="page-h1">How to make <em>masala chai</em> at home</h1>
-      <p>The way we brew it at the cart, in one pot. Pick your cups and your shade; the amounts and the timer follow.</p>
+      <p>Our cart recipe, in one pot. Pick your cups and shade; the amounts and timer follow.</p>
       <span class="gc-bg-k">About <span data-gc-g-total>{{ tot0 }}</span> minutes · 4 steps</span>
     </div>
     <figure class="gc-bg-film">
@@ -285,7 +286,7 @@ og_image: "uploads/opt/pour-a-1280.jpg"
         </div>
         <div>
           <span class="gc-bg-ic" aria-hidden="true"><svg viewBox="0 0 48 48"><path d="M17 6h14v5l4 6v23a2 2 0 0 1-2 2H15a2 2 0 0 1-2-2V17l4-6z"/><path d="M17 11h14M13 17h22"/><path d="M13 26c4-2 7 2 11 0s7-2 11 0" opacity=".5"/></svg></span>
-          <dt class="gc-bg-k">Whole milk</dt><dd data-gc-g-amt="milk"><b>{{ brew.amounts.milk.text }}</b><small>{{ mlk0 }} ml</small></dd>
+          <dt class="gc-bg-k">Whole or oat milk</dt><dd data-gc-g-amt="milk"><b>{{ brew.amounts.milk.text }}</b><small>{{ mlk0 }} ml</small></dd>
         </div>
         <div>
           <span class="gc-bg-ic" aria-hidden="true"><picture><source type="image/webp" srcset="{{ o }}pouch-masala-real-250.webp"><img src="{{ o }}pouch-masala-real-250.jpg" width="250" height="438" alt="" loading="lazy" decoding="async"></picture></span>
@@ -299,31 +300,11 @@ og_image: "uploads/opt/pour-a-1280.jpg"
       <p class="gc-bg-note" data-gc-g-note></p>
     </section>
 
-    {%- comment -%} 3. The tools, and which milk {%- endcomment %}
-    <div class="gc-bg-kit">
-      <div>
-        <span class="gc-bg-k">You&rsquo;ll need</span>
-        <ul class="gc-bg-tools">
-          <li><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M8 20h26v14a5 5 0 0 1-5 5H13a5 5 0 0 1-5-5z"/><path d="M34 23l9-4"/><path d="M6 20h30"/></svg>Small pot</li>
-          <li><svg viewBox="0 0 48 48" aria-hidden="true"><ellipse cx="15" cy="16" rx="7" ry="9" transform="rotate(-35 15 16)"/><path d="M20 22l19 19"/></svg>Tablespoon</li>
-          <li><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M8 16a12 12 0 0 0 24 0z"/><path d="M12 20h16M14 24h12" opacity=".5"/><path d="M32 16l11-6"/></svg>Fine strainer</li>
-          <li><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M10 16h24v14a9 9 0 0 1-9 9h-6a9 9 0 0 1-9-9z"/><path d="M34 20h3a4 4 0 0 1 0 8h-3"/><path d="M18 6c-2 3 2 4 0 7M25 6c-2 3 2 4 0 7" opacity=".6"/></svg>Your cup</li>
-        </ul>
-      </div>
-      <div>
-        <span class="gc-bg-k">Which milk</span>
-        <div class="gc-bg-milk">
-          <p><b>Whole</b>What the recipe is built on. The fat carries the spice and gives it body.</p>
-          <p><b>Oat</b>The best of the plant milks here. Go for a barista oat: it holds up to the boil.</p>
-        </div>
-      </div>
-    </div>
-
     {%- comment -%} 4. The shade: what it should look like, and how long that takes {%- endcomment %}
     <section class="gc-bg-sec">
       <fieldset class="gc-bg-sh" id="colour">
         <legend><h2>Pick your <em>shade</em></h2></legend>
-        <p class="gc-bg-lede">Simmer until it looks like this. The timer in step 3 follows the one you pick.</p>
+        <p class="gc-bg-lede">Simmer to this colour. Step 3&rsquo;s timer follows it.</p>
         <div class="gc-bg-tiles">
           {%- for s in brew.shades %}
           {%- assign sm = s.minutes | plus: extra0 | times: 2 | round | divided_by: 2.0 %}
@@ -337,14 +318,13 @@ og_image: "uploads/opt/pour-a-1280.jpg"
     {%- comment -%} 5. The four steps, each with a few seconds of it (uploads/video/<clip>.mp4) {%- endcomment %}
     <section class="gc-bg-sec" aria-labelledby="gc-bg-steps-h">
       <h2 id="gc-bg-steps-h">Four steps, <em>one pot</em></h2>
-      <p class="gc-bg-lede gc-bg-wide">Keep this open by the stove. The timer keeps your screen awake.</p>
       <ol class="gc-bg-steps">
         {%- for s in brew.steps %}
         <li{% if s.accent %} class="is-accent"{% endif %}>
           {%- if s.clip %}
           <div class="gc-bg-clip">
             <video data-gc-calm data-src="{{ vd }}{{ s.clip }}.mp4::video/mp4" poster="{{ o }}{{ s.clip }}-640.jpg" width="640" height="360" muted loop playsinline preload="none" aria-hidden="true"></video>
-            <span class="gc-bg-no" aria-hidden="true">{{ forloop.index }}</span>
+            <span class="gc-bg-no" aria-hidden="true">0{{ forloop.index }}</span>
             {%- if forloop.first %}<span class="gc-bg-tag"><span data-gc-g-boil>{{ boil0t }}</span> min</span>{% endif %}
             {%- if s.accent %}<span class="gc-bg-tag"><span data-gc-g-sim>{{ sim0t }}</span> min</span>{% endif %}
           </div>
@@ -390,14 +370,12 @@ og_image: "uploads/opt/pour-a-1280.jpg"
 
   {%- comment -%} 7. Questions (also as FAQPage structured data, below) {%- endcomment %}
   {%- capture qa1 %}One heaped tablespoon, about {{ brew.mix_grams_per_cup }} g, per cup. A {{ brew.pouch_grams }} g pouch makes {{ cups_per_pouch }} cups.{% endcapture -%}
-  {%- capture qa2 %}{% for p in site.data.premixes %}{{ p.name }}: {{ p.inside }}{% unless forloop.last %} {% endunless %}{% endfor %}{% endcapture -%}
   {%- capture qa3 %}No, both blends are unsweetened, so you sweeten it how you like. Add sugar with the mix in step 2 and it dissolves into the simmer.{% endcapture -%}
   {%- capture qa4 %}Yes. Brew it stronger than you would hot, chill it properly before it meets ice, and sweeten while it’s still warm. The full method is on our iced chai page.{% endcapture -%}
   <section class="gc-bg-sec" aria-labelledby="gc-bg-faq-h">
     <h2 id="gc-bg-faq-h">Questions we get <em>at the cart</em></h2>
     <div class="gc-bg-faq">
       <details><summary>How much mix per cup?</summary><p>{{ qa1 }}</p></details>
-      <details><summary>What&rsquo;s in the blend?</summary><p>{% for p in site.data.premixes %}<b>{{ p.name }}:</b> {{ p.inside }}{% unless forloop.last %}<br>{% endunless %}{% endfor %}</p></details>
       <details><summary>Is it sweetened?</summary><p>{{ qa3 }}</p></details>
       <details><summary>Can I make it iced?</summary><p>Yes. Brew it stronger than you would hot, chill it properly before it meets ice, and sweeten while it&rsquo;s still warm. The full method is on our <a href="{{ '/how-to-make-iced-chai/' | relative_url }}">iced chai page</a>.</p></details>
     </div>
@@ -466,7 +444,6 @@ og_image: "uploads/opt/pour-a-1280.jpg"
   "@id": "{{ page.url | absolute_url }}#faq",
   "mainEntity": [
     { "@type": "Question", "name": "How much mix per cup?", "acceptedAnswer": { "@type": "Answer", "text": {{ qa1 | jsonify }} } },
-    { "@type": "Question", "name": "What's in the blend?", "acceptedAnswer": { "@type": "Answer", "text": {{ qa2 | jsonify }} } },
     { "@type": "Question", "name": "Is it sweetened?", "acceptedAnswer": { "@type": "Answer", "text": {{ qa3 | jsonify }} } },
     { "@type": "Question", "name": "Can I make it iced?", "acceptedAnswer": { "@type": "Answer", "text": {{ qa4 | jsonify }} } }
   ]
