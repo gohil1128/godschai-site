@@ -15,9 +15,9 @@ Open **`_data/menu.yml`**. There are three lists: `hot`, `iced` and `snacks`.
 Copy an existing block, keep the indentation exactly as it is, and change the text.
 
 ```yaml
-  - name: "Iced Cardamom Chai"          # shows in the homepage lineup
+  - name: "Iced Cardamom Chai"          # shows in the homepage menu
     desc: "Cardamom-forward, over ice." # the longer description
-    short: "Cardamom, over ice."        # the short line in the homepage grid
+    short: "Cardamom, over ice."        # the short line on its homepage card
     img: "uploads/drink-cardamom.jpeg"  # photo (see "Adding a photo" below)
     alt: "Iced Cardamom Chai in a God's Chai cup"   # describes the photo
 ```
@@ -29,12 +29,13 @@ Optional extras:
 | `menu_name` | A longer name, used only in the menu data Google reads |
 | `menu_desc` | A longer description, same |
 | `logo_tile` | `true` shows the God's Chai logo instead of a photo |
+| `photo` | A picture already sized in `uploads/opt` at 160 and 320 px (the samosa uses `offer-bulk`) |
 
-That one edit updates the homepage lineup **and** the `Menu` structured data
+That one edit updates the homepage menu **and** the `Menu` structured data
 Google reads. They can't drift apart.
 
-**There is no separate menu page any more.** The lineup on the homepage is the
-menu — every hot drink, iced drink and snack is in it — and the Menu link in
+**There is no separate menu page any more.** The menu grid on the homepage is
+the menu — every hot drink, iced drink and snack is in it — and the Menu link in
 the top bar and the footer scrolls straight to it. The old addresses
 (`/menu/` and `/menu.html`) forward there, so links already posted to Instagram
 or sitting in Google don't break.
@@ -325,7 +326,7 @@ Claude with Square connected.
 
 `/bulk-orders/` takes orders for hot chai by the cup and samosas by the dozen,
 for offices, parties and get-togethers. It's linked from the footer, the
-catering page and the homepage's catering section.
+catering page and the homepage's strip of three cards.
 
 **How it works.** People choose how much chai and how many samosas, the day
 and time, and pickup or delivery, then press *Send my request*. Their own email
@@ -397,7 +398,7 @@ JavaScript (then the controls are just hidden). Markup and styles:
 `how-to-make-masala-chai/index.html`; behaviour: `assets/js/site.js`, 5c.
 
 Everything it says comes from **`_data/brew.yml`**: `amounts` (per cup), the
-`steps` (also used by the homepage teaser; `clip` names each step's video),
+`steps` (`clip` names each step's video),
 the `shades` (name, colour,
 simmer minutes for 2 cups, rises, a line about it) and the timing rule
 (`boil_base`, `boil_per_cup`, `simmer_per_cup`). The times are rough guides
@@ -494,6 +495,29 @@ from the same folder (IMG_0884, IMG_0924) aren't used yet: they'd suit a
 Christmas gift note.
 
 ---
+
+## The homepage, top to bottom
+
+It's kept short: only what a visitor needs to decide, in this order.
+
+1. **Hero**: rotating photos, the headline, and two buttons (Shop premixes,
+   Book catering). See "The homepage hero".
+2. **A ticker**: real spices from Kerala, single-origin Assam tea, and so on.
+   This is the one line that says why we're different.
+3. **The three ways to buy**: premixes, catering and bulk orders (below).
+4. **Premixes**: both pouches with Add buttons, the price, delivery, and a
+   link to the brew guide.
+5. **The menu**: every drink and the samosa in one grid of photo cards, from
+   `_data/menu.yml` (`_includes/menu-card.html`). Four across on desktop, two
+   on phones. The Menu link lands here (`#menu`).
+6. **Events**: the next pop-ups (`_data/events.yml`).
+7. **@godschai**: the Instagram grid.
+
+The longer sections (the hot drink and iced drinks shown separately, the
+"Kadak" photo band, "Why God's Chai is different", the four brew steps and the
+catering pitch) were taken out in November 2026 because each repeated
+something above it or has its own page: the brew guide, catering and bulk
+orders. They're in the git history if any is wanted back.
 
 ## The homepage's three ways to buy
 
