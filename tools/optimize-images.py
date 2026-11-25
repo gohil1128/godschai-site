@@ -51,8 +51,6 @@ FULL_BLEED = {
     # shop and product pages (premixes.yml `scene`).
     "pouch-masala-scene.jpg": (480, 960),
     "pouch-rose-scene.jpg": (480, 960),
-    # The Classic Hot Chai on the menu: a frame of our straining footage, square.
-    "hot-chai-cup.jpg": (320, 640),
     "offer-catering.jpg": (160, 320),
     "offer-bulk.jpg": (160, 320),
     "hero-journey-web.jpeg": (480, 960, 1600),

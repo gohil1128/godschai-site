@@ -29,7 +29,7 @@ Optional extras:
 | `menu_name` | A longer name, used only in the menu data Google reads |
 | `menu_desc` | A longer description, same |
 | `logo_tile` | `true` shows the God's Chai logo instead of a photo |
-| `photo` | A picture already sized in `uploads/opt` at 160 and 320 px (the samosa uses `offer-bulk`); add `photo_widths` if it has other sizes (the Classic Hot Chai uses `hot-chai-cup`, a frame of our straining footage, at 320 and 640) |
+| `photo` | A picture already sized in `uploads/opt` at 160 and 320 px (the samosa uses `offer-bulk`); add `photo_widths` if it has other sizes |
 
 That one edit updates the homepage menu **and** the `Menu` structured data
 Google reads. They can't drift apart.
