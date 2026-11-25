@@ -7,15 +7,19 @@ og_image: "uploads/opt/pour-a-1280.jpg"
 ---
 
 {%- comment -%}
-  The brew guide: one card that holds everything. How many cups (the amounts
-  follow), what shade (the simmer time and rises follow), and the four steps,
-  with a simmer timer on the third. Everything it says comes from
-  _data/brew.yml: amounts, steps, shades and the timing rule. It's written out
-  here for `serves` cups and the house shade, so it reads fine without
-  JavaScript; assets/js/site.js (5c) makes the cups, shade and timer work.
+  The brew guide, top to bottom: a short intro beside a clip from our pot; how
+  many cups (the water, milk and mix follow); the tools; the shade (the simmer
+  time follows); the four steps, each with a few seconds of video, and a simmer
+  timer on the third; "how did it turn out?" tips; a few questions; the premix.
+  Everything it says about the method comes from _data/brew.yml: amounts,
+  steps and their clips, shades and the timing rule. It's written out here for
+  `serves` cups and the house shade, so it reads fine without JavaScript;
+  assets/js/site.js (5c) makes the cups, shade and timer work.
   ?cups=6 opens it at 6 cups; #colour jumps to the shades.
 {%- endcomment -%}
 {%- assign brew = site.data.brew -%}
+{%- assign o = '/uploads/opt/' | relative_url -%}
+{%- assign vd = '/uploads/video/' | relative_url -%}
 {%- assign n0 = brew.serves -%}
 {%- assign house = brew.shades | where: "house", true | first | default: brew.shades[0] -%}
 {%- assign boil0 = brew.boil_per_cup | times: n0 | plus: brew.boil_base | times: 2 | round | divided_by: 2.0 -%}
@@ -29,135 +33,388 @@ og_image: "uploads/opt/pour-a-1280.jpg"
 {%- assign ml0 = brew.amounts.water.per_cup | times: n0 | times: 250 | round -%}
 {%- assign mlk0 = brew.amounts.milk.per_cup | times: n0 | times: 250 | round -%}
 {%- assign g0 = brew.mix_grams_per_cup | times: n0 | round -%}
+{%- assign orig = site.data.premixes | first -%}
+{%- assign cups_per_pouch = brew.pouch_grams | divided_by: brew.mix_grams_per_cup -%}
 
 <style>
-  .gc-g{max-width:760px;margin:0 auto;padding:clamp(104px,12vh,124px) clamp(18px,4vw,32px) clamp(48px,7vw,90px)}
-  .gc-g h1{margin:0;font:400 clamp(2rem,5vw,2.9rem)/1 'Instrument Serif',serif;letter-spacing:0;color:var(--gc-fg)}
-  .gc-g h1 em{color:var(--gc-coral-t)}
-  .gc-g-sub{margin:10px 0 0;color:var(--gc-fg4);font-size:1rem;line-height:1.5}
-  .gc-g-card{margin-top:clamp(20px,3vw,28px);padding:clamp(18px,3vw,30px);border-radius:24px;background:rgba(var(--gc-surf-rgb),0.7);
-    border:1px solid rgba(var(--gc-gold-rgb),0.16)}
-  .gc-g-k{display:block;font:400 10.5px 'DM Mono',monospace;letter-spacing:0.16em;text-transform:uppercase;color:var(--gc-muted)}
-  /* cups + amounts */
-  .gc-g-top{display:grid;grid-template-columns:auto minmax(0,1fr);gap:14px clamp(18px,4vw,36px);align-items:center}
-  .gc-g-cups{display:flex;align-items:center;gap:6px}
-  .gc-g-cups button{width:34px;height:34px;padding:0;border-radius:999px;border:1px solid rgba(var(--gc-ink-rgb),0.2);background:transparent;color:var(--gc-fg);
-    font-size:18px;line-height:1;cursor:pointer}
-  .gc-g-cups button:disabled{opacity:0.3;cursor:default}
-  .gc-g-cups output{min-width:1.6ch;text-align:center;font:400 2.4rem/1 'Instrument Serif',serif;color:var(--gc-fg)}
-  .gc-g-amts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:0}
-  .gc-g-amts div{min-width:0}
-  .gc-g-amts dd{margin:3px 0 0}
-  .gc-g-amts b{display:block;font:400 1.25rem/1.1 'Instrument Serif',serif;color:var(--gc-fg)}
-  .gc-g-amts small{font:400 11px 'DM Mono',monospace;color:var(--gc-fg4)}
-  .gc-g-note{margin:10px 0 0;font-size:12.5px;line-height:1.45;color:var(--gc-muted)}
-  .gc-g-note:empty{display:none}
-  /* the shade: a slim bar of four chai colours */
-  .gc-g-sh{border:0;min-width:0;margin:22px 0 0;padding:20px 0 0;border-top:1px solid rgba(var(--gc-ink-rgb),0.08);scroll-margin-top:96px}
-  .gc-g-sh legend{float:left;width:100%;padding:0;margin:0 0 10px}
-  .gc-g-bar{clear:both;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:3px}
-  .gc-g-bar label{display:flex;flex-direction:column;gap:7px;cursor:pointer;text-align:center;min-width:0}
-  .gc-g-bar input{position:absolute;opacity:0;width:1px;height:1px;pointer-events:none}
-  .gc-g-sw{position:relative;display:block;height:26px;background:var(--c);transition:box-shadow .2s ease}
-  .gc-g-bar label:first-of-type .gc-g-sw{border-radius:999px 4px 4px 999px}
-  .gc-g-bar label:last-of-type .gc-g-sw{border-radius:4px 999px 999px 4px}
-  .gc-g-sw::after,.gc-g-fill::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
-    background:linear-gradient(180deg,rgba(255,247,232,0.38) 0,rgba(255,247,232,0.1) 24%,rgba(255,247,232,0) 50%),linear-gradient(0deg,rgba(52,24,6,0.26) 0,rgba(52,24,6,0) 55%)}
-  .gc-g-bar label:has(input:checked) .gc-g-sw{box-shadow:0 0 0 2px var(--gc-bg),0 0 0 3.5px #B55F3E}
-  .gc-g-bar label:has(input:focus-visible) .gc-g-sw{outline:2px solid var(--gc-gold-t);outline-offset:4px}
-  .gc-g-bar span:last-child{font-size:12.5px;color:var(--gc-fg4);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .gc-g-bar label:has(input:checked) span:last-child{color:var(--gc-fg);font-weight:600}
-  .gc-g-shnote{margin:10px 0 0;font-size:13px;line-height:1.45;color:var(--gc-fg4)}
-  /* the four steps */
-  .gc-g-steps{list-style:none;margin:22px 0 0;padding:6px 0 0;border-top:1px solid rgba(var(--gc-ink-rgb),0.08)}
-  .gc-g-steps li{display:grid;grid-template-columns:2.2em minmax(0,1fr);gap:12px;padding:14px 0;border-bottom:1px solid rgba(var(--gc-ink-rgb),0.06)}
-  .gc-g-steps li:last-child{border-bottom:0;padding-bottom:4px}
-  .gc-g-steps i{font:400 11px 'DM Mono',monospace;font-style:normal;color:var(--gc-gold-t);padding-top:5px}
-  .gc-g-steps h2{margin:0;font:400 1.2rem/1.25 'Instrument Serif',serif;color:var(--gc-fg)}
-  .gc-g-steps p{margin:3px 0 0;font-size:14px;line-height:1.5;color:var(--gc-fg4)}
-  .gc-g-t{font:400 11px 'DM Mono',monospace;letter-spacing:0.06em;color:var(--gc-gold-t);white-space:nowrap}
-  /* the simmer timer, inside step 03 */
-  .gc-g-timer{display:flex;align-items:center;gap:12px;margin-top:10px}
-  .gc-g-run{display:inline-flex;align-items:center;gap:7px;flex:0 0 auto;padding:6px 12px;border-radius:999px;cursor:pointer;
-    border:1px solid rgba(var(--gc-ink-rgb),0.2);background:transparent;color:var(--gc-fg);font:500 12.5px 'DM Mono',monospace}
-  .gc-g-run svg{width:9px;height:9px;fill:currentColor}
-  .gc-g-run.is-on{background:#B55F3E;border-color:#B55F3E;color:#FFFFFF}
-  .gc-g-run:focus-visible,.gc-g-reset:focus-visible,.gc-g-cups button:focus-visible{outline:2px solid var(--gc-gold-t);outline-offset:2px}
-  .gc-g-track{position:relative;flex:1 1 auto;height:8px;border-radius:999px;background:rgba(var(--gc-ink-rgb),0.07);overflow:hidden}
-  .gc-g-fill{position:absolute;inset:0 auto 0 0;width:0;border-radius:999px;background:var(--c,#A9703F);transition:width .3s linear}
-  .gc-g-reset{border:0;background:none;padding:2px;cursor:pointer;font-size:12.5px;color:var(--gc-fg4);text-decoration:underline;text-underline-offset:3px}
-  .gc-g-cue{margin:8px 0 0;font-size:13.5px;font-weight:600;color:var(--gc-coral-t)}
-  .gc-g-cue:empty{display:none}
-  .gc-g-foot{margin:16px 0 0;font:400 11px 'DM Mono',monospace;letter-spacing:0.06em;color:var(--gc-fg4)}
-  @media (max-width:560px){
-    .gc-g-top{grid-template-columns:1fr}
-    .gc-g-amts b{font-size:1.1rem}
+  .gc-bg{--r:22px;--line:rgba(var(--gc-ink-rgb),0.09);--tile:rgba(var(--gc-surf-rgb),0.72);
+    max-width:1080px;margin:0 auto;padding:clamp(104px,12vh,124px) clamp(18px,4vw,32px) clamp(56px,8vw,100px)}
+  .gc-bg h1,.gc-bg h2{font-family:'Instrument Serif',serif;font-weight:400;letter-spacing:0;color:var(--gc-fg)}
+  .gc-bg h1 em,.gc-bg h2 em{color:var(--gc-coral-t)}
+  .gc-bg-k{display:block;font:400 10.5px 'DM Mono',monospace;letter-spacing:0.16em;text-transform:uppercase;color:var(--gc-muted)}
+  .gc-bg-sec{margin-top:clamp(56px,8vw,96px)}
+  .gc-bg-sec>h2,.gc-bg-sh legend h2{margin:0;font-size:clamp(1.9rem,4.4vw,2.7rem);line-height:1.05;text-align:center}
+  .gc-bg-lede{margin:10px auto 0;max-width:46ch;text-align:center;font-size:15px;line-height:1.55;color:var(--gc-fg4)}
+  .gc-bg :focus-visible{outline:2px solid var(--gc-gold-t);outline-offset:3px}
+
+  /* 1. intro + a clip from our pot */
+  .gc-bg-top{display:grid;grid-template-columns:minmax(0,0.9fr) minmax(0,1.1fr);gap:clamp(24px,5vw,64px);align-items:center}
+  .gc-bg-top h1{margin:0;max-width:11ch;font-size:clamp(2.5rem,5.4vw,3.8rem);line-height:0.98}
+  .gc-bg-top p{margin:16px 0 0;max-width:36ch;font-size:1.05rem;line-height:1.55;color:var(--gc-fg3)}
+  .gc-bg-top .gc-bg-k{margin-top:18px}
+  .gc-bg-film{position:relative;margin:0;border-radius:var(--r);overflow:hidden;aspect-ratio:16/10;background:#2A1A10}
+  .gc-bg-film video{display:block;width:100%;height:100%;object-fit:cover}
+  .gc-bg-film figcaption{position:absolute;left:14px;bottom:12px;padding:5px 10px;border-radius:999px;background:rgba(16,10,5,0.55);
+    -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);color:#F2EBE1;font:400 10.5px 'DM Mono',monospace;letter-spacing:0.08em}
+
+  /* 2. the calculator */
+  .gc-bg-calc{margin-top:clamp(44px,7vw,72px);padding:clamp(22px,4vw,40px);border-radius:28px;background:rgba(var(--gc-gold-rgb),0.07);
+    border:1px solid rgba(var(--gc-gold-rgb),0.14)}
+  .gc-bg-say{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px 12px;margin:0;
+    font:400 clamp(1.5rem,3.6vw,2rem)/1.2 'Instrument Serif',serif;color:var(--gc-fg)}
+  .gc-bg-cups{display:inline-flex;align-items:center;gap:2px;padding:4px;border-radius:999px;border:1px solid rgba(var(--gc-ink-rgb),0.18);background:var(--tile)}
+  .gc-bg-cups button{width:34px;height:34px;padding:0;border:0;border-radius:999px;background:transparent;color:var(--gc-fg);font-size:18px;line-height:1;cursor:pointer}
+  .gc-bg-cups button:hover:not(:disabled){background:rgba(var(--gc-ink-rgb),0.07)}
+  .gc-bg-cups button:disabled{opacity:0.3;cursor:default}
+  .gc-bg-cups output{min-width:2ch;text-align:center;font:500 1.05rem 'DM Mono',monospace;color:var(--gc-fg)}
+  .gc-bg-amts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:clamp(20px,3vw,30px) 0 0}
+  .gc-bg-amts>div{display:flex;flex-direction:column;align-items:center;text-align:center;min-width:0;padding:18px 10px 16px;border-radius:18px;background:var(--tile);
+    border:1px solid var(--line)}
+  .gc-bg-ic{display:grid;place-items:center;width:72px;height:72px;margin-bottom:10px;color:var(--gc-fg3)}
+  .gc-bg-ic svg{width:58px;height:58px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+  .gc-bg-ic img{width:auto;height:72px;object-fit:contain;filter:drop-shadow(0 4px 8px rgba(var(--gc-shadow-rgb),0.18))}
+  .gc-bg-amts dt{order:2;margin-top:4px}
+  .gc-bg-amts dd{margin:0}
+  .gc-bg-amts b{display:block;font:400 clamp(1.3rem,2.6vw,1.6rem)/1.1 'Instrument Serif',serif;color:var(--gc-fg)}
+  .gc-bg-amts small{display:block;margin-top:2px;font:400 11px 'DM Mono',monospace;color:var(--gc-fg4)}
+  .gc-bg-note{margin:16px 0 0;text-align:center;font-size:13.5px;line-height:1.5;color:var(--gc-fg4)}
+  .gc-bg-note:empty{display:none}
+
+  /* 3. tools + milk */
+  .gc-bg-kit{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(20px,4vw,48px);margin-top:clamp(36px,5vw,56px);align-items:start}
+  .gc-bg-tools{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:12px 0 0;padding:0;list-style:none}
+  .gc-bg-tools li{display:flex;flex-direction:column;align-items:center;gap:6px;font-size:12.5px;color:var(--gc-fg4);text-align:center}
+  .gc-bg-tools svg{width:40px;height:40px;fill:none;stroke:var(--gc-fg3);stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round}
+  .gc-bg-milk{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px;margin-top:12px}
+  .gc-bg-milk p{margin:0;padding:14px 16px;border-radius:16px;background:var(--tile);border:1px solid var(--line);font-size:13.5px;line-height:1.5;color:var(--gc-fg4)}
+  .gc-bg-milk p:first-child{border-color:rgba(var(--gc-gold-rgb),0.45)}
+  .gc-bg-milk b{display:block;margin-bottom:2px;font:400 1.15rem/1.2 'Instrument Serif',serif;color:var(--gc-fg)}
+
+  /* 4. the shade */
+  .gc-bg-sh{border:0;min-width:0;margin:0;padding:0;scroll-margin-top:96px}
+  .gc-bg-sh legend{padding:0;width:100%;text-align:center}
+  .gc-bg-tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(8px,1.6vw,16px);margin-top:clamp(20px,3vw,30px)}
+  .gc-bg-tiles label{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;text-align:center;min-width:0}
+  .gc-bg-tiles input{position:absolute;opacity:0;width:1px;height:1px;pointer-events:none}
+  .gc-bg-sw{position:relative;display:block;width:100%;aspect-ratio:3/2;margin-bottom:8px;border-radius:18px;background:var(--c);
+    box-shadow:inset 0 -14px 26px rgba(52,24,6,0.22),0 1px 0 rgba(var(--gc-ink-rgb),0.06);transition:box-shadow .2s ease,transform .2s ease}
+  .gc-bg-sw::before{content:"";position:absolute;left:12%;right:12%;top:9%;height:14%;border-radius:999px;background:rgba(255,247,232,0.28)}
+  .gc-bg-sw::after,.gc-bg-fill::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+    background:linear-gradient(180deg,rgba(255,247,232,0.26) 0,rgba(255,247,232,0.06) 30%,rgba(255,247,232,0) 55%)}
+  .gc-bg-tiles label:hover .gc-bg-sw{transform:translateY(-2px)}
+  .gc-bg-tiles label:has(input:checked) .gc-bg-sw{box-shadow:inset 0 -14px 26px rgba(52,24,6,0.22),0 0 0 3px var(--gc-bg),0 0 0 5px #B55F3E}
+  .gc-bg-tiles label:has(input:focus-visible) .gc-bg-sw{outline:2px solid var(--gc-gold-t);outline-offset:7px}
+  .gc-bg-nm{font-size:14px;color:var(--gc-fg3)}
+  .gc-bg-tiles label:has(input:checked) .gc-bg-nm{color:var(--gc-fg);font-weight:600}
+  .gc-bg-min{font:400 11px 'DM Mono',monospace;color:var(--gc-fg4)}
+  .gc-bg-house{margin-top:4px;padding:3px 9px;border-radius:999px;background:rgba(var(--gc-coral-rgb),0.14);color:var(--gc-coral-t);
+    font:400 9.5px 'DM Mono',monospace;letter-spacing:0.12em;text-transform:uppercase;white-space:nowrap}
+  .gc-bg-house-s{display:none}
+  .gc-bg-shnote{margin:18px auto 0;max-width:52ch;text-align:center;font-size:14px;line-height:1.5;color:var(--gc-fg4)}
+
+  /* 5. the four steps */
+  .gc-bg-steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin:clamp(22px,3vw,34px) 0 0;padding:0;list-style:none;counter-reset:st}
+  .gc-bg-steps>li{position:relative;display:flex;flex-direction:column;min-width:0;border-radius:var(--r);background:var(--tile);border:1px solid var(--line);overflow:hidden}
+  .gc-bg-steps>li.is-accent{border-color:rgba(var(--gc-gold-rgb),0.4)}
+  .gc-bg-clip{position:relative;aspect-ratio:4/3;background:#2A1A10}
+  .gc-bg-clip video{display:block;width:100%;height:100%;object-fit:cover}
+  .gc-bg-no{position:absolute;left:10px;top:10px;display:grid;place-items:center;width:28px;height:28px;border-radius:999px;background:#F2EBE1;color:#3C2116;
+    font:500 12px 'DM Mono',monospace;box-shadow:0 2px 6px rgba(0,0,0,0.2)}
+  .gc-bg-tag{position:absolute;right:10px;top:10px;padding:4px 9px;border-radius:999px;background:rgba(16,10,5,0.6);color:#F2EBE1;
+    font:400 10.5px 'DM Mono',monospace;letter-spacing:0.04em;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+  .gc-bg-body{display:flex;flex-direction:column;flex:1 1 auto;padding:14px 16px 16px}
+  .gc-bg-body h3{margin:0;font:400 1.25rem/1.2 'Instrument Serif',serif;color:var(--gc-fg)}
+  .gc-bg-body p{margin:6px 0 0;font-size:13.5px;line-height:1.5;color:var(--gc-fg4)}
+  .gc-bg-timer{display:flex;align-items:center;gap:10px;margin-top:auto;padding-top:14px}
+  .gc-bg-run{display:inline-flex;align-items:center;gap:7px;flex:0 0 auto;padding:7px 13px;border-radius:999px;cursor:pointer;
+    border:1px solid rgba(var(--gc-ink-rgb),0.22);background:transparent;color:var(--gc-fg);font:500 12.5px 'DM Mono',monospace}
+  .gc-bg-run svg{width:9px;height:9px;fill:currentColor}
+  .gc-bg-run.is-on{background:#B55F3E;border-color:#B55F3E;color:#FFFFFF}
+  .gc-bg-track{position:relative;flex:1 1 auto;height:8px;border-radius:999px;background:rgba(var(--gc-ink-rgb),0.08);overflow:hidden}
+  .gc-bg-fill{position:absolute;inset:0 auto 0 0;width:0;border-radius:999px;background:var(--c,#A9703F);transition:width .3s linear}
+  .gc-bg-reset{align-self:flex-start;margin-top:8px;border:0;background:none;padding:2px 0;cursor:pointer;font-size:12.5px;color:var(--gc-fg4);text-decoration:underline;text-underline-offset:3px}
+  .gc-bg-cue{margin:8px 0 0;font-size:13px;font-weight:600;line-height:1.45;color:var(--gc-coral-t)}
+  .gc-bg-cue:empty{display:none}
+
+  /* 6. how did it turn out */
+  .gc-bg-fb{margin-top:clamp(40px,6vw,64px);padding:clamp(20px,3.4vw,32px);border-radius:28px;background:rgba(var(--gc-gold-rgb),0.07);border:1px solid rgba(var(--gc-gold-rgb),0.14)}
+  .gc-bg-fb fieldset{border:0;margin:0;padding:0;min-width:0}
+  .gc-bg-fb legend{padding:0}
+  .gc-bg-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+  .gc-bg-chips label{position:relative;cursor:pointer}
+  .gc-bg-chips input{position:absolute;opacity:0;width:1px;height:1px;pointer-events:none}
+  .gc-bg-chips span{display:inline-block;padding:8px 15px;border-radius:999px;border:1px solid rgba(var(--gc-ink-rgb),0.2);background:var(--tile);font-size:14px;color:var(--gc-fg3);transition:background .15s ease}
+  .gc-bg-chips label:hover span{border-color:rgba(var(--gc-ink-rgb),0.4)}
+  .gc-bg-chips input:checked+span{background:#B55F3E;border-color:#B55F3E;color:#FFFFFF}
+  .gc-bg-chips input:focus-visible+span{outline:2px solid var(--gc-gold-t);outline-offset:2px}
+  .gc-bg-tips p{display:none;margin:14px 0 0;max-width:62ch;font-size:15px;line-height:1.55;color:var(--gc-fg3)}
+  .gc-bg-fb:has(#gc-fb-0:checked) [data-tip="0"],.gc-bg-fb:has(#gc-fb-1:checked) [data-tip="1"],
+  .gc-bg-fb:has(#gc-fb-2:checked) [data-tip="2"],.gc-bg-fb:has(#gc-fb-3:checked) [data-tip="3"]{display:block}
+
+  /* 7. questions */
+  .gc-bg-faq{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px;margin-top:clamp(20px,3vw,30px)}
+  .gc-bg-faq details{border-radius:16px;background:var(--tile);border:1px solid var(--line)}
+  .gc-bg-faq summary{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:15px 18px;cursor:pointer;list-style:none;font-size:15px;color:var(--gc-fg)}
+  .gc-bg-faq summary::-webkit-details-marker{display:none}
+  .gc-bg-faq summary::after{content:"";flex:0 0 auto;width:8px;height:8px;margin-top:-4px;border-right:1.5px solid var(--gc-fg4);border-bottom:1.5px solid var(--gc-fg4);transform:rotate(45deg);transition:transform .2s ease}
+  .gc-bg-faq details[open] summary::after{transform:rotate(-135deg);margin-top:4px}
+  .gc-bg-faq details p{margin:0;padding:0 18px 16px;font-size:14px;line-height:1.55;color:var(--gc-fg4)}
+  .gc-bg-faq a{color:var(--gc-coral-t)}
+
+  /* 8. the premix */
+  .gc-bg-buy{display:grid;grid-template-columns:auto minmax(0,1fr);gap:clamp(18px,4vw,40px);align-items:center;margin-top:clamp(56px,8vw,96px);
+    padding:clamp(18px,3.4vw,32px);border-radius:28px;background:var(--tile);border:1px solid var(--line)}
+  .gc-bg-buy-pic{display:grid;place-items:center;width:clamp(120px,20vw,200px);aspect-ratio:4/5;border-radius:20px;background:rgba(var(--gc-gold-rgb),0.1)}
+  .gc-bg-buy-pic img{width:72%;height:auto;filter:drop-shadow(0 10px 18px rgba(var(--gc-shadow-rgb),0.25))}
+  .gc-bg-buy h2{margin:6px 0 0;font-size:clamp(1.6rem,3.4vw,2.2rem);line-height:1.05}
+  .gc-bg-buy p{margin:8px 0 0;max-width:48ch;font-size:14.5px;line-height:1.55;color:var(--gc-fg4)}
+  .gc-bg-buy .gc-bg-price{font:400 12px 'DM Mono',monospace;letter-spacing:0.04em;color:var(--gc-fg3)}
+  .gc-bg-buy a{display:inline-block;margin-top:16px;padding:12px 22px;border-radius:999px;background:#B55F3E;color:#FFFFFF;text-decoration:none;font-weight:600;font-size:14.5px}
+  .gc-bg-buy a:hover{background:#9E4F31}
+
+  @media (max-width:860px){
+    .gc-bg-kit{grid-template-columns:1fr}
+    .gc-bg-steps{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .gc-bg-faq{grid-template-columns:1fr}
   }
-  @media (prefers-reduced-motion:reduce){.gc-g-fill,.gc-g-sw{transition:none}}
+  /* Phones: dense, so each screenful carries as much as it can. The intro
+     sits beside a small clip, the four ingredients and the four shades each
+     fit one row, and the steps are a tight list with a small video each. */
+  @media (max-width:600px){
+    .gc-bg{padding-top:92px;padding-bottom:44px}
+    .gc-bg-k{font-size:9.5px;letter-spacing:0.1em}
+    .gc-bg-sec{margin-top:36px}
+    .gc-bg-sec>h2,.gc-bg-sh legend h2{font-size:1.65rem}
+    .gc-bg-lede{margin-top:4px;font-size:13px;line-height:1.45}
+    .gc-bg-top{grid-template-columns:minmax(0,1fr) 36%;gap:14px;align-items:start}
+    .gc-bg-top h1{font-size:1.85rem;max-width:none}
+    .gc-bg-top p{margin-top:8px;font-size:13.5px;line-height:1.45}
+    .gc-bg-top .gc-bg-k{margin-top:8px}
+    .gc-bg-film{aspect-ratio:3/4;border-radius:16px}
+    .gc-bg-film figcaption{display:none}
+    .gc-bg-calc{margin-top:24px;padding:14px 10px 12px;border-radius:20px}
+    .gc-bg-say{gap:8px;font-size:1.35rem}
+    .gc-bg-cups{padding:2px}
+    .gc-bg-cups button{width:30px;height:30px}
+    .gc-bg-amts{gap:6px;margin-top:12px}
+    .gc-bg-amts>div{padding:10px 4px 9px;border-radius:14px}
+    .gc-bg-ic{width:38px;height:38px;margin-bottom:5px}
+    .gc-bg-ic svg{width:32px;height:32px}
+    .gc-bg-ic img{height:38px}
+    .gc-bg-amts b{font-size:1.05rem}
+    .gc-bg-amts small{font-size:9.5px}
+    .gc-bg-amts dt{font-size:8.5px;letter-spacing:0.04em;line-height:1.3}
+    .gc-bg-note{margin-top:8px;font-size:12px}
+    .gc-bg-kit{gap:14px;margin-top:20px}
+    .gc-bg-tools{margin-top:6px}
+    .gc-bg-tools li{gap:3px;font-size:11px}
+    .gc-bg-tools svg{width:28px;height:28px}
+    .gc-bg-milk{gap:6px;margin-top:6px}
+    .gc-bg-milk p{padding:9px 11px;border-radius:12px;font-size:12px;line-height:1.4}
+    .gc-bg-milk b{font-size:1rem}
+    .gc-bg-tiles{gap:6px;margin-top:12px}
+    .gc-bg-sw{aspect-ratio:4/3;margin-bottom:4px;border-radius:12px}
+    .gc-bg-tiles label:has(input:checked) .gc-bg-sw{box-shadow:inset 0 -14px 26px rgba(52,24,6,0.22),0 0 0 2px var(--gc-bg),0 0 0 3.5px #B55F3E}
+    .gc-bg-nm{font-size:12px;line-height:1.2}
+    .gc-bg-min{font-size:10px}
+    .gc-bg-house{margin-top:2px;padding:2px 6px;font-size:8.5px;letter-spacing:0.06em}
+    .gc-bg-wide,.gc-bg-house-l{display:none}.gc-bg-house-s{display:inline}
+    .gc-bg-shnote{margin-top:10px;font-size:12.5px;line-height:1.4}
+    /* the steps: a tight list */
+    .gc-bg-steps{grid-template-columns:1fr;gap:8px;margin-top:14px}
+    .gc-bg-steps>li{display:grid;grid-template-columns:92px minmax(0,1fr);border-radius:16px}
+    .gc-bg-clip{aspect-ratio:auto;min-height:92px}
+    .gc-bg-clip video{position:absolute;inset:0}
+    .gc-bg-no{left:6px;top:6px;width:22px;height:22px;font-size:10.5px}
+    .gc-bg-tag{top:auto;right:auto;left:6px;bottom:6px;padding:2px 7px;font-size:9.5px}
+    .gc-bg-body{padding:9px 12px 10px}
+    .gc-bg-body h3{font-size:1.05rem}
+    .gc-bg-body p{margin-top:3px;font-size:12.5px;line-height:1.4}
+    .gc-bg-timer{padding-top:8px}
+    .gc-bg-run{padding:5px 11px}
+    .gc-bg-reset{margin-top:4px}
+    .gc-bg-cue{margin-top:4px;font-size:12.5px}
+    .gc-bg-fb{margin-top:28px;padding:14px;border-radius:18px}
+    .gc-bg-chips{gap:6px;margin-top:8px}
+    .gc-bg-chips span{padding:6px 11px;font-size:12.5px}
+    .gc-bg-tips p{margin-top:10px;font-size:13px;line-height:1.45}
+    .gc-bg-faq{gap:6px;margin-top:12px}
+    .gc-bg-faq summary{padding:11px 14px;font-size:14px}
+    .gc-bg-faq details p{padding:0 14px 12px;font-size:13px}
+    .gc-bg-buy{grid-template-columns:96px minmax(0,1fr);gap:14px;margin-top:36px;padding:14px;border-radius:20px}
+    .gc-bg-buy-pic{width:96px;border-radius:14px}
+    .gc-bg-buy h2{margin-top:2px;font-size:1.4rem}
+    .gc-bg-buy p{margin-top:4px;font-size:12.5px;line-height:1.4}
+    .gc-bg-buy a{margin-top:10px;padding:9px 16px;font-size:13.5px}
+  }
+  @media (prefers-reduced-motion:reduce){.gc-bg-fill,.gc-bg-sw,.gc-bg-faq summary::after{transition:none}.gc-bg-tiles label:hover .gc-bg-sw{transform:none}}
 </style>
 
-<section class="gc-g" aria-labelledby="page-h1">
-  <h1 id="page-h1">How to make <em>masala chai</em></h1>
-  <p class="gc-g-sub">Pick your cups and your shade; the rest follows.</p>
-
-  <div class="gc-g-card" data-gc-guide
+<div class="gc-bg" data-gc-guide
        data-serves="{{ n0 }}" data-max="{{ brew.max_cups | default: 30 }}"
        data-amounts='{{ brew.amounts | jsonify }}' data-g="{{ brew.mix_grams_per_cup }}" data-pouch="{{ brew.pouch_grams }}" data-big="{{ brew.big_pot_from }}"
        data-shades='{{ brew.shades | jsonify | escape }}' data-start="{{ brew.shade_start }}"
        data-boil-base="{{ brew.boil_base }}" data-boil-per="{{ brew.boil_per_cup }}" data-simmer-per="{{ brew.simmer_per_cup }}">
+  {%- comment -%} 1. Intro, beside a few seconds of chai going into the mug {%- endcomment %}
+  <section class="gc-bg-top" aria-labelledby="page-h1">
+    <div>
+      <h1 id="page-h1">How to make <em>masala chai</em> at home</h1>
+      <p>The way we brew it at the cart, in one pot. Pick your cups and your shade; the amounts and the timer follow.</p>
+      <span class="gc-bg-k">About <span data-gc-g-total>{{ tot0 }}</span> minutes · 4 steps</span>
+    </div>
+    <figure class="gc-bg-film">
+      <video data-gc-calm data-src="{{ vd }}hero-strain-wide.mp4::video/mp4" poster="{{ o }}hero-strain-wide-1280.jpg" width="1280" height="720" muted loop playsinline preload="none" aria-hidden="true"></video>
+      <figcaption>Straight from our pot</figcaption>
+    </figure>
+  </section>
 
-    <div class="gc-g-top">
-      <div>
-        <span class="gc-g-k">Cups</span>
-        <div class="gc-g-cups" role="group" aria-label="How many cups">
+
+    {%- comment -%} 2. How many cups, and what goes in {%- endcomment %}
+    <section class="gc-bg-calc" aria-label="What you need">
+      <p class="gc-bg-say">I&rsquo;m making
+        <span class="gc-bg-cups" role="group" aria-label="How many cups">
           <button type="button" data-gc-g-less aria-label="One cup fewer" hidden>&minus;</button>
           <output data-gc-g-n aria-live="polite">{{ n0 }}</output>
           <button type="button" data-gc-g-more aria-label="One cup more" hidden>+</button>
-        </div>
-      </div>
-      <dl class="gc-g-amts">
-        <div><dt class="gc-g-k">Water</dt><dd data-gc-g-amt="water"><b>{{ brew.amounts.water.text }}</b><small>{{ ml0 }} ml</small></dd></div>
-        <div><dt class="gc-g-k">Milk</dt><dd data-gc-g-amt="milk"><b>{{ brew.amounts.milk.text }}</b><small>{{ mlk0 }} ml</small></dd></div>
-        <div><dt class="gc-g-k">Mix, heaped</dt><dd data-gc-g-amt="mix"><b>{{ brew.amounts.mix.text | replace: 'heaped ', '' }}</b><small>{{ g0 }} g</small></dd></div>
-      </dl>
-    </div>
-    <p class="gc-g-note" data-gc-g-note></p>
-
-    <fieldset class="gc-g-sh" id="colour">
-      <legend class="gc-g-k">Shade</legend>
-      <div class="gc-g-bar">
-        {%- for s in brew.shades %}
-        <label><input type="radio" name="gc-shade" value="{{ forloop.index0 }}"{% if s.name == house.name %} checked{% endif %}><span class="gc-g-sw" style="--c:{{ s.hex }}" aria-hidden="true"></span><span>{{ s.name }}</span></label>
-        {%- endfor %}
-      </div>
-      <p class="gc-g-shnote"><span data-gc-g-shnote>{{ house.note }}</span> For Rose &amp; Cardamom, go a shade lighter.</p>
-    </fieldset>
-
-    <ol class="gc-g-steps">
-      {%- for s in brew.steps %}
-      <li>
-        <i>0{{ forloop.index }}</i>
+        </span>
+        <span data-gc-g-cupword>cups</span></p>
+      <dl class="gc-bg-amts">
         <div>
-        {%- if s.accent %}
-          <h2>Let it rise <span data-gc-g-rises>{{ house.rises }}</span> <span data-gc-g-times>{% if house.rises == 1 %}time{% else %}times{% endif %}</span> <span class="gc-g-t">· <span data-gc-g-sim>{{ sim0t }}</span> min</span></h2>
-          <p>{{ s.desc }}</p>
-          <div class="gc-g-timer" data-gc-g-timer hidden>
-            <button type="button" class="gc-g-run" data-gc-g-run aria-label="Start the {{ clock0 }} simmer timer"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M2 1l7 4-7 4z"/></svg><span data-gc-g-clock>{{ clock0 }}</span></button>
-            <span class="gc-g-track" aria-hidden="true"><span class="gc-g-fill" data-gc-g-fill></span></span>
-            <button type="button" class="gc-g-reset" data-gc-g-reset hidden>Reset</button>
-          </div>
-          <p class="gc-g-cue" data-gc-g-cue aria-live="polite"></p>
-        {%- else %}
-          <h2>{% include brew-text.html t=s.title short=true %}{% if forloop.first %} <span class="gc-g-t">· <span data-gc-g-boil>{{ boil0t }}</span> min</span>{% endif %}</h2>
-          <p>{{ s.desc }}</p>
-        {%- endif %}
+          <span class="gc-bg-ic" aria-hidden="true"><svg viewBox="0 0 48 48"><path d="M13 9h22l-3 31a2 2 0 0 1-2 1.8H18a2 2 0 0 1-2-1.8z"/><path d="M14.4 21h19.2"/><path d="M20 27v6M24 26v9" opacity=".5"/></svg></span>
+          <dt class="gc-bg-k">Water</dt><dd data-gc-g-amt="water"><b>{{ brew.amounts.water.text }}</b><small>{{ ml0 }} ml</small></dd>
         </div>
-      </li>
-      {%- endfor %}
-    </ol>
-    <p class="gc-g-foot">About <span data-gc-g-total>{{ tot0 }}</span> minutes in all, on medium-high.</p>
-  </div>
-</section>
+        <div>
+          <span class="gc-bg-ic" aria-hidden="true"><svg viewBox="0 0 48 48"><path d="M17 6h14v5l4 6v23a2 2 0 0 1-2 2H15a2 2 0 0 1-2-2V17l4-6z"/><path d="M17 11h14M13 17h22"/><path d="M13 26c4-2 7 2 11 0s7-2 11 0" opacity=".5"/></svg></span>
+          <dt class="gc-bg-k">Whole milk</dt><dd data-gc-g-amt="milk"><b>{{ brew.amounts.milk.text }}</b><small>{{ mlk0 }} ml</small></dd>
+        </div>
+        <div>
+          <span class="gc-bg-ic" aria-hidden="true"><picture><source type="image/webp" srcset="{{ o }}pouch-masala-front-250.webp"><img src="{{ o }}pouch-masala-front-250.jpg" width="250" height="438" alt="" loading="lazy" decoding="async"></picture></span>
+          <dt class="gc-bg-k">God&rsquo;s Chai, heaped</dt><dd data-gc-g-amt="mix"><b>{{ brew.amounts.mix.text | replace: 'heaped ', '' }}</b><small>{{ g0 }} g</small></dd>
+        </div>
+        <div>
+          <span class="gc-bg-ic" aria-hidden="true"><svg viewBox="0 0 48 48"><path d="M10 22h28l-3 16a3 3 0 0 1-3 2.5H16a3 3 0 0 1-3-2.5z"/><path d="M15 22c0-5 4-8 9-8s9 3 9 8"/><path d="M20 10l1.5 2M27 9l-1 2.5M24 6v3" opacity=".6"/></svg></span>
+          <dt class="gc-bg-k">Sugar</dt><dd><b>To taste</b><small>your call</small></dd>
+        </div>
+      </dl>
+      <p class="gc-bg-note" data-gc-g-note></p>
+    </section>
+
+    {%- comment -%} 3. The tools, and which milk {%- endcomment %}
+    <div class="gc-bg-kit">
+      <div>
+        <span class="gc-bg-k">You&rsquo;ll need</span>
+        <ul class="gc-bg-tools">
+          <li><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M8 20h26v14a5 5 0 0 1-5 5H13a5 5 0 0 1-5-5z"/><path d="M34 23l9-4"/><path d="M6 20h30"/></svg>Small pot</li>
+          <li><svg viewBox="0 0 48 48" aria-hidden="true"><ellipse cx="15" cy="16" rx="7" ry="9" transform="rotate(-35 15 16)"/><path d="M20 22l19 19"/></svg>Tablespoon</li>
+          <li><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M8 16a12 12 0 0 0 24 0z"/><path d="M12 20h16M14 24h12" opacity=".5"/><path d="M32 16l11-6"/></svg>Fine strainer</li>
+          <li><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M10 16h24v14a9 9 0 0 1-9 9h-6a9 9 0 0 1-9-9z"/><path d="M34 20h3a4 4 0 0 1 0 8h-3"/><path d="M18 6c-2 3 2 4 0 7M25 6c-2 3 2 4 0 7" opacity=".6"/></svg>Your cup</li>
+        </ul>
+      </div>
+      <div>
+        <span class="gc-bg-k">Which milk</span>
+        <div class="gc-bg-milk">
+          <p><b>Whole</b>What the recipe is built on. The fat carries the spice and gives it body.</p>
+          <p><b>Oat</b>The best of the plant milks here. Go for a barista oat: it holds up to the boil.</p>
+        </div>
+      </div>
+    </div>
+
+    {%- comment -%} 4. The shade: what it should look like, and how long that takes {%- endcomment %}
+    <section class="gc-bg-sec">
+      <fieldset class="gc-bg-sh" id="colour">
+        <legend><h2>Pick your <em>shade</em></h2></legend>
+        <p class="gc-bg-lede">Simmer until it looks like this. The timer in step 3 follows the one you pick.</p>
+        <div class="gc-bg-tiles">
+          {%- for s in brew.shades %}
+          {%- assign sm = s.minutes | plus: extra0 | times: 2 | round | divided_by: 2.0 %}
+          <label><input type="radio" name="gc-shade" value="{{ forloop.index0 }}"{% if s.name == house.name %} checked{% endif %}><span class="gc-bg-sw" style="--c:{{ s.hex }}" aria-hidden="true"></span><span class="gc-bg-nm">{{ s.name }}</span><span class="gc-bg-min"><span data-gc-g-swmin>{{ sm | append: "" | remove: ".0" | replace: ".5", "½" }}</span> min</span>{% if s.house %}<span class="gc-bg-house"><span class="gc-bg-house-l">How we pour it</span><span class="gc-bg-house-s">House</span></span>{% endif %}</label>
+          {%- endfor %}
+        </div>
+        <p class="gc-bg-shnote"><span data-gc-g-shnote>{{ house.note }}</span> For Rose &amp; Cardamom, go a shade lighter.</p>
+      </fieldset>
+    </section>
+
+    {%- comment -%} 5. The four steps, each with a few seconds of it (uploads/video/<clip>.mp4) {%- endcomment %}
+    <section class="gc-bg-sec" aria-labelledby="gc-bg-steps-h">
+      <h2 id="gc-bg-steps-h">Four steps, <em>one pot</em></h2>
+      <p class="gc-bg-lede gc-bg-wide">Keep this open by the stove. The timer keeps your screen awake.</p>
+      <ol class="gc-bg-steps">
+        {%- for s in brew.steps %}
+        <li{% if s.accent %} class="is-accent"{% endif %}>
+          {%- if s.clip %}
+          <div class="gc-bg-clip">
+            <video data-gc-calm data-src="{{ vd }}{{ s.clip }}.mp4::video/mp4" poster="{{ o }}{{ s.clip }}-640.jpg" width="640" height="360" muted loop playsinline preload="none" aria-hidden="true"></video>
+            <span class="gc-bg-no" aria-hidden="true">{{ forloop.index }}</span>
+            {%- if forloop.first %}<span class="gc-bg-tag"><span data-gc-g-boil>{{ boil0t }}</span> min</span>{% endif %}
+            {%- if s.accent %}<span class="gc-bg-tag"><span data-gc-g-sim>{{ sim0t }}</span> min</span>{% endif %}
+          </div>
+          {%- endif %}
+          <div class="gc-bg-body">
+          {%- if s.accent %}
+            <h3><span class="gc-vh">Step {{ forloop.index }}: </span>Let it rise <span data-gc-g-rises>{{ house.rises }}</span> <span data-gc-g-times>{% if house.rises == 1 %}time{% else %}times{% endif %}</span></h3>
+            <p>{{ s.desc }}</p>
+            <div class="gc-bg-timer" data-gc-g-timer hidden>
+              <button type="button" class="gc-bg-run" data-gc-g-run aria-label="Start the {{ clock0 }} simmer timer"><svg viewBox="0 0 10 10" aria-hidden="true"><path d="M2 1l7 4-7 4z"/></svg><span data-gc-g-clock>{{ clock0 }}</span></button>
+              <span class="gc-bg-track" aria-hidden="true"><span class="gc-bg-fill" data-gc-g-fill></span></span>
+            </div>
+            <button type="button" class="gc-bg-reset" data-gc-g-reset hidden>Reset</button>
+            <p class="gc-bg-cue" data-gc-g-cue aria-live="polite"></p>
+          {%- else %}
+            <h3><span class="gc-vh">Step {{ forloop.index }}: </span>{% include brew-text.html t=s.title short=true %}</h3>
+            <p>{{ s.desc }}</p>
+          {%- endif %}
+          </div>
+        </li>
+        {%- endfor %}
+      </ol>
+    </section>
+
+  {%- comment -%} 6. How did it turn out? Pure CSS: a chip shows its tip. {%- endcomment %}
+  <section class="gc-bg-fb">
+    <fieldset>
+      <legend class="gc-bg-k">How did your cup turn out?</legend>
+      <div class="gc-bg-chips">
+        <label><input type="radio" name="gc-fb" id="gc-fb-0"><span>Just right</span></label>
+        <label><input type="radio" name="gc-fb" id="gc-fb-1"><span>Too weak</span></label>
+        <label><input type="radio" name="gc-fb" id="gc-fb-2"><span>Too strong</span></label>
+        <label><input type="radio" name="gc-fb" id="gc-fb-3"><span>It boiled over</span></label>
+      </div>
+    </fieldset>
+    <div class="gc-bg-tips" aria-live="polite">
+      <p data-tip="0">That&rsquo;s the one. Same cups, same shade next time, and tag us <a href="{{ site.social.instagram }}">{{ site.social.instagram_handle }}</a> if you pour it somewhere nice.</p>
+      <p data-tip="1">Give it one more rise, or go a shade darker. If it still tastes thin, the mix wants to be properly heaped, and whole milk carries the spice better than skim.</p>
+      <p data-tip="2">Pull it off a minute sooner, or pick a shade lighter. Past Extra kadak the tea turns bitter, so let the colour tell you when to stop.</p>
+      <p data-tip="3">It happens to everyone. Turn the heat down as it climbs and lift the pot off for a second; for 5 cups or more, use a pot twice the size of what&rsquo;s in it.</p>
+    </div>
+  </section>
+
+  {%- comment -%} 7. Questions (also as FAQPage structured data, below) {%- endcomment %}
+  {%- capture qa1 %}One heaped tablespoon, about {{ brew.mix_grams_per_cup }} g, per cup. A {{ brew.pouch_grams }} g pouch makes {{ cups_per_pouch }} cups.{% endcapture -%}
+  {%- capture qa2 %}{% for p in site.data.premixes %}{{ p.name }}: {{ p.inside }}{% unless forloop.last %} {% endunless %}{% endfor %}{% endcapture -%}
+  {%- capture qa3 %}No, both blends are unsweetened, so you sweeten it how you like. Add sugar with the mix in step 2 and it dissolves into the simmer.{% endcapture -%}
+  {%- capture qa4 %}Yes. Brew it stronger than you would hot, chill it properly before it meets ice, and sweeten while it’s still warm. The full method is on our iced chai page.{% endcapture -%}
+  <section class="gc-bg-sec" aria-labelledby="gc-bg-faq-h">
+    <h2 id="gc-bg-faq-h">Questions we get <em>at the cart</em></h2>
+    <div class="gc-bg-faq">
+      <details><summary>How much mix per cup?</summary><p>{{ qa1 }}</p></details>
+      <details><summary>What&rsquo;s in the blend?</summary><p>{% for p in site.data.premixes %}<b>{{ p.name }}:</b> {{ p.inside }}{% unless forloop.last %}<br>{% endunless %}{% endfor %}</p></details>
+      <details><summary>Is it sweetened?</summary><p>{{ qa3 }}</p></details>
+      <details><summary>Can I make it iced?</summary><p>Yes. Brew it stronger than you would hot, chill it properly before it meets ice, and sweeten while it&rsquo;s still warm. The full method is on our <a href="{{ '/how-to-make-iced-chai/' | relative_url }}">iced chai page</a>.</p></details>
+    </div>
+  </section>
+
+  {%- comment -%} 8. The premix {%- endcomment %}
+  <aside class="gc-bg-buy" aria-label="Our masala chai premix">
+    <div class="gc-bg-buy-pic"><picture><source type="image/webp" srcset="{{ o }}pouch-masala-front-250.webp 250w, {{ o }}pouch-masala-front-500.webp 500w" sizes="160px"><img src="{{ o }}pouch-masala-front-500.jpg" srcset="{{ o }}pouch-masala-front-250.jpg 250w, {{ o }}pouch-masala-front-500.jpg 500w" sizes="160px" width="500" height="875" alt="A pouch of God's Chai {{ orig.name }} premix" loading="lazy" decoding="async"></picture></div>
+    <div>
+      <span class="gc-bg-k">The mix in step 2</span>
+      <h2>God&rsquo;s Chai <em>premix</em></h2>
+      <p>The spice is ground and blended for you, so it&rsquo;s the same cup every time. {{ orig.name }} or Rose &amp; Cardamom.</p>
+      <p class="gc-bg-price">{% if site.data.shop.open %}${% include money.html v=site.data.shop.price %} · {% endif %}{{ brew.pouch_grams }} g · {{ cups_per_pouch }} cups a pouch</p>
+      <a href="{{ '/premixes/' | relative_url }}">{% if site.data.shop.open %}Get a pouch{% else %}See the premixes{% endif %}</a>
+    </div>
+  </aside>
+</div>
 
 {%- comment -%} HowTo structured data: the method at `serves` cups, for Google's rich results. Not shown on the page. {%- endcomment %}
 <script type="application/ld+json">
@@ -192,10 +449,26 @@ og_image: "uploads/opt/pour-a-1280.jpg"
       {%- capture st %}{% include brew-text.html t=s.title plain=true %}{% endcapture %}
       "name": {{ st | strip | jsonify }},
       "text": {{ s.desc | jsonify }},
-      "url": "{{ page.url | absolute_url }}#page-h1"
+      {%- if s.clip %}
+      "image": "{{ '/uploads/opt/' | absolute_url }}{{ s.clip }}-640.jpg",
+      {%- endif %}
+      "url": "{{ page.url | absolute_url }}#gc-bg-steps-h"
     }{% unless forloop.last %},{% endunless %}
     {%- endfor %}
   ],
   "publisher": { "@id": "{{ '/' | absolute_url }}#organization" }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "@id": "{{ page.url | absolute_url }}#faq",
+  "mainEntity": [
+    { "@type": "Question", "name": "How much mix per cup?", "acceptedAnswer": { "@type": "Answer", "text": {{ qa1 | jsonify }} } },
+    { "@type": "Question", "name": "What's in the blend?", "acceptedAnswer": { "@type": "Answer", "text": {{ qa2 | jsonify }} } },
+    { "@type": "Question", "name": "Is it sweetened?", "acceptedAnswer": { "@type": "Answer", "text": {{ qa3 | jsonify }} } },
+    { "@type": "Question", "name": "Can I make it iced?", "acceptedAnswer": { "@type": "Answer", "text": {{ qa4 | jsonify }} } }
+  ]
 }
 </script>

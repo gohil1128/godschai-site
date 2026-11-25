@@ -351,28 +351,54 @@ Another item (chai concentrate by the litre, say) is just one more entry under
 
 ## Change the brew guide
 
-`/how-to-make-masala-chai/` is one small card, and nothing else:
+`/how-to-make-masala-chai/` reads top to bottom, in this order:
 
-- **Cups** (− 2 +): the water, milk and heaped tablespoons of mix (with ml and
-  grams) follow, and so do the amounts in the steps. From 5 cups it says to
-  use a big pot. `?cups=6` opens it at 6.
-- **Shade**: a slim bar of four chai colours, Light, Smooth, Kadak (how we pour
-  it) and Extra kadak, with a line about the one picked. It sets the simmer
-  time and the number of rises in step 03. `#colour` jumps to it (the premix
-  pages link there).
-- **The four steps**, with the time to the boil on step 01 and the simmer time
-  on step 03.
-- **A simmer timer** in step 03: ▶ starts it when the mix is in, tap again to
-  pause. A thin bar fills from milky to the shade picked, a soft chime and a
-  line prompt each rise, three chimes say strain (phones that can, buzz too),
-  and the screen stays awake while it runs.
+1. **Intro** beside a muted loop of chai being strained into a mug (the
+   homepage hero's `hero-strain` clip), with the total time.
+2. **"I'm making − 2 + cups"**: four tiles follow, water, whole milk, God's
+   Chai (heaped tablespoons and grams, with the pouch photo) and sugar (to
+   taste). From 5 cups a line says to use a big pot. `?cups=6` opens it at 6.
+3. **You'll need** (pot, tablespoon, fine strainer, cup) and **which milk**
+   (whole, or barista oat). Plain text and line icons in the page.
+4. **Pick your shade**: four chai-coloured tiles, Light, Smooth, Kadak
+   (marked "How we pour it") and Extra kadak, each with its simmer time for
+   the cups chosen. The one picked sets the rises and the timer in step 3.
+   `#colour` jumps here (the premix pages link to it).
+5. **Four step cards**, each with a few silent seconds of that step
+   (`uploads/video/brew-boil|blend|rise|strain.mp4`, first frames in
+   `uploads/opt/brew-*-640.jpg`). They play only while on screen, and not at
+   all with reduced motion or data saver.
+   Step 1 shows the time to the boil; step 3 shows the simmer time and has
+   the **simmer timer**: ▶ starts it when the mix is in, tap again to pause.
+   A thin bar fills from milky to the shade picked, a soft chime and a line
+   prompt each rise, three chimes say strain (phones that can, buzz too), and
+   the screen stays awake while it runs.
+6. **How did your cup turn out?** Four chips (just right, too weak, too
+   strong, boiled over), each showing a tip. CSS only, so it works without
+   JavaScript.
+7. **Questions**: mix per cup, what's in the blends (from
+   `_data/premixes.yml`), sweetened?, iced? Also published as `FAQPage`
+   structured data; change the answers in the page and both follow.
+8. **The premix**: pouch photo, price (while `shop.open`), pouch size and
+   cups, and a link to `/premixes/`.
+
+On phones it's laid out dense, so each screenful carries as much as it can:
+the intro sits beside a small clip, the four ingredients and the four shades
+each fit one row, the steps are a tight list with a small video beside each,
+and the whole guide is about three screens. Those styles are the
+`max-width:600px` block in the page.
+
+The layout took its cues from other brew guides (sentence-style calculator,
+step cards with video, colour tiles, "how did it turn out"); the words,
+photos, clips and timings are all ours.
 
 It's all written out for 2 cups and Kadak, so it reads right without
 JavaScript (then the controls are just hidden). Markup and styles:
 `how-to-make-masala-chai/index.html`; behaviour: `assets/js/site.js`, 5c.
 
 Everything it says comes from **`_data/brew.yml`**: `amounts` (per cup), the
-`steps` (also used by the homepage teaser), the `shades` (name, colour,
+`steps` (also used by the homepage teaser; `clip` names each step's video),
+the `shades` (name, colour,
 simmer minutes for 2 cups, rises, a line about it) and the timing rule
 (`boil_base`, `boil_per_cup`, `simmer_per_cup`). The times are rough guides
 for a stove on medium-high; change them after timing your own pot. The same
@@ -380,8 +406,7 @@ file feeds the page's `HowTo` structured data, which Google can show as a
 recipe-style result.
 
 The longer written guide (why the double boil, the spices, common mistakes)
-was taken off the page to keep it simple; it's in the git history if it's
-ever wanted back.
+is in the git history if it's ever wanted back.
 
 ---
 

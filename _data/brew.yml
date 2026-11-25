@@ -33,18 +33,22 @@ tools:
 
 steps:
   - label: "Boil"
+    clip: "brew-boil"
     title: "{water} water, {milk} milk"
     desc: "Bring both to a boil together in a small pot. Equal parts, no measuring cup gymnastics."
     accent: false
   - label: "Blend"
+    clip: "brew-blend"
     title: "{mix} God's Chai"
     desc: "Stir in the mix and sugar to taste. Give the bag a shake first — the spices settle."
     accent: false
   - label: "Rise"
+    clip: "brew-rise"
     title: "Let it rise 2–3 times"
     desc: "Let it climb the pot, pull it back, repeat. This is where the magic happens — don't skip it."
     accent: true
   - label: "Strain"
+    clip: "brew-strain"
     title: "Strain and enjoy"
     desc: "Pour through a fine strainer into your cup. Kadak, spiced, exactly right."
     accent: false
