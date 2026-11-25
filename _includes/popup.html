@@ -63,18 +63,27 @@
   }
   /* Product pages have a buy bar along the bottom on phones: sit above it. */
   body:has(.gc-sticky.is-on) .gc-club{bottom:calc(84px + env(safe-area-inset-bottom))}
-  /* After it's closed: a small "10% off" dot in the same corner opens it again. */
-  .gc-club-dot{position:fixed;right:20px;bottom:20px;z-index:8990;width:56px;height:56px;padding:0;border:0;border-radius:50%;
+  /* After it's closed: a small "10% off" dot in the same corner opens it again.
+     It's frosted glass, so it sits in whatever is behind it: bright clear
+     glass with white text over the homepage hero photos (while the header is in its
+     dark, see-through state), pale with brown text over the light pages. */
+  .gc-club-dot{position:fixed;right:18px;bottom:18px;z-index:8990;width:50px;height:50px;padding:0;border-radius:50%;
     display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;cursor:pointer;
-    background:#B55F3E;color:#FFFFFF;box-shadow:0 6px 18px rgba(59,31,18,0.22),inset 0 0 0 1px rgba(59,31,18,0.10);
-    font-family:'Hanken Grotesk',sans-serif;transform:scale(.6);opacity:0;transition:transform .35s cubic-bezier(.2,1.3,.4,1),opacity .25s ease}
+    background:rgba(251,248,243,0.58);color:#8B472C;border:1px solid rgba(60,33,22,0.12);
+    -webkit-backdrop-filter:blur(12px) saturate(1.2);backdrop-filter:blur(12px) saturate(1.2);
+    box-shadow:0 4px 14px rgba(59,31,18,0.10);
+    font-family:'Hanken Grotesk',sans-serif;transform:scale(.6);opacity:0;
+    transition:transform .35s cubic-bezier(.2,1.3,.4,1),opacity .25s ease,background-color .5s ease,color .5s ease,border-color .5s ease}
+  body:has([data-gc-nav].gc-dark) .gc-club-dot{background:linear-gradient(180deg,rgba(255,250,242,0.26) 0%,rgba(255,250,242,0.12) 100%);color:#FFFFFF;
+    border-color:rgba(255,250,242,0.42);box-shadow:inset 0 1px 0 rgba(255,255,255,0.4),0 8px 22px rgba(0,0,0,0.16);text-shadow:0 1px 6px rgba(0,0,0,0.25);
+    -webkit-backdrop-filter:blur(14px) saturate(1.5) brightness(1.12);backdrop-filter:blur(14px) saturate(1.5) brightness(1.12)}
   .gc-club-dot[hidden]{display:none}
   .gc-club-dot.is-in{transform:none;opacity:1}
-  .gc-club-dot:hover,.gc-club-dot:focus-visible{transform:scale(1.07)}
-  .gc-club-dot:focus-visible{outline:2px solid #3C2116;outline-offset:3px}
-  .gc-club-dot b{font:800 15px/1 'Hanken Grotesk',sans-serif}
-  .gc-club-dot small{font:600 9px/1 'DM Mono',monospace;letter-spacing:0.08em;text-transform:uppercase}
-  @media (max-width:560px){.gc-club-dot{right:14px;bottom:14px;width:50px;height:50px}.gc-club-dot b{font-size:14px}}
+  .gc-club-dot:hover,.gc-club-dot:focus-visible{transform:scale(1.06);opacity:1}
+  .gc-club-dot:focus-visible{outline:2px solid currentColor;outline-offset:3px}
+  .gc-club-dot b{font:700 13.5px/1 'Hanken Grotesk',sans-serif}
+  .gc-club-dot small{font:500 8.5px/1 'DM Mono',monospace;letter-spacing:0.1em;text-transform:uppercase;opacity:0.85}
+  @media (max-width:560px){.gc-club-dot{right:14px;bottom:14px;width:46px;height:46px}.gc-club-dot b{font-size:13px}}
   body:has(.gc-sticky.is-on) .gc-club-dot{bottom:calc(84px + env(safe-area-inset-bottom))}
   @media (prefers-reduced-motion:reduce){.gc-club{transition:none}.gc-club-dot{transition:none}}
 </style>
