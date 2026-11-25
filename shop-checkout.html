@@ -83,20 +83,23 @@ csp:
   .gc-co-form legend + *{clear:both}
   .gc-co-form legend span{flex:0 0 auto;width:30px;height:30px;border-radius:999px;background:#B55F3E;color:#FFFFFF;
     font:700 14px/30px 'Hanken Grotesk',sans-serif;text-align:center}
-  .gc-co-f{display:block;margin:0 0 14px}
-  .gc-co-f > span{display:block;font-size:13.5px;color:var(--gc-fg3);margin:0 0 6px}
-  .gc-co-f > span small{color:var(--gc-muted);font-size:12.5px}
-  .gc-co-f input,.gc-co-f select{display:block;width:100%;box-sizing:border-box;margin:0;padding:13px 14px;border-radius:12px;
-    border:1px solid rgba(var(--gc-ink-rgb),0.18);background:rgba(var(--gc-ink-rgb),0.05);color:var(--gc-fg);font:400 16px 'Hanken Grotesk',sans-serif;
-    transition:border-color .2s ease,background-color .2s ease}
-  .gc-co-f select{appearance:none;-webkit-appearance:none;background-image:linear-gradient(45deg,transparent 50%,#8B472C 50%),linear-gradient(135deg,#8B472C 50%,transparent 50%);
-    background-position:calc(100% - 18px) 55%,calc(100% - 13px) 55%;background-size:5px 5px;background-repeat:no-repeat;padding-right:34px}
+  /* Minimal fields: a hairline underline on the page, no boxes. Text stays 16px so phones don't zoom in. */
+  .gc-co-f{display:block;margin:0 0 16px;min-width:0}
+  .gc-co-f > span{display:block;font:400 10.5px/1.4 'DM Mono',monospace;letter-spacing:0.12em;text-transform:uppercase;color:var(--gc-muted);margin:0}
+  .gc-co-f > span small{font:400 11.5px 'Hanken Grotesk',sans-serif;letter-spacing:0;text-transform:none;color:var(--gc-muted);opacity:0.8}
+  .gc-co-f input,.gc-co-f select{display:block;width:100%;min-width:0;max-width:100%;box-sizing:border-box;margin:0;min-height:40px;padding:7px 0 8px;
+    border:0;border-bottom:1px solid rgba(var(--gc-ink-rgb),0.2);border-radius:0;background:transparent;color:var(--gc-fg);
+    font:400 16px 'Hanken Grotesk',sans-serif;-webkit-appearance:none;appearance:none;transition:border-color .2s ease,box-shadow .2s ease}
+  .gc-co-f input[type="date"],.gc-co-f input[type="time"]{text-align:left}
+  .gc-co-f input::-webkit-date-and-time-value{text-align:left}
+  .gc-co-f select{padding-right:20px;background-image:linear-gradient(45deg,transparent 50%,var(--gc-muted) 50%),linear-gradient(135deg,var(--gc-muted) 50%,transparent 50%);
+    background-position:calc(100% - 8px) 55%,calc(100% - 3px) 55%;background-size:5px 5px;background-repeat:no-repeat;text-overflow:ellipsis}
   .gc-co-f select option{background:var(--gc-bg2);color:var(--gc-fg)}
-  .gc-co-f input:hover,.gc-co-f select:hover{border-color:rgba(var(--gc-ink-rgb),0.32)}
-  .gc-co-f input:focus,.gc-co-f select:focus{outline:none;border-color:var(--gc-gold-t);background:rgba(var(--gc-ink-rgb),0.08)}
-  .gc-co-f input:focus-visible,.gc-co-f select:focus-visible{outline:2px solid var(--gc-gold-t);outline-offset:2px}
+  .gc-co-f textarea{min-height:44px;resize:vertical;line-height:1.45}
+  .gc-co-f input::placeholder{color:var(--gc-muted);opacity:0.65}
+  .gc-co-f input:focus,.gc-co-f select:focus{outline:none;border-bottom-color:var(--gc-coral-t);box-shadow:0 1px 0 var(--gc-coral-t)}
+  .gc-co-f input[aria-invalid="true"],.gc-co-f select[aria-invalid="true"]{border-bottom-color:var(--gc-coral-t)}
   .gc-co-f input[readonly],.gc-co-f select:disabled{opacity:.7;cursor:default}
-  .gc-co-f input[aria-invalid="true"],.gc-co-f select[aria-invalid="true"]{border-color:var(--gc-coral-t)}
   .gc-co-msg{display:block;min-height:0;margin:6px 0 0;font-size:13px;color:var(--gc-coral-t)}
   .gc-co-msg:empty{display:none}
   .gc-co-msg button{margin-left:6px;padding:0;border:0;background:none;color:var(--gc-gold-t);font:600 13px 'Hanken Grotesk',sans-serif;text-decoration:underline;cursor:pointer}

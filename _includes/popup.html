@@ -40,15 +40,15 @@
   .gc-club summary::-webkit-details-marker{display:none}
   .gc-club details[open] summary{margin-bottom:6px}
   .gc-club ul{margin:0;padding:0 0 0 18px;line-height:1.55}
-  .gc-club form{display:flex;gap:8px;flex-wrap:wrap}
-  .gc-club input[type="email"]{flex:1 1 150px;min-width:0;box-sizing:border-box;padding:11px 14px;border-radius:999px;
-    border:1px solid rgba(59,31,18,0.25);background:#FFF6EC;color:#3C2116;font:400 15px 'Hanken Grotesk',sans-serif}
+  .gc-club form{display:flex;gap:8px 12px;align-items:flex-end;flex-wrap:wrap}
+  .gc-club input[type="email"]{flex:1 1 150px;min-width:0;box-sizing:border-box;padding:8px 0 9px;border-radius:0;
+    border:0;border-bottom:1px solid rgba(59,31,18,0.3);background:transparent;color:#3C2116;font:400 16px 'Hanken Grotesk',sans-serif}
   .gc-club input[type="email"]::placeholder{color:#9A7A62}
   /* The site-wide email styles are made for dark backgrounds. */
   .gc-club input[type="email"]:hover{border-color:rgba(59,31,18,0.45)!important}
-  .gc-club input[type="email"]:focus{border-color:#3C2116!important;background:#FFF6EC!important}
-  .gc-club input[type="email"]:focus-visible{outline:2px solid #3C2116!important;outline-offset:2px}
-  .gc-club button[type="submit"]{flex:0 0 auto;padding:11px 18px;border:0;border-radius:999px;background:#3C2116;color:#F2EBE1;
+  .gc-club input[type="email"]:focus{border-color:#3C2116!important;background:transparent!important;box-shadow:0 1px 0 #3C2116;outline:none}
+  .gc-club input[type="email"]:focus-visible{outline:none!important}
+  .gc-club button[type="submit"]{flex:0 0 auto;padding:9px 16px;border:0;border-radius:999px;background:#3C2116;color:#F2EBE1;
     font:700 14.5px 'Hanken Grotesk',sans-serif;cursor:pointer;transition:background .2s ease}
   .gc-club button[type="submit"]:hover{background:#5A3220}
   .gc-club [data-gc-signup-msg]{flex:1 1 100%;margin:2px 0 0;font-size:13.5px;line-height:1.45;font-weight:600;color:#3C2116!important}

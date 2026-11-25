@@ -545,6 +545,28 @@ The menu bar runs in the same order: Shop, Catering, Menu, Brew Guide, Events
 panel with the main pages and the Instagram, TikTok and Facebook icons; a
 link, a tap outside or Escape closes it (`site.js`, "phone menu").
 
+**Buttons.** Every filled button (shop, add to cart, send my enquiry, pay,
+sign up…) shows a few seconds of our boiling-chai footage under a
+see-through chai tint, so it reads as a gentle animation. The texture is
+`uploads/opt/btn-boil.webp` (80 KB, an 8-second loop), cut from the hero's
+pot clip with:
+
+    ffmpeg -i uploads/video/hero-pot-wide.mp4 -vf "crop=680:160:330:300,fps=8,scale=340:80:flags=lanczos,gblur=sigma=0.5" \
+      -c:v libwebp_anim -q:v 35 -compression_level 6 -loop 0 -an uploads/opt/btn-boil.webp
+
+`btn-boil-still.webp` is one frame of it, used when reduced motion is on.
+The tint and hover are in `_includes/base-styles-dark.html` (`--gc-boil`).
+The tint is the colour of the real chai in the clip (`#C9934A`, sampled
+from the video frames), with dark espresso text (`#2B170B`) so the label
+stays easy to read. Hover makes it a little lighter.
+
+Forms (catering enquiry, bulk orders, checkout, the email sign-ups, the Chai
+Club card) all use the same minimal fields: a small mono label, the field as a
+hairline underline on the page (no boxes), a coral underline on focus, and
+short fields paired two to a row even on phones. The text in a field stays
+16px so iPhones don't zoom in. The card number field at checkout is Square's
+own box (styled in `assets/js/pay.js`).
+
 The footer is kept short: the logo, one line, the main pages on one line, the
 guides on a smaller line under them, the three social icons, and the email
 sign-up. The social icons are one include, `_includes/social-icons.html`, used
