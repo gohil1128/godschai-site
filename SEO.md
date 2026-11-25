@@ -367,7 +367,7 @@ Another item (chai concentrate by the litre, say) is just one more entry under
 5. **Four step cards**, each with a few silent seconds of that step
    (`uploads/video/brew-boil|blend|rise|strain.mp4`, first frames in
    `uploads/opt/brew-*-640.jpg`). They play only while on screen, and not at
-   all with reduced motion or data saver. On phones the cards swipe sideways.
+   all with reduced motion or data saver.
    Step 1 shows the time to the boil; step 3 shows the simmer time and has
    the **simmer timer**: ▶ starts it when the mix is in, tap again to pause.
    A thin bar fills from milky to the shade picked, a soft chime and a line
@@ -381,6 +381,12 @@ Another item (chai concentrate by the litre, say) is just one more entry under
    structured data; change the answers in the page and both follow.
 8. **The premix**: pouch photo, price (while `shop.open`), pouch size and
    cups, and a link to `/premixes/`.
+
+On phones it's laid out dense, so each screenful carries as much as it can:
+the intro sits beside a small clip, the four ingredients and the four shades
+each fit one row, the steps are a tight list with a small video beside each,
+and the whole guide is about three screens. Those styles are the
+`max-width:600px` block in the page.
 
 The layout took its cues from other brew guides (sentence-style calculator,
 step cards with video, colour tiles, "how did it turn out"); the words,
