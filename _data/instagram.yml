@@ -37,13 +37,13 @@ tiles:
     widths: "400"
     video: community-rose.mp4
     alt: "An iced God's Chai topped with rose petals"
-  - image: drink-lavender
+  - image: drink-lavender-studio
     widths: "320,640"
     alt: "Lavender Cold Foam Chai topped with lavender cream-cheese foam"
   - image: pouch-rose-front
     widths: "250,500"
     alt: "The Rose & Cardamom premix pouch"
-  - image: drink-chocolate
+  - image: drink-chocolate-studio
     widths: "320,640"
     alt: "Iced Chocolate Chai with dark chocolate, hazelnut syrup and biscuit crumbles"
   - image: drink-montblanc-v2

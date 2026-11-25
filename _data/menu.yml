@@ -31,7 +31,7 @@ iced:
   - name: "Iced Chocolate Chai"
     desc: "House chai concentrate with rich dark chocolate, milk, hazelnut syrup and biscuit crumbles."
     short: "Dark chocolate & hazelnut."
-    img: "uploads/drink-chocolate.jpeg"
+    img: "uploads/drink-chocolate-studio.jpg"
     alt: "Iced Chocolate Chai with dark chocolate, hazelnut syrup and biscuit crumbles"
 
   - name: "YXE's Mont Blanc"
@@ -44,13 +44,13 @@ iced:
     desc: "Decadent house-made banana bread syrup with oat milk and chai concentrate."
     short: "Banana bread syrup, oat milk."
     menu_name: "Iced Banana Bread Chai · Oat Milk"
-    img: "uploads/drink-bananabread.jpeg"
+    img: "uploads/drink-bananabread-studio.png"
     alt: "Iced Banana Bread Chai with oat milk and house banana bread syrup"
 
   - name: "Lavender Cold Foam Chai"
     desc: "House chai concentrate and milk under a lavender cream-cheese cold foam."
     short: "Lavender cream-cheese foam."
-    img: "uploads/drink-lavender.jpeg"
+    img: "uploads/drink-lavender-studio.jpg"
     alt: "Lavender Cold Foam Chai topped with lavender cream-cheese foam"
 
 # Food.

@@ -34,10 +34,14 @@ OUT = os.path.join(PUB, "opt")
 # and ship only the pixels that are actually visible.
 DRINKS_4x5 = [
     "drink-gulabo-studio.png",
-    "drink-chocolate.jpeg",
+    # Chocolate and lavender: the original shots, reframed like the studio
+    # photos (cup centred, ~48% of the width) with the orange tablecloth and
+    # wall recoloured to a studio backdrop (cocoa / dusty rose). Banana bread
+    # uses its studio photo.
+    "drink-chocolate-studio.jpg",
     "drink-montblanc-v2.jpeg",
-    "drink-bananabread.jpeg",
-    "drink-lavender.jpeg",
+    "drink-bananabread-studio.png",
+    "drink-lavender-studio.jpg",
     "pour-cup.jpeg",
 ]
 DRINK_WIDTHS = (320, 640)

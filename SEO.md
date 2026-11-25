@@ -539,6 +539,14 @@ cropped square and graded to match the site; the graded originals are in
 `uploads/_src/offer-*.jpg`, sized by `tools/optimize-images.py`. To swap one,
 replace that file with another square photo and run the script.
 
+The iced drink photos on the menu all follow one studio look: the cup is big and
+centred on a plain backdrop. Gulabo, Mont Blanc and Banana Bread are studio
+shots (`uploads/_src/drink-*-studio.png`, `drink-montblanc-v2.jpeg`). Chocolate
+and Lavender were shot on an orange tablecloth. Their `drink-*-studio.jpg`
+versions are the same photos reframed to match, with the cloth and wall
+recoloured to cocoa (chocolate) and dusty rose (lavender). The real shadows,
+folds and clear plastic are kept, and the orange glow on the drinks is toned down.
+
 The menu bar runs in the same order: Shop, Catering, Menu, Brew Guide, Events
 (`_includes/nav-dark.html`). On phones (under 760px) the links and the
 @godschai pill fold into one round menu button next to the bag. It opens a
