@@ -47,6 +47,8 @@ FULL_BLEED = {
     # The homepage strip's three small square photos (premixes, catering, bulk
     # orders), cropped and graded from our own shoots; shown at 68px.
     "offer-premix.jpg": (160, 320),
+    # The Classic Hot Chai on the menu: a frame of our straining footage, square.
+    "hot-chai-cup.jpg": (320, 640),
     "offer-catering.jpg": (160, 320),
     "offer-bulk.jpg": (160, 320),
     "hero-journey-web.jpeg": (480, 960, 1600),
@@ -78,6 +80,10 @@ LOGOS = {
 PRODUCT = {
     "pouch-masala-front.png": (250, 500),
     "pouch-rose-front.png": (250, 500),
+    # Real photos of the two pouches (cropped to the same 4:7 shape as the
+    # renders above); these are what the site shows.
+    "pouch-masala-real.jpg": (250, 500),
+    "pouch-rose-real.jpg": (250, 500),
 }
 
 # First frames of the two community clips, shown while the video is still

@@ -29,7 +29,7 @@ Optional extras:
 | `menu_name` | A longer name, used only in the menu data Google reads |
 | `menu_desc` | A longer description, same |
 | `logo_tile` | `true` shows the God's Chai logo instead of a photo |
-| `photo` | A picture already sized in `uploads/opt` at 160 and 320 px (the samosa uses `offer-bulk`) |
+| `photo` | A picture already sized in `uploads/opt` at 160 and 320 px (the samosa uses `offer-bulk`); add `photo_widths` if it has other sizes (the Classic Hot Chai uses `hot-chai-cup`, a frame of our straining footage, at 320 and 640) |
 
 That one edit updates the homepage menu **and** the `Menu` structured data
 Google reads. They can't drift apart.
@@ -109,7 +109,7 @@ block on the homepage **and** the `/premixes/` page together.
   key: "o"                              # its letter in the shop's checkout links — don't change
   notes: "Bold · Warm · Rich"          # the small uppercase line
   blurb: "The cart recipe, in a pouch…" # only shown on /premixes/
-  img: "pouch-masala-front"             # uploads/pouch-masala-front.png, no extension
+  img: "pouch-masala-real"              # a real photo of the pouch, uploads/_src/pouch-masala-real.jpg (4:7), no extension
   alt: "God's Chai Original Masala premix pouch, 125g, makes 25 cups"
   tilt: "rotate(-3deg)"                 # how it leans on the homepage
 ```

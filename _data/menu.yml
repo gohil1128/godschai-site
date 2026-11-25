@@ -10,7 +10,9 @@ hot:
     short: "The original masala chai, hot."
     menu_desc: "Slow-simmered masala chai — whole spices from Kerala, single-origin Assam tea and real milk. The original, served hot."
     img: ""
-    alt: "A hot cup of God's Chai classic masala chai"
+    photo: "hot-chai-cup"               # already in uploads/opt: a frame of our straining footage
+    photo_widths: "320,640"
+    alt: "Fresh masala chai being strained into a mug, a pouch of God's Chai behind it"
 
 # Iced & signature drinks.
 iced:
