@@ -17,6 +17,20 @@ og_image: "uploads/og-image.jpg"
 <div style="position:relative;z-index:1">
 
   <!-- ================= HERO ================= -->
+  <style>
+    /* The hero's two buttons: frosted glass that lets the photo show through,
+       the main one tinted coral. Same family as the "10% off" badge. */
+    .gc-hb{display:inline-flex;align-items:center;text-decoration:none;font-weight:600;font-size:15px;line-height:1;padding:13px 21px;border-radius:999px;
+      color:#F2EBE1;background:rgba(16,10,5,0.22);border:1px solid rgba(242,235,225,0.26);
+      -webkit-backdrop-filter:blur(12px) saturate(1.2);backdrop-filter:blur(12px) saturate(1.2);
+      transition:background-color .25s ease,border-color .25s ease}
+    .gc-hb-main{background:rgba(181,95,62,0.52);border-color:rgba(227,152,116,0.42)}
+    .gc-hb:hover{background:rgba(16,10,5,0.4);border-color:rgba(242,235,225,0.5)}
+    .gc-hb-main:hover{background:rgba(181,95,62,0.78);border-color:rgba(227,152,116,0.7)}
+    .gc-hb:focus-visible{outline:2px solid #F2EBE1;outline-offset:3px}
+    @media (max-width:560px){.gc-hb{font-size:14.5px;padding:12px 19px}}
+    @media (prefers-reduced-motion:reduce){.gc-hb{transition:none}}
+  </style>
   <section class="gc-dark" aria-labelledby="hero-h1" style="position:relative;height:100vh;min-height:620px;background:var(--gc-bg)">
     <div style="position:relative;height:100%;overflow:hidden;background:var(--gc-bg)">
     {%- comment -%}
@@ -78,11 +92,11 @@ og_image: "uploads/og-image.jpg"
         <p style="font-size:clamp(1.05rem,1.5vw,1.3rem);line-height:1.5;color:var(--gc-fg2);max-width:36ch;margin:20px 0 0;text-shadow:0 2px 16px rgba(0,0,0,0.6)">Whole spices from Kerala. Single-origin Assam tea. Poured fresh, the real way.</p>
         <div style="display:flex;gap:13px;flex-wrap:wrap;margin-top:30px">
           {%- if site.data.shop.open %}
-          <a href="{{ '/premixes/' | relative_url }}" style="text-decoration:none;background:#B55F3E;color:#FFFFFF;font-weight:700;font-size:16px;padding:15px 26px;border-radius:999px;box-shadow:0 12px 34px rgba(var(--gc-coral-rgb),0.45)" class="gc-pill-coral">Shop premixes →</a>
-          <a href="{{ '/catering/' | relative_url }}" style="text-decoration:none;background:rgba(var(--gc-ink-rgb),0.10);color:var(--gc-fg);font-weight:600;font-size:16px;padding:15px 24px;border-radius:999px;border:1.5px solid rgba(var(--gc-ink-rgb),0.3);backdrop-filter:blur(4px)" class="gc-pill-ghost">Book catering</a>
+          <a href="{{ '/premixes/' | relative_url }}" class="gc-hb gc-hb-main">Shop premixes →</a>
+          <a href="{{ '/catering/' | relative_url }}" class="gc-hb">Book catering</a>
           {%- else %}
-          <a href="#menu" style="text-decoration:none;background:#B55F3E;color:#FFFFFF;font-weight:700;font-size:16px;padding:15px 26px;border-radius:999px;box-shadow:0 12px 34px rgba(var(--gc-coral-rgb),0.45)" class="gc-pill-coral">View the menu →</a>
-          <a href="{{ '/catering/' | relative_url }}" style="text-decoration:none;background:rgba(var(--gc-ink-rgb),0.10);color:var(--gc-fg);font-weight:600;font-size:16px;padding:15px 24px;border-radius:999px;border:1.5px solid rgba(var(--gc-ink-rgb),0.3);backdrop-filter:blur(4px)" class="gc-pill-ghost">Book catering</a>
+          <a href="#menu" class="gc-hb gc-hb-main">View the menu →</a>
+          <a href="{{ '/catering/' | relative_url }}" class="gc-hb">Book catering</a>
           {%- endif %}
         </div>
         <ul class="gc-hero-facts">
