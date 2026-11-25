@@ -361,8 +361,8 @@ Another item (chai concentrate by the litre, say) is just one more entry under
    taste). From 5 cups a line says to use a big pot. `?cups=6` opens it at 6.
 3. **You'll need** (pot, tablespoon, fine strainer, cup) and **which milk**
    (whole, or barista oat). Plain text and line icons in the page.
-4. **Pick your shade**: four chai-coloured tiles, Light, Smooth, Kadak
-   (marked "How we pour it") and Extra kadak, each with its simmer time for
+4. **Pick your shade**: four chai-coloured tiles, Light, Smooth, Bold
+   (marked "How we pour it") and Extra bold, each with its simmer time for
    the cups chosen. The one picked sets the rises and the timer in step 3.
    `#colour` jumps here (the premix pages link to it).
 5. **Four step cards**, each with a few silent seconds of that step
@@ -393,7 +393,7 @@ The layout took its cues from other brew guides (sentence-style calculator,
 step cards with video, colour tiles, "how did it turn out"); the words,
 photos, clips and timings are all ours.
 
-It's all written out for 2 cups and Kadak, so it reads right without
+It's all written out for 2 cups and Bold, so it reads right without
 JavaScript (then the controls are just hidden). Markup and styles:
 `how-to-make-masala-chai/index.html`; behaviour: `assets/js/site.js`, 5c.
 
