@@ -104,11 +104,6 @@ og_image: "uploads/og-image.jpg"
     font:700 13.5px 'Hanken Grotesk',sans-serif;cursor:pointer}
 
   /* How it works */
-  .gc-bk-how{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:clamp(14px,1.8vw,20px)}
-  .gc-bk-how > div{padding:24px 22px 26px;background:rgba(var(--gc-surf-rgb),0.8);border:1px solid rgba(var(--gc-gold-rgb),0.16);border-radius:22px}
-  .gc-bk-how span{font-family:'Instrument Serif',serif;font-size:40px;line-height:0.8;color:var(--gc-gold-t)}
-  .gc-bk-how h3{font-family:'Instrument Serif',serif;font-weight:400;font-size:1.3rem;margin:16px 0 0;color:var(--gc-fg)}
-  .gc-bk-how p{color:var(--gc-fg4);line-height:1.55;margin:8px 0 0;font-size:0.97rem}
   @media (prefers-reduced-motion:reduce){.gc-bk-step button,.gc-bk-f input,.gc-bk-f textarea{transition:none}}
 </style>
 
@@ -200,10 +195,15 @@ og_image: "uploads/og-image.jpg"
 <section aria-labelledby="how-h2" style="background:rgba(var(--gc-surf-rgb),0.6);border-top:1px solid rgba(var(--gc-ink-rgb),0.08);border-bottom:1px solid rgba(var(--gc-ink-rgb),0.08)">
   <div style="max-width:1120px;margin:0 auto;padding:clamp(46px,6vw,80px) clamp(16px,4vw,40px)">
     <h2 id="how-h2" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(1.9rem,4.4vw,3rem);letter-spacing:0;margin:0 0 26px;color:var(--gc-fg)">How it works</h2>
-    <div class="gc-bk-how" data-gc-stagger>
-      <div class="gc-card"><span>01</span><h3>Send your request</h3><p>Pick how much chai and how many samosas, the day, and pickup or delivery. It lands in our inbox.</p></div>
-      <div class="gc-card"><span>02</span><h3>We confirm and quote</h3><p>We check we're free and reply with the price and a payment link. No packages to decode.</p></div>
-      <div class="gc-card"><span>03</span><h3>Chai time</h3><p>Pay when you're happy with it, then pick it up or we bring it to you. Everyone gets a proper cup.</p></div>
+    <div class="gc-tabbar" data-gc-tabbar role="tablist" aria-label="How it works">
+      <a class="gc-tab" role="tab" id="tab-how-1" href="#how-1" aria-controls="how-1" aria-selected="true"><small>01</small>Send</a>
+      <a class="gc-tab" role="tab" id="tab-how-2" href="#how-2" aria-controls="how-2" aria-selected="false"><small>02</small>Confirm</a>
+      <a class="gc-tab" role="tab" id="tab-how-3" href="#how-3" aria-controls="how-3" aria-selected="false"><small>03</small>Chai time</a>
+    </div>
+    <div class="gc-tabpanels">
+      <div class="gc-tabpanel" id="how-1" role="tabpanel" aria-labelledby="tab-how-1" tabindex="0"><h3>Send your request</h3><p>Pick how much chai and how many samosas, the day, and pickup or delivery. It lands in our inbox.</p><a class="gc-tabnext" href="#how-2" data-gc-tabnext>Next: we confirm →</a></div>
+      <div class="gc-tabpanel" id="how-2" role="tabpanel" aria-labelledby="tab-how-2" tabindex="0"><h3>We confirm and quote</h3><p>We check we're free and reply with the price and a payment link. No packages to decode.</p><a class="gc-tabnext" href="#how-3" data-gc-tabnext>Next: chai time →</a></div>
+      <div class="gc-tabpanel" id="how-3" role="tabpanel" aria-labelledby="tab-how-3" tabindex="0"><h3>Chai time</h3><p>Pay when you're happy with it, then pick it up or we bring it to you. Everyone gets a proper cup.</p></div>
     </div>
     <p style="margin:28px 0 0;font-size:1.02rem;line-height:1.6;color:var(--gc-fg3);max-width:60ch">Want the cart pouring at your event instead? <a href="{{ '/catering/' | relative_url }}" style="color:var(--gc-gold-t);font-weight:600">Book chai catering →</a></p>
   </div>

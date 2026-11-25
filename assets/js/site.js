@@ -66,6 +66,7 @@ layout: null
       requestAnimationFrame(function () { el.scrollIntoView(); });
     };
     d.addEventListener('click', function (ev) {
+      if (ev.defaultPrevented) return;   // e.g. a tab, which handles its own scrolling
       var a = ev.target.closest && ev.target.closest('a[href^="#"]');
       if (a) alignTo(a.getAttribute('href'));
     });
@@ -761,4 +762,109 @@ layout: null
       })
       .catch(function () {});
   }
+  /* ---------- 9. Tabs ----------
+     A row of #links becomes real tabs: one panel shows at a time and a soft
+     pill of light slides to the chosen tab. Without JavaScript every panel
+     shows and each tab jumps to its panel. The catering tabs live in a bar
+     pinned under the header ([data-gc-stick]); picking a tab from further
+     down the page brings its panel back into view. */
+  var root = d.documentElement;
+  var nav = d.querySelector('[data-gc-nav]');
+  var setNavH = function () { if (nav) root.style.setProperty('--gc-navh', nav.getBoundingClientRect().height + 'px'); };
+  setNavH();
+  window.addEventListener('resize', setNavH, { passive: true });
+  if (nav && 'ResizeObserver' in window) new ResizeObserver(setNavH).observe(nav);
+
+  [].slice.call(d.querySelectorAll('[data-gc-tabbar]')).forEach(function (bar) {
+    var tabs = [].slice.call(bar.querySelectorAll('[role="tab"]'));
+    var panels = tabs.map(function (t) { return d.getElementById(t.getAttribute('aria-controls')); });
+    if (!tabs.length || panels.some(function (pn) { return !pn; })) return;
+    var glow = d.createElement('span');
+    glow.className = 'gc-tabglow'; glow.setAttribute('aria-hidden', 'true');
+    bar.insertBefore(glow, bar.firstChild);
+    bar.classList.add('has-glow');
+    var stick = bar.closest('[data-gc-stick]');
+    var current = 0;
+    var place = function (instant) {
+      var t = tabs[current];
+      if (instant) glow.style.transition = 'none';
+      glow.style.width = t.offsetWidth + 'px';
+      glow.style.transform = 'translateX(' + t.offsetLeft + 'px)';
+      if (instant) { glow.offsetWidth; glow.style.transition = ''; }
+    };
+    var select = function (i, opts) {
+      opts = opts || {};
+      current = i;
+      tabs.forEach(function (t, j) {
+        var on = j === i;
+        t.setAttribute('aria-selected', on ? 'true' : 'false');
+        t.tabIndex = on ? 0 : -1;
+        panels[j].hidden = !on;
+        panels[j].classList.remove('is-in');
+      });
+      if (!opts.instant && !reduceMotion) { void panels[i].offsetWidth; panels[i].classList.add('is-in'); }
+      place(opts.instant);
+      // keep the chosen tab in view when the row scrolls sideways on a phone
+      var t = tabs[i];
+      if (t.offsetLeft < bar.scrollLeft || t.offsetLeft + t.offsetWidth > bar.scrollLeft + bar.clientWidth) {
+        bar.scrollTo({ left: t.offsetLeft - 24, behavior: reduceMotion || opts.instant ? 'auto' : 'smooth' });
+      }
+      if (opts.focus) t.focus();
+      // from further down the page, bring the panel back up under the pinned bar
+      if (stick && opts.scroll) {
+        var top = panels[i].getBoundingClientRect().top;
+        var limit = (parseFloat(getComputedStyle(root).getPropertyValue('--gc-navh')) || 72) + stick.offsetHeight + 8;
+        if (top < limit || top > window.innerHeight * 0.8) {
+          panels[i].scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+        }
+      }
+    };
+    tabs.forEach(function (t, i) {
+      t.addEventListener('click', function (ev) {
+        ev.preventDefault();
+        select(i, { scroll: true });
+        if (history.replaceState) history.replaceState(null, '', '#' + panels[i].id);
+      });
+      t.addEventListener('keydown', function (ev) {
+        var k = ev.key, n = tabs.length, j = -1;
+        if (k === 'ArrowRight') j = (i + 1) % n;
+        else if (k === 'ArrowLeft') j = (i - 1 + n) % n;
+        else if (k === 'Home') j = 0;
+        else if (k === 'End') j = n - 1;
+        if (j > -1) { ev.preventDefault(); select(j, { focus: true }); }
+      });
+    });
+    // "Next" links inside a panel move to the next tab
+    panels.forEach(function (pn, i) {
+      [].slice.call(pn.querySelectorAll('[data-gc-tabnext]')).forEach(function (a) {
+        a.addEventListener('click', function (ev) { ev.preventDefault(); select((i + 1) % tabs.length, { scroll: true, focus: true }); });
+      });
+    });
+    var start = 0;
+    if (location.hash) panels.forEach(function (pn, i) { if ('#' + pn.id === location.hash) start = i; });
+    select(start, { instant: true });
+    window.addEventListener('resize', function () { place(true); }, { passive: true });
+    if (d.fonts && d.fonts.ready) d.fonts.ready.then(function () { place(true); });
+    // a panel's tab may be chosen by a link elsewhere on the page
+    window.addEventListener('hashchange', function () {
+      panels.forEach(function (pn, i) { if ('#' + pn.id === location.hash) select(i, { scroll: true }); });
+    });
+  });
+
+  [].slice.call(d.querySelectorAll('[data-gc-stick]')).forEach(function (stick) {
+    var watch = d.getElementById(stick.getAttribute('data-gc-stick'));
+    var setH = function () { root.style.setProperty('--gc-stickh', stick.offsetHeight + 'px'); };
+    setH();
+    if ('ResizeObserver' in window) new ResizeObserver(setH).observe(stick);
+    var check = function () {
+      var navH = parseFloat(getComputedStyle(root).getPropertyValue('--gc-navh')) || 72;
+      // "at the top": pinned, or resting within a few pixels of where it pins
+      var stuck = stick.getBoundingClientRect().top <= navH + 24;
+      var gone = watch ? watch.getBoundingClientRect().bottom < navH + 8 : stuck;
+      stick.classList.toggle('is-stuck', stuck && gone);
+    };
+    check();
+    window.addEventListener('scroll', check, { passive: true });
+    window.addEventListener('resize', check, { passive: true });
+  });
 })();

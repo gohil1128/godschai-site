@@ -6,11 +6,48 @@ breadcrumb: "Catering"
 og_image: "uploads/og-image.jpg"
 ---
 
-<section aria-labelledby="page-h1" style="max-width:1240px;margin:0 auto;padding:clamp(110px,14vh,170px) clamp(18px,4vw,40px) clamp(20px,3vw,30px)">
-  <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gc-coral-t);margin-bottom:14px">Weddings · offices · parties · markets</div>
+<div class="gc-cat">
+
+<section id="cater-top" aria-labelledby="page-h1" style="max-width:1240px;margin:0 auto;padding:clamp(110px,14vh,170px) clamp(18px,4vw,40px) 18px">
   <h1 id="page-h1" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(2.3rem,6vw,4.2rem);line-height:0.98;letter-spacing:0;margin:0;max-width:24ch">Chai Catering in <span style="color:var(--gc-coral-t);font-style:italic">Saskatoon</span></h1>
-  <p style="font-size:clamp(1.05rem,1.5vw,1.25rem);line-height:1.6;color:var(--gc-fg2);max-width:54ch;margin:22px 0 28px">We roll up with the cart and pour masala chai fresh on site. Hot when it&rsquo;s &minus;30, iced on patio days. Weddings, office mornings, markets and parties across Saskatoon.</p>
-  <div style="display:flex;gap:13px;flex-wrap:wrap">
+  <p style="font-size:clamp(1.05rem,1.5vw,1.25rem);line-height:1.6;color:var(--gc-fg2);max-width:54ch;margin:18px 0 0">We roll up with the cart and pour masala chai fresh on site. Hot when it&rsquo;s &minus;30, iced on patio days. Weddings, office mornings, markets and parties across Saskatoon.</p>
+</section>
+
+{%- comment -%} What we cater, as tabs. The bar stays pinned under the header for the
+whole page (site.js "Tabs"); "Chai catering" fades in beside it once the
+heading above has scrolled away. {%- endcomment -%}
+<div class="gc-stick" data-gc-stick="page-h1">
+  <div class="gc-stick-in">
+    <span class="gc-stick-t" aria-hidden="true">Chai catering <i>in Saskatoon</i></span>
+    <div class="gc-tabbar" data-gc-tabbar role="tablist" aria-label="What we cater">
+      <a class="gc-tab" role="tab" id="tab-weddings" href="#weddings" aria-controls="weddings" aria-selected="true">Weddings</a>
+      <a class="gc-tab" role="tab" id="tab-offices" href="#offices" aria-controls="offices" aria-selected="false">Offices</a>
+      <a class="gc-tab" role="tab" id="tab-parties" href="#parties" aria-controls="parties" aria-selected="false">Parties</a>
+      <a class="gc-tab" role="tab" id="tab-markets" href="#markets" aria-controls="markets" aria-selected="false">Markets</a>
+    </div>
+  </div>
+</div>
+
+<section aria-label="What we cater" style="max-width:1240px;margin:0 auto;padding:0 clamp(18px,4vw,40px) clamp(24px,3.4vw,40px)">
+  <div class="gc-tabpanels">
+    <div class="gc-tabpanel" id="weddings" role="tabpanel" aria-labelledby="tab-weddings" tabindex="0">
+      <h2>The chai bar everyone talks about</h2>
+      <p>Way more fun than a coffee urn. Cocktail hour, a late-night pick-me-up, or the morning-after brunch. We set up a full chai bar and pour all night.</p>
+    </div>
+    <div class="gc-tabpanel" id="offices" role="tabpanel" aria-labelledby="tab-offices" tabindex="0">
+      <h2>Office mornings, upgraded</h2>
+      <p>Team kickoffs, client days, staff appreciation, conference breaks. We roll in, pour, and roll out. No mess left behind.</p>
+    </div>
+    <div class="gc-tabpanel" id="parties" role="tabpanel" aria-labelledby="tab-parties" tabindex="0">
+      <h2>Parties &amp; showers</h2>
+      <p>Birthdays, bridal and baby showers, Friendsgiving, holiday parties and run club meetups. If people are hanging out, chai fits right in.</p>
+    </div>
+    <div class="gc-tabpanel" id="markets" role="tabpanel" aria-labelledby="tab-markets" tabindex="0">
+      <h2>Markets &amp; pop-ups</h2>
+      <p>Farmers&rsquo; markets, makers&rsquo; markets and festivals. We bring the cart, brew on site and pour all day, hot or iced.</p>
+    </div>
+  </div>
+  <div style="display:flex;gap:13px;flex-wrap:wrap;margin-top:26px">
     <a href="#book" style="text-decoration:none;background:#B55F3E;color:#FFFFFF;font-weight:700;font-size:16px;padding:15px 26px;border-radius:999px" class="gc-pill">Check your date →</a>
     <a href="{{ site.social.instagram }}" target="_blank" rel="noopener" style="text-decoration:none;background:rgba(var(--gc-ink-rgb),0.10);color:var(--gc-fg);font-weight:600;font-size:16px;padding:15px 24px;border-radius:999px;border:1.5px solid rgba(var(--gc-ink-rgb),0.3)" class="gc-pill-ghost">Message us on Instagram</a>
   </div>
@@ -20,27 +57,6 @@ og_image: "uploads/og-image.jpg"
 {% include photo-band.html base="catering-sunset" widths="800,1600" focus="50% 55%" alt="The God's Chai bar at sunset, two of our team pouring chai at an outdoor event" caption="The bar with Poise Studio, August" %}
 
 <div data-gc-reveal>
-
-<section id="enquire" aria-labelledby="fit-h2" style="max-width:1240px;margin:0 auto;padding:clamp(30px,4vw,60px) clamp(18px,4vw,40px);scroll-margin-top:84px">
-  <h2 id="fit-h2" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(1.9rem,4.4vw,3rem);letter-spacing:0;margin:0 0 28px;color:var(--gc-fg)">What we cater</h2>
-  <div data-gc-stagger style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:clamp(16px,2vw,24px)">
-    <div style="padding:28px 26px 30px;background:rgba(var(--gc-surf-rgb),0.8);border:1px solid rgba(var(--gc-gold-rgb),0.16);border-radius:22px" class="gc-card">
-      <div style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--gc-gold-d)">01 · Weddings</div>
-      <h3 style="font-family:'Instrument Serif',serif;font-weight:400;font-size:1.4rem;margin:12px 0 0;color:var(--gc-fg)">The chai bar everyone talks about</h3>
-      <p style="color:var(--gc-fg4);line-height:1.6;margin:10px 0 0">Way more fun than a coffee urn. Cocktail hour, a late-night pick-me-up, or the morning-after brunch. We set up a full chai bar and pour all night.</p>
-    </div>
-    <div style="padding:28px 26px 30px;background:rgba(var(--gc-surf-rgb),0.8);border:1px solid rgba(var(--gc-gold-rgb),0.16);border-radius:22px" class="gc-card">
-      <div style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--gc-gold-d)">02 · Corporate</div>
-      <h3 style="font-family:'Instrument Serif',serif;font-weight:400;font-size:1.4rem;margin:12px 0 0;color:var(--gc-fg)">Office mornings, upgraded</h3>
-      <p style="color:var(--gc-fg4);line-height:1.6;margin:10px 0 0">Team kickoffs, client days, staff appreciation, conference breaks. We roll in, pour, and roll out. No mess left behind.</p>
-    </div>
-    <div style="padding:28px 26px 30px;background:rgba(var(--gc-surf-rgb),0.8);border:1px solid rgba(var(--gc-gold-rgb),0.16);border-radius:22px" class="gc-card">
-      <div style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--gc-gold-d)">03 · Private</div>
-      <h3 style="font-family:'Instrument Serif',serif;font-weight:400;font-size:1.4rem;margin:12px 0 0;color:var(--gc-fg)">Parties, showers &amp; markets</h3>
-      <p style="color:var(--gc-fg4);line-height:1.6;margin:10px 0 0">Birthdays, bridal and baby showers, Friendsgiving, holiday parties, run club meetups and markets. If people are hanging out, chai fits right in.</p>
-    </div>
-  </div>
-</section>
 
 {%- comment -%} "How it works", the longer write-up (the FAQ below covers the same ground). Hidden for now: set long_copy: true in _config.yml to bring it back. {%- endcomment -%}
 {%- if site.long_copy %}
@@ -166,6 +182,8 @@ og_image: "uploads/og-image.jpg"
   <p style="font-size:1.05rem;line-height:1.6;color:var(--gc-fg3);max-width:48ch;margin:0 0 24px">We're out at pop-ups across the city most weeks. Check where the cart's parked next.</p>
   <a href="{{ '/events/' | relative_url }}" style="text-decoration:none;background:rgba(var(--gc-ink-rgb),0.10);color:var(--gc-fg);font-weight:600;font-size:16px;padding:15px 24px;border-radius:999px;border:1.5px solid rgba(var(--gc-ink-rgb),0.3)" class="gc-pill-ghost">See the pop-up schedule →</a>
 </section>
+
+</div>
 
 </div>
 
