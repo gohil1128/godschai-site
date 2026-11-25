@@ -12,7 +12,7 @@
     {%- if d.photo %}
     {% include img.html base=d.photo ext="jpg" widths=pw sizes="(max-width:600px) 46vw, (max-width:900px) 30vw, 280px" w="320" h="320" alt=d.alt wrap="display:block;width:100%;height:100%" style="width:100%;height:100%;object-fit:cover;display:block" %}
     {%- elsif d.logo_tile or d.img == nil or d.img == "" %}
-    <span class="gc-mc-logo">{% include img.html base="logo-cream" ext="png" widths="128,256" sizes="140px" w="256" h="256" alt="" wrap="display:block;width:100%" style="width:100%;height:auto;display:block" %}</span>
+    <span class="gc-mc-logo gc-glow">{% include img.html base="logo-cream" ext="png" widths="128,256" sizes="140px" w="256" h="256" alt="" wrap="display:block;width:100%" style="width:100%;height:auto;display:block" %}</span>
     {%- else %}
     {%- assign dbase = d.img | split: "/" | last | split: "." | first %}
     {% include img.html base=dbase ext="jpg" widths="320,640" sizes="(max-width:600px) 46vw, (max-width:900px) 30vw, 280px" w="640" h="800" alt=d.alt wrap="display:block;width:100%;height:100%" style="width:100%;height:100%;object-fit:cover;display:block;filter:saturate(1.18) contrast(1.04) brightness(1.06)" %}

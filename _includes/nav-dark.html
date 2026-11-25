@@ -18,7 +18,7 @@
       — so the header is never empty. base-styles-dark.html hides it on :defined.
       Both are the same artwork on the same 2048 canvas, so nothing shifts.
     {%- endcomment -%}
-    <a href="{{ '/' | relative_url }}" style="text-decoration:none;display:flex;align-items:center;line-height:1" aria-label="God's Chai — home">
+    <a href="{{ '/' | relative_url }}" class="gc-glow" style="text-decoration:none;display:flex;align-items:center;line-height:1" aria-label="God's Chai — home">
       <gods-chai-logo tint="var(--gc-logo)" aria-hidden="true" style="height:76px;width:76px;display:block;filter:drop-shadow(0 2px 8px rgba(var(--gc-shadow-rgb),0.3))">
         <span class="gc-logo-l">{% include img.html base="artboard" ext="png" widths="128,256" sizes="76px" w="256" h="256" alt="" priority=true wrap="display:block" style="height:76px;width:76px;display:block" %}</span>
         <span class="gc-logo-d">{% include img.html base="logo-cream" ext="png" widths="128,256" sizes="76px" w="256" h="256" alt="" priority=true wrap="display:block" style="height:76px;width:76px;display:block" %}</span>

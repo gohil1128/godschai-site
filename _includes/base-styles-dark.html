@@ -332,6 +332,18 @@
       radial-gradient(44% 24% at 46% 56%,rgba(var(--gc-ray-rgb),0.30),rgba(var(--gc-ray-rgb),0) 100%),
       repeating-conic-gradient(from 4deg at 46% 56%,rgba(var(--gc-ray-rgb),0) 0deg 4.5deg,rgba(var(--gc-ray-rgb),0.26) 6deg 7deg,rgba(var(--gc-ray-rgb),0) 8.5deg 11deg)}}
   @keyframes gcRays{from{opacity:.55}to{opacity:1}}
+  /* The logo glows: a warm halo with faint rays behind it, breathing slowly
+     (header, footer and the menu's logo tiles). */
+  .gc-glow{position:relative;isolation:isolate}
+  .gc-glow::before{content:"";position:absolute;z-index:-1;inset:-22%;border-radius:50%;pointer-events:none;
+    background:
+      radial-gradient(closest-side,rgba(var(--gc-glow-rgb),0.55),rgba(var(--gc-glow-rgb),0.18) 55%,rgba(var(--gc-glow-rgb),0) 100%),
+      repeating-conic-gradient(from 3deg,rgba(var(--gc-ray-rgb),0) 0deg 9deg,rgba(var(--gc-ray-rgb),0.45) 12deg 13.5deg,rgba(var(--gc-ray-rgb),0) 16.5deg 24deg);
+    -webkit-mask-image:radial-gradient(closest-side,#000 30%,rgba(0,0,0,.5) 62%,transparent 100%);
+            mask-image:radial-gradient(closest-side,#000 30%,rgba(0,0,0,.5) 62%,transparent 100%);
+    filter:blur(3px);animation:gcLogoGlow 4.8s ease-in-out infinite alternate}
+  .gc-mc-logo.gc-glow::before{inset:-34%}
+  @keyframes gcLogoGlow{from{opacity:.5;transform:scale(.94)}to{opacity:1;transform:scale(1.05)}}
   h1 span[style*="italic"],h2 span[style*="italic"]{text-shadow:0 0 22px rgba(var(--gc-glow-rgb),0.45)}
   .gc-card{transition:border-color .32s ease,box-shadow .45s ease}
   .gc-card:hover,.gc-card:focus-within{box-shadow:0 20px 44px -28px rgba(var(--gc-glow-rgb),0.9),0 0 0 1px rgba(var(--gc-glow-rgb),0.10)}
@@ -342,7 +354,7 @@
     animation:gcBreathe 9s ease-in-out infinite alternate}
   @keyframes gcBreathe{from{opacity:.25}to{opacity:.85}}
   @media (prefers-reduced-motion:reduce){
-    section[aria-labelledby="page-h1"]::before,.gc-band-pic::after{animation:none}
+    section[aria-labelledby="page-h1"]::before,.gc-band-pic::after,.gc-glow::before{animation:none}
     .gc-tabpanel.is-in{animation:none}
     .gc-tabglow,.gc-stick-t,.gc-stick::before{transition:none}
   }
