@@ -500,7 +500,7 @@ layout: null
     window[cb] = function (data) {
       // Mailchimp reports "already subscribed" as an error; that's a win for the visitor.
       var already = data && /already subscribed/i.test(data.msg || '');
-      settle(!!data && (data.result === 'success' || already), already ? "You're already on the list. ✶" : null);
+      settle(!!data && (data.result === 'success' || already), already ? "You're already on the list." : null);
     };
     var s = d.createElement('script');
     var q = '';
@@ -518,13 +518,13 @@ layout: null
      welcome note with the members' code. If the service can't be reached, or
      couldn't put them on the list itself, they're signed up straight to
      Mailchimp as above, so nobody is lost. */
-  var CLUB_IN = 'You’re in the Chai Club! ✶ ';
+  var CLUB_IN = 'You’re in the Chai Club! ';
   function join(form, done) {
     var api = form.getAttribute('data-gc-club-api');
     var email = (form.querySelector('input[name="EMAIL"]') || {}).value || '';
     var direct = function (note) {
       subscribe(form, function (ok, custom) {
-        done(ok, ok ? (custom ? 'You’re already on our list, so you’re in the club. ✶' : CLUB_IN + (note || 'Watch your inbox for your member perks.')) : null);
+        done(ok, ok ? (custom ? 'You’re already on our list, so you’re in the club.' : CLUB_IN + (note || 'Watch your inbox for your member perks.')) : null);
       });
     };
     if (!api || !window.fetch) return direct();
@@ -539,7 +539,7 @@ layout: null
         finished = true; clearTimeout(timer);
         var note = data.already ? 'You’re already a member. Your code is in your welcome email.'
           : data.emailed ? 'Check your inbox for your welcome note and your 10% code.' : 'Watch your inbox for your member perks.';
-        if (data.listed) done(true, (data.already ? 'Welcome back! ✶ ' : CLUB_IN) + note);
+        if (data.listed) done(true, (data.already ? 'Welcome back! ' : CLUB_IN) + note);
         else direct(note);
       }, fallback);
   }
@@ -594,7 +594,7 @@ layout: null
       msg.style.display = 'block';
       msg.style.color = ok ? 'var(--gc-gold-t)' : 'var(--gc-coral-t)';
       if (ok && WELCOME && !club) showCode(msg, !!custom);
-      else msg.textContent = ok ? (custom || "Thanks — you're subscribed. ✶")
+      else msg.textContent = ok ? (custom || "Thanks — you're subscribed.")
                                 : "That didn't go through — check your email and try again.";
       tell(ok ? 'done' : 'error');
       if (ok) {

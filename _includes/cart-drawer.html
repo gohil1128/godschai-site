@@ -242,7 +242,7 @@
       {%- if shop.welcome_offer %}
       {%- capture deal_btn %}Get my {{ shop.welcome_percent }}%{% endcapture %}
       <div class="gc-deal" data-gc-deal>
-        <button type="button" class="gc-deal-open" data-gc-deal-open aria-expanded="false" aria-controls="gc-deal-form"><b>✶ Get {{ shop.welcome_percent }}% off</b> — join our email list</button>
+        <button type="button" class="gc-deal-open" data-gc-deal-open aria-expanded="false" aria-controls="gc-deal-form"><b>Get {{ shop.welcome_percent }}% off</b> — join our email list</button>
         <div id="gc-deal-form" class="gc-deal-form" data-gc-deal-form hidden>
           <p>New blends, pop-ups and the odd deal. Unsubscribe any time.</p>
           {% include signup-form.html id="cart" button=deal_btn list="welcome" max="100%" %}

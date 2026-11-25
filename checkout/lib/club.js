@@ -24,7 +24,7 @@ const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) => ({ '&':
 
 export function clubWelcomeEmail() {
   const code = CLUB_CODE, percent = (CODES[CLUB_CODE] || { percent: '10' }).percent;
-  const subject = `Welcome to the Chai Club ✶ your ${percent}% code is inside`;
+  const subject = `Welcome to the Chai Club: your ${percent}% code is inside`;
   const serif = "'Instrument Serif',Georgia,'Times New Roman',serif";
   const sans = "'Hanken Grotesk',-apple-system,'Segoe UI',Helvetica,Arial,sans-serif";
   const mono = "'DM Mono',Menlo,Consolas,monospace";
@@ -49,7 +49,7 @@ export function clubWelcomeEmail() {
     <tr><td style="padding:28px 32px 6px">
       <div style="font:400 26px ${serif};color:#1D120B">What members get</div>
       <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-top:8px">
-        ${PERKS.map((p) => `<tr><td width="26" valign="top" style="padding:7px 0;font:700 16px ${sans};color:#C2410C">✶</td><td style="padding:7px 0;font:400 15px/1.45 ${sans};color:#3A2A1E">${esc(p)}</td></tr>`).join('')}
+        ${PERKS.map((p) => `<tr><td width="26" valign="top" style="padding:7px 0;font:700 16px ${sans};color:#C2410C">&bull;</td><td style="padding:7px 0;font:400 15px/1.45 ${sans};color:#3A2A1E">${esc(p)}</td></tr>`).join('')}
       </table>
     </td></tr>
     <tr><td style="padding:22px 32px 28px">
