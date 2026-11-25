@@ -556,6 +556,9 @@ pot clip with:
 
 `btn-boil-still.webp` is one frame of it, used when reduced motion is on.
 The tint and hover are in `_includes/base-styles-dark.html` (`--gc-boil`).
+The tint is the colour of the real chai in the clip (`#C9934A`, sampled
+from the video frames), with dark espresso text (`#2B170B`) so the label
+stays easy to read. Hover makes it a little lighter.
 
 Forms (catering enquiry, bulk orders, checkout, the email sign-ups, the Chai
 Club card) all use the same minimal fields: a small mono label, the field as a
