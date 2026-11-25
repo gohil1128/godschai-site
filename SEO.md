@@ -111,7 +111,7 @@ block on the homepage **and** the `/premixes/` page together.
   blurb: "The cart recipe, in a pouch…" # only shown on /premixes/
   img: "pouch-masala-real"              # a real photo of the pouch, uploads/_src/pouch-masala-real.jpg (4:7), no extension
   alt: "God's Chai Original Masala premix pouch, 125g, makes 25 cups"
-  tilt: "rotate(-3deg)"                 # how it leans on the homepage
+  scene: "pouch-masala-scene"           # the pouch in its setting (4:5), the big picture on the homepage, shop and its page
 ```
 
 Adding a third blend is just another block — both pages lay themselves out

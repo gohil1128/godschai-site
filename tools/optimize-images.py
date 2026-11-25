@@ -47,6 +47,10 @@ FULL_BLEED = {
     # The homepage strip's three small square photos (premixes, catering, bulk
     # orders), cropped and graded from our own shoots; shown at 68px.
     "offer-premix.jpg": (160, 320),
+    # The pouches in their setting (4:5), for the big pictures on the homepage,
+    # shop and product pages (premixes.yml `scene`).
+    "pouch-masala-scene.jpg": (480, 960),
+    "pouch-rose-scene.jpg": (480, 960),
     # The Classic Hot Chai on the menu: a frame of our straining footage, square.
     "hot-chai-cup.jpg": (320, 640),
     "offer-catering.jpg": (160, 320),

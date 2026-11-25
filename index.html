@@ -135,12 +135,12 @@ og_image: "uploads/og-image.jpg"
         <p style="margin:18px 0 0"><a href="{{ '/premixes/' | relative_url }}" style="text-decoration:none;color:var(--gc-gold-t);font-weight:600;font-size:15px;border-bottom:2px solid rgba(var(--gc-gold-rgb),0.5);padding-bottom:2px">More about the premixes →</a></p>
         {%- endif %}
       </div>
-      {%- comment -%} The real pouch fronts, tilted against each other. {%- endcomment -%}
-      <div style="flex:1 1 420px;min-width:280px;display:flex;gap:clamp(14px,2vw,26px);justify-content:center;align-items:flex-end">
+      {%- comment -%} Both pouches as full-frame photos, side by side. {%- endcomment -%}
+      <div style="flex:1 1 420px;min-width:280px;display:flex;gap:clamp(14px,2vw,26px);justify-content:center;align-items:flex-start">
         {% for pouch in site.data.premixes %}
-        <div style="flex:0 1 250px;min-width:0;display:flex;flex-direction:column;gap:14px;transform:{{ pouch.tilt }}">
+        <div style="flex:1 1 0;max-width:300px;min-width:0;display:flex;flex-direction:column;gap:14px">
           {%- if site.data.shop.open %}<a href="{{ '/premixes/' | relative_url }}{{ pouch.slug }}/" style="display:block" tabindex="-1" aria-hidden="true">{% endif %}
-          {% include img.html base=pouch.img ext="jpg" widths="250,500" sizes="(max-width:700px) 42vw, 250px" w="544" h="952" alt=pouch.alt wrap="display:block" style="width:100%;height:auto;display:block;border-radius:12px 12px 16px 16px;box-shadow:0 30px 50px -22px rgba(0,0,0,0.7)" %}
+          {% include img.html base=pouch.scene ext="jpg" widths="480,960" sizes="(max-width:700px) 44vw, 300px" w="960" h="1200" alt=pouch.alt wrap="display:block" style="width:100%;height:auto;aspect-ratio:4/5;object-fit:cover;display:block;border-radius:22px" %}
           {%- if site.data.shop.open %}</a>{% endif %}
           <div style="text-align:center">
             <div style="font-family:'Instrument Serif',serif;font-size:1.25rem;color:var(--gc-fg);line-height:1.1">{% if site.data.shop.open %}<a href="{{ '/premixes/' | relative_url }}{{ pouch.slug }}/" style="color:inherit;text-decoration:none">{{ pouch.name }}</a>{% else %}{{ pouch.name }}{% endif %}</div>

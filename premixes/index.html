@@ -49,7 +49,7 @@ og_image: "uploads/og-image.jpg"
   <div data-gc-stagger style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:clamp(16px,2vw,24px)">
     {% for pouch in site.data.premixes %}
     <div style="padding:28px 28px 32px;background:rgba(var(--gc-surf-rgb),0.8);border:1px solid rgba(var(--gc-gold-rgb),0.16);border-radius:22px;display:flex;flex-direction:column;align-items:center;text-align:center" class="gc-card">
-      {% include img.html base=pouch.img ext="jpg" widths="250,500" sizes="(max-width:700px) 60vw, 250px" w="544" h="952" alt=pouch.alt wrap="display:block;width:min(72%,230px)" style="width:100%;height:auto;display:block;border-radius:10px 10px 14px 14px;box-shadow:0 24px 44px -20px rgba(0,0,0,0.7)" %}
+      {% include img.html base=pouch.scene ext="jpg" widths="480,960" sizes="(max-width:700px) 88vw, 420px" w="960" h="1200" alt=pouch.alt wrap="display:block;width:100%" style="width:100%;height:auto;aspect-ratio:4/5;object-fit:cover;display:block;border-radius:18px" %}
       <h3 style="font-family:'Instrument Serif',serif;font-weight:400;font-size:1.5rem;margin:22px 0 0;color:var(--gc-fg)">{{ pouch.name }}</h3>
       <div style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--gc-gold-t);margin-top:7px">{{ pouch.notes }}</div>
       <p style="color:var(--gc-fg4);line-height:1.6;margin:14px 0 0;max-width:38ch">{{ pouch.blurb }}</p>
