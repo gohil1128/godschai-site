@@ -85,6 +85,35 @@
     section[id]{scroll-margin-top:124px!important}
   }
 
+  /* Footer links: one short line of the main pages, one of the guides. */
+  .gc-fl{display:flex;flex-wrap:wrap;gap:2px 18px;margin:18px 0 0;font-size:15px}
+  .gc-fl a{text-decoration:none;color:var(--gc-fg)}
+  .gc-fl-guides{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 14px;margin:8px 0 0;font-size:13.5px}
+  .gc-fl-guides span{font-family:'DM Mono',monospace;font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--gc-muted)}
+  .gc-fl-guides a{text-decoration:none;color:var(--gc-muted)}
+  .gc-fl a:hover,.gc-fl-guides a:hover{color:var(--gc-coral-t)}
+
+  /* Phone menu: below 760px the nav links and the @godschai pill fold into one
+     button that opens this panel (site.js, "phone menu"). */
+  .gc-menubtn{display:none;align-items:center;justify-content:center;width:42px;height:42px;padding:0;border-radius:999px;cursor:pointer;
+    background:transparent;color:var(--gc-fg);border:1px solid rgba(var(--gc-ink-rgb),0.22)}
+  .gc-menubtn path{transition:transform .25s ease;transform-origin:12px 12px}
+  .gc-menubtn[aria-expanded="true"] .gc-mb-a{transform:translateY(3px) rotate(45deg)}
+  .gc-menubtn[aria-expanded="true"] .gc-mb-b{transform:translateY(-3px) rotate(-45deg)}
+  .gc-nmenu{position:absolute;top:calc(100% + 6px);left:12px;right:12px;padding:10px 22px 20px;border-radius:24px;
+    background:var(--gc-bg);color:var(--gc-fg);border:1px solid rgba(var(--gc-ink-rgb),0.12);
+    -webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);box-shadow:0 24px 60px rgba(0,0,0,0.25)}
+  .gc-nmenu[hidden]{display:none}
+  .gc-nmenu > a{display:block;padding:11px 0;text-decoration:none;color:var(--gc-fg);font:400 1.6rem/1.15 'Instrument Serif',serif;
+    border-bottom:1px solid rgba(var(--gc-ink-rgb),0.08)}
+  .gc-nmenu-soc{display:flex;gap:10px;margin-top:16px}
+  @media (max-width:760px){
+    header nav .gc-navlinks,header nav .gc-nav-ig{display:none!important}
+    .gc-menubtn{display:flex}
+  }
+  @media (min-width:761px){.gc-nmenu{display:none!important}}
+  @media (prefers-reduced-motion:reduce){.gc-menubtn path{transition:none}}
+
   /* Tap targets: the nav and footer links are only 14-18px tall on their own.
      Vertical padding grows the hit area without moving anything visually. */
   header nav > div > a{padding:13px 0!important;white-space:nowrap}

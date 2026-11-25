@@ -537,8 +537,15 @@ cropped square and graded to match the site; the graded originals are in
 replace that file with another square photo and run the script.
 
 The menu bar runs in the same order: Shop, Catering, Menu, Brew Guide, Events
-(`_includes/nav-dark.html`). On phones "Brew Guide" shortens to "Brew" so all
-five fit on one line.
+(`_includes/nav-dark.html`). On phones (under 760px) the links and the
+@godschai pill fold into one round menu button next to the bag. It opens a
+panel with the main pages and the Instagram, TikTok and Facebook icons; a
+link, a tap outside or Escape closes it (`site.js`, "phone menu").
+
+The footer is kept short: the logo, one line, the main pages on one line, the
+guides on a smaller line under them, the three social icons, and the email
+sign-up. The social icons are one include, `_includes/social-icons.html`, used
+in both the footer and the phone menu.
 
 ---
 
@@ -923,8 +930,8 @@ Instagram button on a phone.
 
 ## Change site-wide details
 
-**`_config.yml`** holds the things that appear everywhere: Instagram and TikTok
-links, the Google Analytics ID, the Mailchimp list, and the season label shown on
+**`_config.yml`** holds the things that appear everywhere: the Instagram, TikTok
+and Facebook links (`social`; leave `facebook` empty to hide its icon), the Google Analytics ID, the Mailchimp list, and the season label shown on
 the menu (`season: "Summer 2026"`).
 
 ---
