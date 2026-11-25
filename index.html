@@ -62,13 +62,6 @@ og_image: "uploads/og-image.jpg"
       .gc-hero-slide.is-on{opacity:1}
       .gc-hero-slide.is-on.is-still img{animation:gc-hero-drift var(--secs,6s) linear forwards}
       @keyframes gc-hero-drift{from{transform:scale(1)}to{transform:scale(1.06)}}
-      /* the three facts under the buttons: present, but quiet */
-      .gc-hero-facts{display:flex;flex-wrap:wrap;align-items:center;gap:6px 0;margin:26px 0 0;padding:0;list-style:none;
-        font:400 10.5px/1.4 'DM Mono',monospace;letter-spacing:0.14em;text-transform:uppercase;color:rgba(var(--gc-ink-rgb),0.62)}
-      .gc-hero-facts li{display:flex;align-items:center;white-space:nowrap}
-      .gc-hero-facts li + li::before{content:"";width:3px;height:3px;border-radius:50%;background:currentColor;opacity:0.55;margin:0 12px}
-      .gc-hero-facts b{font-weight:500;color:var(--gc-gold-t);margin-right:6px}
-      @media (max-width:560px){.gc-hero-facts{gap:5px 16px;margin-top:22px;font-size:10px;letter-spacing:0.12em}.gc-hero-facts li + li::before{display:none}}
       @media (prefers-reduced-motion:reduce){.gc-hero-slide{transition:none}.gc-hero-slide.is-on.is-still img{animation:none}}
     </style>
     <div class="gc-hero-media">
@@ -104,11 +97,6 @@ og_image: "uploads/og-image.jpg"
           <a href="{{ '/catering/' | relative_url }}" class="gc-hb">Book catering</a>
           {%- endif %}
         </div>
-        <ul class="gc-hero-facts">
-          <li><b>100%</b>real spices</li>
-          <li><b>2</b>origins, Kerala + Assam</li>
-          <li><b>YXE</b>made in Saskatoon</li>
-        </ul>
       </div>
     </div>
     </div>
