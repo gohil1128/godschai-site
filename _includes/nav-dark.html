@@ -24,7 +24,7 @@
         <span class="gc-logo-d">{% include img.html base="logo-cream" ext="png" widths="128,256" sizes="76px" w="256" h="256" alt="" priority=true wrap="display:block" style="height:76px;width:76px;display:block" %}</span>
       </gods-chai-logo>
     </a>
-    <div style="display:flex;align-items:center;gap:clamp(12px,2vw,28px);font-weight:500;font-size:14.5px">
+    <div class="gc-navlinks" style="display:flex;align-items:center;gap:clamp(12px,2vw,28px);font-weight:500;font-size:14.5px">
       {%- comment -%} What people can buy comes first: the shop and catering. "Brew Guide" shortens to "Brew" on phones to make room. {%- endcomment %}
       <a href="{{ '/premixes/' | relative_url }}" style="text-decoration:none;color:var(--gc-fg2)">{% if site.data.shop.open %}Shop{% else %}Premixes{% endif %}</a>
       <a href="{{ '/catering/' | relative_url }}" style="text-decoration:none;color:var(--gc-fg2)">Catering</a>
@@ -40,7 +40,20 @@
         <b data-gc-badge hidden>0</b>
       </button>
       {%- endif %}
-      <a href="{{ site.social.instagram }}" target="_blank" rel="noopener" style="text-decoration:none;background:#B55F3E;color:#FFFFFF;font-weight:700;font-size:13.5px;padding:9px 16px;border-radius:999px;white-space:nowrap" class="gc-pill">{{ site.social.instagram_handle }}</a>
+      <a href="{{ site.social.instagram }}" target="_blank" rel="noopener" style="text-decoration:none;background:#B55F3E;color:#FFFFFF;font-weight:700;font-size:13.5px;padding:9px 16px;border-radius:999px;white-space:nowrap" class="gc-pill gc-nav-ig">{{ site.social.instagram_handle }}</a>
+      {%- comment -%} Phones: the links fold into this one button (site.js, "phone menu"). {%- endcomment %}
+      <button type="button" class="gc-menubtn gc-ico" data-gc-menu-btn aria-expanded="false" aria-controls="gc-menu" aria-label="Menu">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true" focusable="false"><path class="gc-mb-a" d="M4 9h16"/><path class="gc-mb-b" d="M4 15h16"/></svg>
+      </button>
     </span>
   </nav>
+  <div class="gc-nmenu" id="gc-menu" data-gc-menu hidden>
+    <a href="{{ '/premixes/' | relative_url }}">{% if site.data.shop.open %}Shop premixes{% else %}Premixes{% endif %}</a>
+    <a href="{{ '/' | relative_url }}#menu">Drinks menu</a>
+    <a href="{{ '/catering/' | relative_url }}">Catering</a>
+    <a href="{{ '/bulk-orders/' | relative_url }}">Bulk orders</a>
+    <a href="{{ '/events/' | relative_url }}">Events</a>
+    <a href="{{ '/how-to-make-masala-chai/' | relative_url }}">Brew guide</a>
+    <div class="gc-nmenu-soc">{% include social-icons.html size=42 %}</div>
+  </div>
 </header>

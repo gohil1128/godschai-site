@@ -131,6 +131,22 @@ layout: null
   }
 
   /* ---------- 3. Nav solidify + mesh drift + parallax band ---------- */
+  /* Phone menu: the nav's links fold into one button below 760px
+     (_includes/nav-dark.html). It opens a panel under the header; a link, a
+     tap outside or Escape closes it. */
+  var menuBtn = d.querySelector('[data-gc-menu-btn]'), menu = d.querySelector('[data-gc-menu]');
+  if (menuBtn && menu) {
+    var setMenu = function (on) {
+      menu.hidden = !on; menuBtn.setAttribute('aria-expanded', on ? 'true' : 'false');
+      menuBtn.setAttribute('aria-label', on ? 'Close menu' : 'Menu');
+      var hdr = menuBtn.closest('[data-gc-nav]'); if (hdr) hdr.classList.toggle('gc-menu-on', on);
+    };
+    menuBtn.addEventListener('click', function (e) { e.stopPropagation(); setMenu(menu.hidden); });
+    menu.addEventListener('click', function (e) { if (e.target.closest('a')) setMenu(false); });
+    d.addEventListener('click', function (e) { if (!menu.hidden && !menu.contains(e.target)) setMenu(false); });
+    d.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !menu.hidden) { setMenu(false); menuBtn.focus(); } });
+  }
+
   var nav = d.querySelector('[data-gc-nav][data-gc-nav-transparent]');
   var meshA = d.querySelector('[data-gc-mesh="a"]');
   var meshB = d.querySelector('[data-gc-mesh="b"]');

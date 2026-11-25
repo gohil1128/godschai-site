@@ -230,7 +230,8 @@ og_image: "uploads/og-image.jpg"
   "hasMenu": { "@id": "{{ '/' | absolute_url }}#menu" },
   "sameAs": [
     "{{ site.social.instagram }}",
-    "{{ site.social.tiktok }}"
+    "{{ site.social.tiktok }}"{% if site.social.facebook %},
+    "{{ site.social.facebook }}"{% endif %}
   ],
   "parentOrganization": { "@id": "{{ '/' | absolute_url }}#organization" }
 }
