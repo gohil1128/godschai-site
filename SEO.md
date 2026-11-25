@@ -769,7 +769,7 @@ and nothing takes focus:
   dot is frosted glass so it doesn't compete with the photos: bright clear
   glass with white text over the homepage hero, pale with brown text on the light pages. It
   goes away for good once they join. Styles: `_includes/popup.html`.
-- **After joining:** it says *"You're in the Chai Club! ✶ Check your inbox…"*,
+- **After joining:** it says *"You're in the Chai Club! Check your inbox…"*,
   then tidies itself away. Members never see it again.
 - **Where it never shows:** the checkout page and the order-confirmed page.
 
