@@ -44,6 +44,11 @@ DRINK_WIDTHS = (320, 640)
 
 # Full-bleed / background images keep their aspect ratio.
 FULL_BLEED = {
+    # The homepage strip's three small square photos (premixes, catering, bulk
+    # orders), cropped and graded from our own shoots; shown at 68px.
+    "offer-premix.jpg": (160, 320),
+    "offer-catering.jpg": (160, 320),
+    "offer-bulk.jpg": (160, 320),
     "hero-journey-web.jpeg": (480, 960, 1600),
     "pour-a.jpeg": (640, 1280),
     # Colour-graded stills from the How to make chai shoot (Nov 2026).

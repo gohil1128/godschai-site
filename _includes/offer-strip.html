@@ -28,15 +28,15 @@
   <h2 id="offers-h2">Take God's Chai home, or to your event</h2>
   <ul>
     <li><a class="gc-offer" href="{{ '/premixes/' | relative_url }}">
-      {% include img.html base="pouch-masala-front" ext="jpg" widths="250" sizes="68px" w="544" h="952" alt="" style="object-position:50% 30%" %}
+      {% include img.html base="offer-premix" ext="jpg" widths="160,320" sizes="68px" w="320" h="320" alt="" %}
       <span><small>Premixes</small><b>Masala chai at home</b><em>${% include money.html v=shop.price %} a pouch, 25 cups. Delivered in Saskatoon, shipped across Canada.</em></span>
       <i aria-hidden="true">→</i></a></li>
     <li><a class="gc-offer" href="{{ '/catering/' | relative_url }}">
-      {% include img.html base="community-cart" ext="jpg" widths="400" sizes="68px" w="406" h="720" alt="" style="object-position:50% 40%" %}
+      {% include img.html base="offer-catering" ext="jpg" widths="160,320" sizes="68px" w="320" h="320" alt="" %}
       <span><small>Catering</small><b>The chai cart at your event</b><em>Weddings, offices, parties and markets in Saskatoon.</em></span>
       <i aria-hidden="true">→</i></a></li>
     <li><a class="gc-offer" href="{{ '/bulk-orders/' | relative_url }}">
-      {% include img.html base="pour-cup" ext="jpg" widths="320" sizes="68px" w="640" h="800" alt="" %}
+      {% include img.html base="offer-bulk" ext="jpg" widths="160,320" sizes="68px" w="320" h="320" alt="" %}
       <span><small>Bulk orders</small><b>Chai &amp; samosas for a crowd</b><em>By the cup and by the dozen, with {{ site.data.bulk.notice_hours | default: 48 }} hours' notice.</em></span>
       <i aria-hidden="true">→</i></a></li>
   </ul>
