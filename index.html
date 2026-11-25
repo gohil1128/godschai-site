@@ -160,28 +160,33 @@ og_image: "uploads/og-image.jpg"
   <style>
     .gc-menu-h{display:flex;justify-content:space-between;align-items:flex-end;gap:12px 24px;flex-wrap:wrap;margin-bottom:clamp(18px,3vw,28px)}
     .gc-menu-h p{max-width:36ch;font-size:1rem;line-height:1.5;color:var(--gc-fg4);margin:0}
-    .gc-menu{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(10px,1.5vw,16px)}
-    .gc-mc{background:var(--gc-card);border:1px solid rgba(var(--gc-ink-rgb),0.10);border-radius:20px;overflow:hidden;min-width:0}
-    .gc-mc-pic{position:relative;aspect-ratio:1/1;overflow:hidden;display:flex;align-items:center;justify-content:center;
-      background:radial-gradient(120% 100% at 50% 34%,#3A2517 0%,#1C110A 100%)}
+    /* One immersive gradient for the whole menu: no cards, the drinks sit
+       straight on it as rounded photos with their name underneath. */
+    #menu.gc-menu-sec{color:var(--gc-fg);
+      background:radial-gradient(90% 55% at 12% 0%,rgba(181,95,62,0.42) 0%,rgba(181,95,62,0) 62%),
+        radial-gradient(70% 45% at 92% 100%,rgba(215,131,95,0.22) 0%,rgba(215,131,95,0) 60%),
+        linear-gradient(180deg,#24150D 0%,#3A2114 52%,#22140C 100%)}
+    .gc-menu{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(22px,3vw,34px) clamp(14px,2vw,24px)}
+    .gc-mc{min-width:0}
+    .gc-mc-pic{position:relative;aspect-ratio:1/1;overflow:hidden;display:flex;align-items:center;justify-content:center;border-radius:22px;
+      background:radial-gradient(120% 100% at 50% 34%,#4A2E1D 0%,#2A170E 100%);box-shadow:0 22px 44px -22px rgba(0,0,0,0.7)}
     .gc-mc-pic.is-hot{background:linear-gradient(150deg,#B55F3E 0%,#8E472C 100%)}
-    .gc-mc-logo{display:block;width:58%}
-    .gc-mc-tag{position:absolute;left:10px;top:10px;font-family:'DM Mono',monospace;font-size:10.5px;letter-spacing:0.1em;text-transform:uppercase;
-      color:#3C2116;background:rgba(251,248,243,0.9);padding:3px 9px;border-radius:999px}
-    .gc-mc-b{padding:13px 15px 15px}
-    .gc-mc-b h3{font-family:'Instrument Serif',serif;font-weight:400;font-size:1.08rem;line-height:1.15;margin:0;letter-spacing:0;color:var(--gc-fg)}
-    .gc-mc-b p{font-size:0.86rem;line-height:1.4;color:var(--gc-fg4);margin:4px 0 0}
+    .gc-mc-logo{display:block;width:56%}
+    .gc-mc-b{padding:12px 2px 0}
+    .gc-mc-k{display:block;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--gc-coral-t);margin-bottom:5px}
+    .gc-mc-b h3{font-family:'Instrument Serif',serif;font-weight:400;font-size:1.2rem;line-height:1.15;margin:0;letter-spacing:0;color:var(--gc-fg)}
+    .gc-mc-b p{font-size:0.88rem;line-height:1.4;color:var(--gc-fg4);margin:4px 0 0}
     @media (max-width:900px){.gc-menu{grid-template-columns:repeat(3,minmax(0,1fr))}}
     @media (max-width:600px){
-      .gc-menu{grid-template-columns:repeat(2,minmax(0,1fr))}
-      .gc-mc{border-radius:16px}
-      .gc-mc-tag{left:8px;top:8px;font-size:9.5px;padding:2px 7px}
-      .gc-mc-b{padding:9px 11px 11px}
-      .gc-mc-b h3{font-size:0.98rem}
-      .gc-mc-b p{font-size:0.78rem;margin-top:2px}
+      .gc-menu{grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 12px}
+      .gc-mc-pic{border-radius:18px}
+      .gc-mc-b{padding-top:9px}
+      .gc-mc-k{font-size:9px;margin-bottom:3px}
+      .gc-mc-b h3{font-size:1.02rem}
+      .gc-mc-b p{font-size:0.8rem;margin-top:2px}
     }
   </style>
-  <section id="menu" aria-labelledby="menu-h2" style="background:rgba(var(--gc-surf-rgb),0.6);border-top:1px solid rgba(var(--gc-ink-rgb),0.08);border-bottom:1px solid rgba(var(--gc-ink-rgb),0.08);scroll-margin-top:84px">
+  <section id="menu" class="gc-dark gc-menu-sec" aria-labelledby="menu-h2" style="scroll-margin-top:84px">
     <div style="max-width:1240px;margin:0 auto;padding:clamp(40px,6vw,80px) clamp(18px,4vw,40px)">
       <div class="gc-menu-h">
         <div>
