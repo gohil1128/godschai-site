@@ -123,11 +123,6 @@
   @media (max-width:430px){
     #hot > div > div{min-width:0!important}
   }
-  /* Five spice cards: auto-fit gives a clean row of five from 1180px and 3+2 on a
-     tablet, but leaves a 4+1 orphan in the band between. Pin it to three there. */
-  @media (min-width:900px) and (max-width:1179px){
-    #spice-grid{grid-template-columns:repeat(3,1fr)!important}
-  }
   /* Long-form article copy (brew guide, catering). Matches the site voice/palette. */
   .gc-prose{color:var(--gc-fg3);font-size:1.05rem;line-height:1.65}
   .gc-prose p{margin:0 0 18px}
@@ -252,4 +247,103 @@
   .gc-band-pic{aspect-ratio:var(--band-ratio,21/9);border-radius:clamp(18px,2.4vw,28px);overflow:hidden;background:var(--gc-card);box-shadow:0 22px 50px -34px rgba(var(--gc-shadow-rgb),0.7)}
   .gc-band figcaption{margin:12px 2px 0;font:400 11.5px/1.5 'DM Mono',monospace;letter-spacing:0.08em;text-transform:uppercase;color:var(--gc-fg4)}
   @media (max-width:700px){.gc-band-pic{aspect-ratio:4/3}}
+
+  /* ---------- Tabs ----------
+     One row of tabs instead of a stack of cards: what we cater, how bulk
+     orders work, the iced-chai steps, latte vs masala, the five spices.
+     The tabs are plain #links, so with JavaScript off every panel shows and a
+     tab jumps to it; site.js turns them into real tabs. A soft pill of warm
+     light slides to the chosen tab. */
+  :root{--gc-glow-rgb:255,196,128;--gc-ray-rgb:240,168,98}
+  .gc-tabbar{position:relative;display:flex;gap:2px;width:max-content;max-width:100%;overflow-x:auto;scrollbar-width:none;
+    padding:4px;border-radius:999px;background:rgba(var(--gc-ink-rgb),0.05);border:1px solid rgba(var(--gc-gold-rgb),0.16);
+    -webkit-overflow-scrolling:touch}
+  .gc-tabbar::-webkit-scrollbar{display:none}
+  .gc-tab{position:relative;z-index:1;flex:none;display:inline-flex;align-items:center;gap:7px;padding:9px 16px;border-radius:999px;
+    font:600 14px/1 'Hanken Grotesk',system-ui,sans-serif;color:var(--gc-fg4);text-decoration:none;white-space:nowrap;
+    transition:color .3s ease;-webkit-tap-highlight-color:transparent}
+  .gc-tab small{font:500 10.5px/1 'DM Mono',monospace;letter-spacing:0.08em;color:var(--gc-gold-d);opacity:.8}
+  .gc-tab:hover{color:var(--gc-fg)}
+  .gc-tab[aria-selected="true"]{color:var(--gc-fg)}
+  .gc-tab:focus-visible{outline:2px solid var(--gc-gold-t);outline-offset:1px}
+  .gc-tabbar:not(.has-glow) .gc-tab[aria-selected="true"]{background:var(--gc-card);box-shadow:0 0 0 1px rgba(var(--gc-gold-rgb),0.26)}
+  .gc-tabglow{position:absolute;z-index:0;top:4px;bottom:4px;left:0;width:0;border-radius:999px;pointer-events:none;
+    background:linear-gradient(180deg,rgba(255,252,246,0.95),var(--gc-card));
+    box-shadow:0 0 0 1px rgba(var(--gc-gold-rgb),0.26),0 6px 18px -8px rgba(var(--gc-glow-rgb),0.9),0 0 26px -6px rgba(var(--gc-glow-rgb),0.55);
+    transition:transform .5s cubic-bezier(.2,.7,.2,1),width .5s cubic-bezier(.2,.7,.2,1)}
+  .gc-dark .gc-tabglow,[data-gc-theme="dark"] .gc-tabglow{background:linear-gradient(180deg,rgba(255,236,214,0.16),rgba(255,236,214,0.06))}
+  .gc-tabpanel{position:relative;max-width:64ch;padding:22px 2px 6px;scroll-margin-top:calc(var(--gc-navh,72px) + var(--gc-stickh,0px) + 16px)}
+  .gc-tabpanel::before{content:"";position:absolute;z-index:-1;left:-40px;top:-20px;width:min(520px,90vw);height:260px;pointer-events:none;
+    background:radial-gradient(closest-side,rgba(var(--gc-glow-rgb),0.20),rgba(var(--gc-glow-rgb),0) 100%);filter:blur(6px)}
+  .gc-tp-k{display:flex;justify-content:space-between;gap:14px;font:500 11px/1.4 'DM Mono',monospace;letter-spacing:0.18em;text-transform:uppercase;color:var(--gc-gold-d)}
+  .gc-tabpanel h2,.gc-tabpanel h3{font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(1.45rem,2.6vw,1.8rem);line-height:1.1;margin:10px 0 0;color:var(--gc-fg)}
+  .gc-tabpanel p{color:var(--gc-fg4);line-height:1.62;margin:10px 0 0;font-size:1.02rem}
+  .gc-tabpanel .gc-tp-num{font-family:'Instrument Serif',serif;font-size:52px;line-height:0.8;color:var(--gc-gold-t);opacity:.9}
+  .gc-tabpanel.is-in{animation:gcTabIn .55s cubic-bezier(.2,.7,.2,1)}
+  @keyframes gcTabIn{from{opacity:0;transform:translateY(8px);filter:blur(5px)}to{opacity:1;transform:none;filter:none}}
+  .gc-tabpanels{position:relative;isolation:isolate}
+  .gc-tabnext{display:inline-flex;align-items:center;gap:6px;margin-top:16px;font:600 14px/1 'Hanken Grotesk',sans-serif;color:var(--gc-gold-t);text-decoration:none}
+  .gc-tabnext:hover{color:var(--gc-gold-h)}
+  @media (max-width:560px){
+    .gc-tab{padding:8px 12px;font-size:13.5px}
+  }
+  @media (max-width:420px){
+    .gc-tab{padding:8px 10px;font-size:13px}
+    .gc-tab small{display:none}
+  }
+
+  /* The catering tabs stay pinned under the header; once the big heading has
+     scrolled away, "Chai catering" fades in beside them so it's always clear
+     where you are. */
+  .gc-stick{position:sticky;top:var(--gc-navh,72px);z-index:60;margin:0 auto;max-width:1240px;
+    padding:10px clamp(18px,4vw,40px);transition:background-color .35s ease,box-shadow .35s ease}
+  .gc-stick::before{content:"";position:absolute;inset:0 calc(50% - 50vw);z-index:-1;background:rgba(var(--gc-bg-rgb),0);
+    -webkit-backdrop-filter:blur(0);backdrop-filter:blur(0);border-bottom:1px solid transparent;
+    transition:background-color .35s ease,border-color .35s ease,-webkit-backdrop-filter .35s ease,backdrop-filter .35s ease}
+  .gc-stick.is-stuck::before{background:rgba(var(--gc-bg-rgb),0.84);-webkit-backdrop-filter:blur(16px) saturate(1.3);backdrop-filter:blur(16px) saturate(1.3);
+    border-bottom-color:rgba(var(--gc-ink-rgb),0.08)}
+  .gc-cat [id]{scroll-margin-top:calc(var(--gc-navh,72px) + var(--gc-stickh,0px) + 14px)}
+  .gc-stick-in{display:flex;flex-wrap:wrap;align-items:center;gap:6px 16px}
+  .gc-stick-t{display:block;opacity:0;transform:translateY(5px);font-family:'Instrument Serif',serif;font-size:1.2rem;line-height:1.15;color:var(--gc-fg);
+    white-space:nowrap;overflow:hidden;transition:opacity .4s ease,transform .45s cubic-bezier(.2,.7,.2,1),max-width .45s cubic-bezier(.2,.7,.2,1),margin .45s cubic-bezier(.2,.7,.2,1)}
+  .gc-stick-t i{color:var(--gc-coral-t)}
+  .gc-stick.is-stuck .gc-stick-t{opacity:1;transform:none}
+  /* phones: the title keeps its own line (so nothing moves when it appears);
+     wider screens: it slides in to the left of the tabs */
+  @media (max-width:760px){.gc-stick-t{flex-basis:100%}}
+  @media (min-width:761px){.gc-stick-t{max-width:0;margin-right:-16px}.gc-stick.is-stuck .gc-stick-t{max-width:280px;margin-right:0}}
+
+  /* ---------- Light ----------
+     Small, warm touches, like light through steam: soft rays behind each
+     page's heading, a glow on the accent word, warm bloom on cards, a slow
+     breath of light over the photo bands. All of it stops with reduced motion. */
+  section[aria-labelledby="page-h1"]{position:relative;isolation:isolate}
+  section[aria-labelledby="page-h1"]::before{content:"";position:absolute;z-index:-1;inset:0;pointer-events:none;
+    background:
+      radial-gradient(22% 34% at 24% 56%,rgba(var(--gc-ray-rgb),0.34),rgba(var(--gc-ray-rgb),0) 100%),
+      repeating-conic-gradient(from 4deg at 24% 56%,rgba(var(--gc-ray-rgb),0) 0deg 4.5deg,rgba(var(--gc-ray-rgb),0.30) 6deg 7deg,rgba(var(--gc-ray-rgb),0) 8.5deg 11deg);
+    -webkit-mask-image:radial-gradient(23% 42% at 24% 56%,#000 0%,rgba(0,0,0,.42) 46%,transparent 100%);
+            mask-image:radial-gradient(23% 42% at 24% 56%,#000 0%,rgba(0,0,0,.42) 46%,transparent 100%);
+    filter:blur(2.5px);animation:gcRays 7s ease-in-out infinite alternate}
+  @media (max-width:760px){section[aria-labelledby="page-h1"]::before{
+    -webkit-mask-image:radial-gradient(46% 30% at 46% 56%,#000 0%,rgba(0,0,0,.4) 46%,transparent 100%);
+            mask-image:radial-gradient(46% 30% at 46% 56%,#000 0%,rgba(0,0,0,.4) 46%,transparent 100%);
+    background:
+      radial-gradient(44% 24% at 46% 56%,rgba(var(--gc-ray-rgb),0.30),rgba(var(--gc-ray-rgb),0) 100%),
+      repeating-conic-gradient(from 4deg at 46% 56%,rgba(var(--gc-ray-rgb),0) 0deg 4.5deg,rgba(var(--gc-ray-rgb),0.26) 6deg 7deg,rgba(var(--gc-ray-rgb),0) 8.5deg 11deg)}}
+  @keyframes gcRays{from{opacity:.55}to{opacity:1}}
+  h1 span[style*="italic"],h2 span[style*="italic"]{text-shadow:0 0 22px rgba(var(--gc-glow-rgb),0.45)}
+  .gc-card{transition:border-color .32s ease,box-shadow .45s ease}
+  .gc-card:hover,.gc-card:focus-within{box-shadow:0 20px 44px -28px rgba(var(--gc-glow-rgb),0.9),0 0 0 1px rgba(var(--gc-glow-rgb),0.10)}
+  .gc-pill:hover,.gc-pill-coral:hover,.gc-club button[type="submit"]:hover{box-shadow:inset 0 1px 0 rgba(255,226,206,0.35),0 6px 16px -9px rgba(110,45,20,0.6),0 0 26px -6px rgba(var(--gc-glow-rgb),0.65)!important}
+  .gc-band-pic{position:relative}
+  .gc-band-pic::after{content:"";position:absolute;inset:0;pointer-events:none;mix-blend-mode:soft-light;
+    background:radial-gradient(70% 90% at 85% 10%,rgba(255,210,150,0.55),rgba(255,210,150,0) 60%);
+    animation:gcBreathe 9s ease-in-out infinite alternate}
+  @keyframes gcBreathe{from{opacity:.25}to{opacity:.85}}
+  @media (prefers-reduced-motion:reduce){
+    section[aria-labelledby="page-h1"]::before,.gc-band-pic::after{animation:none}
+    .gc-tabpanel.is-in{animation:none}
+    .gc-tabglow,.gc-stick-t,.gc-stick::before{transition:none}
+  }
 </style>

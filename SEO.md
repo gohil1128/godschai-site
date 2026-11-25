@@ -769,6 +769,43 @@ switch is the `prefers-reduced-motion` block at the foot of each stylesheet.
 
 ---
 
+## Tabs instead of stacked cards
+
+Sections that used to be a pile of cards are now one row of tabs with one
+panel showing at a time:
+
+- **Catering:** what we cater (Weddings, Offices, Parties, Markets).
+- **Bulk orders:** how it works (Send, Confirm, Chai time).
+- **Iced chai guide:** the four steps (each panel links on to the next).
+- **Latte vs masala:** the short answer.
+- **Spices:** the five spices. Each tab's name is the `tab:` field in
+  `_data/spices.yml`.
+
+The markup is a `.gc-tabbar` (`data-gc-tabbar`, `role="tablist"`) of `#links`.
+Each link points at a `.gc-tabpanel`. `site.js` ("Tabs") turns them into real
+tabs, with arrow keys and a soft pill of light that slides to the chosen tab.
+With JavaScript off, every panel shows and each tab jumps to its panel. To add a
+tab, add a link and a panel with matching `id` / `aria-controls`.
+
+On the catering page, "Chai Catering in Saskatoon" is the first thing on the
+page. Its tab bar (`.gc-stick`) stays pinned under the header the whole way
+down. Once the heading has scrolled away, "Chai catering in Saskatoon" fades in
+next to the tabs (above them on phones). Tapping a tab from further down brings
+its panel back into view.
+
+## Light effects
+
+Small warm touches, in the spirit of light through steam:
+
+- a soft halo of light rays behind each page's heading, breathing slowly;
+- a faint glow on the italic accent word in headings;
+- a warm bloom under cards and buttons on hover;
+- a slow breath of golden light over the photo bands.
+
+They're all in `_includes/base-styles-dark.html` under "Light". The colours are
+`--gc-glow-rgb` and `--gc-ray-rgb`. Everything stops when the visitor has
+reduced motion turned on.
+
 ## The particle light
 
 The signup box has a small cloud of glowing specks at the top: a slow sphere
