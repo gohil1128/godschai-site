@@ -6,7 +6,7 @@
 {%- assign p = include.p -%}
 {%- capture purl %}{{ '/premixes/' | relative_url }}{{ p.slug }}/{% endcapture -%}
 <div class="gc-pcard gc-card">
-  <a href="{{ purl }}" tabindex="-1" aria-hidden="true">{% include img.html base=p.img ext="jpg" widths="250,500" sizes="(max-width:700px) 60vw, 220px" w="544" h="952" alt=p.alt wrap="display:block" style="width:100%;height:auto;display:block;border-radius:10px 10px 14px 14px;box-shadow:0 24px 44px -20px rgba(0,0,0,0.7)" %}</a>
+  <a class="gc-pcard-pic" href="{{ purl }}" tabindex="-1" aria-hidden="true">{% include img.html base=p.scene ext="jpg" widths="480,960" sizes="(max-width:700px) 88vw, 420px" w="960" h="1200" alt=p.alt wrap="display:block" style="width:100%;height:auto;aspect-ratio:4/5;object-fit:cover;display:block;border-radius:20px" %}</a>
   <h3><a href="{{ purl }}">{{ p.name }}</a></h3>
   <div class="gc-pcard-notes">{{ p.notes }}</div>
   <p>{{ p.tagline }}</p>

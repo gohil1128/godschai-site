@@ -131,8 +131,11 @@
 
   /* Product cards */
   .gc-pcard{display:flex;flex-direction:column;align-items:center;text-align:center;padding:26px 24px 26px;
-    background:rgba(var(--gc-surf-rgb),0.8);border:1px solid rgba(var(--gc-gold-rgb),0.16);border-radius:22px}
+    background:rgba(var(--gc-surf-rgb),0.8);border:1px solid rgba(var(--gc-gold-rgb),0.16);border-radius:22px;overflow:hidden}
   .gc-pcard > a{display:block;width:min(52%,170px)}
+  /* the pouch photo runs to the card's edges */
+  .gc-pcard > a.gc-pcard-pic{width:calc(100% + 48px);margin:-26px -24px 0}
+  .gc-pcard > a.gc-pcard-pic img{border-radius:0!important}
   .gc-pcard h3{font-family:'Instrument Serif',serif;font-weight:400;font-size:1.55rem;margin:20px 0 0;line-height:1.1}
   .gc-pcard h3 a{color:var(--gc-fg);text-decoration:none}
   .gc-pcard-notes{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--gc-gold-t);margin-top:7px}

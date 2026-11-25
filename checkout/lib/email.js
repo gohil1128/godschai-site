@@ -10,8 +10,8 @@
 const SITE = 'https://godschai.com';
 const IMG = {
   logo: SITE + '/uploads/opt/logo-cream-256.png',
-  'Original Masala': SITE + '/uploads/opt/pouch-masala-front-250.jpg',
-  'Rose & Cardamom': SITE + '/uploads/opt/pouch-rose-front-250.jpg',
+  'Original Masala': SITE + '/uploads/opt/pouch-masala-real-250.jpg',
+  'Rose & Cardamom': SITE + '/uploads/opt/pouch-rose-real-250.jpg',
 };
 const ZONE_TEXT = {
   saskatoon: {
