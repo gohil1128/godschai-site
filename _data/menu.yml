@@ -59,4 +59,5 @@ snacks:
     desc: "Crisp, golden pastry with a warm spiced filling."
     short: "Crisp, golden, spiced."
     img: ""
-    alt: "A crisp golden samosa"
+    photo: "offer-bulk"                 # already in uploads/opt (the homepage strip's samosa photo)
+    alt: "Golden samosas in the warmer at the cart"

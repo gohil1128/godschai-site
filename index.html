@@ -82,7 +82,7 @@ og_image: "uploads/og-image.jpg"
           <a href="{{ '/catering/' | relative_url }}" style="text-decoration:none;background:rgba(var(--gc-ink-rgb),0.10);color:var(--gc-fg);font-weight:600;font-size:16px;padding:15px 24px;border-radius:999px;border:1.5px solid rgba(var(--gc-ink-rgb),0.3);backdrop-filter:blur(4px)" class="gc-pill-ghost">Book catering</a>
           {%- else %}
           <a href="#menu" style="text-decoration:none;background:#B55F3E;color:#FFFFFF;font-weight:700;font-size:16px;padding:15px 26px;border-radius:999px;box-shadow:0 12px 34px rgba(var(--gc-coral-rgb),0.45)" class="gc-pill-coral">View the menu →</a>
-          <a href="#hot" style="text-decoration:none;background:rgba(var(--gc-ink-rgb),0.10);color:var(--gc-fg);font-weight:600;font-size:16px;padding:15px 24px;border-radius:999px;border:1.5px solid rgba(var(--gc-ink-rgb),0.3);backdrop-filter:blur(4px)" class="gc-pill-ghost">Explore the chai</a>
+          <a href="{{ '/catering/' | relative_url }}" style="text-decoration:none;background:rgba(var(--gc-ink-rgb),0.10);color:var(--gc-fg);font-weight:600;font-size:16px;padding:15px 24px;border-radius:999px;border:1.5px solid rgba(var(--gc-ink-rgb),0.3);backdrop-filter:blur(4px)" class="gc-pill-ghost">Book catering</a>
           {%- endif %}
         </div>
         <ul class="gc-hero-facts">
@@ -121,7 +121,7 @@ og_image: "uploads/og-image.jpg"
         {%- if site.data.shop.open %}
         <p style="font-size:1.08rem;line-height:1.55;color:var(--gc-fg3);max-width:40ch;margin:16px 0 26px">Two blends, hand crafted in Saskatoon and stove-top ready in minutes — each pouch makes 25 cups. ${% include money.html v=site.data.shop.price %} a pouch{% if site.data.shop.pair_price %} or both for ${% include money.html v=site.data.shop.pair_price %}{% endif %}, delivered free anywhere in Saskatoon.</p>
         <a href="{{ '/premixes/' | relative_url }}" style="display:inline-block;text-decoration:none;background:#B55F3E;color:#FFFFFF;font-weight:700;font-size:16px;padding:15px 28px;border-radius:999px" class="gc-pill">Shop the premixes</a>
-        <p style="margin:14px 0 0;font-size:13px;color:var(--gc-muted)">Shipped across Canada too · <a href="{{ '/shipping/' | relative_url }}" style="color:var(--gc-muted)">delivery details</a></p>
+        <p style="margin:14px 0 0;font-size:13px;color:var(--gc-muted)">Shipped across Canada too · <a href="{{ '/shipping/' | relative_url }}" style="color:var(--gc-muted)">delivery details</a> · <a href="{{ '/how-to-make-masala-chai/' | relative_url }}" style="color:var(--gc-muted)">how to brew it</a></p>
         {%- else %}
         <p style="font-size:1.08rem;line-height:1.55;color:var(--gc-fg3);max-width:40ch;margin:16px 0 26px">Two blends, hand crafted in Saskatoon and stove-top ready in minutes — each pouch makes 25 cups. Get first dibs the day they drop.</p>
         {% include signup-form.html id="premix" button="Get launch updates" big=true list="premix-launch" note="No spam. Just one note on launch day." %}
@@ -148,175 +148,51 @@ og_image: "uploads/og-image.jpg"
     </div>
   </section>
 
-  <!-- HOT -->
-  {%- assign hot = site.data.menu.hot | first %}
-  <section id="hot" aria-labelledby="hot-h2" style="max-width:1240px;margin:0 auto;padding:clamp(60px,8vw,110px) clamp(18px,4vw,40px) clamp(20px,3vw,36px);scroll-margin-top:84px">
-    <div style="margin-bottom:28px">
-      <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.18em;text-transform:uppercase;color:var(--gc-gold-t)">Cozy · comforting · slow</div>
-      <h2 id="hot-h2" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(2rem,4.4vw,3.3rem);letter-spacing:0;line-height:1;margin:10px 0 0">The hot one</h2>
-    </div>
-    <div style="display:flex;gap:0;align-items:stretch;flex-wrap:wrap;background:var(--gc-card);border:1px solid rgba(var(--gc-ink-rgb),0.08);border-radius:28px;overflow:hidden">
-      <div style="flex:1 1 300px;min-width:260px;min-height:280px;background:linear-gradient(150deg,#B55F3E 0%,#8E472C 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:36px 24px">
-        {% include img.html base="logo-cream" ext="png" widths="128,256" sizes="220px" w="256" h="256" alt="" wrap="display:block;width:min(62%,220px)" style="width:100%;height:auto;display:block" %}
-        <span style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:#FFEFD9">Served hot · all day</span>
-      </div>
-      <div style="flex:1 1 360px;min-width:300px;padding:clamp(28px,4vw,48px);display:flex;flex-direction:column;justify-content:center">
-        <span style="align-self:flex-start;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:#FFFFFF;background:#B55F3E;padding:6px 12px;border-radius:999px">The only hot on the menu</span>
-        <h3 style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(1.8rem,3.4vw,2.6rem);letter-spacing:0;line-height:1.02;margin:16px 0 0;color:var(--gc-fg)">{{ hot.name }}</h3>
-        <p style="font-size:1.05rem;line-height:1.55;color:var(--gc-fg3);margin:12px 0 0;max-width:42ch">{{ hot.desc }}</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- COLD -->
-  <section id="cold" aria-labelledby="cold-h2" style="background:rgba(var(--gc-surf-rgb),0.6);margin-top:clamp(40px,5vw,76px);scroll-margin-top:84px">
-    <div style="max-width:1240px;margin:0 auto;padding:clamp(44px,6vw,84px) clamp(18px,4vw,40px)">
-      <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:18px;flex-wrap:wrap;margin-bottom:30px">
-        <div>
-          <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.18em;text-transform:uppercase;color:var(--gc-coral-t)">Bold · iced · made for the feed</div>
-          <h2 id="cold-h2" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(2rem,4.8vw,3.6rem);letter-spacing:0;line-height:1;margin:10px 0 0;color:var(--gc-fg)">Cold Chai Creations</h2>
-        </div>
-        <p style="max-width:34ch;font-size:1.02rem;line-height:1.5;color:var(--gc-fg4);margin:0">Same real chai, served loud. Layered, spiced, and ridiculously photogenic over ice.</p>
-      </div>
-      <div data-gc-stagger style="display:grid;grid-template-columns:repeat(auto-fill,minmax(165px,1fr));gap:clamp(12px,1.5vw,18px)">
-        {%- for d in site.data.menu.iced %}
-        <div style="background:var(--gc-card);border:1px solid rgba(var(--gc-ink-rgb),0.10);border-radius:22px;overflow:hidden" class="gc-lift">
-          {%- if d.logo_tile %}
-          <div style="aspect-ratio:4/5;overflow:hidden;position:relative;background:radial-gradient(120% 100% at 50% 34%,#3A2517 0%,#1C110A 100%);display:flex;align-items:center;justify-content:center;padding:24px">
-            {% include img.html base="logo-cream" ext="png" widths="128,256" sizes="160px" w="256" h="256" alt="God's Chai logo" wrap="display:block;width:76%;max-height:64%" style="width:100%;height:100%;object-fit:contain;display:block" %}
-          </div>
-          {%- else %}
-          <div style="aspect-ratio:4/5;overflow:hidden;background:var(--gc-card);position:relative">
-            {%- assign dbase = d.img | split: "/" | last | split: "." | first %}
-                        {% include img.html base=dbase ext="jpg" widths="320,640" sizes="(max-width:700px) 45vw, 200px" w="640" h="800" alt=d.alt wrap="display:block;width:100%;height:100%" style="width:100%;height:100%;object-fit:cover;display:block;filter:saturate(1.18) contrast(1.04) brightness(1.06)" %}
-            <div style="position:absolute;inset:0;background:linear-gradient(180deg,transparent 58%,rgba(20,12,7,0.45) 100%)"></div>
-          </div>
-          {%- endif %}
-          <div style="padding:16px 17px 19px">
-            <h3 style="font-family:'Instrument Serif',serif;font-weight:400;font-size:1.05rem;margin:0;letter-spacing:0;color:var(--gc-fg)">{{ d.name }}</h3>
-            <p style="font-size:0.86rem;line-height:1.45;color:var(--gc-fg4);margin:6px 0 0">{{ d.desc }}</p>
-          </div>
-        </div>
-        {%- endfor %}
-      </div>
-    </div>
-  </section>
-
-  <!-- POUR BAND (parallax) -->
-  <section class="gc-dark" aria-labelledby="pour-h2" style="position:relative;height:62vh;min-height:420px;overflow:hidden">
-    <div data-gc-parallax style="position:absolute;left:0;right:0;top:-16%;bottom:-16%;will-change:transform">
-      {% include img.html base="pour-a" ext="jpg" widths="640,1280" sizes="100vw" w="1065" h="1600" alt="Masala chai being poured from a steel kettle" wrap="display:block;width:100%;height:100%" style="width:100%;height:100%;object-fit:cover;object-position:54% 38%;display:block" %}
-    </div>
-    <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(var(--gc-bg-rgb),0.6) 0%,rgba(var(--gc-bg-rgb),0.32) 42%,rgba(var(--gc-bg-rgb),0.78) 100%)"></div>
-    <div style="position:relative;z-index:2;max-width:1240px;margin:0 auto;height:100%;display:flex;flex-direction:column;justify-content:center;padding:0 clamp(18px,4vw,40px)">
-      <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gc-gold-t);margin-bottom:14px">Straight from the kettle</div>
-      <h2 id="pour-h2" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(2.6rem,8vw,6rem);line-height:0.92;letter-spacing:0;margin:0;max-width:16ch;text-shadow:0 6px 40px rgba(0,0,0,0.55)">Kadak. Every single cup.</h2>
-    </div>
-  </section>
-
-  <!-- WHY -->
-  <section id="why" aria-labelledby="why-h2" style="max-width:1240px;margin:0 auto;padding:clamp(48px,6vw,90px) clamp(18px,4vw,40px);scroll-margin-top:84px">
-    <h2 id="why-h2" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(1.9rem,4vw,3rem);letter-spacing:0;text-align:center;margin:0 0 8px">Why God's Chai is different</h2>
-    <p style="text-align:center;color:var(--gc-fg4);font-size:1.05rem;margin:0 auto 42px;max-width:46ch">No syrups pretending to be spice. No powders, no shortcuts. Just real masala chai, done properly.</p>
-    <div data-gc-stagger style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:clamp(16px,2vw,24px)">
-      <div style="padding:30px 28px 32px;background:rgba(var(--gc-surf-rgb),0.8);backdrop-filter:blur(3px);border:1px solid rgba(var(--gc-gold-rgb),0.16);border-radius:22px;--gc-bh:rgba(var(--gc-gold-rgb),0.5)" class="gc-card">
-        <div style="display:flex;align-items:baseline;gap:14px;padding-bottom:18px;border-bottom:1px solid rgba(var(--gc-ink-rgb),0.10)">
-          <span style="font-family:'Instrument Serif',serif;font-weight:400;font-size:46px;line-height:0.8;color:var(--gc-gold-t);letter-spacing:0">01</span>
-          <span style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--gc-gold-d)">Sourcing</span>
-        </div>
-        <h3 style="font-family:'Instrument Serif',serif;font-weight:400;font-size:1.32rem;margin:20px 0 0">Sourced, not faked</h3>
-        <p style="color:var(--gc-fg4);line-height:1.55;margin:9px 0 0">Whole spices from Kerala and single-origin tea from Assam. Ground and blended in small batches.</p>
-      </div>
-      <div style="padding:30px 28px 32px;background:rgba(var(--gc-surf-rgb),0.8);backdrop-filter:blur(3px);border:1px solid rgba(var(--gc-gold-rgb),0.16);border-radius:22px;--gc-bh:rgba(var(--gc-gold-rgb),0.5)" class="gc-card">
-        <div style="display:flex;align-items:baseline;gap:14px;padding-bottom:18px;border-bottom:1px solid rgba(var(--gc-ink-rgb),0.10)">
-          <span style="font-family:'Instrument Serif',serif;font-weight:400;font-size:46px;line-height:0.8;color:var(--gc-gold-t);letter-spacing:0">02</span>
-          <span style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--gc-gold-d)">Philosophy</span>
-        </div>
-        <h3 style="font-family:'Instrument Serif',serif;font-weight:400;font-size:1.32rem;margin:20px 0 0">Real spices, done right</h3>
-        <p style="color:var(--gc-fg4);line-height:1.55;margin:9px 0 0">Whole spices, freshly ground and slow-brewed the proper way — never from a premade base.</p>
-      </div>
-      <div style="padding:30px 28px 32px;background:rgba(var(--gc-surf-rgb),0.8);backdrop-filter:blur(3px);border:1px solid rgba(var(--gc-gold-rgb),0.16);border-radius:22px;--gc-bh:rgba(var(--gc-gold-rgb),0.5)" class="gc-card">
-        <div style="display:flex;align-items:baseline;gap:14px;padding-bottom:18px;border-bottom:1px solid rgba(var(--gc-ink-rgb),0.10)">
-          <span style="font-family:'Instrument Serif',serif;font-weight:400;font-size:46px;line-height:0.8;color:var(--gc-gold-t);letter-spacing:0">03</span>
-          <span style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--gc-gold-d)">Roots</span>
-        </div>
-        <h3 style="font-family:'Instrument Serif',serif;font-weight:400;font-size:1.32rem;margin:20px 0 0">Built for YXE</h3>
-        <p style="color:var(--gc-fg4);line-height:1.55;margin:9px 0 0">Made for Saskatoon's Gen Z and millennials who want a daily chai ritual that actually tastes like something.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- MENU PREVIEW -->
+  <!-- MENU: every drink and the samosa, in one grid (_data/menu.yml). The nav's
+       Menu link lands here. -->
+  <style>
+    .gc-menu-h{display:flex;justify-content:space-between;align-items:flex-end;gap:12px 24px;flex-wrap:wrap;margin-bottom:clamp(18px,3vw,28px)}
+    .gc-menu-h p{max-width:36ch;font-size:1rem;line-height:1.5;color:var(--gc-fg4);margin:0}
+    .gc-menu{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(10px,1.5vw,16px)}
+    .gc-mc{background:var(--gc-card);border:1px solid rgba(var(--gc-ink-rgb),0.10);border-radius:20px;overflow:hidden;min-width:0}
+    .gc-mc-pic{position:relative;aspect-ratio:1/1;overflow:hidden;display:flex;align-items:center;justify-content:center;
+      background:radial-gradient(120% 100% at 50% 34%,#3A2517 0%,#1C110A 100%)}
+    .gc-mc-pic.is-hot{background:linear-gradient(150deg,#B55F3E 0%,#8E472C 100%)}
+    .gc-mc-logo{display:block;width:58%}
+    .gc-mc-tag{position:absolute;left:10px;top:10px;font-family:'DM Mono',monospace;font-size:10.5px;letter-spacing:0.1em;text-transform:uppercase;
+      color:#3C2116;background:rgba(251,248,243,0.9);padding:3px 9px;border-radius:999px}
+    .gc-mc-b{padding:13px 15px 15px}
+    .gc-mc-b h3{font-family:'Instrument Serif',serif;font-weight:400;font-size:1.08rem;line-height:1.15;margin:0;letter-spacing:0;color:var(--gc-fg)}
+    .gc-mc-b p{font-size:0.86rem;line-height:1.4;color:var(--gc-fg4);margin:4px 0 0}
+    @media (max-width:900px){.gc-menu{grid-template-columns:repeat(3,minmax(0,1fr))}}
+    @media (max-width:600px){
+      .gc-menu{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .gc-mc{border-radius:16px}
+      .gc-mc-tag{left:8px;top:8px;font-size:9.5px;padding:2px 7px}
+      .gc-mc-b{padding:9px 11px 11px}
+      .gc-mc-b h3{font-size:0.98rem}
+      .gc-mc-b p{font-size:0.78rem;margin-top:2px}
+    }
+  </style>
   <section id="menu" aria-labelledby="menu-h2" style="background:rgba(var(--gc-surf-rgb),0.6);border-top:1px solid rgba(var(--gc-ink-rgb),0.08);border-bottom:1px solid rgba(var(--gc-ink-rgb),0.08);scroll-margin-top:84px">
-    <div style="max-width:1240px;margin:0 auto;padding:clamp(44px,6vw,84px) clamp(18px,4vw,40px)">
-      <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:18px;flex-wrap:wrap;margin-bottom:30px">
+    <div style="max-width:1240px;margin:0 auto;padding:clamp(40px,6vw,80px) clamp(18px,4vw,40px)">
+      <div class="gc-menu-h">
         <div>
           <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.18em;text-transform:uppercase;color:var(--gc-gold-t)">The menu</div>
-          <h2 id="menu-h2" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(2rem,4.4vw,3.3rem);letter-spacing:0;line-height:1;margin:10px 0 0">The full lineup</h2>
+          <h2 id="menu-h2" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(2rem,4.4vw,3.3rem);letter-spacing:0;line-height:1;margin:10px 0 0">Hot, iced &amp; a samosa</h2>
         </div>
+        <p>The same real chai, hot or over ice, at every pop-up. Pair any drink with a samosa for a combo.</p>
       </div>
-      <div data-gc-stagger style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:clamp(14px,1.8vw,20px)">
-        {%- for d in site.data.menu.hot %}{% include lineup-card.html d=d tag="Hot" %}{% endfor -%}
-        {%- for d in site.data.menu.iced %}{% include lineup-card.html d=d tag="Iced" %}{% endfor -%}
-        {%- for d in site.data.menu.snacks %}{% include lineup-card.html d=d tag="Snack" %}{% endfor -%}
-      </div>
-      <div style="margin-top:22px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:var(--gc-card);border:1px dashed rgba(var(--gc-gold-rgb),0.35);border-radius:16px;padding:14px 20px">
-        <span style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:#FFFFFF;background:#B55F3E;padding:6px 12px;border-radius:999px">Combos available</span>
-        <span style="font-size:0.98rem;color:var(--gc-fg3)">Pair any drink with a samosa — just ask at the cart.</span>
+      <div data-gc-stagger class="gc-menu">
+        {%- for d in site.data.menu.hot %}{% include menu-card.html d=d tag="Hot" %}{% endfor -%}
+        {%- for d in site.data.menu.iced %}{% include menu-card.html d=d tag="Iced" %}{% endfor -%}
+        {%- for d in site.data.menu.snacks %}{% include menu-card.html d=d tag="Snack" %}{% endfor -%}
       </div>
     </div>
   </section>
 
-  <!-- BREW GUIDE TEASER -->
-  <section id="brew" aria-labelledby="brew-h2" style="background:linear-gradient(180deg,var(--gc-bg2),var(--gc-card));border-top:1px solid rgba(var(--gc-gold-rgb),0.14);border-bottom:1px solid rgba(var(--gc-gold-rgb),0.14);scroll-margin-top:84px">
-    <div style="max-width:1240px;margin:0 auto;padding:clamp(48px,6vw,90px) clamp(18px,4vw,40px)">
-      <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:28px;flex-wrap:wrap;margin-bottom:clamp(30px,4vw,46px)">
-        <div>
-          <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gc-gold-t);margin-bottom:14px">Brew it your way</div>
-          <h2 id="brew-h2" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(2.1rem,5vw,3.6rem);line-height:0.98;letter-spacing:0;margin:0;color:var(--gc-fg)">Four steps. One proper cup.</h2>
-        </div>
-        <p style="max-width:34ch;font-size:1.02rem;line-height:1.5;color:var(--gc-fg4);margin:0">Straight off the back of the bag. Stovetop only — this is how masala chai is supposed to be made.</p>
-      </div>
-      <div style="display:flex;align-items:center;gap:10px;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:var(--gc-gold-d);margin-bottom:20px">
-        <span style="width:7px;height:7px;border-radius:50%;background:#B55F3E;display:inline-block"></span>
-        <span>Serves {{ site.data.brew.serves }}</span>
-        <span style="flex:1;height:1px;background:rgba(var(--gc-gold-rgb),0.2)"></span>
-      </div>
-      <div data-gc-stagger style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:clamp(14px,1.8vw,20px)">
-        {%- for s in site.data.brew.steps %}
-        {%- if s.accent %}{% assign bc = "rgba(var(--gc-coral-rgb),0.3)" %}{% assign bh = "rgba(var(--gc-coral-rgb),0.65)" %}{% assign nc = "var(--gc-coral-t)" %}{% assign lc = "var(--gc-coral-t)" %}
-        {%- else %}{% assign bc = "rgba(var(--gc-gold-rgb),0.16)" %}{% assign bh = "rgba(var(--gc-gold-rgb),0.5)" %}{% assign nc = "var(--gc-gold-t)" %}{% assign lc = "var(--gc-gold-d)" %}{% endif %}
-        <div style="padding:26px 24px 28px;background:rgba(var(--gc-surf-rgb),0.72);border:1px solid {{ bc }};border-radius:22px;--gc-bh:{{ bh }}" class="gc-card gc-lift">
-          <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding-bottom:16px;border-bottom:1px solid rgba(var(--gc-ink-rgb),0.10)">
-            <span style="font-family:'Instrument Serif',serif;font-size:44px;line-height:0.8;color:{{ nc }}">0{{ forloop.index }}</span>
-            <span style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.18em;text-transform:uppercase;color:{{ lc }}">{{ s.label }}</span>
-          </div>
-          <h3 style="font-family:'Instrument Serif',serif;font-weight:400;font-size:1.32rem;margin:20px 0 0;color:var(--gc-fg)">{% include brew-text.html t=s.title plain=true %}</h3>
-          <p style="color:var(--gc-fg4);line-height:1.55;margin:9px 0 0;font-size:0.95rem">{{ s.desc }}</p>
-        </div>
-        {%- endfor %}
-      </div>
-      <p style="margin:26px 0 0"><a href="{{ '/how-to-make-masala-chai/' | relative_url }}" style="text-decoration:none;color:var(--gc-gold-t);font-weight:600;font-size:15px;border-bottom:2px solid rgba(var(--gc-gold-rgb),0.5);padding-bottom:2px">Read the full guide to making masala chai →</a></p>
-    </div>
-  </section>
-
-  <!-- EVENTS TEASER -->
+  <!-- EVENTS: where to find the cart next -->
   {% include events-grid.html heading_id="events-h2" %}
-
-  <!-- CATERING TEASER -->
-  <section id="catering" aria-labelledby="catering-h2" style="background:rgba(var(--gc-surf-rgb),0.6);border-top:1px solid rgba(var(--gc-ink-rgb),0.08);scroll-margin-top:84px">
-    <div style="max-width:1240px;margin:0 auto;padding:clamp(46px,6vw,88px) clamp(18px,4vw,40px);display:flex;gap:clamp(28px,4vw,60px);align-items:center;flex-wrap:wrap">
-      <div style="flex:1 1 420px;min-width:300px">
-        <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.18em;text-transform:uppercase;color:var(--gc-coral-t)">Weddings · offices · parties</div>
-        <h2 id="catering-h2" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(2rem,4.4vw,3.3rem);letter-spacing:0;line-height:1;margin:10px 0 0;color:var(--gc-fg)">Chai catering in Saskatoon</h2>
-        <p style="font-size:1.05rem;line-height:1.6;color:var(--gc-fg3);max-width:46ch;margin:16px 0 24px">Bring the cart to your event. We pour fresh masala chai for weddings, office mornings, markets and private parties across Saskatoon and area — hot in winter, iced in summer, always kadak.</p>
-        <div style="display:flex;gap:13px;flex-wrap:wrap">
-          <a href="{{ '/catering/' | relative_url }}" style="text-decoration:none;background:#B55F3E;color:#FFFFFF;font-weight:700;font-size:16px;padding:15px 26px;border-radius:999px" class="gc-pill">Book chai for your event →</a>
-          <a href="{{ '/bulk-orders/' | relative_url }}" style="text-decoration:none;background:rgba(var(--gc-ink-rgb),0.10);color:var(--gc-fg);font-weight:600;font-size:16px;padding:15px 24px;border-radius:999px;border:1.5px solid rgba(var(--gc-ink-rgb),0.3)" class="gc-pill-ghost">Order chai &amp; samosas in bulk</a>
-        </div>
-      </div>
-    </div>
-  </section>
 
   <!-- COMMUNITY: the @godschai Instagram grid (_data/instagram.yml) -->
   {% include insta-grid.html %}
