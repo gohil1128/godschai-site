@@ -2,7 +2,8 @@
   Shared <head> for every page. Pages set these in their front matter:
     title        — <60 chars, must pair the brand with Saskatoon/Saskatchewan
     description  — 140-160 chars (description_open replaces it once the shop opens)
-    og_image     — optional, defaults to the site OG image
+    og_image     — optional, defaults to the site OG image (1200×630)
+    og_alt       — optional, describes og_image
     theme_color  — optional, defaults to the dark palette
     csp          — optional extra sources for the Content-Security-Policy, per
                    directive (script, style, font, img, connect, frame). Only
@@ -33,8 +34,14 @@
 
 <title>{{ page.title }}</title>
 <meta name="description" content="{{ desc }}">
+{%- comment -%} One robots tag per page. Pages left out of the sitemap (404,
+  checkout, order confirmed) default to noindex; a page can set its own with
+  `robots:` in its front matter. The 404 page has no canonical of its own. {%- endcomment %}
+{%- unless page.url == "/404.html" %}
 <link rel="canonical" href="{{ page.url | absolute_url }}">
-<meta name="robots" content="index, follow, max-image-preview:large">
+{%- endunless %}
+{%- if page.sitemap == false %}{% assign robots_default = "noindex, follow" %}{% else %}{% assign robots_default = "index, follow, max-image-preview:large" %}{% endif %}
+<meta name="robots" content="{{ page.robots | default: robots_default }}">
 <meta name="theme-color" content="{{ theme }}">
 <meta name="geo.region" content="CA-SK">
 <meta name="geo.placename" content="Saskatoon">
@@ -48,7 +55,7 @@
 <meta property="og:image" content="{{ og_img | absolute_url }}">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="God's Chai — masala chai brewed fresh in Saskatoon">
+<meta property="og:image:alt" content="{{ page.og_alt | default: "God's Chai — masala chai brewed fresh in Saskatoon" | escape }}">
 <meta property="og:locale" content="{{ site.locale }}">
 
 <!-- Twitter -->
@@ -72,23 +79,38 @@
 <link rel="preload" href="{{ '/assets/fonts/instrument-serif-400.woff2' | relative_url }}" as="font" type="font/woff2" crossorigin>
 <style>{% include fonts.css %}</style>
 
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id={{ site.ga_measurement_id }}"></script>
+<!-- Marks the page as scripted before anything paints, so tab panels that
+     will be hidden start hidden (no jump when site.js takes over). -->
+<script>document.documentElement.classList.add('gc-js');</script>
+
+<!-- Google Analytics and Microsoft Clarity. Their queues start now, so nothing
+     sent early is lost, but the scripts themselves (and the animated header
+     logo) download once the page has loaded and the browser is idle, or on the
+     first tap or scroll, whichever comes first. On a phone they used to hold up
+     the first screen by well over a second. -->
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
   gtag('config', '{{ site.ga_measurement_id }}');
-</script>
-
-
-<!-- Microsoft Clarity -->
-<script type="text/javascript">
-    (function(c,l,a,r,i,t,y){
-        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-    })(window, document, "clarity", "script", "z9zkwhsjui");
+  window.clarity = window.clarity || function(){(window.clarity.q = window.clarity.q || []).push(arguments);};
+  (function () {
+    var done = false;
+    var late = [
+      'https://www.googletagmanager.com/gtag/js?id={{ site.ga_measurement_id }}',
+      'https://www.clarity.ms/tag/z9zkwhsjui',
+      '{{ "/assets/js/logo-sting.js" | relative_url }}'
+    ];
+    function go() {
+      if (done) return; done = true;
+      late.forEach(function (src) { var s = document.createElement('script'); s.async = true; s.src = src; document.head.appendChild(s); });
+      ['scroll', 'pointerdown', 'keydown', 'touchstart'].forEach(function (e) { removeEventListener(e, go, true); });
+    }
+    ['scroll', 'pointerdown', 'keydown', 'touchstart'].forEach(function (e) { addEventListener(e, go, { capture: true, passive: true, once: true }); });
+    addEventListener('load', function () {
+      if ('requestIdleCallback' in window) requestIdleCallback(go, { timeout: 2500 }); else setTimeout(go, 1200);
+    });
+  })();
 </script>
 
 {% include schema-organization.html %}

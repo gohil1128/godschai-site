@@ -21,6 +21,12 @@ og_image: "uploads/og-image.jpg"
     /* The hero's two buttons: bright frosted glass that lets the photo show
        through (lifted, not darkened), the main one in a glowing coral glass.
        Same family as the "10% off" badge. */
+    /* The hero copy rises in with CSS, not JavaScript, so the heading is on
+       screen at first paint (it is the page's largest element: waiting for
+       site.js made it the slowest thing on a phone). */
+    .gc-hero-in{animation:gcHeroIn 1.1s cubic-bezier(.2,.7,.2,1) both}
+    @keyframes gcHeroIn{from{opacity:.02;transform:translateY(24px)}to{opacity:1;transform:none}}
+    @media (prefers-reduced-motion:reduce){.gc-hero-in{animation:none}}
     .gc-hb{display:inline-flex;align-items:center;text-decoration:none;font-weight:600;font-size:15px;line-height:1;padding:13px 21px;border-radius:999px;
       color:#FFFFFF;text-shadow:0 1px 8px rgba(0,0,0,0.25);
       background:linear-gradient(180deg,rgba(255,250,242,0.26) 0%,rgba(255,250,242,0.12) 100%);
@@ -84,7 +90,7 @@ og_image: "uploads/og-image.jpg"
     <div style="position:absolute;inset:0;pointer-events:none;background:radial-gradient(120% 85% at 50% 30%,transparent 46%,rgba(var(--gc-bg-rgb),0.6) 100%)"></div>
 
     <div style="position:relative;z-index:2;max-width:1320px;margin:0 auto;height:100%;display:flex;flex-direction:column;justify-content:flex-end;padding:0 clamp(20px,6vw,90px) clamp(74px,13vh,150px)">
-      <div data-gc-hero-in style="opacity:0;transform:translateY(28px);transition:opacity 1.1s cubic-bezier(.2,.7,.2,1),transform 1.1s cubic-bezier(.2,.7,.2,1);max-width:800px">
+      <div class="gc-hero-in" style="max-width:800px">
         {%- comment -%} The page's main heading. "Masala chai in Saskatoon" stays in it for Google and screen readers, but isn't shown. {%- endcomment %}
         <h1 id="hero-h1" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(3rem,9vw,7rem);line-height:0.92;letter-spacing:0;margin:0;text-shadow:0 6px 40px rgba(0,0,0,0.5)">Not your<br><span style="color:var(--gc-coral-t);font-style:italic">average</span> chai.<span class="gc-vh"> Masala chai in Saskatoon.</span></h1>
         <p style="font-size:clamp(1.05rem,1.5vw,1.3rem);line-height:1.5;color:var(--gc-fg2);max-width:36ch;margin:20px 0 0;text-shadow:0 2px 16px rgba(0,0,0,0.6)">Kerala spice &times; Assam tea &times; YXE.</p>
@@ -123,11 +129,11 @@ og_image: "uploads/og-image.jpg"
   <section id="premix" aria-labelledby="premix-h2" style="background:linear-gradient(135deg,var(--gc-card),var(--gc-card));scroll-margin-top:84px">
     <div style="max-width:1240px;margin:0 auto;padding:clamp(46px,6vw,88px) clamp(18px,4vw,40px);display:flex;gap:clamp(28px,4vw,60px);align-items:center;flex-wrap:wrap">
       <div style="flex:1 1 400px;min-width:300px">
-        <div style="display:inline-block;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.16em;text-transform:uppercase;color:#FFFFFF;background:#B55F3E;padding:7px 13px;border-radius:999px;font-weight:500">{% if site.data.shop.open %}Now delivering{% else %}Launching this fall{% endif %}</div>
+        <div style="display:inline-block;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.16em;text-transform:uppercase;color:#FFFFFF;background:#AE5839;padding:7px 13px;border-radius:999px;font-weight:500">{% if site.data.shop.open %}Now delivering{% else %}Launching this fall{% endif %}</div>
         <h2 id="premix-h2" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(2.1rem,5vw,3.6rem);letter-spacing:0;line-height:0.98;color:var(--gc-fg);margin:18px 0 0">Premixes.<br>The same chai, at home.</h2>
         {%- if site.data.shop.open %}
         <p style="font-size:1.08rem;line-height:1.55;color:var(--gc-fg3);max-width:40ch;margin:16px 0 26px">Two blends, hand crafted in Saskatoon and stove-top ready in minutes — each pouch makes 25 cups. ${% include money.html v=site.data.shop.price %} a pouch{% if site.data.shop.pair_price %} or both for ${% include money.html v=site.data.shop.pair_price %}{% endif %}, delivered free anywhere in Saskatoon.</p>
-        <a href="{{ '/premixes/' | relative_url }}" style="display:inline-block;text-decoration:none;background:#B55F3E;color:#FFFFFF;font-weight:700;font-size:16px;padding:15px 28px;border-radius:999px" class="gc-pill">Shop the premixes</a>
+        <a href="{{ '/premixes/' | relative_url }}" style="display:inline-block;text-decoration:none;background:#AE5839;color:#FFFFFF;font-weight:700;font-size:16px;padding:15px 28px;border-radius:999px" class="gc-pill">Shop the premixes</a>
         <p style="margin:14px 0 0;font-size:13px;color:var(--gc-muted)">Shipped across Canada too · <a href="{{ '/shipping/' | relative_url }}" style="color:var(--gc-muted)">delivery details</a> · <a href="{{ '/how-to-make-masala-chai/' | relative_url }}" style="color:var(--gc-muted)">how to brew it</a></p>
         {%- else %}
         <p style="font-size:1.08rem;line-height:1.55;color:var(--gc-fg3);max-width:40ch;margin:16px 0 26px">Two blends, hand crafted in Saskatoon and stove-top ready in minutes — each pouch makes 25 cups. Get first dibs the day they drop.</p>
@@ -170,7 +176,7 @@ og_image: "uploads/og-image.jpg"
     .gc-mc{min-width:0}
     .gc-mc-pic{position:relative;aspect-ratio:1/1;overflow:hidden;display:flex;align-items:center;justify-content:center;border-radius:22px;
       background:radial-gradient(120% 100% at 50% 34%,#4A2E1D 0%,#2A170E 100%);box-shadow:0 22px 44px -22px rgba(0,0,0,0.7)}
-    .gc-mc-pic.is-hot{background:linear-gradient(150deg,#B55F3E 0%,#8E472C 100%)}
+    .gc-mc-pic.is-hot{background:linear-gradient(150deg,#AE5839 0%,#8E472C 100%)}
     .gc-mc-logo{display:block;width:56%}
     .gc-mc-b{padding:12px 2px 0}
     .gc-mc-k{display:block;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.16em;text-transform:uppercase;color:var(--gc-coral-t);margin-bottom:5px}

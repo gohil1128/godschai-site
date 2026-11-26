@@ -267,8 +267,8 @@ so it's a job to hand to Claude with Square connected. The box's heading is
 | Setting | What it does |
 | --- | --- |
 | `open` | The launch switch. `false` shows "launching this fall" and the email signups; `true` turns every premix box on the site into "order now". |
-| `price` | $15.99 a pouch, before tax. |
-| `pair_price` | "Try both": one Original Masala + one Rose & Cardamom for $28.99, for every pair in the order. The saving comes off before PST. `checkout/lib/order.js` (`PAIR_SAVING`, in cents: 2 × price − pair price) applies it on Square. The pre-made links for orders with both blends are left out, because they carry the old price. |
+| `price` | $17.99 a pouch, before tax. |
+| `pair_price` | "Try both": one Original Masala + one Rose & Cardamom for $32.99, for every pair in the order. The saving comes off before PST. `checkout/lib/order.js` (`PAIR_SAVING`, in cents: 2 × price − pair price) applies it on Square. The pre-made links for orders with both blends are left out, because they carry the old price. |
 | `max_each` | Most pouches of one blend in an order (3). |
 | `checkout_api` | The checkout service's address. Blank until it's set up; then any quantity can be ordered (up to `max_each_api`). |
 | `pay_on_site` | `true` sends checkout to our own payment page, `/checkout/`. Needs the steps above. |
@@ -1022,6 +1022,35 @@ Two rules worth keeping:
   *Saskatchewan*. "God's Chai" on its own is also a Chaayos product in India, and
   we will not outrank them on the bare brand name — local intent is where we win.
 - **Descriptions 140–160 characters.** Shorter gets padded by Google, longer gets cut.
+
+Optional lines in the same block:
+
+- `og_image` and `og_alt`: the picture (1200×630) and its description for link
+  previews in WhatsApp, iMessage, Facebook and so on. Each main page has its
+  own (`uploads/og-*.jpg`); without one, a page uses `uploads/og-image.jpg`.
+- `sitemap: false`: leaves the page out of the sitemap and also keeps it out of
+  search results (`noindex`). The 404, checkout and order-confirmed pages use it.
+- `robots:` sets the page's robots tag directly (checkout uses `noindex, nofollow`).
+
+## Analytics
+
+Google Analytics (`ga_measurement_id` in `_config.yml`) and Microsoft Clarity
+are set up in `_includes/head.html`. Their scripts, and the animated header
+logo, download once the page has loaded (or on the first tap or scroll), so
+they don't slow the first screen. Anything sent before then waits in a queue.
+
+Events sent to Analytics:
+
+| Event | When |
+| --- | --- |
+| `add_to_cart` | a pouch goes in the cart (with the blend, quantity and value) |
+| `begin_checkout` | Checkout is pressed in the cart |
+| `purchase` | the thank-you page opens after paying (once per order) |
+| `sign_up` | someone joins the newsletter or the Chai Club |
+| `generate_lead` | a catering enquiry or bulk order request is sent (`form` says which) |
+
+In Analytics, mark `purchase` and `generate_lead` as key events (Admin → Events)
+so they show up as conversions.
 
 ---
 

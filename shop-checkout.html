@@ -6,7 +6,7 @@ permalink: /checkout/
 # No Chai Club card mid-checkout (_includes/popup.html).
 no_club: true
 sitemap: false
-head_extra: '<meta name="robots" content="noindex, nofollow">'
+robots: "noindex, nofollow"
 # Square's card fields (and Google Pay) load from these. Only this page needs
 # them, so the rest of the site keeps its tighter policy (_includes/head.html).
 csp:
@@ -29,7 +29,9 @@ csp:
 {%- assign pay_api = "" -%}
 {%- if shop.checkout_api != "" -%}{%- assign pay_api = shop.checkout_api | replace: "/api/checkout", "/api/pay" -%}{%- endif -%}
 <style>
-  .gc-co{max-width:1120px;margin:0 auto;padding:clamp(108px,13vh,150px) clamp(16px,4vw,40px) clamp(40px,6vw,70px)}
+  .gc-co{max-width:1120px;margin:0 auto;padding:clamp(108px,13vh,150px) clamp(16px,4vw,40px) clamp(40px,6vw,70px);min-height:92vh}
+  /* min-height: the order fills in from the cart after the page loads; holding the
+     space keeps the footer from jumping down when it does. */
   .gc-co-kicker{font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gc-gold-t);margin-bottom:12px}
   .gc-co h1{font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(2.3rem,6vw,3.6rem);line-height:1;margin:0}
   .gc-co h1 em{color:var(--gc-coral-t)}
@@ -81,12 +83,12 @@ csp:
   .gc-co-form legend{float:left;width:100%;padding:0;margin:0 0 16px;display:flex;align-items:center;gap:12px;
     font-family:'Instrument Serif',serif;font-size:1.55rem;color:var(--gc-fg);line-height:1.1}
   .gc-co-form legend + *{clear:both}
-  .gc-co-form legend span{flex:0 0 auto;width:30px;height:30px;border-radius:999px;background:#B55F3E;color:#FFFFFF;
+  .gc-co-form legend span{flex:0 0 auto;width:30px;height:30px;border-radius:999px;background:#AE5839;color:#FFFFFF;
     font:700 14px/30px 'Hanken Grotesk',sans-serif;text-align:center}
   /* Minimal fields: a hairline underline on the page, no boxes. Text stays 16px so phones don't zoom in. */
   .gc-co-f{display:block;margin:0 0 16px;min-width:0}
   .gc-co-f > span{display:block;font:400 10.5px/1.4 'DM Mono',monospace;letter-spacing:0.12em;text-transform:uppercase;color:var(--gc-muted);margin:0}
-  .gc-co-f > span small{font:400 11.5px 'Hanken Grotesk',sans-serif;letter-spacing:0;text-transform:none;color:var(--gc-muted);opacity:0.8}
+  .gc-co-f > span small{font:400 11.5px 'Hanken Grotesk',sans-serif;letter-spacing:0;text-transform:none;color:var(--gc-muted)}
   .gc-co-f input,.gc-co-f select{display:block;width:100%;min-width:0;max-width:100%;box-sizing:border-box;margin:0;min-height:40px;padding:7px 0 8px;
     border:0;border-bottom:1px solid rgba(var(--gc-ink-rgb),0.2);border-radius:0;background:transparent;color:var(--gc-fg);
     font:400 16px 'Hanken Grotesk',sans-serif;-webkit-appearance:none;appearance:none;transition:border-color .2s ease,box-shadow .2s ease}
@@ -131,16 +133,16 @@ csp:
 
 <section class="gc-co" data-gc-co data-pay-api="{{ pay_api }}" data-on-site="{% if shop.pay_on_site %}true{% else %}false{% endif %}" data-thanks="{{ '/order-confirmed/' | relative_url }}" aria-labelledby="page-h1">
   <div class="gc-co-kicker">Almost chai time</div>
-  <h1 id="page-h1">Checkout<em>.</em></h1>
+  <h1 id="page-h1">Checkout<em aria-hidden="true">.</em></h1>
 
   <noscript><div class="gc-co-empty">Checkout needs JavaScript switched on. Or skip the tech: message us on <a href="{{ site.social.instagram }}" style="color:var(--gc-gold-t)">Instagram</a> and we'll sort your order.</div></noscript>
   <div class="gc-co-empty" data-gc-co-empty hidden>
     <p style="margin:0 0 16px;font-size:1.05rem">Your cart's empty — and so is your mug. Let's fix both.</p>
-    <a href="{{ '/premixes/' | relative_url }}" class="gc-pill" style="display:inline-block;text-decoration:none;background:#B55F3E;color:#FFFFFF;font-weight:700;padding:13px 22px;border-radius:999px">Shop premixes</a>
+    <a href="{{ '/premixes/' | relative_url }}" class="gc-pill" style="display:inline-block;text-decoration:none;background:#AE5839;color:#FFFFFF;font-weight:700;padding:13px 22px;border-radius:999px">Shop premixes</a>
   </div>
 
   <div class="gc-co-grid" data-gc-co-main hidden>
-    <aside class="gc-co-sum" data-gc-co-sum aria-label="Your order">
+    <div class="gc-co-sum" data-gc-co-sum role="region" aria-label="Your order">
       <button type="button" class="gc-co-toggle" data-gc-co-toggle aria-expanded="false" aria-controls="gc-co-sumbody">
         <span>Your order <i aria-hidden="true">▾</i></span><b data-gc-co-total-top>$0.00</b>
       </button>
@@ -171,7 +173,7 @@ csp:
           <p class="gc-co-codemsg" data-gc-co-codemsg aria-live="polite"></p>
         </div>
       </div>
-    </aside>
+    </div>
 
     <form class="gc-co-form" data-gc-co-form novalidate>
       <fieldset>

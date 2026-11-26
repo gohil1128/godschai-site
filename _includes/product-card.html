@@ -1,18 +1,24 @@
 {%- comment -%}
   One premix as a shop card: picture and name link to its page, then the
-  price and "Add to cart" (assets/js/cart.js). Param: p (an entry from
-  _data/premixes.yml). Styles live in cart-drawer.html.
+  price and "Add to cart" (assets/js/cart.js). Params: p (an entry from
+  _data/premixes.yml) and h (the heading level, default 3). Styles live in
+  cart-drawer.html.
+  It uses its own variable (pc), not p: includes share the page's variables,
+  so assigning p here would overwrite the product page's own p and everything
+  after this card (the sticky buy bar, the product data) would describe the
+  other blend.
 {%- endcomment -%}
-{%- assign p = include.p -%}
-{%- capture purl %}{{ '/premixes/' | relative_url }}{{ p.slug }}/{% endcapture -%}
+{%- assign pc = include.p -%}
+{%- assign hl = include.h | default: 3 -%}
+{%- capture purl %}{{ '/premixes/' | relative_url }}{{ pc.slug }}/{% endcapture -%}
 <div class="gc-pcard gc-card">
-  <a class="gc-pcard-pic" href="{{ purl }}" tabindex="-1" aria-hidden="true">{% include img.html base=p.scene ext="jpg" widths="480,960" sizes="(max-width:700px) 88vw, 420px" w="960" h="1200" alt=p.alt wrap="display:block" style="width:100%;height:auto;aspect-ratio:4/5;object-fit:cover;display:block;border-radius:20px" %}</a>
-  <h3><a href="{{ purl }}">{{ p.name }}</a></h3>
-  <div class="gc-pcard-notes">{{ p.notes }}</div>
-  <p>{{ p.tagline }}</p>
+  <a class="gc-pcard-pic" href="{{ purl }}" tabindex="-1" aria-hidden="true">{% include img.html base=pc.scene ext="jpg" widths="480,960" sizes="(max-width:700px) 88vw, 420px" w="960" h="1200" alt=pc.alt wrap="display:block" style="width:100%;height:auto;aspect-ratio:4/5;object-fit:cover;display:block;border-radius:20px" %}</a>
+  <h{{ hl }} class="gc-pcard-t"><a href="{{ purl }}">{{ pc.name }}</a></h{{ hl }}>
+  <div class="gc-pcard-notes">{{ pc.notes }}</div>
+  <p>{{ pc.tagline }}</p>
   <div class="gc-pcard-buy">
     <span class="gc-price">${% include money.html v=site.data.shop.price %}</span>
-    <button type="button" class="gc-add gc-pill" data-gc-add="{{ p.key }}" hidden>Add to cart</button>
+    <button type="button" class="gc-add gc-pill" data-gc-add="{{ pc.key }}" hidden>Add to cart</button>
   </div>
   <a class="gc-more" href="{{ purl }}">What's inside &amp; how to brew →</a>
 </div>

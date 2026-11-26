@@ -51,7 +51,25 @@
       if (data.fees.hasOwnProperty(saved.z)) state.z = saved.z;
     }
   } catch (e) {}
-  if (d.querySelector('[data-gc-clear-cart]')) { data.blends.forEach(function (k) { state.q[k] = 0; }); }
+  // Google Analytics events (the gtag queue is set up in head.html; nothing is
+  // sent if Analytics is missing). Values are in CAD, before tax and shipping.
+  function track(name, params) { try { if (typeof W.gtag === 'function') W.gtag('event', name, params); } catch (e) {} }
+  function items(q) {
+    return data.blends.filter(function (k) { return q[k] > 0; }).map(function (k) {
+      return { item_id: k, item_name: k === 'o' ? 'Original Masala' : k === 'r' ? 'Rose & Cardamom' : k, price: data.price, quantity: q[k] };
+    });
+  }
+  if (d.querySelector('[data-gc-clear-cart]')) {
+    // The thank-you page: report the order that was just paid for, once.
+    if (count() > 0) {
+      var t = totals(), qs = new URLSearchParams(location.search);
+      var id = qs.get('order') || qs.get('orderId') || qs.get('transactionId') || ('gc-' + Date.now());
+      var seen = false;
+      try { seen = sessionStorage.getItem('gc_purchase') === id; sessionStorage.setItem('gc_purchase', id); } catch (e) {}
+      if (!seen) track('purchase', { transaction_id: id, currency: 'CAD', value: +(t.sub - t.saving).toFixed(2), tax: t.tax, shipping: t.fee, items: items(state.q) });
+    }
+    data.blends.forEach(function (k) { state.q[k] = 0; });
+  }
 
   function save() {
     try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {}
@@ -205,9 +223,12 @@
       var scope = el.closest('[data-gc-buy]');
       var pick = scope && scope.querySelector('[data-gc-pick] output');
       var howMany = pick ? parseInt(pick.textContent, 10) || 1 : 1;
+      var added = {};
       el.getAttribute('data-gc-add').split(',').forEach(function (k) {
-        if (state.q.hasOwnProperty(k)) state.q[k] = Math.min(data.max, state.q[k] + howMany);
+        if (state.q.hasOwnProperty(k)) { state.q[k] = Math.min(data.max, state.q[k] + howMany); added[k] = howMany; }
       });
+      var addedItems = items(added);
+      track('add_to_cart', { currency: 'CAD', value: +(addedItems.reduce(function (s, i) { return s + i.quantity; }, 0) * data.price).toFixed(2), items: addedItems });
       save(); render(); bump(); open();
     } else if (el.hasAttribute('data-gc-cart-open')) { render(); open(); }
     else if (el.hasAttribute('data-gc-cart-close')) close();
@@ -334,6 +355,8 @@
   function onPayPage() { return data.payPage && location.pathname === data.payPage; }
   go.addEventListener('click', function () {
     if (!url) return;
+    var bt = totals();
+    track('begin_checkout', { currency: 'CAD', value: +(bt.sub - bt.saving).toFixed(2), items: items(state.q) });
     if (data.payPage) {
       if (onPayPage()) { close(); return; }
       go.disabled = true;

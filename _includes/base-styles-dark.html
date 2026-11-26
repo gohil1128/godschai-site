@@ -18,7 +18,7 @@
     color-scheme:dark;
     --gc-bg:#100A05;--gc-bg-rgb:16,10,5;--gc-bg2:#1A100A;--gc-card:#2E1D13;--gc-surf-rgb:28,17,10;
     --gc-fg:#F2EBE1;--gc-fg2:#E7D6C4;--gc-fg3:#D6C7B4;--gc-fg4:#C7B29E;--gc-muted:#AB9280;--gc-ink-rgb:242,235,225;
-    --gc-gold-t:#B55F3E;--gc-gold-h:#E39874;--gc-gold-d:#A4573A;--gc-gold-rgb:215,131,95;
+    --gc-gold-t:#AE5839;--gc-gold-h:#E39874;--gc-gold-d:#A4573A;--gc-gold-rgb:215,131,95;
     --gc-coral-t:#E39874;--gc-coral-rgb:227,152,116;--gc-shadow-rgb:0,0,0;
     --gc-logo:#F2EBE1;
     color:var(--gc-fg);
@@ -33,14 +33,14 @@
   html,body{margin:0;padding:0}
   html{overflow-x:clip;scroll-behavior:smooth}
   body{overflow-x:clip;background:var(--gc-bg)}
-  ::selection{background:#B55F3E;color:#FFFFFF}
+  ::selection{background:#AE5839;color:#FFFFFF}
   a{color:var(--gc-gold-t)}
   a:hover{color:var(--gc-gold-h)}
   @keyframes gc-marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
   @keyframes gc-kb{from{transform:scale(1.03)}to{transform:scale(1.13)}}
   @keyframes gc-cuedot{0%{transform:translateY(0);opacity:0.2}50%{transform:translateY(8px);opacity:1}100%{transform:translateY(0);opacity:0.2}}
   /* Skip link — visible only when focused. */
-  .gc-skip{position:absolute;left:-9999px;top:0;z-index:200;background:#B55F3E;color:#FFFFFF;font-family:'Hanken Grotesk',sans-serif;font-weight:700;font-size:14px;padding:12px 18px;border-radius:0 0 10px 0;text-decoration:none}
+  .gc-skip{position:absolute;left:-9999px;top:0;z-index:200;background:#AE5839;color:#FFFFFF;font-family:'Hanken Grotesk',sans-serif;font-weight:700;font-size:14px;padding:12px 18px;border-radius:0 0 10px 0;text-decoration:none}
   .gc-skip:focus{left:0}
   :focus-visible{outline:2px solid var(--gc-gold-t);outline-offset:3px}
   /* Animated logo in the header. Until the script registers the element the
@@ -158,7 +158,7 @@
   .gc-pill,.gc-pill-coral,.gc-club button[type="submit"]{
     background:radial-gradient(130% 95% at 28% -18%,rgba(255,226,206,0.26) 0%,rgba(255,226,206,0) 56%),
       linear-gradient(160deg,rgba(222,132,96,0.80) 0%,rgba(181,95,62,0.78) 50%,rgba(150,74,44,0.86) 100%),
-      var(--gc-boil) center/cover no-repeat,#B55F3E!important;
+      var(--gc-boil) center/cover no-repeat,#AE5839!important;
     color:#FFF8EE!important;text-shadow:0 1px 2px rgba(70,28,10,0.35);
     box-shadow:inset 0 1px 0 rgba(255,226,206,0.35),0 6px 16px -9px rgba(110,45,20,0.6)}
   .gc-pill:hover,.gc-pill:focus-visible,.gc-pill-coral:hover,.gc-pill-coral:focus-visible,.gc-club button[type="submit"]:hover{
@@ -185,7 +185,7 @@
   a{transition:color .22s ease}
   header nav > div > a{position:relative}
   header nav > div > a::after{content:"";position:absolute;left:0;right:0;bottom:9px;height:1.5px;
-    background:#B55F3E;transform:scaleX(0);transform-origin:left center;
+    background:#AE5839;transform:scaleX(0);transform-origin:left center;
     transition:transform .34s cubic-bezier(.2,.7,.2,1)}
   header nav > div > a:hover::after,header nav > div > a:focus-visible::after{transform:scaleX(1)}
 
@@ -262,7 +262,7 @@
   .gc-tab{position:relative;z-index:1;flex:none;display:inline-flex;align-items:center;gap:7px;padding:9px 16px;border-radius:999px;
     font:600 14px/1 'Hanken Grotesk',system-ui,sans-serif;color:var(--gc-fg4);text-decoration:none;white-space:nowrap;
     transition:color .3s ease;-webkit-tap-highlight-color:transparent}
-  .gc-tab small{font:500 10.5px/1 'DM Mono',monospace;letter-spacing:0.08em;color:var(--gc-gold-d);opacity:.8}
+  .gc-tab small{font:500 10.5px/1 'DM Mono',monospace;letter-spacing:0.08em;color:var(--gc-gold-d)}
   .gc-tab:hover{color:var(--gc-fg)}
   .gc-tab[aria-selected="true"]{color:var(--gc-fg)}
   .gc-tab:focus-visible{outline:2px solid var(--gc-gold-t);outline-offset:1px}
@@ -282,6 +282,10 @@
   .gc-tabpanel.is-in{animation:gcTabIn .55s cubic-bezier(.2,.7,.2,1)}
   @keyframes gcTabIn{from{opacity:0;transform:translateY(8px);filter:blur(5px)}to{opacity:1;transform:none;filter:none}}
   .gc-tabpanels{position:relative;isolation:isolate}
+  /* With scripts on (head.html marks the page .gc-js before it paints), only
+     the first panel shows until site.js takes over, so the page doesn't load
+     with every panel open and then jump. Without scripts, every panel shows. */
+  .gc-js .gc-tabpanels:not(.is-ready) > .gc-tabpanel ~ .gc-tabpanel{display:none}
   .gc-tabnext{display:inline-flex;align-items:center;gap:6px;margin-top:16px;font:600 14px/1 'Hanken Grotesk',sans-serif;color:var(--gc-gold-t);text-decoration:none}
   .gc-tabnext:hover{color:var(--gc-gold-h)}
   @media (max-width:560px){

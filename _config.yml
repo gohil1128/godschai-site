@@ -48,6 +48,7 @@ exclude:
   - node_modules
   - checkout
   - receipt-kit
+  - tools                     # image and logo build scripts: not part of the site
 
 # Pretty URLs: /events/index.html -> /events/
 permalink: pretty

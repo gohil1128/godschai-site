@@ -3,7 +3,8 @@ layout: default
 title: "Bulk Chai & Samosa Orders in Saskatoon | God's Chai"
 description: "Hot masala chai by the cup and samosas by the dozen for the office, a party or a get-together. Pickup or delivery anywhere in Saskatoon with 48 hours' notice."
 breadcrumb: "Bulk orders"
-og_image: "uploads/og-image.jpg"
+og_image: "uploads/og-bulk.jpg"
+og_alt: "Golden samosas in the God's Chai warmer"
 ---
 {%- comment -%}
   Bulk orders: hot chai and samosas for a crowd. What's on offer, the notice
@@ -31,7 +32,7 @@ og_image: "uploads/og-image.jpg"
   .gc-bk legend{float:left;width:100%;padding:0;margin:0 0 16px;display:flex;align-items:center;gap:12px;
     font-family:'Instrument Serif',serif;font-size:1.55rem;color:var(--gc-fg);line-height:1.1}
   .gc-bk legend + *{clear:both}
-  .gc-bk legend span{flex:0 0 auto;width:30px;height:30px;border-radius:999px;background:#B55F3E;color:#FFFFFF;
+  .gc-bk legend span{flex:0 0 auto;width:30px;height:30px;border-radius:999px;background:#AE5839;color:#FFFFFF;
     font:700 14px/30px 'Hanken Grotesk',sans-serif;text-align:center}
   .gc-bk-item{display:flex;align-items:center;gap:14px 18px;flex-wrap:wrap;padding:14px 0;border-top:1px solid rgba(var(--gc-ink-rgb),0.08)}
   .gc-bk-item:first-of-type{border-top:0;padding-top:0}
@@ -53,7 +54,7 @@ og_image: "uploads/og-image.jpg"
   /* Minimal fields: a hairline underline on the page, no boxes. Text stays 16px so phones don't zoom in. */
   .gc-bk-f{display:block;margin:0 0 16px;min-width:0}
   .gc-bk-f > span{display:block;font:400 10.5px/1.4 'DM Mono',monospace;letter-spacing:0.12em;text-transform:uppercase;color:var(--gc-muted);margin:0}
-  .gc-bk-f > span small{font:400 11.5px 'Hanken Grotesk',sans-serif;letter-spacing:0;text-transform:none;color:var(--gc-muted);opacity:0.8}
+  .gc-bk-f > span small{font:400 11.5px 'Hanken Grotesk',sans-serif;letter-spacing:0;text-transform:none;color:var(--gc-muted)}
   .gc-bk-f input,.gc-bk-f textarea{display:block;width:100%;min-width:0;max-width:100%;box-sizing:border-box;margin:0;min-height:40px;padding:7px 0 8px;
     border:0;border-bottom:1px solid rgba(var(--gc-ink-rgb),0.2);border-radius:0;background:transparent;color:var(--gc-fg);
     font:400 16px 'Hanken Grotesk',sans-serif;-webkit-appearance:none;appearance:none;transition:border-color .2s ease,box-shadow .2s ease}
@@ -87,7 +88,7 @@ og_image: "uploads/og-image.jpg"
   .gc-bk-rows dt{margin:0}
   .gc-bk-rows dd{margin:0;text-align:right;color:var(--gc-fg);font-family:'DM Mono',monospace;font-size:13.5px}
   .gc-bk-rows dd.is-empty{color:#7C6757}
-  .gc-bk-send{display:block;width:100%;margin:18px 0 0;padding:12px 22px;border:0;border-radius:999px;background:#B55F3E;color:#FFFFFF;
+  .gc-bk-send{display:block;width:100%;margin:18px 0 0;padding:12px 22px;border:0;border-radius:999px;background:#AE5839;color:#FFFFFF;
     font:700 16.5px 'Hanken Grotesk',sans-serif;cursor:pointer}
   .gc-bk-small{margin:12px 0 0;font-size:13px;line-height:1.5;color:var(--gc-muted);text-align:center}
   .gc-bk-err{margin:12px 0 0;padding:12px 14px;border-radius:12px;background:rgba(var(--gc-coral-rgb),0.09);border:1px solid rgba(var(--gc-coral-rgb),0.32);
@@ -166,7 +167,7 @@ og_image: "uploads/og-image.jpg"
       </fieldset>
     </div>
 
-    <aside class="gc-bk-sum" aria-labelledby="gc-bk-sum-h">
+    <div class="gc-bk-sum" role="region" aria-labelledby="gc-bk-sum-h">
       <h2 id="gc-bk-sum-h">Your request</h2>
       <dl class="gc-bk-rows" data-gc-bulk-rows>
         {%- for it in bulk.items %}
@@ -186,7 +187,7 @@ og_image: "uploads/og-image.jpg"
         <pre class="gc-bk-text" data-gc-bulk-text></pre>
         <button type="button" class="gc-bk-copy" data-gc-bulk-copy>Copy my request</button>
       </div>
-    </aside>
+    </div>
   </form>
 </section>
 
