@@ -98,20 +98,21 @@ refund_days: 30
 # old pair price ($26.99), so using them would undercharge. If the service is
 # down, those orders show a "message us" note instead. To bring them back,
 # re-create them in Square with the new pair saving ($2.99 per pair).
-# The price went from $15.99 to $17.99 (Nov 2026): after changing it in Square,
-# open one of these links and check it shows $17.99. If it still shows the old
-# price, re-create the links or blank them so nobody is undercharged.
+# All of them are blank for now: they were made at the old $15.99 price, which
+# Square keeps baked into each link, so after the move to $17.99 (Nov 2026) they
+# would undercharge. To bring them back, re-create them in Square at $17.99
+# (and the pair saving for the both-blend ones) and paste the new links in.
 links:
-  o0r1-saskatoon: "https://square.link/u/wnuCxyCx"
-  o0r2-saskatoon: "https://square.link/u/N7mAbfsi"
-  o0r3-saskatoon: "https://square.link/u/Dx8sVJ19"
-  o1r0-saskatoon: "https://square.link/u/mD0svBMD"
-  o2r0-saskatoon: "https://square.link/u/8lS1Wd3B"
-  o3r0-saskatoon: "https://square.link/u/c7PgxT9u"
+  o0r1-saskatoon: ""
+  o0r2-saskatoon: ""
+  o0r3-saskatoon: ""
+  o1r0-saskatoon: ""
+  o2r0-saskatoon: ""
+  o3r0-saskatoon: ""
 
-  o0r1-canada: "https://square.link/u/po8DjhxV"
-  o0r2-canada: "https://square.link/u/AaiFZHVY"
-  o0r3-canada: "https://square.link/u/NM53Nl6A"
-  o1r0-canada: "https://square.link/u/n9cJdKVf"
-  o2r0-canada: "https://square.link/u/WSc92CkC"
-  o3r0-canada: "https://square.link/u/1b6lPine"
+  o0r1-canada: ""
+  o0r2-canada: ""
+  o0r3-canada: ""
+  o1r0-canada: ""
+  o2r0-canada: ""
+  o3r0-canada: ""
