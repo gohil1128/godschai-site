@@ -13,13 +13,13 @@ open: true
 
 # Per pouch, in dollars. This is what the site shows; what people are actually
 # charged is set in Square, so change both together.
-price: 15.99
+price: 17.99
 
 # "Try both": one Original Masala + one Rose & Cardamom together cost this
 # instead of 2 × price, for every pair in the order (2 of each = 2 pairs). The
 # saving comes off before PST. The checkout links for orders with both blends
 # carry the matching discount, so change it in Square too.
-pair_price: 28.99
+pair_price: 32.99
 
 # Most pouches of one blend in a single order. Each extra step means more
 # checkout links below, so raise it with care.
@@ -98,6 +98,9 @@ refund_days: 30
 # old pair price ($26.99), so using them would undercharge. If the service is
 # down, those orders show a "message us" note instead. To bring them back,
 # re-create them in Square with the new pair saving ($2.99 per pair).
+# The price went from $15.99 to $17.99 (Nov 2026): after changing it in Square,
+# open one of these links and check it shows $17.99. If it still shows the old
+# price, re-create the links or blank them so nobody is undercharged.
 links:
   o0r1-saskatoon: "https://square.link/u/wnuCxyCx"
   o0r2-saskatoon: "https://square.link/u/N7mAbfsi"
