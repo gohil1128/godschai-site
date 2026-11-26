@@ -57,13 +57,8 @@ email: "sip@godschai.com"
 # Where it can go. No pickups: every order is delivered or shipped.
 # fee is in dollars and must match the shipping fee on that zone's Square links.
 # tax: the sales tax on that zone's orders, as a fraction (0.06 = 6%), and
-# tax_name what it's called. It must match the tax on that zone's Square # Pre-made links, used only if the checkout service can't be reached. The ones
-# for orders with BOTH blends (o1r1 … o3r3) are left out: they were made with the
-# old pair price ($26.99), so using them would undercharge. If the service is
-# down, those orders show a "message us" note instead. To bring them back,
-# re-create them in Square with the new pair saving ($2.99 per pair).
-links:
-# the Saskatoon links carry Square's 6% PST; the rest-of-Canada links don't.
+# tax_name what it's called. It must match the tax on that zone's Square
+# links: the Saskatoon links carry Square's 6% PST; the rest-of-Canada links don't.
 # free_from: orders with at least this many pouches ship free, so their Square
 # links carry no shipping fee.
 zones:
@@ -98,6 +93,11 @@ refund_days: 30
 # and sends people back to /order-confirmed/ once they've paid. A blank one
 # just shows "message us" for that order, so the shop never sends anyone to a
 # dead link.
+# Pre-made links, used only if the checkout service can't be reached. The ones
+# for orders with BOTH blends (o1r1 … o3r3) are left out: they were made with the
+# old pair price ($26.99), so using them would undercharge. If the service is
+# down, those orders show a "message us" note instead. To bring them back,
+# re-create them in Square with the new pair saving ($2.99 per pair).
 links:
   o0r1-saskatoon: "https://square.link/u/wnuCxyCx"
   o0r2-saskatoon: "https://square.link/u/N7mAbfsi"

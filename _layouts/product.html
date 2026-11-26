@@ -143,7 +143,7 @@ layout: default
   "@context": "https://schema.org",
   "@type": "Product",
   "@id": "{{ page.url | absolute_url }}#product",
-  "name": "{{ p.name | escape }} Masala Chai Premix, 125 g",
+  "name": {{ p.name | append: " Chai Premix, 125 g" | jsonify }},
   "description": {{ p.blurb | jsonify }},
   "image": "{{ '/uploads/opt/' | absolute_url }}{{ p.img }}-500.jpg",
   "brand": { "@type": "Brand", "name": "God's Chai" },
@@ -175,7 +175,7 @@ layout: default
       "applicableCountry": "CA",
       "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
       "merchantReturnDays": {{ shop.refund_days }},
-      "returnFees": "https://schema.org/FreeReturn",
+      "itemDefectReturnFees": "https://schema.org/FreeReturn",
       "refundType": "https://schema.org/FullRefund"
     }
   }

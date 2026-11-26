@@ -1023,6 +1023,35 @@ Two rules worth keeping:
   we will not outrank them on the bare brand name — local intent is where we win.
 - **Descriptions 140–160 characters.** Shorter gets padded by Google, longer gets cut.
 
+Optional lines in the same block:
+
+- `og_image` and `og_alt`: the picture (1200×630) and its description for link
+  previews in WhatsApp, iMessage, Facebook and so on. Each main page has its
+  own (`uploads/og-*.jpg`); without one, a page uses `uploads/og-image.jpg`.
+- `sitemap: false`: leaves the page out of the sitemap and also keeps it out of
+  search results (`noindex`). The 404, checkout and order-confirmed pages use it.
+- `robots:` sets the page's robots tag directly (checkout uses `noindex, nofollow`).
+
+## Analytics
+
+Google Analytics (`ga_measurement_id` in `_config.yml`) and Microsoft Clarity
+are set up in `_includes/head.html`. Their scripts, and the animated header
+logo, download once the page has loaded (or on the first tap or scroll), so
+they don't slow the first screen. Anything sent before then waits in a queue.
+
+Events sent to Analytics:
+
+| Event | When |
+| --- | --- |
+| `add_to_cart` | a pouch goes in the cart (with the blend, quantity and value) |
+| `begin_checkout` | Checkout is pressed in the cart |
+| `purchase` | the thank-you page opens after paying (once per order) |
+| `sign_up` | someone joins the newsletter or the Chai Club |
+| `generate_lead` | a catering enquiry or bulk order request is sent (`form` says which) |
+
+In Analytics, mark `purchase` and `generate_lead` as key events (Admin → Events)
+so they show up as conversions.
+
 ---
 
 ## The sitemap

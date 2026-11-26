@@ -175,6 +175,7 @@
     if (link) link.href = href;
     done.hidden = false;
     done.focus({ preventScroll: true });
+    if (typeof window.gtag === 'function') window.gtag('event', 'generate_lead', { form: 'bulk' });
     if (TO) window.location.href = href;
   });
 

@@ -14,13 +14,7 @@ layout: null
   var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   /* ---------- 1. Hero copy reveal ---------- */
-  var heroIn = d.querySelector('[data-gc-hero-in]');
-  if (heroIn) {
-    requestAnimationFrame(function () {
-      heroIn.style.opacity = '1';
-      heroIn.style.transform = 'none';
-    });
-  }
+  /* Now done in CSS (.gc-hero-in on the homepage) so the heading paints at once. */
 
   /* ---------- 2. Scroll reveal for content blocks ---------- */
   var revealTargets = [].slice.call(d.querySelectorAll('[data-gc-reveal] > section, [data-gc-reveal] > footer'));
@@ -616,6 +610,7 @@ layout: null
       tell(ok ? 'done' : 'error');
       if (ok) {
         input.value = '';
+        if (typeof gtag === 'function') gtag('event', 'sign_up', { method: club ? 'chai_club' : 'newsletter' });
         try { localStorage.setItem('gc_subscribed', '1'); } catch (e) {}
       }
     });
@@ -757,6 +752,13 @@ layout: null
             if (old) { try { old.pause(); } catch (err) {} }
             slots[i].replaceChildren ? slots[i].replaceChildren(a) : (slots[i].innerHTML = '', slots[i].appendChild(a));
           };
+          // Let the browser pick the size it needs (tiles are ~124px wide on a
+          // phone, 280px on desktop) instead of always fetching the 700px one.
+          var sz = p.sizes || {}, set = ['small', 'medium', 'large'].filter(function (k) { return sz[k] && sz[k].mediaUrl && sz[k].width; });
+          if (set.length > 1) {
+            img.sizes = '(min-width:880px) 280px, 33vw';
+            img.srcset = set.map(function (k) { return sz[k].mediaUrl + ' ' + sz[k].width + 'w'; }).join(', ');
+          }
           img.src = igSrc(p);
         });
       })
@@ -843,6 +845,7 @@ layout: null
     var start = 0;
     if (location.hash) panels.forEach(function (pn, i) { if ('#' + pn.id === location.hash) start = i; });
     select(start, { instant: true });
+    panels[0].parentNode.classList.add('is-ready');
     window.addEventListener('resize', function () { place(true); }, { passive: true });
     if (d.fonts && d.fonts.ready) d.fonts.ready.then(function () { place(true); });
     // a panel's tab may be chosen by a link elsewhere on the page

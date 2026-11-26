@@ -69,7 +69,7 @@
      dark, see-through state), pale with brown text over the light pages. */
   .gc-club-dot{position:fixed;right:18px;bottom:18px;z-index:8990;width:50px;height:50px;padding:0;border-radius:50%;
     display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;cursor:pointer;
-    background:rgba(251,248,243,0.58);color:#8B472C;border:1px solid rgba(60,33,22,0.12);
+    background:rgba(251,248,243,0.9);color:#8B472C;border:1px solid rgba(60,33,22,0.12);
     -webkit-backdrop-filter:blur(12px) saturate(1.2);backdrop-filter:blur(12px) saturate(1.2);
     box-shadow:0 4px 14px rgba(59,31,18,0.10);
     font-family:'Hanken Grotesk',sans-serif;transform:scale(.6);opacity:0;
@@ -82,12 +82,12 @@
   .gc-club-dot:hover,.gc-club-dot:focus-visible{transform:scale(1.06);opacity:1}
   .gc-club-dot:focus-visible{outline:2px solid currentColor;outline-offset:3px}
   .gc-club-dot b{font:700 13.5px/1 'Hanken Grotesk',sans-serif}
-  .gc-club-dot small{font:500 8.5px/1 'DM Mono',monospace;letter-spacing:0.1em;text-transform:uppercase;opacity:0.85}
+  .gc-club-dot small{font:500 8.5px/1 'DM Mono',monospace;letter-spacing:0.1em;text-transform:uppercase}
   @media (max-width:560px){.gc-club-dot{right:14px;bottom:14px;width:46px;height:46px}.gc-club-dot b{font-size:13px}}
   body:has(.gc-sticky.is-on) .gc-club-dot{bottom:calc(84px + env(safe-area-inset-bottom))}
   @media (prefers-reduced-motion:reduce){.gc-club{transition:none}.gc-club-dot{transition:none}}
 </style>
-<aside class="gc-club" id="gc-club" role="dialog" aria-modal="false" aria-labelledby="gc-club-title" hidden
+<div class="gc-club" id="gc-club" role="dialog" aria-modal="false" aria-labelledby="gc-club-title" hidden
        data-delay="{{ club.delay_seconds | default: 10 }}" data-days="{{ club.dismiss_days | default: 30 }}">
   <div class="gc-club-badge" aria-hidden="true">10%<small>OFF</small></div>
   <button type="button" class="gc-club-x" data-gc-club-close aria-label="Close">&times;</button>
@@ -110,6 +110,6 @@
     <button type="submit">Join</button>
     <p data-gc-signup-msg role="status" aria-live="polite" style="display:none"></p>
   </form>
-</aside>
+</div>
 <button type="button" class="gc-club-dot" data-gc-club-dot hidden aria-controls="gc-club"
         aria-label="Join the Chai Club: 10% off your first order" title="Join the Chai Club: 10% off"><b>10%</b><small>off</small></button>
