@@ -35,7 +35,9 @@ export function orderSummary(order, payment) {
   const f = (order.fulfillments || [])[0] || {};
   const rec = (f.shipment_details && f.shipment_details.recipient) || {};
   const a = rec.address || payment.shipping_address || {};
-  const zone = /saskatoon/i.test(payment.note || '') ? 'saskatoon' : 'canada';
+  // The payment note starts with the zone ("Saskatoon delivery…" or "Canada Post…").
+  const zone = /^\s*saskatoon/i.test(payment.note || '') ? 'saskatoon' : 'canada';
+  const noteFromPayment = (String(payment.note || '').split(' · Delivery note: ')[1] || '').trim();
   const ship = (order.service_charges || []).reduce((s, c) => s + ((c.total_money || {}).amount || 0), 0);
   return {
     receipt: payment.receipt_number || (order.id || '').slice(0, 4),
@@ -57,6 +59,8 @@ export function orderSummary(order, payment) {
     taxName: ((order.taxes || [])[0] || {}).name || 'Tax',
     shipping: ship,
     total: (order.total_money || payment.total_money || {}).amount || 0,
+    // The buyer's delivery note (buzzer code, "leave it at the door"…), if any.
+    deliveryNote: ((order.metadata || {}).delivery_note || f.shipment_details && f.shipment_details.shipping_note || noteFromPayment || '').trim(),
   };
 }
 
@@ -104,6 +108,7 @@ export function customerEmail(o) {
         <div style="font:400 12px ${mono};letter-spacing:.16em;text-transform:uppercase;color:#A4573A">What happens next · ${esc(z.label)}</div>
         <div style="font:400 15px/1.55 ${sans};color:#3A2A1E;margin-top:8px">${z.next}</div>
         ${o.address.length ? `<div style="font:400 14px/1.5 ${sans};color:#5A4535;margin-top:12px"><strong style="color:#1D120B">Delivering to</strong><br>${[esc(o.name)].concat(o.address.map(esc)).join('<br>')}</div>` : ''}
+        ${o.deliveryNote ? `<div style="font:400 14px/1.5 ${sans};color:#5A4535;margin-top:12px"><strong style="color:#1D120B">Your delivery note</strong><br>${esc(o.deliveryNote)}</div>` : ''}
       </td></tr></table>
     </td></tr>
     <tr><td style="padding:22px 32px 4px">
@@ -132,7 +137,8 @@ export function customerEmail(o) {
     `Delivery: ${o.shipping ? money(o.shipping) : 'Free'}`,
     `Total paid: ${money(o.total)}`, '',
     `What happens next (${z.label}): ${z.next}`, '',
-    o.address.length ? `Delivering to: ${[o.name].concat(o.address).join(', ')}` : null, '',
+    o.address.length ? `Delivering to: ${[o.name].concat(o.address).join(', ')}` : null,
+    o.deliveryNote ? `Your delivery note: ${o.deliveryNote}` : null, '',
     'Brew it: 1 heaped tbsp (5 g) per cup in ½ cup boiling water, add ½ cup milk, boil, simmer 2–3 min, strain, sweeten to taste.',
     `Full guide: ${SITE}/how-to-make-masala-chai/`, '',
     'Questions, cravings or a brewing emergency? Just hit reply — a real human (usually mid-chai) will answer.',
@@ -157,7 +163,8 @@ export function ownerEmail(o) {
     `Delivery: ${where}${o.items.length ? ' — ' + (o.shipping ? money(o.shipping) : 'free') : ''}`,
     `Total: ${money(o.total)}`, '',
     o.name ? `Customer: ${o.name}` : null, o.email ? `Email: ${o.email}` : null, o.phone ? `Phone: ${o.phone}` : null,
-    o.address.length ? `Address: ${o.address.join(', ')}` : null, '',
+    o.address.length ? `Address: ${o.address.join(', ')}` : null,
+    o.deliveryNote ? `DELIVERY NOTE: ${o.deliveryNote}` : null, '',
     o.receiptUrl ? `Receipt: ${o.receiptUrl}` : null,
     'Fulfil it in Square Dashboard → Orders. Canada Post orders: add the tracking number there.',
     o.email ? 'Reply to this email to write to the customer.' : null,

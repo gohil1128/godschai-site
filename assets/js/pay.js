@@ -282,6 +282,7 @@
       var body = JSON.stringify({
         action: 'pay', attempt: uuid(), token: token, items: st.q, zone: st.z, expectTotal: quote.total,
         contact: { email: b.email, phone: b.phone }, code: code || undefined, optIn: !!form.elements.optin.checked,
+        note: (st.n || '').trim() || undefined,
         address: { first: b.first, last: b.last, line1: b.line1, line2: b.line2, city: b.city, province: b.province, postal: b.postal }
       });
       post(body, 2).then(function (r) {

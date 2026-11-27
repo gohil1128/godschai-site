@@ -1032,6 +1032,22 @@ Optional lines in the same block:
   search results (`noindex`). The 404, checkout and order-confirmed pages use it.
 - `robots:` sets the page's robots tag directly (checkout uses `noindex, nofollow`).
 
+## Delivery notes
+
+The cart has an optional **Delivery note** box under "Where's it going?"
+(buzzer code, "leave it at the door"…), up to 200 characters. It's kept with the
+cart and sent with the order. You'll find it:
+
+- in **Square** on the payment (its note reads e.g. "Saskatoon delivery (free) ·
+  Delivery note: Buzzer 204") and on the order's first line;
+- in the **new-order alert** email, as `DELIVERY NOTE: …`;
+- in the customer's **order confirmation** email, as "Your delivery note".
+
+The cleaning and the 200-character limit are in `checkout/lib/order.js`
+(`cleanNote`). If Square ever refuses the note on the order, the checkout
+service tries again with the note on the payment only, so nobody is stopped
+from paying.
+
 ## Analytics
 
 Google Analytics (`ga_measurement_id` in `_config.yml`) and Microsoft Clarity

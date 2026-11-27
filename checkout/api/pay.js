@@ -77,7 +77,7 @@ export function readBuyer(body, zoneKey) {
 function orderWithDelivery(o, buyer, optIn) {
   const order = squareOrder(o);
   // Ticked "send me new blends and deals": the order emails pass it to Mailchimp.
-  if (optIn) order.metadata = { marketing: 'yes' };
+  if (optIn) order.metadata = { ...(order.metadata || {}), marketing: 'yes' };
   if (o.fee) {
     order.service_charges = [{ uid: 'ship', name: SHIPPING_NAME, amount_money: { amount: o.fee, currency: 'CAD' }, calculation_phase: 'TOTAL_PHASE', taxable: false }];
   }
@@ -87,6 +87,7 @@ function orderWithDelivery(o, buyer, optIn) {
       type: 'SHIPMENT',
       state: 'PROPOSED',
       shipment_details: {
+        ...(o.deliveryNote ? { shipping_note: o.deliveryNote } : {}),
         recipient: {
           display_name: buyer.first + ' ' + buyer.last,
           email_address: buyer.email,

@@ -39,7 +39,9 @@
   function $$(sel) { return [].slice.call(d.querySelectorAll(sel)); }
 
   // ---- state ----------------------------------------------------------
-  var state = { q: {}, z: '' };
+  // q: pouches of each blend; z: delivery zone; n: the buyer's delivery note.
+  var state = { q: {}, z: '', n: '' };
+  var NOTE_MAX = 200;
   data.blends.forEach(function (k) { state.q[k] = 0; });
   try {
     var saved = JSON.parse(localStorage.getItem(KEY) || 'null');
@@ -49,6 +51,7 @@
         state.q[k] = v > 0 ? Math.min(v, data.max) : 0;
       });
       if (data.fees.hasOwnProperty(saved.z)) state.z = saved.z;
+      if (typeof saved.n === 'string') state.n = saved.n.slice(0, NOTE_MAX);
     }
   } catch (e) {}
   // Google Analytics events (the gtag queue is set up in head.html; nothing is
@@ -69,6 +72,7 @@
       if (!seen) track('purchase', { transaction_id: id, currency: 'CAD', value: +(t.sub - t.saving).toFixed(2), tax: t.tax, shipping: t.fee, items: items(state.q) });
     }
     data.blends.forEach(function (k) { state.q[k] = 0; });
+    state.n = '';
   }
 
   function save() {
@@ -277,6 +281,13 @@
   zones.forEach(function (z) {
     z.addEventListener('change', function () { state.z = z.value; save(); render(); });
   });
+  // Delivery note (buzzer code, "leave it at the door"…): kept with the cart,
+  // sent along with the order, shown in Square and in the order emails.
+  var noteIn = root.querySelector('[data-gc-note]');
+  if (noteIn) {
+    noteIn.value = state.n || '';
+    noteIn.addEventListener('input', function () { state.n = noteIn.value.slice(0, NOTE_MAX); save(); });
+  }
   d.addEventListener('keydown', function (e) {
     if (root.hidden) return;
     if (e.key === 'Escape') { close(); return; }
@@ -343,6 +354,7 @@
     };
     if (!data.api) { done(fallback); return; }
     var body = { items: state.q, zone: state.z };
+    if (state.n && state.n.trim()) body.note = state.n.trim();
     if (welcomeCode()) body.code = welcomeCode();
     fetch(data.api, {
       method: 'POST',
@@ -376,7 +388,7 @@
   // Another tab changed the cart.
   W.addEventListener('storage', function (e) {
     if (e.key !== KEY) return;
-    try { var s = JSON.parse(e.newValue || 'null'); if (s && s.q) { state = s; render(); d.dispatchEvent(new CustomEvent('gc:cart')); } } catch (x) {}
+    try { var s = JSON.parse(e.newValue || 'null'); if (s && s.q) { if (typeof s.n !== 'string') s.n = ''; state = s; if (noteIn && d.activeElement !== noteIn) noteIn.value = s.n; render(); d.dispatchEvent(new CustomEvent('gc:cart')); } } catch (x) {}
   });
 
   // ---- product page quantity pickers + sticky bar ----------------------
@@ -429,7 +441,7 @@
   // ---- for the payment page (assets/js/pay.js) -------------------------
   W.GCCart = {
     data: data,
-    state: function () { return { q: JSON.parse(JSON.stringify(state.q)), z: state.z }; },
+    state: function () { return { q: JSON.parse(JSON.stringify(state.q)), z: state.z, n: state.n || '' }; },
     totals: totals,
     setZone: function (z) { if (data.fees.hasOwnProperty(z) && z !== state.z) { state.z = z; save(); render(); } },
     clear: function () { data.blends.forEach(function (k) { state.q[k] = 0; }); save(); render(); },

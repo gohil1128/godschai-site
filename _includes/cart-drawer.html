@@ -95,6 +95,11 @@
   .gc-zone em span{display:block;font-size:10.5px;color:var(--gc-muted);margin-top:3px}
   .gc-zone.is-on{background:rgba(var(--gc-gold-rgb),0.07)}
   .gc-sum{font-size:14.5px;color:var(--gc-fg4);margin:0 0 14px}
+  .gc-note-f{display:block;margin:16px 2px 4px}
+  .gc-note-f > span{display:block;font:500 11px/1.4 'DM Mono',monospace;letter-spacing:0.14em;text-transform:uppercase;color:var(--gc-fg4)}
+  .gc-note-f small{font:400 11.5px 'Hanken Grotesk',sans-serif;letter-spacing:0;text-transform:none;color:var(--gc-muted)}
+  .gc-note-f input{display:block;width:100%;font:400 16px 'Hanken Grotesk',sans-serif;color:var(--gc-fg);background:transparent}
+  .gc-note-f input:focus{outline:none;border-bottom-color:var(--gc-gold-t)}
   .gc-cart-foot .gc-sum{font-size:13.5px;margin:0 0 10px}
   .gc-sum summary{display:flex;justify-content:space-between;align-items:baseline;gap:12px;list-style:none;cursor:pointer;
     font-size:17px;font-weight:600;color:var(--gc-fg);padding:2px 0}
@@ -238,6 +243,12 @@
         </label>
         {%- endfor %}
         <p style="margin:2px 2px 0;font-size:12.5px;color:var(--gc-muted)">No pickups — every order comes to you. <a href="{{ '/shipping/' | relative_url }}">How delivery works</a></p>
+      {%- comment -%} Optional note for whoever delivers it. Sent with the order
+        (assets/js/cart.js → checkout service) and shown in Square and the order emails. {%- endcomment %}
+      <label class="gc-note-f" for="gc-note">
+        <span>Delivery note <small>(optional)</small></span>
+        <input id="gc-note" class="gc-su-in" type="text" data-gc-note maxlength="200" autocomplete="off" enterkeyhint="done" placeholder="Buzzer code, leave at the door…">
+      </label>
       </fieldset>
     </div>
 

@@ -32,6 +32,14 @@ export const CODES = {
   CHAI10: { percent: '10', name: 'CHAI10 · 10% off' },
 };
 export const MAX_EACH = 99;
+// The buyer's delivery note from the cart (buzzer code, "leave it at the
+// door"…): one line of plain text, at most this many characters.
+export const NOTE_MAX = 200;
+
+export function cleanNote(v) {
+  if (typeof v !== 'string') return '';
+  return v.replace(/[\u0000-\u001F\u007F]+/g, ' ').replace(/\s+/g, ' ').trim().slice(0, NOTE_MAX);
+}
 export const ORIGINS = ['https://godschai.com', 'https://www.godschai.com'];
 
 export function cors(req, res, methods) {
@@ -75,11 +83,15 @@ export function readOrder(body) {
   // decides (our page says so; Square's page just goes without it).
   const codeKey = typeof body.code === 'string' ? body.code.trim().toUpperCase().slice(0, 20) : '';
   const code = codeKey && CODES[codeKey] ? { key: codeKey, ...CODES[codeKey] } : null;
+  const deliveryNote = cleanNote(body.note);
   return {
     badCode: !!codeKey && !code, code,
     zoneKey: body.zone, zone, lines, parts, count, pairs, shipFree,
     fee: zone.fee && !shipFree ? zone.fee : 0,
-    note: zone.note + (shipFree ? ' (free, ' + zone.freeFrom + '+ pouches)' : ''),
+    deliveryNote,
+    // The payment's note in Square. It starts with the zone (the order emails
+    // read it from there), then the buyer's delivery note if they left one.
+    note: zone.note + (shipFree ? ' (free, ' + zone.freeFrom + '+ pouches)' : '') + (deliveryNote ? ' · Delivery note: ' + deliveryNote : ''),
   };
 }
 
@@ -95,6 +107,12 @@ export function squareOrder(o) {
   if (o.code) discounts.push({ uid: 'code', name: o.code.name, percentage: o.code.percent, scope: 'ORDER' });
   if (discounts.length) order.discounts = discounts;
   if (o.zone.tax) order.taxes = [{ uid: 'pst', catalog_object_id: PST_TAX_ID, scope: 'ORDER' }];
+  // The delivery note rides on the order too: in its metadata (read by the
+  // order emails) and on the first line, so it shows in Square Dashboard → Orders.
+  if (o.deliveryNote) {
+    order.metadata = { delivery_note: o.deliveryNote };
+    order.line_items[0].note = 'Delivery note: ' + o.deliveryNote;
+  }
   return order;
 }
 
