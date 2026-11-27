@@ -46,7 +46,7 @@ export default async function handler(req, res) {
   };
   if (o.fee) checkout_options.shipping_fee = { name: SHIPPING_NAME, charge: { amount: o.fee, currency: 'CAD' } };
 
-  const r = await fetch(SQUARE, {
+  const create = (ord) => fetch(SQUARE, {
     method: 'POST',
     headers: {
       Authorization: 'Bearer ' + token,
@@ -56,13 +56,25 @@ export default async function handler(req, res) {
     body: JSON.stringify({
       idempotency_key: crypto.randomUUID(),
       description: parts.join(' + ') + ', ' + o.zone.label + (o.shipFree ? ' (free shipping)' : ''),
-      order,
+      order: ord,
       checkout_options,
       payment_note: o.note,
     }),
   }).catch(() => null);
 
-  const data = r ? await r.json().catch(() => null) : null;
+  let r = await create(order);
+  let data = r ? await r.json().catch(() => null) : null;
+  // A delivery note is carried on the order (metadata + a line note) as well as
+  // the payment note. If Square ever turns those order fields down, try once
+  // more without them: the note still travels in the payment note, and the
+  // buyer is never stopped from paying over it.
+  if (o.deliveryNote && r && r.status === 400) {
+    const plain = { ...order, line_items: order.line_items.map(({ note, ...l }) => l) };
+    delete plain.metadata;
+    console.error('square_note_retry', data && data.errors && data.errors[0] && data.errors[0].code);
+    r = await create(plain);
+    data = r ? await r.json().catch(() => null) : null;
+  }
   const url = data && data.payment_link && data.payment_link.url;
   if (!r || !r.ok || !url) {
     const code = data && data.errors && data.errors[0] && data.errors[0].code;
