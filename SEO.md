@@ -673,8 +673,9 @@ top of a section hiding behind the bar when someone clicks Menu or Events.
 ## The Instagram grid
 
 Near the bottom of the homepage, under the `@godschai` heading, nine square
-tiles sit three to a row like an Instagram profile, with only a quiet "tag us"
-line below (no Follow button: social links live in the header, menu and footer). Every tile opens Instagram. The component is
+tiles sit three to a row like an Instagram profile, with only a "tag us" line
+under the handle, set in the serif italic over a soft glow (no Follow button:
+social links live in the header, menu and footer). Every tile opens Instagram. The component is
 `_includes/insta-grid.html`; what goes in it is `_data/instagram.yml`.
 
 **Show your real, latest posts (recommended, about two minutes):**
