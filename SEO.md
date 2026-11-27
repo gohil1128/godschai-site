@@ -455,8 +455,7 @@ under 2 MB), save their first frames as `uploads/_src/<name>-wide.png` and
 `-tall.png`, list those under `POSTERS` in `tools/optimize-images.py`
 (640, 1280 and 608 wide), and run it.
 
-**The words**: the headline, one line under it ("Real spice, real tea, made in
-Saskatoon."), and the two buttons, which are bright frosted glass so
+**The words**: the headline, one line under it ("Real spice, real tea."), and the two buttons, which are bright frosted glass so
 the photo shows through. A dark wash behind the words keeps them readable.
 (The small "100% real spices · 2 origins · YXE" row was dropped once the line
 above it said the same.) To change the line, edit it in `index.html`; keep it short.
