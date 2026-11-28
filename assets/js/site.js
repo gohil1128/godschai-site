@@ -621,8 +621,73 @@ layout: null
      bottom on a phone, once they've scrolled). It slides up a few seconds in, never covers the page or takes focus, and goes away
      for good once someone joins. Closing it hides it for dismiss_days, and
      leaves a small "10% off" dot in the corner that opens it again. */
+  /* While a sale runs (_data/shop.yml `promo`), the Black Friday card takes the
+     club card's place: it slides up a moment after someone lands, with a live
+     countdown. Closing it or tapping "Shop the sale" leaves a small "25% off" dot
+     that brings it back, and it doesn't pop up by itself again this sale. After
+     the end it's removed and the club card comes back. */
+  var bfCard = d.getElementById('gc-bf');
+  var bfDot = d.querySelector('[data-gc-bf-dot]');
+  var bfUntil = bfCard ? Date.parse(bfCard.getAttribute('data-until')) : 0;
+  var bfOn = !!bfCard && Date.now() <= bfUntil;
+  var bfGtag = function (name) {
+    try { if (typeof gtag === 'function') gtag('event', name, { promotion_id: 'black-friday', promotion_name: 'Black Friday sale', creative_slot: 'landing_card' }); } catch (e) {}
+  };
+  if (bfCard && !bfOn) {
+    bfCard.parentNode.removeChild(bfCard);
+    if (bfDot) bfDot.parentNode.removeChild(bfDot);
+  }
+  if (bfOn) {
+    var BF_KEY = 'gc_bf_seen';
+    var bfStamp = bfCard.getAttribute('data-until');
+    var bfSeen = function () { try { return localStorage.getItem(BF_KEY) === bfStamp; } catch (e) { return false; } };
+    var bfMark = function () { try { localStorage.setItem(BF_KEY, bfStamp); } catch (e) {} };
+    var bfShowDot = function (on) {
+      if (!bfDot) return;
+      if (on) {
+        bfDot.hidden = false;
+        requestAnimationFrame(function () { requestAnimationFrame(function () { bfDot.classList.add('is-in'); }); });
+      } else { bfDot.classList.remove('is-in'); bfDot.hidden = true; }
+    };
+    var bfHide = function (then) {
+      bfCard.classList.remove('is-in');
+      setTimeout(function () { bfCard.hidden = true; if (then) then(); }, 600);
+    };
+    var bfShow = function () {
+      if (!bfCard.hidden) return;
+      bfShowDot(false);
+      bfCard.hidden = false;
+      requestAnimationFrame(function () { requestAnimationFrame(function () { bfCard.classList.add('is-in'); }); });
+      bfGtag('view_promotion');
+    };
+    // "Ends in 2d 5h", then "Ends in 3h 20m" on the last day.
+    var bfLeft = bfCard.querySelector('[data-gc-bf-left]');
+    var bfTick = function () {
+      var ms = bfUntil - Date.now();
+      if (ms <= 0) { bfHide(); bfShowDot(false); return false; }
+      var h = Math.floor(ms / 36e5), m = Math.floor(ms % 36e5 / 6e4);
+      if (bfLeft) bfLeft.textContent = 'Ends in ' + (h >= 24 ? Math.floor(h / 24) + 'd ' + (h % 24) + 'h' : (h ? h + 'h ' : '') + m + 'm');
+      return true;
+    };
+    if (bfTick()) {
+      var bfTimer = setInterval(function () { if (!bfTick()) clearInterval(bfTimer); }, 30000);
+      bfCard.querySelector('[data-gc-bf-close]').addEventListener('click', function () {
+        bfMark(); bfHide(function () { bfShowDot(true); });
+      });
+      bfCard.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') bfCard.querySelector('[data-gc-bf-close]').click();
+      });
+      bfCard.querySelector('[data-gc-bf-go]').addEventListener('click', function () {
+        bfMark(); bfGtag('select_promotion'); bfHide(function () { bfShowDot(true); });
+      });
+      if (bfDot) bfDot.addEventListener('click', bfShow);
+      if (bfSeen()) bfShowDot(true);
+      else setTimeout(bfShow, 1200);
+    }
+  }
+
   var clubCard = d.getElementById('gc-club');
-  if (clubCard) {
+  if (clubCard && !bfOn) {
     var CLUB_KEY = 'gc_club_dismissed_until';
     var days = Number(clubCard.getAttribute('data-days')) || 30;
     var clubSuppressed = function () {
