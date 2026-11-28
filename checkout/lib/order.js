@@ -30,12 +30,13 @@ export const PAIR_SAVING = 299;
 // welcome_code in _data/shop.yml.
 export const CODES = {
   CHAI10: { percent: '10', name: 'CHAI10 · 10% off' },
-  // Black Friday. `until` is the last moment it works (Saskatoon time, UTC-6);
-  // after it the code is simply left off the order. `exclusive`: it replaces
-  // the "Try both" pair price instead of adding to it. Matches `promo` in
-  // _data/shop.yml.
-  BF20: { percent: '20', name: 'BF20 · Black Friday 20% off', exclusive: true, until: Date.parse('2026-11-30T23:59:59-06:00') },
 };
+// The Black Friday sale: no code, it applies to every order while it runs.
+// `until` is the last moment (Saskatoon time, UTC-6); after it, orders are
+// priced as usual. It replaces the pair price, and any discount code is
+// ignored. Matches `promo` in _data/shop.yml.
+export const SALE = { percent: '25', name: 'Black Friday · 25% off', until: Date.parse('2026-11-30T23:59:59-06:00') };
+const saleOn = () => Date.now() <= SALE.until;
 export const MAX_EACH = 99;
 // The buyer's delivery note from the cart (buzzer code, "leave it at the
 // door"…): one line of plain text, at most this many characters.
@@ -82,21 +83,18 @@ export function readOrder(body) {
   }
   for (const key of Object.keys(body.items)) if (!ITEMS[key]) return { error: 'bad_item' };
   if (!count) return { error: 'empty' };
-  // An "exclusive" offer (BF20) replaces the pair price rather than adding to it.
-  const codeFirst = typeof body.code === 'string' ? body.code.trim().toUpperCase().slice(0, 20) : '';
-  const first = CODES[codeFirst];
-  const exclusive = !!(first && first.exclusive && !(first.until && Date.now() > first.until));
-  const pairs = exclusive ? 0 : Math.min(body.items.o || 0, body.items.r || 0);
+  // The sale replaces the pair price rather than adding to it.
+  const pairs = saleOn() ? 0 : Math.min(body.items.o || 0, body.items.r || 0);
   const shipFree = !!(zone.freeFrom && count >= zone.freeFrom);
   // A code that isn't ours is reported, not silently ignored: the caller
   // decides (our page says so; Square's page just goes without it).
   const codeKey = typeof body.code === 'string' ? body.code.trim().toUpperCase().slice(0, 20) : '';
-  const known = codeKey && CODES[codeKey];
-  // A code past its end date is treated like one we don't know.
-  const code = known && !(known.until && Date.now() > known.until) ? { key: codeKey, ...known } : null;
+  const sale = saleOn() ? SALE : null;
+  // While the sale runs no code can be added on top of it.
+  const code = !sale && codeKey && CODES[codeKey] ? { key: codeKey, ...CODES[codeKey] } : null;
   const deliveryNote = cleanNote(body.note);
   return {
-    badCode: !!codeKey && !code, code,
+    badCode: !!codeKey && !code && !sale, code, sale,
     zoneKey: body.zone, zone, lines, parts, count, pairs, shipFree,
     fee: zone.fee && !shipFree ? zone.fee : 0,
     deliveryNote,
@@ -115,6 +113,7 @@ export function squareOrder(o) {
   if (o.pairs > 0) {
     discounts.push({ uid: 'pair', name: 'Try both: pair price', amount_money: { amount: o.pairs * PAIR_SAVING, currency: 'CAD' }, scope: 'ORDER' });
   }
+  if (o.sale) discounts.push({ uid: 'sale', name: o.sale.name, percentage: o.sale.percent, scope: 'ORDER' });
   if (o.code) discounts.push({ uid: 'code', name: o.code.name, percentage: o.code.percent, scope: 'ORDER' });
   if (discounts.length) order.discounts = discounts;
   if (o.zone.tax) order.taxes = [{ uid: 'pst', catalog_object_id: PST_TAX_ID, scope: 'ORDER' }];

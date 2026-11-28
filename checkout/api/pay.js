@@ -116,6 +116,7 @@ function totals(order) {
     discount: amt(order.total_discount_money),
     pairDiscount: off('pair'),
     codeDiscount: off('code'),
+    saleDiscount: off('sale'),
     tax: amt(order.total_tax_money),
     shipping: amt(order.total_service_charge_money),
     total: amt(order.total_money),

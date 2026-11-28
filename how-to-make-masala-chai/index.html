@@ -389,7 +389,7 @@ og_alt: "Masala chai poured from a steel pot"
       <span class="gc-bg-k">The mix in step 2</span>
       <h2>God&rsquo;s Chai <em>premix</em></h2>
       <p>The spice is ground and blended for you, so it&rsquo;s the same cup every time. {{ orig.name }} or Rose &amp; Cardamom.</p>
-      <p class="gc-bg-price">{% if site.data.shop.open %}${% include money.html v=site.data.shop.price %} · {% endif %}{{ brew.pouch_grams }} g · {{ cups_per_pouch }} cups a pouch</p>
+      <p class="gc-bg-price">{% if site.data.shop.open %}{% include price.html v=site.data.shop.price %} · {% endif %}{{ brew.pouch_grams }} g · {{ cups_per_pouch }} cups a pouch</p>
       <a href="{{ '/premixes/' | relative_url }}">{% if site.data.shop.open %}Get a pouch{% else %}See the premixes{% endif %}</a>
     </div>
   </aside>

@@ -29,7 +29,7 @@
   <ul>
     <li><a class="gc-offer" href="{{ '/premixes/' | relative_url }}">
       {% include img.html base="offer-premix" ext="jpg" widths="160,320" sizes="68px" w="320" h="320" alt="" %}
-      <span><small>Premixes</small><b>Masala chai at home</b><em>${% include money.html v=shop.price %} a pouch, 25 cups. Delivered in Saskatoon, shipped across Canada.</em></span>
+      <span><small>Premixes</small><b>Masala chai at home</b><em>{% include price.html v=shop.price %} a pouch, 25 cups. Delivered in Saskatoon, shipped across Canada.</em></span>
       <i aria-hidden="true">→</i></a></li>
     <li><a class="gc-offer" href="{{ '/catering/' | relative_url }}">
       {% include img.html base="offer-catering" ext="jpg" widths="160,320" sizes="68px" w="320" h="320" alt="" %}

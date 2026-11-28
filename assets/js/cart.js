@@ -54,12 +54,33 @@
       if (typeof saved.n === 'string') state.n = saved.n.slice(0, NOTE_MAX);
     }
   } catch (e) {}
-  // A limited-time offer (_data/shop.yml `promo`): while it runs the cart
-  // applies its code and drops the pair price (they don't combine). The
-  // checkout service checks the end date again, so this is only for display.
-  var promo = data.promo && data.promo.code ? data.promo : null;
+  // A limited-time sale (_data/shop.yml `promo`): a percentage off, no code.
+  // While it runs the pair price is dropped (they don't combine), prices show
+  // crossed out with the sale price beside them, and no discount code is sent.
+  // The checkout service applies the sale and checks the end date itself, so
+  // this is only for display.
+  var promo = data.promo && data.promo.percent ? data.promo : null;
   function promoOn() { return !!promo && Date.now() <= Date.parse(promo.until); }
-  function activeCode() { return promoOn() ? promo.code : welcomeCode(); }
+  function activeCode() { return promoOn() ? '' : welcomeCode(); }
+  function saleCents() { return Math.round(Math.round(data.price * 100) * (100 - promo.percent) / 100); }
+  function dollars(c) { return (c / 100).toFixed(2); }
+  // Every [data-gc-price] on the page: the plain price, or while the sale runs
+  // the old price crossed out with the sale price beside it.
+  function paintPrices() {
+    $$('[data-gc-price]').forEach(function (el) {
+      var was = el.getAttribute('data-gc-price');
+      if (promoOn()) {
+        var now = dollars(saleCents());
+        el.innerHTML = '<s class="gc-pr-was"><span class="gc-vh">Was </span>$' + was + '</s> <span class="gc-pr-now"><span class="gc-vh">now </span>$' + now + '</span>';
+      } else {
+        el.textContent = '$' + was;
+      }
+    });
+    $$('[data-gc-percup]').forEach(function (el) {
+      el.textContent = promoOn() ? Math.round(saleCents() / 25) : el.getAttribute('data-gc-percup');
+    });
+    $$('[data-gc-pairnote]').forEach(function (el) { el.hidden = promoOn(); });
+  }
 
   // Google Analytics events (the gtag queue is set up in head.html; nothing is
   // sent if Analytics is missing). Values are in CAD, before tax and shipping.
@@ -173,7 +194,8 @@
     var discNote = root.querySelector('[data-gc-discnote]');
     if (discNote) discNote.hidden = !t.saving || promoOn();
     var discLabel = root.querySelector('[data-gc-disc-label]');
-    if (discLabel) discLabel.textContent = promoOn() ? promo.code + ' · ' + promo.percent + '% off' : 'Try-both pair price';
+    if (discLabel) discLabel.textContent = promoOn() ? promo.label + ' · ' + promo.percent + '% off' : 'Try-both pair price';
+    paintPrices();
     // Notices for the offer, anywhere on the page, only while it runs.
     $$('[data-gc-promo]').forEach(function (el) { el.hidden = !promoOn(); });
     // "Add to your order": with the offer on there's no pair price to mention.
@@ -182,7 +204,7 @@
       el.textContent = promoOn() ? el.getAttribute('data-plain') : el._gcPair;
     });
     root.querySelectorAll('[data-gc-up-item] button[data-full]').forEach(function (b) {
-      var price = promoOn() ? b.getAttribute('data-full') : b.getAttribute('data-pair');
+      var price = promoOn() ? dollars(saleCents()) : b.getAttribute('data-pair');
       b.textContent = '+ $' + price;
       b.setAttribute('aria-label', 'Add ' + b.getAttribute('data-name') + ', $' + price + ' more');
     });

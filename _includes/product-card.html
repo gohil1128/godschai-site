@@ -17,7 +17,7 @@
   <div class="gc-pcard-notes">{{ pc.notes }}</div>
   <p>{{ pc.tagline }}</p>
   <div class="gc-pcard-buy">
-    <span class="gc-price">${% include money.html v=site.data.shop.price %}</span>
+    <span class="gc-price">{% include price.html v=site.data.shop.price %}</span>
     <button type="button" class="gc-add gc-pill" data-gc-add="{{ pc.key }}" hidden>Add to cart</button>
   </div>
   <a class="gc-more" href="{{ purl }}">What's inside &amp; how to brew →</a>

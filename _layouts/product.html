@@ -61,7 +61,7 @@ layout: default
     <div class="gc-pcard-notes" style="margin-top:12px">{{ p.notes }}</div>
     <p class="gc-prod-lede">{{ p.blurb }}</p>
     {%- assign per_cup = shop.price | divided_by: 25.0 | times: 100 | round %}
-    <div class="gc-prod-price"><b>${% include money.html v=shop.price %}</b><span>125 g pouch · 25 cups · about {{ per_cup }}¢ a cup</span></div>
+    <div class="gc-prod-price"><b>{% include price.html v=shop.price %}</b><span>125 g pouch · 25 cups · about <span data-gc-percup="{{ per_cup }}">{{ per_cup }}</span>¢ a cup</span></div>
     {% include promo-note.html page=true %}
     {%- if shop.open %}
     <div class="gc-buy" data-gc-buy data-gc-buy-main>
@@ -134,7 +134,7 @@ layout: default
 </section>
 
 <div class="gc-sticky" data-gc-sticky>
-  <div><b>{{ p.name }}</b><span>${% include money.html v=shop.price %} · 25 cups</span></div>
+  <div><b>{{ p.name }}</b><span>{% include price.html v=shop.price %} · 25 cups</span></div>
   <button type="button" class="gc-add gc-pill" data-gc-add="{{ p.key }}" hidden>Add to cart</button>
 </div>
 {%- endif %}

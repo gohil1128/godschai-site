@@ -1032,29 +1032,31 @@ Optional lines in the same block:
   search results (`noindex`). The 404, checkout and order-confirmed pages use it.
 - `robots:` sets the page's robots tag directly (checkout uses `noindex, nofollow`).
 
-## Limited-time offers (BF20)
+## Limited-time sale (Black Friday, 25% off)
 
-`promo` in `_data/shop.yml` runs a time-limited code, currently **BF20: 20% off
-both premixes until the end of Nov 30 (Saskatoon time)**.
+`promo` in `_data/shop.yml` runs a time-limited sale, currently **25% off both
+premixes until the end of Nov 30 (Saskatoon time)**. There is no code to type.
 
-- **How it works for customers:** nothing to type. While the offer runs the cart
-  applies the code itself, shows "BF20 · 20% off" in the total, and a small
-  notice appears in the cart, on /premixes/, on both product pages and in the
-  homepage premix section. After the end time the notices disappear and prices
-  go back to normal by themselves.
-- **No stacking:** BF20 replaces the "Try both" pair price and the CHAI10 welcome
-  code (the cart sends BF20 instead). It takes money off the pouches only, not
-  delivery, and PST is worked out on the discounted price.
-- **Checked twice:** the checkout service (`checkout/lib/order.js`, `CODES.BF20`)
-  has its own end date and applies the discount on the order, so it shows in
-  Square as "BF20 · Black Friday 20% off". Someone with an old cached page can't
-  use it after the end.
+- **What customers see:** every premix price shows the old price crossed out with
+  the sale price beside it ($17.99 → $13.49), the cart total shows
+  "Black Friday · 25% off", and a small notice appears in the cart, on /premixes/,
+  on both product pages and in the homepage premix section. The pair price
+  ("one of each for $32.99") is hidden while the sale runs. After the end time
+  everything goes back to normal by itself (prices are painted by `cart.js`, the
+  plain price is what's in the HTML).
+- **No stacking:** the sale replaces the "Try both" pair price, and any discount
+  code (including the CHAI10 welcome code) is ignored. Square's own coupon box is
+  turned off on the sale's checkout page. It takes money off the pouches only,
+  not delivery, and PST is worked out on the discounted price.
+- **Checked twice:** the checkout service (`checkout/lib/order.js`, `SALE`) has
+  its own end date and applies the discount on the order, so it shows in Square
+  as "Black Friday · 25% off". Someone with an old cached page can't get it after
+  the end, and can't miss it before.
 - **To change it:** the percentage, label and end are in `shop.yml`. The same
-  percentage and end are in `order.js`. Change both, then `until` there too.
-- **To take it down early:** delete the `promo` block in `shop.yml` and remove
-  `BF20` from `CODES` in `order.js`.
-- **No coupon is needed in Square.** Don't also create BF20 under Customers →
-  Marketing → Coupons: a Square coupon would sit on top of the pair price.
+  percentage and end are in `order.js`. Change both.
+- **To take it down early:** delete the `promo` block in `shop.yml` and the `SALE`
+  in `order.js` (and the lines that use it).
+- **Nothing to create in Square.** No coupon is needed.
 
 ## Delivery notes
 
