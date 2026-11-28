@@ -12,6 +12,17 @@
   first so the welcome email with the members' code goes out.
 {%- endcomment -%}
 {%- assign club = site.data.club -%}
+{%- comment -%}
+  While a sale is on (_data/shop.yml `promo`), a Black Friday card takes the
+  club card's place: it slides up a moment after someone lands, says what's
+  off and when it ends (a live countdown), and links to the premixes. Closing
+  it or tapping through leaves a small "25% off" dot that opens it again, and it
+  doesn't pop up again for the rest of the sale. The club card and its "10% off"
+  dot stay away while it runs (that code can't be used with the sale) and come
+  back by themselves after the end. Behaviour: assets/js/site.js (7).
+{%- endcomment -%}
+{%- assign promo = site.data.shop.promo -%}
+{%- if promo.percent and site.data.shop.open %}{% assign promo_card = true %}{% else %}{% assign promo_card = false %}{% endif -%}
 <style>
   .gc-club{position:fixed;right:20px;bottom:20px;z-index:9000;width:304px;box-sizing:border-box;
     padding:18px 18px 16px;border-radius:18px;background:#F2EBE1;color:#3C2116;
@@ -86,6 +97,27 @@
   @media (max-width:560px){.gc-club-dot{right:14px;bottom:14px;width:46px;height:46px}.gc-club-dot b{font-size:13px}}
   body:has(.gc-sticky.is-on) .gc-club-dot{bottom:calc(84px + env(safe-area-inset-bottom))}
   @media (prefers-reduced-motion:reduce){.gc-club{transition:none}.gc-club-dot{transition:none}}
+{%- if promo_card %}
+  /* The Black Friday card: the same slide-up card, in espresso with a gold edge. */
+  .gc-club.gc-bf{background:radial-gradient(120% 90% at 100% 0%,rgba(246,195,28,0.13) 0%,rgba(246,195,28,0) 55%),#24150E;color:#F6EBDD;
+    border-color:rgba(233,188,142,0.32);box-shadow:0 18px 50px rgba(0,0,0,0.5),0 0 0 1px rgba(246,195,28,0.06),0 0 36px -8px rgba(233,140,90,0.35)}
+  .gc-bf .gc-club-x{color:#F6EBDD}
+  .gc-bf .gc-club-x:hover,.gc-bf .gc-club-x:focus-visible{background:rgba(246,235,221,0.1)}
+  .gc-bf .gc-club-badge{background:#F6C31C;color:#24150E;width:64px;height:64px;font-size:17px}
+  .gc-club.gc-bf{width:340px}
+  .gc-bf h2{padding-right:84px}
+  .gc-bf h2 b{color:#F6EBDD;letter-spacing:0.04em}
+  .gc-bf h2 i{background:#E07B4F;color:#FFF5EA}
+  .gc-bf .gc-club-line{color:#E6D3BF;margin-bottom:6px}
+  .gc-bf-price{margin:0 0 12px;font:400 14px 'DM Mono',monospace;color:#E6D3BF}
+  .gc-bf-price .gc-pr-was{color:rgba(230,211,191,0.6)}
+  .gc-bf-price .gc-pr-now{color:#F6C31C;font-weight:600;font-size:16px}
+  .gc-bf-row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .gc-bf-go{display:inline-flex;align-items:center;padding:10px 18px;border-radius:999px;text-decoration:none;font:700 14.5px 'Hanken Grotesk',sans-serif}
+  .gc-bf-left{font:500 11.5px 'DM Mono',monospace;letter-spacing:0.06em;text-transform:uppercase;color:#E9BC8E}
+  .gc-bf-dot b{color:inherit}
+  @media (max-width:560px){.gc-club.gc-bf{width:auto}.gc-bf .gc-club-line{font-size:13px;margin-bottom:4px}.gc-bf-price{margin-bottom:10px}}
+{%- endif %}
 </style>
 <div class="gc-club" id="gc-club" role="dialog" aria-modal="false" aria-labelledby="gc-club-title" hidden
        data-delay="{{ club.delay_seconds | default: 10 }}" data-days="{{ club.dismiss_days | default: 30 }}">
@@ -113,3 +145,18 @@
 </div>
 <button type="button" class="gc-club-dot" data-gc-club-dot hidden aria-controls="gc-club"
         aria-label="Join the Chai Club: 10% off your first order" title="Join the Chai Club: 10% off"><b>10%</b><small>off</small></button>
+{%- if promo_card %}
+<div class="gc-club gc-bf" id="gc-bf" role="dialog" aria-modal="false" aria-labelledby="gc-bf-title" hidden data-until="{{ promo.until }}">
+  <div class="gc-club-badge" aria-hidden="true">{{ promo.percent }}%<small>OFF</small></div>
+  <button type="button" class="gc-club-x" data-gc-bf-close aria-label="Close">&times;</button>
+  <h2 id="gc-bf-title"><b>BLACK</b><i>Friday</i></h2>
+  <p class="gc-club-line">{{ promo.percent }}% off both premixes. No code needed, it comes off in your cart.</p>
+  <p class="gc-bf-price">{% include price.html v=site.data.shop.price %} a pouch</p>
+  <div class="gc-bf-row">
+    <a class="gc-bf-go gc-pill-coral" href="{{ '/premixes/' | relative_url }}#shop" data-gc-bf-go>Shop the sale &rarr;</a>
+    <span class="gc-bf-left" data-gc-bf-left>Ends {{ promo.until | date: "%b %-d" }}</span>
+  </div>
+</div>
+<button type="button" class="gc-club-dot gc-bf-dot" data-gc-bf-dot hidden aria-controls="gc-bf"
+        aria-label="{{ promo.label }}: {{ promo.percent }}% off both premixes" title="{{ promo.label }}: {{ promo.percent }}% off"><b>{{ promo.percent }}%</b><small>off</small></button>
+{%- endif %}
