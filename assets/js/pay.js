@@ -115,8 +115,11 @@
       var t = quote && quote.key === key(st) ? quote : local(st);
       root.querySelector('[data-gc-co-count]').textContent = n === 1 ? '1 pouch' : n + ' pouches';
       root.querySelector('[data-gc-co-sub]').textContent = money(t.subtotal);
-      root.querySelector('[data-gc-co-discrow]').hidden = !t.pairDiscount;
-      root.querySelector('[data-gc-co-disc]').textContent = '−' + money(t.pairDiscount);
+      var offPair = (t.pairDiscount || 0) + (t.saleDiscount || 0);
+      root.querySelector('[data-gc-co-discrow]').hidden = !offPair;
+      root.querySelector('[data-gc-co-disc]').textContent = '−' + money(offPair);
+      var offName = root.querySelector('[data-gc-co-disc-name]');
+      if (offName) offName.textContent = t.saleDiscount ? 'Black Friday sale' : 'Try-both pair price';
       root.querySelector('[data-gc-co-coderow]').hidden = !t.codeDiscount;
       root.querySelector('[data-gc-co-codename]').textContent = code + ' · code';
       root.querySelector('[data-gc-co-codeoff]').textContent = '−' + money(t.codeDiscount);

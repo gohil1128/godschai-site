@@ -132,7 +132,7 @@ og_image: "uploads/og-image.jpg"
         <div style="display:inline-block;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.16em;text-transform:uppercase;color:#FFFFFF;background:#AE5839;padding:7px 13px;border-radius:999px;font-weight:500">{% if site.data.shop.open %}Now delivering{% else %}Launching this fall{% endif %}</div>
         <h2 id="premix-h2" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(2.1rem,5vw,3.6rem);letter-spacing:0;line-height:0.98;color:var(--gc-fg);margin:18px 0 0">Premixes.<br>The same chai, at home.</h2>
         {%- if site.data.shop.open %}
-        <p style="font-size:1.08rem;line-height:1.55;color:var(--gc-fg3);max-width:40ch;margin:16px 0 26px">Two blends, hand crafted in Saskatoon and stove-top ready in minutes — each pouch makes 25 cups. ${% include money.html v=site.data.shop.price %} a pouch{% if site.data.shop.pair_price %} or both for ${% include money.html v=site.data.shop.pair_price %}{% endif %}, delivered free anywhere in Saskatoon.</p>
+        <p style="font-size:1.08rem;line-height:1.55;color:var(--gc-fg3);max-width:40ch;margin:16px 0 26px">Two blends, hand crafted in Saskatoon and stove-top ready in minutes — each pouch makes 25 cups. {% include price.html v=site.data.shop.price %} a pouch{% if site.data.shop.pair_price %}<span data-gc-pairnote> or both for ${% include money.html v=site.data.shop.pair_price %}</span>{% endif %}, delivered free anywhere in Saskatoon.</p>
         <a href="{{ '/premixes/' | relative_url }}" style="display:inline-block;text-decoration:none;background:#AE5839;color:#FFFFFF;font-weight:700;font-size:16px;padding:15px 28px;border-radius:999px" class="gc-pill">Shop the premixes</a>
         {% include promo-note.html page=true %}
         <p style="margin:14px 0 0;font-size:13px;color:var(--gc-muted)">Shipped across Canada too · <a href="{{ '/shipping/' | relative_url }}" style="color:var(--gc-muted)">delivery details</a> · <a href="{{ '/how-to-make-masala-chai/' | relative_url }}" style="color:var(--gc-muted)">how to brew it</a></p>
@@ -153,7 +153,7 @@ og_image: "uploads/og-image.jpg"
             <div style="font-family:'Instrument Serif',serif;font-size:1.25rem;color:var(--gc-fg);line-height:1.1">{% if site.data.shop.open %}<a href="{{ '/premixes/' | relative_url }}{{ pouch.slug }}/" style="color:inherit;text-decoration:none">{{ pouch.name }}</a>{% else %}{{ pouch.name }}{% endif %}</div>
             <div style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--gc-gold-t);margin-top:5px">{{ pouch.notes }}</div>
             {%- if site.data.shop.open %}
-            <button type="button" class="gc-add gc-pill" data-gc-add="{{ pouch.key }}" hidden style="margin-top:12px;padding:10px 18px;font-size:14px">Add · ${% include money.html v=site.data.shop.price %}</button>
+            <button type="button" class="gc-add gc-pill" data-gc-add="{{ pouch.key }}" hidden style="margin-top:12px;padding:10px 18px;font-size:14px">Add · {% include price.html v=site.data.shop.price %}</button>
             {%- endif %}
           </div>
         </div>

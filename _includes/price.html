@@ -1,0 +1,8 @@
+{%- comment -%}
+  A premix price. Param: v (dollars, e.g. shop.price). It renders the plain
+  price; while a sale is running (_data/shop.yml `promo`) cart.js swaps it for
+  the old price crossed out with the sale price beside it, and puts it back when
+  the sale ends. With JavaScript off, or after the end, the plain price shows.
+{%- endcomment -%}
+{%- capture price_text %}{% include money.html v=include.v %}{% endcapture -%}
+<span class="gc-pr" data-gc-price="{{ price_text | strip }}">${{ price_text | strip }}</span>
