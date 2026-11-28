@@ -14,6 +14,7 @@ og_alt: "The Original Masala and Rose & Cardamom chai premix pouches"
   <div style="display:inline-block;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:0.16em;text-transform:uppercase;color:#FFFFFF;background:#AE5839;padding:7px 13px;border-radius:999px;font-weight:500">Now delivering</div>
   <h1 id="page-h1" style="font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(2.3rem,6vw,4.2rem);line-height:0.98;letter-spacing:0;margin:18px 0 0;max-width:26ch">Masala Chai Premix, <span style="color:var(--gc-coral-t);font-style:italic">made in Saskatoon</span></h1>
   <p style="font-size:clamp(1.05rem,1.5vw,1.25rem);line-height:1.6;color:var(--gc-fg2);max-width:52ch;margin:22px 0 0">We're bagging what we pour. Two blends, hand crafted here in Saskatoon, stove-top ready in minutes — and each 125g pouch makes 25 cups. Unsweetened, so you choose how sweet.</p>
+  {% include promo-note.html page=true %}
   <div id="shop" data-gc-stagger style="display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:clamp(16px,2vw,24px);margin:clamp(28px,4vw,44px) 0 0;scroll-margin-top:110px">
     {%- for p in site.data.premixes %}
     {% include product-card.html p=p h=2 %}

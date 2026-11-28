@@ -1,0 +1,10 @@
+{%- comment -%}
+  The limited-time offer notice (_data/shop.yml `promo`). A quiet line that cart.js
+  shows only while the offer is running, so a stale page never advertises it after
+  it ends. Renders nothing when there is no `promo`. Param: page=true for the
+  version that sits on a page (wider, with room above it).
+{%- endcomment -%}
+{%- assign promo = site.data.shop.promo -%}
+{%- if promo.code and site.data.shop.open %}
+<p class="gc-promo{% if include.page %} gc-promo-page{% endif %}" data-gc-promo hidden><b>{{ promo.label }}</b> · {{ promo.percent }}% off both premixes with code <b>{{ promo.code }}</b>, applied at checkout. Ends {{ promo.until | date: "%b %-d" }}. Can't be combined with other offers.</p>
+{%- endif %}

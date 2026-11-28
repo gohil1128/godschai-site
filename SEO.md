@@ -1032,6 +1032,30 @@ Optional lines in the same block:
   search results (`noindex`). The 404, checkout and order-confirmed pages use it.
 - `robots:` sets the page's robots tag directly (checkout uses `noindex, nofollow`).
 
+## Limited-time offers (BF20)
+
+`promo` in `_data/shop.yml` runs a time-limited code, currently **BF20: 20% off
+both premixes until the end of Nov 30 (Saskatoon time)**.
+
+- **How it works for customers:** nothing to type. While the offer runs the cart
+  applies the code itself, shows "BF20 · 20% off" in the total, and a small
+  notice appears in the cart, on /premixes/, on both product pages and in the
+  homepage premix section. After the end time the notices disappear and prices
+  go back to normal by themselves.
+- **No stacking:** BF20 replaces the "Try both" pair price and the CHAI10 welcome
+  code (the cart sends BF20 instead). It takes money off the pouches only, not
+  delivery, and PST is worked out on the discounted price.
+- **Checked twice:** the checkout service (`checkout/lib/order.js`, `CODES.BF20`)
+  has its own end date and applies the discount on the order, so it shows in
+  Square as "BF20 · Black Friday 20% off". Someone with an old cached page can't
+  use it after the end.
+- **To change it:** the percentage, label and end are in `shop.yml`. The same
+  percentage and end are in `order.js`. Change both, then `until` there too.
+- **To take it down early:** delete the `promo` block in `shop.yml` and remove
+  `BF20` from `CODES` in `order.js`.
+- **No coupon is needed in Square.** Don't also create BF20 under Customers →
+  Marketing → Coupons: a Square coupon would sit on top of the pair price.
+
 ## Delivery notes
 
 The cart has an optional **Delivery note** box under "Where's it going?"

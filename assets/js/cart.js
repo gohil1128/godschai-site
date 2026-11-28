@@ -54,6 +54,13 @@
       if (typeof saved.n === 'string') state.n = saved.n.slice(0, NOTE_MAX);
     }
   } catch (e) {}
+  // A limited-time offer (_data/shop.yml `promo`): while it runs the cart
+  // applies its code and drops the pair price (they don't combine). The
+  // checkout service checks the end date again, so this is only for display.
+  var promo = data.promo && data.promo.code ? data.promo : null;
+  function promoOn() { return !!promo && Date.now() <= Date.parse(promo.until); }
+  function activeCode() { return promoOn() ? promo.code : welcomeCode(); }
+
   // Google Analytics events (the gtag queue is set up in head.html; nothing is
   // sent if Analytics is missing). Values are in CAD, before tax and shipping.
   function track(name, params) { try { if (typeof W.gtag === 'function') W.gtag('event', name, params); } catch (e) {} }
@@ -88,8 +95,10 @@
     var fee = z && !(freeAt && n >= freeAt) ? data.fees[z] : 0;
     var priceC = Math.round(data.price * 100);
     // "Try both": every Original + Rose pair costs pair_price instead of 2 × price.
-    var pairs = data.pair ? Math.min.apply(null, data.blends.map(function (k) { return state.q[k]; })) : 0;
+    var pairs = data.pair && !promoOn() ? Math.min.apply(null, data.blends.map(function (k) { return state.q[k]; })) : 0;
     var disc = pairs * data.pair;
+    // The offer: a percentage off the pouches (not delivery), before PST.
+    if (promoOn()) disc = Math.round(n * priceC * promo.percent / 100);
     // Worked out the way Square does it, in cents: the saving comes off first,
     // then the tax is worked out once on what's left (rounded half-to-even, as
     // Square does). Never on shipping.
@@ -162,7 +171,21 @@
     var discRow = root.querySelector('[data-gc-discrow]');
     discRow.hidden = !t.saving;
     var discNote = root.querySelector('[data-gc-discnote]');
-    if (discNote) discNote.hidden = !t.saving;
+    if (discNote) discNote.hidden = !t.saving || promoOn();
+    var discLabel = root.querySelector('[data-gc-disc-label]');
+    if (discLabel) discLabel.textContent = promoOn() ? promo.code + ' · ' + promo.percent + '% off' : 'Try-both pair price';
+    // Notices for the offer, anywhere on the page, only while it runs.
+    $$('[data-gc-promo]').forEach(function (el) { el.hidden = !promoOn(); });
+    // "Add to your order": with the offer on there's no pair price to mention.
+    $$('[data-gc-up-text]').forEach(function (el) {
+      if (!el._gcPair) el._gcPair = el.textContent;
+      el.textContent = promoOn() ? el.getAttribute('data-plain') : el._gcPair;
+    });
+    root.querySelectorAll('[data-gc-up-item] button[data-full]').forEach(function (b) {
+      var price = promoOn() ? b.getAttribute('data-full') : b.getAttribute('data-pair');
+      b.textContent = '+ $' + price;
+      b.setAttribute('aria-label', 'Add ' + b.getAttribute('data-name') + ', $' + price + ' more');
+    });
     if (t.saving) root.querySelector('[data-gc-disc]').textContent = '−' + money(t.saving);
     root.querySelector('[data-gc-taxrow]').hidden = !t.tax;
     root.querySelector('[data-gc-tax]').textContent = money(t.tax);
@@ -355,7 +378,7 @@
     if (!data.api) { done(fallback); return; }
     var body = { items: state.q, zone: state.z };
     if (state.n && state.n.trim()) body.note = state.n.trim();
-    if (welcomeCode()) body.code = welcomeCode();
+    if (activeCode()) body.code = activeCode();
     fetch(data.api, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -423,6 +446,7 @@
     // With the checkout service, the code is added to the order for them.
     deal.querySelector('[data-gc-deal-where]').textContent = data.api ? 'it comes off at checkout.' : 'pop it in on the payment page.';
     var showDeal = function () {
+      deal.hidden = promoOn();   // the offer replaces the welcome code while it runs
       var have = !!welcomeCode();
       dealOpen.hidden = have || dealOpen.getAttribute('aria-expanded') === 'true';
       dealForm.hidden = have || dealOpen.getAttribute('aria-expanded') !== 'true';
@@ -447,7 +471,7 @@
     clear: function () { data.blends.forEach(function (k) { state.q[k] = 0; }); save(); render(); },
     open: function () { render(); open(); },
     hosted: hosted,
-    code: welcomeCode
+    code: activeCode
   };
   // Our own payment page has no address quirk to warn about.
   var tip = root.querySelector('[data-gc-tip]');
