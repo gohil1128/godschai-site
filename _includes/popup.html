@@ -16,7 +16,8 @@
   While a sale is on (_data/shop.yml `promo`), a Black Friday card takes the
   club card's place: it slides up a moment after someone lands, says what's
   off and when it ends (a live countdown), and links to the premixes. Closing
-  it or tapping through leaves a small "25% off" dot that opens it again, and it
+  it or tapping through leaves a slim "Black Friday · 25% off" pill in the corner
+  that stays on every page and opens it again, and the card
   doesn't pop up again for the rest of the sale. The club card and its "10% off"
   dot stay away while it runs (that code can't be used with the sale) and come
   back by themselves after the end. Behaviour: assets/js/site.js (7).
@@ -115,8 +116,25 @@
   .gc-bf-row{display:flex;align-items:center;justify-content:space-between;gap:10px}
   .gc-bf-go{display:inline-flex;align-items:center;padding:10px 18px;border-radius:999px;text-decoration:none;font:700 14.5px 'Hanken Grotesk',sans-serif}
   .gc-bf-left{font:500 11.5px 'DM Mono',monospace;letter-spacing:0.06em;text-transform:uppercase;color:#E9BC8E}
-  .gc-bf-dot b{color:inherit}
   @media (max-width:560px){.gc-club.gc-bf{width:auto}.gc-bf .gc-club-line{font-size:13px;margin-bottom:4px}.gc-bf-price{margin-bottom:10px}}
+  /* The sale pill: always in the corner while the sale runs (when the card
+     isn't open). Small, no close button, nothing moves; tapping it opens the card. */
+  .gc-bf-pill{position:fixed;right:18px;bottom:18px;z-index:8990;display:inline-flex;align-items:center;gap:8px;
+    padding:8px 14px 8px 11px;border-radius:999px;cursor:pointer;white-space:nowrap;
+    background:rgba(36,21,14,0.86);color:#F6EBDD;border:1px solid rgba(233,188,142,0.28);
+    -webkit-backdrop-filter:blur(12px) saturate(1.2);backdrop-filter:blur(12px) saturate(1.2);
+    box-shadow:0 6px 20px rgba(0,0,0,0.22);font:500 12.5px/1 'Hanken Grotesk',sans-serif;
+    transform:translateY(10px);opacity:0;transition:transform .4s cubic-bezier(.2,.7,.2,1),opacity .3s ease,border-color .2s ease}
+  .gc-bf-pill[hidden]{display:none}
+  .gc-bf-pill.is-in{transform:none;opacity:1}
+  .gc-bf-pill:hover,.gc-bf-pill:focus-visible{border-color:rgba(246,195,28,0.6)}
+  .gc-bf-pill:focus-visible{outline:2px solid #F6C31C;outline-offset:3px}
+  .gc-bf-pill i{width:7px;height:7px;border-radius:50%;background:#F6C31C;box-shadow:0 0 8px rgba(246,195,28,0.7);flex:none}
+  .gc-bf-pill b{font-weight:700;color:#F6C31C}
+  .gc-bf-pill span{font:500 11px/1 'DM Mono',monospace;letter-spacing:0.04em;color:#E9BC8E}
+  body:has(.gc-sticky.is-on) .gc-bf-pill{bottom:calc(84px + env(safe-area-inset-bottom))}
+  @media (max-width:560px){.gc-bf-pill{right:12px;bottom:12px;padding:7px 12px 7px 10px;font-size:12px}}
+  @media (prefers-reduced-motion:reduce){.gc-bf-pill{transition:none}}
 {%- endif %}
 </style>
 <div class="gc-club" id="gc-club" role="dialog" aria-modal="false" aria-labelledby="gc-club-title" hidden
@@ -157,6 +175,6 @@
     <span class="gc-bf-left" data-gc-bf-left>Ends {{ promo.until | date: "%b %-d" }}</span>
   </div>
 </div>
-<button type="button" class="gc-club-dot gc-bf-dot" data-gc-bf-dot hidden aria-controls="gc-bf"
-        aria-label="{{ promo.label }}: {{ promo.percent }}% off both premixes" title="{{ promo.label }}: {{ promo.percent }}% off"><b>{{ promo.percent }}%</b><small>off</small></button>
+<button type="button" class="gc-bf-pill" data-gc-bf-dot hidden aria-controls="gc-bf"
+        aria-label="{{ promo.label }}: {{ promo.percent }}% off both premixes. Show the offer"><i aria-hidden="true"></i>{{ promo.label }} · <b>{{ promo.percent }}% off</b><span data-gc-bf-short></span></button>
 {%- endif %}

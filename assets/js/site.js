@@ -623,8 +623,10 @@ layout: null
      leaves a small "10% off" dot in the corner that opens it again. */
   /* While a sale runs (_data/shop.yml `promo`), the Black Friday card takes the
      club card's place: it slides up a moment after someone lands, with a live
-     countdown. Closing it or tapping "Shop the sale" leaves a small "25% off" dot
-     that brings it back, and it doesn't pop up by itself again this sale. After
+     countdown. Closing it or tapping "Shop the sale" leaves a slim pill in the
+     corner ("Black Friday · 25% off · 3d 4h left") that stays on every page for
+     the rest of the sale and opens the card again; the card itself doesn't pop
+     up by itself again this sale. After
      the end it's removed and the club card comes back. */
   var bfCard = d.getElementById('gc-bf');
   var bfDot = d.querySelector('[data-gc-bf-dot]');
@@ -662,11 +664,14 @@ layout: null
     };
     // "Ends in 2d 5h", then "Ends in 3h 20m" on the last day.
     var bfLeft = bfCard.querySelector('[data-gc-bf-left]');
+    var bfShort = bfDot && bfDot.querySelector('[data-gc-bf-short]');
     var bfTick = function () {
       var ms = bfUntil - Date.now();
       if (ms <= 0) { bfHide(); bfShowDot(false); return false; }
       var h = Math.floor(ms / 36e5), m = Math.floor(ms % 36e5 / 6e4);
-      if (bfLeft) bfLeft.textContent = 'Ends in ' + (h >= 24 ? Math.floor(h / 24) + 'd ' + (h % 24) + 'h' : (h ? h + 'h ' : '') + m + 'm');
+      var span = h >= 24 ? Math.floor(h / 24) + 'd ' + (h % 24) + 'h' : (h ? h + 'h ' : '') + m + 'm';
+      if (bfLeft) bfLeft.textContent = 'Ends in ' + span;
+      if (bfShort) bfShort.textContent = '· ' + span + ' left';
       return true;
     };
     if (bfTick()) {
