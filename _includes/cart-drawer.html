@@ -95,6 +95,12 @@
   .gc-zone em span{display:block;font-size:10.5px;color:var(--gc-muted);margin-top:3px}
   .gc-zone.is-on{background:rgba(var(--gc-gold-rgb),0.07)}
   .gc-sum{font-size:14.5px;color:var(--gc-fg4);margin:0 0 14px}
+  /* The limited-time offer notice (promo-note.html): a quiet line, shown only while it runs. */
+  .gc-promo{margin:0 0 12px;padding:9px 14px;border-radius:12px;border:1px dashed rgba(var(--gc-gold-rgb),0.45);background:rgba(var(--gc-gold-rgb),0.07);
+    font-size:13.5px;line-height:1.45;color:var(--gc-fg3)}
+  .gc-promo[hidden]{display:none}
+  .gc-promo b{color:var(--gc-gold-t);font-weight:700}
+  .gc-promo-page{margin:18px 0 0;max-width:52ch;font-size:14.5px}
   .gc-note-f{display:block;margin:16px 2px 4px}
   .gc-note-f > span{display:block;font:500 11px/1.4 'DM Mono',monospace;letter-spacing:0.14em;text-transform:uppercase;color:var(--gc-fg4)}
   .gc-note-f small{font:400 11.5px 'Hanken Grotesk',sans-serif;letter-spacing:0;text-transform:none;color:var(--gc-muted)}
@@ -226,8 +232,8 @@
         <div class="gc-cart-up-item" data-gc-up-item="{{ p.key }}" hidden>
           {% include img.html base=p.img ext="jpg" widths="250" sizes="40px" w="544" h="952" alt="" %}
           {%- if shop.pair_price %}{% assign up_price = shop.pair_price | minus: shop.price %}{% else %}{% assign up_price = shop.price %}{% endif %}
-          <div><b>{{ p.name }}</b><small>{% if shop.pair_price %}Make it a pair: both for ${% include money.html v=shop.pair_price %}{% else %}{{ p.tagline }}{% endif %}</small></div>
-          <button type="button" data-gc-add="{{ p.key }}" aria-label="Add {{ p.name }}, ${% include money.html v=up_price %} more">+ ${% include money.html v=up_price %}</button>
+          <div><b>{{ p.name }}</b><small data-gc-up-text data-plain="{{ p.tagline | escape }}">{% if shop.pair_price %}Make it a pair: both for ${% include money.html v=shop.pair_price %}{% else %}{{ p.tagline }}{% endif %}</small></div>
+          <button type="button" data-gc-add="{{ p.key }}" data-name="{{ p.name | escape }}" data-pair="{% include money.html v=up_price %}" data-full="{% include money.html v=shop.price %}" aria-label="Add {{ p.name }}, ${% include money.html v=up_price %} more">+ ${% include money.html v=up_price %}</button>
         </div>
         {%- endfor %}
       </section>
@@ -268,10 +274,11 @@
         Kept small on purpose: the total, a button, one quiet line. The breakdown
         (pouches, pair price, tax, delivery) opens from the total.
       {%- endcomment %}
+      {% include promo-note.html %}
       <details class="gc-sum" aria-live="polite">
         <summary><span>Total <i aria-hidden="true"></i></span><span data-gc-total>$0.00</span></summary>
         <div><span data-gc-count>Pouches</span><span data-gc-sub>$0.00</span></div>
-        <div data-gc-discrow hidden class="gc-sum-save"><span>Try-both pair price</span><span data-gc-disc></span></div>
+        <div data-gc-discrow hidden class="gc-sum-save"><span data-gc-disc-label>Try-both pair price</span><span data-gc-disc></span></div>
         {%- comment -%} Square won't add a coupon (like the Chai Club's CHAI10) on top of another discount. {%- endcomment %}
         <p data-gc-discnote hidden class="gc-sum-note">Coupon codes can't be added to the pair price.</p>
         <div data-gc-taxrow hidden><span>{{ shop.zones.saskatoon.tax_name | default: "Tax" }}</span><span data-gc-tax></span></div>
@@ -287,5 +294,5 @@
   </div>
 </div>
 {% include brew-loader.html %}
-<script type="application/json" data-gc-cart-data>{"price":{{ shop.price }},"payPage":{% if shop.pay_on_site and shop.checkout_api != "" %}{{ '/checkout/' | relative_url | jsonify }}{% else %}""{% endif %},"max":{{ shop_max }},"pair":{% if shop.pair_price %}{{ shop.price | times: 2 | minus: shop.pair_price | times: 100 | round }}{% else %}0{% endif %},"api":{{ shop.checkout_api | jsonify }},"blends":[{% for p in site.data.premixes %}{{ p.key | jsonify }}{% unless forloop.last %},{% endunless %}{% endfor %}],"fees":{ {%- for z in shop.zones -%}{{ z[0] | jsonify }}:{{ z[1].fee }}{% unless forloop.last %},{% endunless %}{%- endfor -%} },"tax":{ {%- for z in shop.zones -%}{{ z[0] | jsonify }}:{{ z[1].tax | default: 0 }}{% unless forloop.last %},{% endunless %}{%- endfor -%} },"free":{ {%- for z in shop.zones -%}{{ z[0] | jsonify }}:{{ z[1].free_from | default: 0 }}{% unless forloop.last %},{% endunless %}{%- endfor -%} },"links":{{ shop.links | jsonify }},"instagram":{{ site.social.instagram | jsonify }}}</script>
+<script type="application/json" data-gc-cart-data>{"price":{{ shop.price }},"payPage":{% if shop.pay_on_site and shop.checkout_api != "" %}{{ '/checkout/' | relative_url | jsonify }}{% else %}""{% endif %},"max":{{ shop_max }},"pair":{% if shop.pair_price %}{{ shop.price | times: 2 | minus: shop.pair_price | times: 100 | round }}{% else %}0{% endif %},"api":{{ shop.checkout_api | jsonify }},"blends":[{% for p in site.data.premixes %}{{ p.key | jsonify }}{% unless forloop.last %},{% endunless %}{% endfor %}],"fees":{ {%- for z in shop.zones -%}{{ z[0] | jsonify }}:{{ z[1].fee }}{% unless forloop.last %},{% endunless %}{%- endfor -%} },"tax":{ {%- for z in shop.zones -%}{{ z[0] | jsonify }}:{{ z[1].tax | default: 0 }}{% unless forloop.last %},{% endunless %}{%- endfor -%} },"free":{ {%- for z in shop.zones -%}{{ z[0] | jsonify }}:{{ z[1].free_from | default: 0 }}{% unless forloop.last %},{% endunless %}{%- endfor -%} },"links":{{ shop.links | jsonify }},"instagram":{{ site.social.instagram | jsonify }}{% if shop.promo.code %},"promo":{"code":{{ shop.promo.code | jsonify }},"percent":{{ shop.promo.percent }},"until":{{ shop.promo.until | jsonify }}}{% endif %}}</script>
 <script src="{{ '/assets/js/cart.js' | relative_url }}" defer></script>

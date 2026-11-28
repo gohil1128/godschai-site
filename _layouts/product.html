@@ -62,6 +62,7 @@ layout: default
     <p class="gc-prod-lede">{{ p.blurb }}</p>
     {%- assign per_cup = shop.price | divided_by: 25.0 | times: 100 | round %}
     <div class="gc-prod-price"><b>${% include money.html v=shop.price %}</b><span>125 g pouch · 25 cups · about {{ per_cup }}¢ a cup</span></div>
+    {% include promo-note.html page=true %}
     {%- if shop.open %}
     <div class="gc-buy" data-gc-buy data-gc-buy-main>
       <div class="gc-step" role="group" aria-label="How many pouches" data-gc-pick>

@@ -30,6 +30,11 @@ export const PAIR_SAVING = 299;
 // welcome_code in _data/shop.yml.
 export const CODES = {
   CHAI10: { percent: '10', name: 'CHAI10 · 10% off' },
+  // Black Friday. `until` is the last moment it works (Saskatoon time, UTC-6);
+  // after it the code is simply left off the order. `exclusive`: it replaces
+  // the "Try both" pair price instead of adding to it. Matches `promo` in
+  // _data/shop.yml.
+  BF20: { percent: '20', name: 'BF20 · Black Friday 20% off', exclusive: true, until: Date.parse('2026-11-30T23:59:59-06:00') },
 };
 export const MAX_EACH = 99;
 // The buyer's delivery note from the cart (buzzer code, "leave it at the
@@ -77,12 +82,18 @@ export function readOrder(body) {
   }
   for (const key of Object.keys(body.items)) if (!ITEMS[key]) return { error: 'bad_item' };
   if (!count) return { error: 'empty' };
-  const pairs = Math.min(body.items.o || 0, body.items.r || 0);
+  // An "exclusive" offer (BF20) replaces the pair price rather than adding to it.
+  const codeFirst = typeof body.code === 'string' ? body.code.trim().toUpperCase().slice(0, 20) : '';
+  const first = CODES[codeFirst];
+  const exclusive = !!(first && first.exclusive && !(first.until && Date.now() > first.until));
+  const pairs = exclusive ? 0 : Math.min(body.items.o || 0, body.items.r || 0);
   const shipFree = !!(zone.freeFrom && count >= zone.freeFrom);
   // A code that isn't ours is reported, not silently ignored: the caller
   // decides (our page says so; Square's page just goes without it).
   const codeKey = typeof body.code === 'string' ? body.code.trim().toUpperCase().slice(0, 20) : '';
-  const code = codeKey && CODES[codeKey] ? { key: codeKey, ...CODES[codeKey] } : null;
+  const known = codeKey && CODES[codeKey];
+  // A code past its end date is treated like one we don't know.
+  const code = known && !(known.until && Date.now() > known.until) ? { key: codeKey, ...known } : null;
   const deliveryNote = cleanNote(body.note);
   return {
     badCode: !!codeKey && !code, code,

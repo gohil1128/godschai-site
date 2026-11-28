@@ -21,6 +21,21 @@ price: 17.99
 # carry the matching discount, so change it in Square too.
 pair_price: 32.99
 
+# A limited-time offer (Black Friday). While it runs, the cart applies the code
+# for the customer and shows a small notice on the premix pages. It can't be
+# combined with the pair price or the welcome code (it replaces them), and it
+# only takes money off the pouches, not delivery. The checkout service enforces
+# the end date itself: checkout/lib/order.js (CODES.BF20, `until`), so change
+# both together. To end the offer early or later, change `until` in both
+# places; to take it down, delete this block (the notices and discount go away).
+# `until` is the last moment it works, in Saskatoon time (UTC-6, no daylight
+# saving).
+promo:
+  code: "BF20"
+  percent: 20
+  label: "Black Friday"
+  until: "2026-11-30T23:59:59-06:00"
+
 # Most pouches of one blend in a single order. Each extra step means more
 # checkout links below, so raise it with care.
 max_each: 3
